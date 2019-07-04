@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteppersControlApp", "SteppersControlApp\SteppersControlApp.csproj", "{11A12811-EC99-4265-A6F8-7ADD89582C7C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C75697AB-D456-44EB-86A4-A1C23BC776EC} = {C75697AB-D456-44EB-86A4-A1C23BC776EC}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteppersControlCore", "SteppersControlCore\SteppersControlCore.csproj", "{C75697AB-D456-44EB-86A4-A1C23BC776EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11A12811-EC99-4265-A6F8-7ADD89582C7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11A12811-EC99-4265-A6F8-7ADD89582C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11A12811-EC99-4265-A6F8-7ADD89582C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11A12811-EC99-4265-A6F8-7ADD89582C7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C75697AB-D456-44EB-86A4-A1C23BC776EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C75697AB-D456-44EB-86A4-A1C23BC776EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C75697AB-D456-44EB-86A4-A1C23BC776EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C75697AB-D456-44EB-86A4-A1C23BC776EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B3E6234-DAE2-4D12-82C8-916C1C218208}
+	EndGlobalSection
+EndGlobal
