@@ -23,6 +23,8 @@ namespace SteppersControlApp.Views
 
         Timer updateTimer = new Timer();
 
+        private System.Threading.Mutex mutex;
+
         public SteppersGridView()
         {
             InitializeComponent();
@@ -86,9 +88,7 @@ namespace SteppersControlApp.Views
         {
             fillGrid();
         }
-
-        private System.Threading.Mutex mutex;
-
+        
         private ushort[] _states = new ushort[18];
 
         public void ShowStates()

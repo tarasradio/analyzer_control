@@ -52,17 +52,20 @@ namespace SteppersControlApp
             InitializeComponent();
 
             _core = new Core();
-
-            InitializeAll();
-
+            
             if(!_core.getConfig().LoadFromFile(Configurationfilename))
             {
                 MessageBox.Show("Файл настроек не найден!");
                 Close();
             }
 
+            InitializeAll();
+
             steppersGridView.SetConfiguration(_core.getConfig());
             steppersGridView.UpdateInformation();
+
+            devicesControlView.SetConfiguration(_core.getConfig());
+            devicesControlView.UpdateInformation();
         }
 
         private void InitializeAll()

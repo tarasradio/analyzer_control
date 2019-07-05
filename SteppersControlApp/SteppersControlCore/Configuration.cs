@@ -13,15 +13,18 @@ namespace SteppersControlCore
         const string ROOTNAME = "SteppersTool";
 
         public Dictionary<int, Stepper> Steppers { get; set; }
+        public Dictionary<int, Device> Devices { get; set; }
 
         public Configuration()
         {
             Steppers = new Dictionary<int, Stepper>();
+            Devices = new Dictionary<int, Device>();
         }
 
         public bool LoadFromFile(string filename)
         {
             Steppers.Clear();
+            Devices.Clear();
             XmlDocument document = new XmlDocument();
 
             try
@@ -44,6 +47,23 @@ namespace SteppersControlCore
                     item.Speed = int.Parse(StepperNode.SelectSingleNode("Speed").InnerText);
 
                     Steppers.Add(item.Number, item);
+                }
+
+                XmlNodeList DevicesNode =
+                    document.SelectNodes("/" + ROOTNAME + "/Devices/Device");
+
+                foreach (XmlNode DeviceNode in DevicesNode)
+                {
+                    Device item = new Device();
+
+                    item.Number = int.Parse(DeviceNode.SelectSingleNode("Number").InnerText);
+
+                    if (item.Number < 0)
+                        throw new FormatException("Номер устройства не может быть меньше 0.");
+
+                    item.Name = DeviceNode.SelectSingleNode("Name").InnerText;
+
+                    Devices.Add(item.Number, item);
                 }
             }
             catch { return false; }

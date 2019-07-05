@@ -60,6 +60,7 @@
     <Compile Include="CommunicationProtocol\StepperCommands\SetSpeedCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\StopCommand.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Device.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="CommunicationProtocol\Protocol.cs" />
     <Compile Include="CommunicationProtocol\Responses\SteppersStatesResponse.cs" />

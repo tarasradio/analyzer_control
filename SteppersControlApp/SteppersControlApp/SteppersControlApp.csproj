@@ -71,6 +71,12 @@
     <Compile Include="Views\CNCView.Designer.cs">
       <DependentUpon>CNCView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\DevicesControlView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\DevicesControlView.Designer.cs">
+      <DependentUpon>DevicesControlView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -107,6 +113,9 @@
     </Compile>
     <EmbeddedResource Include="Views\CNCView.resx">
       <DependentUpon>CNCView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DevicesControlView.resx">
+      <DependentUpon>DevicesControlView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\LogView.resx">
       <DependentUpon>LogView.cs</DependentUpon>
