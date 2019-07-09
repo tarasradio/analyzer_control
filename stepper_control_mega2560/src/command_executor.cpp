@@ -19,6 +19,7 @@ void executeSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength);
 void executeCncMoveCommand(uint8_t *packet, uint8_t packetLength);
 void executeCncHomeCommand(uint8_t *packet, uint8_t packetLength);
 void executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength);
+void executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state);
 
 void printCommandStateResponse(uint32_t commandId, uint8_t commandState);
 void printMessage(String messageText);
@@ -194,6 +195,16 @@ void executeCommand(uint8_t *packet, uint8_t packetLength)
     case CNC_HOME:
     {
       executeCncHomeCommand(packet + 1, packetLength - 1);
+    }
+    break;
+    case CNC_ON_DEVICE:
+    {
+      executeCncSetDeviceStateCommand(packet + 1, packetLength - 1, 1);
+    }
+    break;
+    case CNC_OFF_DEVICE:
+    {
+      executeCncSetDeviceStateCommand(packet + 1, packetLength - 1, 0);
     }
     break;
     default:
@@ -445,6 +456,32 @@ void executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength)
 
     getStepper(stepper).setMaxSpeed(fullSpeed);
     getStepper(stepper).setFullSpeed(fullSpeed);
+
+    printMessage(messageToSend);
+  }
+
+  messageToSend = "";
+}
+
+void executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state)
+{
+  uint8_t countOfDevices = packet[0];
+
+  uint32_t packetId = readLong(packet + countOfDevices * 1 + 1);
+
+  printCommandStateResponse(packetId, COMMAND_OK);
+
+  messageToSend = "[CNC Set dev state] ";
+  messageToSend += "devs = " + String(countOfDevices);
+  printMessage(messageToSend);
+
+  for (int i = 0; i < countOfDevices; i++)
+  {
+    uint8_t device = packet[i + 1];
+
+    messageToSend = "[ dev = " + String(device) + "] ";
+
+    device_set_state(device, state);
 
     printMessage(messageToSend);
   }

@@ -29,7 +29,7 @@ namespace SteppersControlApp
         
         ControlPanelForm controlPanel = new ControlPanelForm();
 
-        string Configurationfilename = "WTFTOOL.txt";
+        string Configurationfilename = "settings.txt";
 
         private void UpdateState()
         {
@@ -50,22 +50,6 @@ namespace SteppersControlApp
         public MainForm()
         {
             InitializeComponent();
-
-            _core = new Core();
-            
-            if(!_core.getConfig().LoadFromFile(Configurationfilename))
-            {
-                MessageBox.Show("Файл настроек не найден!");
-                Close();
-            }
-
-            InitializeAll();
-
-            steppersGridView.SetConfiguration(_core.getConfig());
-            steppersGridView.UpdateInformation();
-
-            devicesControlView.SetConfiguration(_core.getConfig());
-            devicesControlView.UpdateInformation();
         }
 
         private void InitializeAll()
@@ -282,6 +266,27 @@ namespace SteppersControlApp
         private void cncView_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            _core = new Core();
+
+            if (!_core.getConfig().LoadFromFile(Configurationfilename))
+            {
+                MessageBox.Show("Файл настроек не найден!");
+                Close(); Dispose(); return;
+            }
+            else
+            {
+                InitializeAll();
+
+                steppersGridView.SetConfiguration(_core.getConfig());
+                steppersGridView.UpdateInformation();
+
+                devicesControlView.SetConfiguration(_core.getConfig());
+                devicesControlView.UpdateInformation();
+            }
         }
     }
 }

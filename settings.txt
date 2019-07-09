@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SteppersTool>
+  <Steppers>
+    <Stepper>
+      <Number>0</Number>
+      <Name>WTF Stepper 0</Name>
+      <Speed>200</Speed>
+    </Stepper>
+    <Stepper>
+      <Number>1</Number>
+      <Name>Игла 2 (Вращение)</Name>
+      <Speed>200</Speed>
+    </Stepper>
+    <Stepper>
+      <Number>2</Number>
+      <Name>WTF Stepper 2</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>3</Number>
+      <Name>WTF Stepper 3</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>4</Number>
+      <Name>Игла 1 (Вращение)</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>5</Number>
+      <Name>Игла 1 (Вертикальное перемещение)</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>6</Number>
+      <Name>Ротор</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>7</Number>
+      <Name>Игла 2 (Вертикальное перемещение)</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>8</Number>
+      <Name>Лента конвейера</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>9</Number>
+      <Name>Вращение пробирки</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>10</Number>
+      <Name>Продольное перемещение челнока разгружающего устройства</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>11</Number>
+      <Name>Движение челнока горизонтальное</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>12</Number>
+      <Name>Иглы</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>13</Number>
+      <Name>Вибромешалка</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>14</Number>
+      <Name>WTF Stepper 14</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>15</Number>
+      <Name>WTF Stepper 15</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>16</Number>
+      <Name>WTF Stepper 16</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>17</Number>
+      <Name>WTF Stepper 17</Name>
+      <Speed>200</Speed>
+    </Stepper>
+  </Steppers>
+  <Devices>
+	<Device>
+	  <Number>0</Number>
+      <Name>Насос / клапан 0</Name>
+	</Device>
+	<Device>
+	  <Number>1</Number>
+      <Name>Насос / клапан 1</Name>
+	</Device>
+	<Device>
+	  <Number>2</Number>
+      <Name>Насос / клапан 2</Name>
+	</Device>
+	<Device>
+	  <Number>3</Number>
+      <Name>Насос / клапан 3</Name>
+	</Device>
+	<Device>
+	  <Number>4</Number>
+      <Name>Насос / клапан 4</Name>
+	</Device>
+	<Device>
+	  <Number>5</Number>
+      <Name>Насос / клапан 5</Name>
+	</Device>
+	<Device>
+	  <Number>6</Number>
+      <Name>Насос / клапан 6</Name>
+	</Device>
+	<Device>
+	  <Number>7</Number>
+      <Name>Насос / клапан 7</Name>
+	</Device>
+	<Device>
+	  <Number>8</Number>
+      <Name>Насос / клапан 8</Name>
+	</Device>
+	<Device>
+	  <Number>9</Number>
+      <Name>Насос / клапан 9</Name>
+	</Device>
+	<Device>
+	  <Number>10</Number>
+      <Name>Насос / клапан 10</Name>
+	</Device>
+	<Device>
+	  <Number>11</Number>
+      <Name>Насос / клапан 11</Name>
+	</Device>
+  </Devices>
+</SteppersTool>

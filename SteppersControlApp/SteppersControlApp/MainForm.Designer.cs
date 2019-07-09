@@ -42,7 +42,9 @@
             this.buttonShowControlPanel = new System.Windows.Forms.ToolStripButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSteppers = new System.Windows.Forms.TabPage();
+            this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
             this.tabPageUnits = new System.Windows.Forms.TabPage();
+            this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
             this.buttonUnit12 = new System.Windows.Forms.CheckBox();
             this.buttonUnit11 = new System.Windows.Forms.CheckBox();
             this.buttonUnit10 = new System.Windows.Forms.CheckBox();
@@ -56,8 +58,6 @@
             this.buttonUnit2 = new System.Windows.Forms.CheckBox();
             this.buttonUnit1 = new System.Windows.Forms.CheckBox();
             this.tabPageCNC = new System.Windows.Forms.TabPage();
-            this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
-            this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
             this.cncView = new SteppersControlApp.Views.CNCView();
             this.logView = new SteppersControlApp.Views.LogView();
             this.statusStrip1.SuspendLayout();
@@ -194,6 +194,16 @@
             this.tabPageSteppers.Text = "Список моторов";
             this.tabPageSteppers.UseVisualStyleBackColor = true;
             // 
+            // steppersGridView
+            // 
+            this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.steppersGridView.Location = new System.Drawing.Point(3, 6);
+            this.steppersGridView.Name = "steppersGridView";
+            this.steppersGridView.Size = new System.Drawing.Size(795, 366);
+            this.steppersGridView.TabIndex = 11;
+            // 
             // tabPageUnits
             // 
             this.tabPageUnits.Controls.Add(this.devicesControlView);
@@ -216,6 +226,16 @@
             this.tabPageUnits.TabIndex = 2;
             this.tabPageUnits.Text = "Управление клапанами и насосами";
             this.tabPageUnits.UseVisualStyleBackColor = true;
+            // 
+            // devicesControlView
+            // 
+            this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.devicesControlView.Location = new System.Drawing.Point(402, 6);
+            this.devicesControlView.Name = "devicesControlView";
+            this.devicesControlView.Size = new System.Drawing.Size(396, 366);
+            this.devicesControlView.TabIndex = 12;
             // 
             // buttonUnit12
             // 
@@ -384,26 +404,6 @@
             this.tabPageCNC.Text = "Программное управление";
             this.tabPageCNC.UseVisualStyleBackColor = true;
             // 
-            // steppersGridView
-            // 
-            this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.steppersGridView.Location = new System.Drawing.Point(3, 6);
-            this.steppersGridView.Name = "steppersGridView";
-            this.steppersGridView.Size = new System.Drawing.Size(795, 366);
-            this.steppersGridView.TabIndex = 11;
-            // 
-            // devicesControlView
-            // 
-            this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.devicesControlView.Location = new System.Drawing.Point(402, 6);
-            this.devicesControlView.Name = "devicesControlView";
-            this.devicesControlView.Size = new System.Drawing.Size(396, 366);
-            this.devicesControlView.TabIndex = 12;
-            // 
             // cncView
             // 
             this.cncView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -435,6 +435,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Name = "MainForm";
             this.Text = "Steppers control v0.7";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
