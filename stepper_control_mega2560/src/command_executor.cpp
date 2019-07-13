@@ -11,6 +11,9 @@ void readPacket();
 void processPacket();
 void executeCommand(uint8_t *buffer, uint8_t bufferLength);
 
+bool checkStepper(uint8_t stepper);
+
+void executeAbortCommand(uint8_t *packet, uint8_t packetLength);
 void executeGoUntilCommand(uint8_t *packet, uint8_t packetLength);
 void executeRunCommand(uint8_t *packet, uint8_t packetLength);
 void executeMoveCommand(uint8_t *packet, uint8_t packetLength);
@@ -30,7 +33,7 @@ void printSteppersStates();
 uint8_t incomingBuffer[64];
 uint8_t currentBufferByte = 0;
 
-uint8_t steppersForMove[18];
+uint8_t steppersForMove[STEPPERS_COUNT];
 uint8_t countMoveSteppers = 0;
 
 uint8_t getSteppersInMove()
@@ -209,6 +212,12 @@ void executeCommand(uint8_t *packet, uint8_t packetLength)
       executeCncSetDeviceStateCommand(packet + 1, packetLength - 1, 0);
     }
     break;
+    case CMD_ABORT:
+    {
+      //TODO: Добавить обработку
+      executeAbortCommand(packet + 1, packetLength - 1);
+    }
+    break;
     default:
     {
       printMessage("Unknown command!");
@@ -217,20 +226,53 @@ void executeCommand(uint8_t *packet, uint8_t packetLength)
   }
 }
 
+String messageToSend = "";
+
+bool checkStepper(uint8_t stepper)
+{
+  bool result = (stepper >= 0 && stepper < STEPPERS_COUNT) ? true : false;
+  if(!result)
+  {
+    messageToSend = "wrong stepper = " + String(stepper);
+    printMessage(messageToSend);
+  }
+  return result;
+}
+
 uint32_t readLong(uint8_t *buffer)
 {
   return *((unsigned long *)(buffer));
 }
 
-String messageToSend = "";
+void executeAbortCommand(uint8_t *packet, uint8_t packetLength)
+{
+  waitForCommandDone = 0;
+
+  for(uint8_t i = 0; i < STEPPERS_COUNT; i++)
+  {
+    getStepper(i).softHiZ();
+  }
+
+  for(uint8_t i = 0;  i < 12; i++)
+  {
+    device_off(i);
+  }
+
+#ifdef DEBUG
+  messageToSend = "[Abort] ";
+
+  printMessage(messageToSend);
+#endif
+}
 
 void executeGoUntilCommand(uint8_t *packet, uint8_t packetLength)
 {
   uint8_t stepper = packet[0];
   uint8_t direction = packet[1];
   uint32_t fullSpeed = readLong(packet + 2);
-
   uint32_t packetId = readLong(packet + 6);
+
+  if(!checkStepper(stepper)) return;
 
   printCommandStateResponse(packetId, COMMAND_OK);
 
@@ -256,8 +298,10 @@ void executeRunCommand(uint8_t *packet, uint8_t packetLength)
   uint8_t stepper = packet[0];
   uint8_t direction = packet[1];
   uint32_t fullSpeed = readLong(packet + 2);
-
   uint32_t packetId = readLong(packet + 6);
+
+  if(!checkStepper(stepper)) return;
+
   printCommandStateResponse(packetId, COMMAND_OK);
 
   getStepper(stepper).run(direction, fullSpeed);
@@ -277,8 +321,9 @@ void executeMoveCommand(uint8_t *packet, uint8_t packetLength)
   uint8_t stepper = packet[0];
   uint8_t direction = packet[1];
   uint32_t steps = readLong(packet + 2);
-
   uint32_t packetId = readLong(packet + 6);
+
+  if(!checkStepper(stepper)) return;
 
   printCommandStateResponse(packetId, COMMAND_OK);
 
@@ -302,8 +347,10 @@ void executeStopCommand(uint8_t *packet, uint8_t packetLength)
 {
   uint8_t stepper = packet[0];
   uint8_t stopType = packet[1];
-
   uint32_t packetId = readLong(packet + 2);
+
+  if(!checkStepper(stepper)) return;
+
   printCommandStateResponse(packetId, COMMAND_OK);
 
 #ifdef DEBUG
@@ -330,6 +377,22 @@ void executeStopCommand(uint8_t *packet, uint8_t packetLength)
       getStepper(stepper).hardStop();
     }
     break;
+    case HiZ_SOFT:
+    {
+#ifdef DEBUG
+      messageToSend += "HiZ SOFT";
+#endif
+      getStepper(stepper).softHiZ();
+    }
+    break;
+    case HiZ_HARD:
+    {
+#ifdef DEBUG
+      messageToSend += "HiZ HARD";
+#endif
+      getStepper(stepper).hardHiZ();
+    }
+    break;
   }
 #ifdef DEBUG
   printMessage(messageToSend);
@@ -340,8 +403,10 @@ void executeSetSpeedCommand(uint8_t *packet, uint8_t packetLength)
 {
   uint8_t stepper = packet[0];
   uint32_t fullSpeed = readLong(packet + 1);
-
   uint32_t packetId = readLong(packet + 5);
+
+  if(!checkStepper(stepper)) return;
+
   printCommandStateResponse(packetId, COMMAND_OK);
 
   getStepper(stepper).setMaxSpeed(fullSpeed);
@@ -360,8 +425,10 @@ void executeSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength)
 {
   uint8_t device = packet[0];
   uint8_t state = packet[1];
-
   uint32_t packetId = readLong(packet + 2);
+
+
+
   printCommandStateResponse(packetId, COMMAND_OK);
   device_set_state(device, state);
 
@@ -377,7 +444,6 @@ void executeSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength)
 void executeCncMoveCommand(uint8_t *packet, uint8_t packetLength)
 {
   uint8_t countOfSteppers = packet[0];
-
   uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
 
   printCommandStateResponse(packetId, COMMAND_OK);
@@ -395,9 +461,12 @@ void executeCncMoveCommand(uint8_t *packet, uint8_t packetLength)
     uint8_t stepper = packet[i * 6 + 1];
     uint8_t direction = packet[i * 6 + 2];
     uint32_t steps = readLong(packet + i * 6 + 3);
-    
-    steppersForMove[i] = stepper;
-    getStepper(stepper).move(direction, steps);
+
+    if(checkStepper(stepper))
+    {
+      steppersForMove[i] = stepper;
+      getStepper(stepper).move(direction, steps);
+    }
 
 #ifdef DEBUG
     messageToSend = "[ stepper = " + String(stepper);
@@ -433,9 +502,20 @@ void executeCncHomeCommand(uint8_t *packet, uint8_t packetLength)
     uint8_t direction = packet[i * 6 + 2];
     uint32_t fullSpeed = readLong(packet + i * 6 + 3);
     
-    steppersForMove[i] = stepper;
-
-    getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
+    if(checkStepper(stepper))
+    {
+      steppersForMove[i] = stepper;
+      uint8_t sw_status = getStepper(stepper).getStatus() & STATUS_SW_F;
+      if(sw_status != 0)
+      {
+        getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
+      }
+      else
+      {
+        //TODO: добавить решение!!!
+        //getStepper(stepper).releaseSw(RESET_ABSPOS, direction);
+      }
+    }
 
 #ifdef DEBUG
     messageToSend = "[ stepper = " + String(stepper);
@@ -468,8 +548,11 @@ void executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength)
     uint8_t stepper = packet[i * 5 + 1];
     uint32_t fullSpeed = readLong(packet + i * 5 + 2);
 
-    getStepper(stepper).setMaxSpeed(fullSpeed);
-    getStepper(stepper).setFullSpeed(fullSpeed);
+    if(checkStepper(stepper))
+    {
+      getStepper(stepper).setMaxSpeed(fullSpeed);
+      getStepper(stepper).setFullSpeed(fullSpeed);
+    }
 
 #ifdef DEBUG
     messageToSend = "[ stepper = " + String(stepper);

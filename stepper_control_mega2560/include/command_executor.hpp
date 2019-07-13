@@ -6,7 +6,9 @@
 enum StopType
 {
     STOP_SOFT = 0x00,
-    STOP_HARD = 0x01
+    STOP_HARD = 0x01,
+    HiZ_SOFT = 0x02,
+    HiZ_HARD = 0x03
 };
 
 void executionMainLoop();

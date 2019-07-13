@@ -25,6 +25,7 @@ enum Responses
 
 enum StepperCommands
 {
+  CMD_ABORT = 0x08,
   CMD_GO_UNTIL = 0x09,
   CMD_RUN = 0x10,
   CMD_MOVE = 0x11,
@@ -39,14 +40,12 @@ enum AdditionalCommands
 
 enum CncCommands
 {
-	CNC_MOVE = 0x015,
+	CNC_MOVE = 0x15,
 	CNC_SET_SPEED,
 	CNC_STOP,
 	CNC_HOME,
 	CNC_ON_DEVICE,
-	CNC_OFF_DEVICE,
-	CNC_GO_TO_HAND,
-	CNC_GO_TO_PROGRAM
+	CNC_OFF_DEVICE
 };
 
 #endif
