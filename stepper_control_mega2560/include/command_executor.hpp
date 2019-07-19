@@ -11,5 +11,19 @@ enum StopType
     HiZ_HARD = 0x03
 };
 
+enum HomingState
+{
+    HOMING_SUCCESS = 0x00,
+    WAIT_SW_PRESSED,
+    WAIT_SW_RELEASED
+};
+
+enum MoveType
+{
+    SIMPLE_MOVE = 0x00,
+    HOMING_MOVE,
+    NO_MOVE
+};
+
 void executionMainLoop();
 #endif

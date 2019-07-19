@@ -36,19 +36,66 @@ uint8_t currentBufferByte = 0;
 uint8_t steppersForMove[STEPPERS_COUNT];
 uint8_t countMoveSteppers = 0;
 
+// 0 - not move, 1 - move
+uint8_t getStepperMoveState(uint8_t stepper)
+{
+  uint16_t stepperStatus = getStepper(stepper).getStatus() & STATUS_MOT_STATUS;
+  return (uint8_t) stepperStatus;
+}
+
 uint8_t getSteppersInMove()
 {
   uint8_t steppersInMove = 0;
   for (int i = 0; i < countMoveSteppers; i++)
   {
     uint8_t stepper = steppersForMove[i];
-    uint16_t stepperStatus = getStepper(stepper).getStatus() & STATUS_MOT_STATUS;
 
-    if (stepperStatus != 0)
+    if (getStepperMoveState(stepper) != 0)
       steppersInMove++;
   }
 
   return steppersInMove;
+}
+
+uint8_t steppersForHomingStates[STEPPERS_COUNT];
+uint8_t steppersHomingDirection[STEPPERS_COUNT];
+uint32_t steppersHomingSpeed[STEPPERS_COUNT];
+
+uint8_t currentMoveType = NO_MOVE;
+
+uint8_t getSteppersInHoming()
+{
+  uint8_t steppersInHoming = 0;
+
+  for (int i = 0; i < countMoveSteppers; i++)
+  {
+    uint8_t stepper = steppersForMove[i];
+    if(steppersForHomingStates[i] == WAIT_SW_PRESSED)
+    {
+      if(getStepperMoveState(stepper) != 0)
+      {
+        steppersInHoming++;
+      }
+      else
+      {
+        steppersForHomingStates[i] = HOMING_SUCCESS;
+      }
+    }
+    else if(steppersForHomingStates[i] = WAIT_SW_RELEASED)
+    {
+      if(getStepperMoveState(stepper) != 0)
+      {
+        steppersInHoming++;
+      }
+      else
+      {
+        getStepper(stepper).goUntil(RESET_ABSPOS, steppersHomingDirection[i], steppersHomingSpeed[i]);
+        steppersForHomingStates[i] = WAIT_SW_PRESSED;
+      }
+    }
+  }
+
+  return steppersInHoming;
 }
 
 uint32_t lastCommandId = 0;
@@ -69,7 +116,7 @@ void executionMainLoop()
 
   if (waitForCommandDone != 0) // Есть команды, ожидающие завершения
   {
-    if (getSteppersInMove() == 0) // Моторы завершили движение
+    if (getSteppersInMove() == 0 && getSteppersInHoming() == 0) // Моторы завершили движение
     {
       printCommandStateResponse(lastCommandId, COMMAND_DONE);
       waitForCommandDone = 0;
@@ -505,15 +552,20 @@ void executeCncHomeCommand(uint8_t *packet, uint8_t packetLength)
     if(checkStepper(stepper))
     {
       steppersForMove[i] = stepper;
+      steppersHomingDirection[i] = direction;
+      steppersHomingSpeed[i] = fullSpeed;
+
       uint8_t sw_status = getStepper(stepper).getStatus() & STATUS_SW_F;
       if(sw_status != 0)
       {
+        steppersForHomingStates[i] = WAIT_SW_PRESSED;
         getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
       }
       else
       {
-        //TODO: добавить решение!!!
-        //getStepper(stepper).releaseSw(RESET_ABSPOS, direction);
+        steppersForHomingStates[i] = WAIT_SW_RELEASED;
+        uint8_t inverseDir = direction == FWD ? REV : FWD;
+        getStepper(stepper).releaseSw(RESET_ABSPOS, inverseDir); // настроить MIN SPEED
       }
     }
 
