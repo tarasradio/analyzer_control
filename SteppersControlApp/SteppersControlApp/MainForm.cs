@@ -13,6 +13,7 @@ using SteppersControlCore.MachineControl;
 using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.SerialCommunication;
+using System.Diagnostics;
 
 namespace SteppersControlApp
 {
@@ -287,6 +288,31 @@ namespace SteppersControlApp
                 devicesControlView.SetConfiguration(_core.getConfig());
                 devicesControlView.UpdateInformation();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+
+            byte[] packet = { 0x7D, 0x7D, 0xDD, 0x11, 0x12, 0x13, 0xDD, 0x13, 0x34, 0x55, 0x55, 0x45, 0x45, 0x34,0xDD, 0x7D };
+
+            for(int i = 0; i < 100000; i++)
+            {
+                byte[] wrapResult = ByteStuffing.wrapPacket(packet);
+                byte[] unwrapResult = ByteStuffing.unwrapPacket(wrapResult);
+            }
+
+            stopWatch.Stop();
+
+            TimeSpan ts = stopWatch.Elapsed;
+
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+            Console.WriteLine("RunTime " + elapsedTime);
+
         }
     }
 }

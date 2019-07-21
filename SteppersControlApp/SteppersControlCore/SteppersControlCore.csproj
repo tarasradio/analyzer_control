@@ -68,6 +68,7 @@
     <Compile Include="MachineControl\CncFrame.cs" />
     <Compile Include="MachineControl\CncParser.cs" />
     <Compile Include="MachineControl\CncProgram.cs" />
+    <Compile Include="SerialCommunication\ByteStuffing.cs" />
     <Compile Include="SerialCommunication\PackageHandler.cs" />
     <Compile Include="SerialCommunication\PackageReceiver.cs" />
     <Compile Include="SerialCommunication\SerialHelper.cs" />
