@@ -31,6 +31,8 @@ private:
     void executeCncHomeCommand(uint8_t *packet, uint8_t packetLength);
     void executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength);
     void executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state);
+
+    bool checkSameCommand(uint32_t commandId, uint8_t commandType);
 public:
     CommandExecutor2();
     void UpdateState();

@@ -28,6 +28,18 @@ enum MoveType
     NO_MOVE
 };
 
+enum CommandExecutionState
+{
+    EXECUTION_RUN,
+    EXECUTION_SUCCESS
+};
+
+enum CommandExecutionType
+{
+    SIMPLE_COMMAND,
+    WAITING_COMMAND
+};
+
 uint8_t steppersForMove[STEPPERS_COUNT];
 uint8_t countMoveSteppers = 0;
 
@@ -38,6 +50,7 @@ uint32_t steppersHomingSpeed[STEPPERS_COUNT];
 uint8_t currentMoveType = NO_MOVE;
 
 uint32_t lastCommandId = 0;
+uint8_t lastCommandState = EXECUTION_SUCCESS;
 uint8_t waitForCommandDone = 0;
 
 String messageToSend = "";
@@ -113,6 +126,7 @@ void CommandExecutor2::UpdateState()
         {
             printCommandStateResponse(lastCommandId, COMMAND_DONE);
             waitForCommandDone = 0;
+            lastCommandState = EXECUTION_SUCCESS;
         }
     }
 }
@@ -120,6 +134,7 @@ void CommandExecutor2::UpdateState()
 void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
 {
     byte commandType = packet[0];
+
     switch (commandType)
     {
         case CMD_GO_UNTIL:
@@ -207,11 +222,30 @@ uint32_t CommandExecutor2::readLong(uint8_t *buffer)
   return *((unsigned long *)(buffer));
 }
 
-//TODO: добавить проверку не завершенных команд
-void CommandExecutor2::addCommandForWait(uint32_t commandId)
+bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
 {
-  lastCommandId = commandId;
-  waitForCommandDone = 1;
+    bool isSame = false;
+    if(lastCommandId == commandId)
+    {
+        isSame = true;
+        if(lastCommandState == EXECUTION_RUN)
+            printCommandStateResponse(commandId, COMMAND_OK);
+        else if(lastCommandState == EXECUTION_SUCCESS)
+            printCommandStateResponse(commandId, COMMAND_DONE);
+    }
+    else
+    {
+        lastCommandId = commandId;
+        lastCommandState = EXECUTION_RUN;
+        printCommandStateResponse(commandId, COMMAND_OK);
+
+        if(commandType == WAITING_COMMAND)
+        {
+            waitForCommandDone = 1;
+        }
+    }
+
+    return isSame;
 }
 
 void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength)
@@ -242,15 +276,14 @@ void CommandExecutor2::executeGoUntilCommand(uint8_t *packet, uint8_t packetLeng
     uint32_t fullSpeed = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
+    if(!checkSameCommand(packetId, WAITING_COMMAND))
+        return;
+
     if (!checkStepper(stepper))
         return;
 
-    printCommandStateResponse(packetId, COMMAND_OK);
-
     countMoveSteppers = 1;
     steppersForMove[0] = stepper;
-
-    addCommandForWait(packetId);
 
     getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
 
@@ -271,10 +304,11 @@ void CommandExecutor2::executeRunCommand(uint8_t *packet, uint8_t packetLength)
     uint32_t fullSpeed = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if (!checkStepper(stepper))
+    if(!checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if (!checkStepper(stepper))
+        return;
 
     getStepper(stepper).run(direction, fullSpeed);
 
@@ -295,15 +329,15 @@ void CommandExecutor2::executeMoveCommand(uint8_t *packet, uint8_t packetLength)
     uint32_t steps = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if (!checkStepper(stepper))
+    if(!checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if (!checkStepper(stepper))
+        return;
 
     countMoveSteppers = 1;
     steppersForMove[0] = stepper;
 
-    addCommandForWait(packetId);
     getStepper(stepper).move(direction, steps);
 
 #ifdef DEBUG
@@ -322,10 +356,11 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
     uint8_t stopType = packet[1];
     uint32_t packetId = readLong(packet + 2);
 
-    if (!checkStepper(stepper))
+    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if (!checkStepper(stepper))
+        return;
 
 #ifdef DEBUG
     messageToSend = "[Stop] ";
@@ -379,10 +414,11 @@ void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint8_t packetLen
     uint32_t fullSpeed = readLong(packet + 1);
     uint32_t packetId = readLong(packet + 5);
 
-    if (!checkStepper(stepper))
+    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if (!checkStepper(stepper))
+        return;
 
     getStepper(stepper).setMaxSpeed(fullSpeed);
     getStepper(stepper).setFullSpeed(fullSpeed);
@@ -402,7 +438,9 @@ void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint8_t pac
     uint8_t state = packet[1];
     uint32_t packetId = readLong(packet + 2);
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+        return;
+
     device_set_state(device, state);
 
 #ifdef DEBUG
@@ -419,7 +457,8 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLeng
     uint8_t countOfSteppers = packet[0];
     uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if(!checkSameCommand(packetId, WAITING_COMMAND))
+        return;
 
     countMoveSteppers = countOfSteppers;
 
@@ -449,8 +488,6 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLeng
         printMessage(messageToSend);
 #endif
     }
-
-    addCommandForWait(packetId);
 }
 
 void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLength)
@@ -459,7 +496,8 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
 
     uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if(!checkSameCommand(packetId, WAITING_COMMAND))
+        return;
 
     countMoveSteppers = countOfSteppers;
 
@@ -503,8 +541,6 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
         printMessage(messageToSend);
 #endif
     }
-
-    addCommandForWait(packetId);
 }
 
 void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength)
@@ -513,7 +549,8 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packet
 
     uint32_t packetId = readLong(packet + countOfSteppers * 5 + 1);
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+        return;
 
 #ifdef DEBUG
     messageToSend = "[CNC Set speed] ";
@@ -547,7 +584,8 @@ void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t 
 
     uint32_t packetId = readLong(packet + countOfDevices * 1 + 1);
 
-    printCommandStateResponse(packetId, COMMAND_OK);
+    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+        return;
 
 #ifdef DEBUG
     messageToSend = "[CNC Set dev state] ";
