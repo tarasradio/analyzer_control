@@ -3,10 +3,13 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 #include "steppers.hpp"
-#include "command_executor.hpp"
+//#include "command_executor.hpp"
+#include "task_manager.hpp"
 
 #define BAUDRATE 115200
 #define POLLING_TIMEOUT 50
+
+TaskManager _taskManager = TaskManager();
 
 void setup()
 {
@@ -21,7 +24,8 @@ void setup()
 
 void loop()
 {
-  executionMainLoop();
+  //executionMainLoop();
+  _taskManager.TaskLoop();
   
   delay(POLLING_TIMEOUT);
 }

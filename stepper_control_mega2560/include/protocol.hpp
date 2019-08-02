@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 
-uint8_t packetHeader[] = {0x55, 0x55};
-uint8_t packetHeaderLength = 2;
+static uint8_t packetHeader[] = {0x55, 0x55};
+static uint8_t packetHeaderLength = 2;
 
-uint8_t packetEnd[] = {0xAA, 0xAA};
-uint8_t packetEndLength = 2;
+static uint8_t packetEnd[] = {0xAA, 0xAA};
+static uint8_t packetEndLength = 2;
 
 enum CommandStates
 {
