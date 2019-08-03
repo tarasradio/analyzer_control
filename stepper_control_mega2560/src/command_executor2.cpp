@@ -4,7 +4,7 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 
-//#define DEBUG
+#define DEBUG
 
 enum StopType
 {
@@ -194,7 +194,6 @@ void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
         break;
         case CMD_ABORT:
         {
-            //TODO: Добавить обработку
             executeAbortCommand(packet + 1, packetLength - 1);
         }
         break;
@@ -224,6 +223,11 @@ uint32_t CommandExecutor2::readLong(uint8_t *buffer)
 
 bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
 {
+#ifdef DEBUG
+    messageToSend = "command id = " + String(commandId);
+    printMessage(messageToSend);
+#endif
+
     bool isSame = false;
     if(lastCommandId == commandId)
     {
@@ -244,7 +248,10 @@ bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
             waitForCommandDone = 1;
         }
     }
-
+#ifdef DEBUG
+    messageToSend = "Is same = " + String(isSame);
+    printMessage(messageToSend);
+#endif
     return isSame;
 }
 
@@ -276,7 +283,7 @@ void CommandExecutor2::executeGoUntilCommand(uint8_t *packet, uint8_t packetLeng
     uint32_t fullSpeed = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if(!checkSameCommand(packetId, WAITING_COMMAND))
+    if(checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
     if (!checkStepper(stepper))
@@ -304,7 +311,7 @@ void CommandExecutor2::executeRunCommand(uint8_t *packet, uint8_t packetLength)
     uint32_t fullSpeed = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if(!checkSameCommand(packetId, WAITING_COMMAND))
+    if(checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
     if (!checkStepper(stepper))
@@ -329,7 +336,7 @@ void CommandExecutor2::executeMoveCommand(uint8_t *packet, uint8_t packetLength)
     uint32_t steps = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if(!checkSameCommand(packetId, WAITING_COMMAND))
+    if(checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
     if (!checkStepper(stepper))
@@ -356,7 +363,7 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
     uint8_t stopType = packet[1];
     uint32_t packetId = readLong(packet + 2);
 
-    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+    if(checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
     if (!checkStepper(stepper))
@@ -414,7 +421,7 @@ void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint8_t packetLen
     uint32_t fullSpeed = readLong(packet + 1);
     uint32_t packetId = readLong(packet + 5);
 
-    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+    if(checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
     if (!checkStepper(stepper))
@@ -438,18 +445,18 @@ void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint8_t pac
     uint8_t state = packet[1];
     uint32_t packetId = readLong(packet + 2);
 
-    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+    if(checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
     device_set_state(device, state);
 
-#ifdef DEBUG
+//#ifdef DEBUG
     messageToSend = "[Set device state] ";
     messageToSend += "device = " + String(device);
     messageToSend += ", state = " + String(state);
 
     printMessage(messageToSend);
-#endif
+//#endif
 }
 
 void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLength)
@@ -457,7 +464,7 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLeng
     uint8_t countOfSteppers = packet[0];
     uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
 
-    if(!checkSameCommand(packetId, WAITING_COMMAND))
+    if(checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
     countMoveSteppers = countOfSteppers;
@@ -496,7 +503,7 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
 
     uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
 
-    if(!checkSameCommand(packetId, WAITING_COMMAND))
+    if(checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
     countMoveSteppers = countOfSteppers;
@@ -549,7 +556,7 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packet
 
     uint32_t packetId = readLong(packet + countOfSteppers * 5 + 1);
 
-    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+    if(checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
 #ifdef DEBUG
@@ -584,7 +591,7 @@ void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t 
 
     uint32_t packetId = readLong(packet + countOfDevices * 1 + 1);
 
-    if(!checkSameCommand(packetId, SIMPLE_COMMAND))
+    if(checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
 #ifdef DEBUG

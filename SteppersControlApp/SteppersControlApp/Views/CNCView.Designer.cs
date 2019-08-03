@@ -31,12 +31,14 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CNCView));
             this.programTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.buttonTestProgram = new System.Windows.Forms.Button();
+            this.buttonTestCNCMove = new System.Windows.Forms.Button();
+            this.buttonAbortExecution = new System.Windows.Forms.Button();
+            this.buttonRunExecution = new System.Windows.Forms.Button();
             this.buttonOpenFile = new System.Windows.Forms.Button();
             this.buttonSaveFile = new System.Windows.Forms.Button();
-            this.buttonTestCNCMove = new System.Windows.Forms.Button();
-            this.buttonRunProgram = new System.Windows.Forms.Button();
-            this.buttonStopProgram = new System.Windows.Forms.Button();
+            this.buttonClearFile = new System.Windows.Forms.Button();
+            this.buttonTestFile = new System.Windows.Forms.Button();
+            this.CNCViewToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,57 +60,28 @@
         '\''};
             this.programTextBox.AutoScrollMinSize = new System.Drawing.Size(267, 14);
             this.programTextBox.BackBrush = null;
+            this.programTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.programTextBox.CharHeight = 14;
             this.programTextBox.CharWidth = 8;
             this.programTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.programTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.programTextBox.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.programTextBox.IsReplaceMode = false;
-            this.programTextBox.Location = new System.Drawing.Point(3, 32);
+            this.programTextBox.Location = new System.Drawing.Point(3, 53);
             this.programTextBox.Name = "programTextBox";
             this.programTextBox.Paddings = new System.Windows.Forms.Padding(0);
             this.programTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.programTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("programTextBox.ServiceColors")));
-            this.programTextBox.Size = new System.Drawing.Size(855, 392);
+            this.programTextBox.Size = new System.Drawing.Size(855, 371);
             this.programTextBox.TabIndex = 5;
             this.programTextBox.Text = "// ВВЕДИТЕ КОД ПРОГРАММЫ ЗДЕСЬ";
             this.programTextBox.Zoom = 100;
             this.programTextBox.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.ProgramTextBox_TextChanged);
             // 
-            // buttonTestProgram
-            // 
-            this.buttonTestProgram.Location = new System.Drawing.Point(213, 3);
-            this.buttonTestProgram.Name = "buttonTestProgram";
-            this.buttonTestProgram.Size = new System.Drawing.Size(71, 23);
-            this.buttonTestProgram.TabIndex = 4;
-            this.buttonTestProgram.Text = "Проверка";
-            this.buttonTestProgram.UseVisualStyleBackColor = true;
-            this.buttonTestProgram.Click += new System.EventHandler(this.buttonTestProgram_Click);
-            // 
-            // buttonOpenFile
-            // 
-            this.buttonOpenFile.Location = new System.Drawing.Point(3, 3);
-            this.buttonOpenFile.Name = "buttonOpenFile";
-            this.buttonOpenFile.Size = new System.Drawing.Size(99, 23);
-            this.buttonOpenFile.TabIndex = 6;
-            this.buttonOpenFile.Text = "Открыть файл";
-            this.buttonOpenFile.UseVisualStyleBackColor = true;
-            this.buttonOpenFile.Click += new System.EventHandler(this.buttonOpenFile_Click);
-            // 
-            // buttonSaveFile
-            // 
-            this.buttonSaveFile.Location = new System.Drawing.Point(108, 3);
-            this.buttonSaveFile.Name = "buttonSaveFile";
-            this.buttonSaveFile.Size = new System.Drawing.Size(99, 23);
-            this.buttonSaveFile.TabIndex = 7;
-            this.buttonSaveFile.Text = "Сохранить файл";
-            this.buttonSaveFile.UseVisualStyleBackColor = true;
-            this.buttonSaveFile.Click += new System.EventHandler(this.buttonSaveFile_Click);
-            // 
             // buttonTestCNCMove
             // 
-            this.buttonTestCNCMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTestCNCMove.Location = new System.Drawing.Point(759, 3);
+            this.buttonTestCNCMove.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.buttonTestCNCMove.Location = new System.Drawing.Point(445, 14);
             this.buttonTestCNCMove.Name = "buttonTestCNCMove";
             this.buttonTestCNCMove.Size = new System.Drawing.Size(99, 23);
             this.buttonTestCNCMove.TabIndex = 8;
@@ -116,37 +89,104 @@
             this.buttonTestCNCMove.UseVisualStyleBackColor = true;
             this.buttonTestCNCMove.Click += new System.EventHandler(this.buttonTestCNCMove_Click);
             // 
-            // buttonRunProgram
+            // buttonAbortExecution
             // 
-            this.buttonRunProgram.Location = new System.Drawing.Point(290, 3);
-            this.buttonRunProgram.Name = "buttonRunProgram";
-            this.buttonRunProgram.Size = new System.Drawing.Size(71, 23);
-            this.buttonRunProgram.TabIndex = 11;
-            this.buttonRunProgram.Text = "Запуск";
-            this.buttonRunProgram.UseVisualStyleBackColor = true;
-            this.buttonRunProgram.Click += new System.EventHandler(this.buttonRunProgram_Click);
+            this.buttonAbortExecution.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAbortExecution.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonAbortExecution.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAbortExecution.Image = ((System.Drawing.Image)(resources.GetObject("buttonAbortExecution.Image")));
+            this.buttonAbortExecution.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonAbortExecution.Location = new System.Drawing.Point(814, 3);
+            this.buttonAbortExecution.Name = "buttonAbortExecution";
+            this.buttonAbortExecution.Size = new System.Drawing.Size(44, 44);
+            this.buttonAbortExecution.TabIndex = 38;
+            this.CNCViewToolTip.SetToolTip(this.buttonAbortExecution, "Прервать выполнение");
+            this.buttonAbortExecution.UseVisualStyleBackColor = false;
+            this.buttonAbortExecution.Click += new System.EventHandler(this.buttonAbortExecution_Click);
             // 
-            // buttonStopProgram
+            // buttonRunExecution
             // 
-            this.buttonStopProgram.Location = new System.Drawing.Point(367, 3);
-            this.buttonStopProgram.Name = "buttonStopProgram";
-            this.buttonStopProgram.Size = new System.Drawing.Size(71, 23);
-            this.buttonStopProgram.TabIndex = 12;
-            this.buttonStopProgram.Text = "Остановка";
-            this.buttonStopProgram.UseVisualStyleBackColor = true;
-            this.buttonStopProgram.Click += new System.EventHandler(this.buttonStopProgram_Click);
+            this.buttonRunExecution.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRunExecution.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonRunExecution.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRunExecution.Image = ((System.Drawing.Image)(resources.GetObject("buttonRunExecution.Image")));
+            this.buttonRunExecution.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonRunExecution.Location = new System.Drawing.Point(764, 3);
+            this.buttonRunExecution.Name = "buttonRunExecution";
+            this.buttonRunExecution.Size = new System.Drawing.Size(44, 44);
+            this.buttonRunExecution.TabIndex = 39;
+            this.CNCViewToolTip.SetToolTip(this.buttonRunExecution, "Запуск программы");
+            this.buttonRunExecution.UseVisualStyleBackColor = false;
+            this.buttonRunExecution.Click += new System.EventHandler(this.buttonRunProgram_Click);
+            // 
+            // buttonOpenFile
+            // 
+            this.buttonOpenFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonOpenFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpenFile.Image")));
+            this.buttonOpenFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonOpenFile.Location = new System.Drawing.Point(53, 3);
+            this.buttonOpenFile.Name = "buttonOpenFile";
+            this.buttonOpenFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonOpenFile.TabIndex = 40;
+            this.CNCViewToolTip.SetToolTip(this.buttonOpenFile, "Открыть файл");
+            this.buttonOpenFile.UseVisualStyleBackColor = false;
+            this.buttonOpenFile.Click += new System.EventHandler(this.buttonOpenFile_Click);
+            // 
+            // buttonSaveFile
+            // 
+            this.buttonSaveFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonSaveFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSaveFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonSaveFile.Image")));
+            this.buttonSaveFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonSaveFile.Location = new System.Drawing.Point(103, 3);
+            this.buttonSaveFile.Name = "buttonSaveFile";
+            this.buttonSaveFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonSaveFile.TabIndex = 41;
+            this.CNCViewToolTip.SetToolTip(this.buttonSaveFile, "Сохранить файл");
+            this.buttonSaveFile.UseVisualStyleBackColor = false;
+            this.buttonSaveFile.Click += new System.EventHandler(this.buttonSaveFile_Click);
+            // 
+            // buttonClearFile
+            // 
+            this.buttonClearFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonClearFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClearFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonClearFile.Image")));
+            this.buttonClearFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonClearFile.Location = new System.Drawing.Point(3, 3);
+            this.buttonClearFile.Name = "buttonClearFile";
+            this.buttonClearFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonClearFile.TabIndex = 42;
+            this.CNCViewToolTip.SetToolTip(this.buttonClearFile, "Очистить файл");
+            this.buttonClearFile.UseVisualStyleBackColor = false;
+            this.buttonClearFile.Click += new System.EventHandler(this.buttonClearFile_Click);
+            // 
+            // buttonTestFile
+            // 
+            this.buttonTestFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonTestFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonTestFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonTestFile.Image")));
+            this.buttonTestFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.buttonTestFile.Location = new System.Drawing.Point(153, 3);
+            this.buttonTestFile.Name = "buttonTestFile";
+            this.buttonTestFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonTestFile.TabIndex = 43;
+            this.CNCViewToolTip.SetToolTip(this.buttonTestFile, "Проверить программу");
+            this.buttonTestFile.UseVisualStyleBackColor = false;
+            this.buttonTestFile.Click += new System.EventHandler(this.buttonTestProgram_Click);
             // 
             // CNCView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.buttonStopProgram);
-            this.Controls.Add(this.buttonRunProgram);
-            this.Controls.Add(this.buttonTestCNCMove);
+            this.Controls.Add(this.buttonTestFile);
+            this.Controls.Add(this.buttonClearFile);
             this.Controls.Add(this.buttonSaveFile);
             this.Controls.Add(this.buttonOpenFile);
+            this.Controls.Add(this.buttonRunExecution);
+            this.Controls.Add(this.buttonAbortExecution);
+            this.Controls.Add(this.buttonTestCNCMove);
             this.Controls.Add(this.programTextBox);
-            this.Controls.Add(this.buttonTestProgram);
             this.Name = "CNCView";
             this.Size = new System.Drawing.Size(861, 427);
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).EndInit();
@@ -157,11 +197,13 @@
         #endregion
 
         private FastColoredTextBoxNS.FastColoredTextBox programTextBox;
-        private System.Windows.Forms.Button buttonTestProgram;
+        private System.Windows.Forms.Button buttonTestCNCMove;
+        private System.Windows.Forms.Button buttonAbortExecution;
+        private System.Windows.Forms.Button buttonRunExecution;
         private System.Windows.Forms.Button buttonOpenFile;
         private System.Windows.Forms.Button buttonSaveFile;
-        private System.Windows.Forms.Button buttonTestCNCMove;
-        private System.Windows.Forms.Button buttonRunProgram;
-        private System.Windows.Forms.Button buttonStopProgram;
+        private System.Windows.Forms.Button buttonClearFile;
+        private System.Windows.Forms.Button buttonTestFile;
+        private System.Windows.Forms.ToolTip CNCViewToolTip;
     }
 }

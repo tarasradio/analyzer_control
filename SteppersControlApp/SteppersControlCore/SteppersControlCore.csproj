@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommunicationProtocol\AbstractCommand.cs" />
-    <Compile Include="CommunicationProtocol\AdditionalCommands\EmmergencyStopCommand.cs" />
+    <Compile Include="CommunicationProtocol\AdditionalCommands\AbortExecutionCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\SetDeviceStateCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\HomeCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\MoveCncCommand.cs" />

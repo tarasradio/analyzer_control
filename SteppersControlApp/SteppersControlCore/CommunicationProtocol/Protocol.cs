@@ -42,12 +42,13 @@ namespace SteppersControlCore.CommunicationProtocol
 
         public enum AdditionalCommands
         {
-            SET_DEVICE_STATE = 0x14
+            SET_DEVICE_STATE = 0x14,
+            ABORT_EXECUTION
         }
 
         public enum CncCommands
         {
-            CNC_MOVE = 0x015,
+            CNC_MOVE = 0x16,
             CNC_SET_SPEED,
             CNC_STOP,
             CNC_HOME,

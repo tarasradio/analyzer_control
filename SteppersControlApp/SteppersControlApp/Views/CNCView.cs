@@ -347,9 +347,15 @@ namespace SteppersControlApp.Views
             }
         }
 
-        private void buttonStopProgram_Click(object sender, EventArgs e)
+        private void buttonAbortExecution_Click(object sender, EventArgs e)
         {
             _cncExecutor.AbortExecution();
+            _helper.SendBytes(new AbortExecutionCommand(Protocol.GetPacketId()).GetBytes());
+        }
+
+        private void buttonClearFile_Click(object sender, EventArgs e)
+        {
+            programTextBox.Clear();
         }
     }
 }

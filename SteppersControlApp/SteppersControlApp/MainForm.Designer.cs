@@ -40,6 +40,7 @@
             this.buttonConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.buttonShowControlPanel = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSteppers = new System.Windows.Forms.TabPage();
             this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
@@ -60,7 +61,6 @@
             this.tabPageCNC = new System.Windows.Forms.TabPage();
             this.cncView = new SteppersControlApp.Views.CNCView();
             this.logView = new SteppersControlApp.Views.LogView();
-            this.button1 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -103,7 +103,8 @@
             this.editBaudrate,
             this.buttonConnect,
             this.toolStripSeparator1,
-            this.buttonShowControlPanel});
+            this.buttonShowControlPanel,
+            this.toolStripSeparator2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -169,6 +170,11 @@
             this.buttonShowControlPanel.Size = new System.Drawing.Size(120, 36);
             this.buttonShowControlPanel.Text = "Панель управления";
             this.buttonShowControlPanel.Click += new System.EventHandler(this.buttonShowControlPanel_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
             // tabControl1
             // 
@@ -412,7 +418,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cncView.Location = new System.Drawing.Point(6, 6);
             this.cncView.Name = "cncView";
-            this.cncView.Size = new System.Drawing.Size(792, 411);
+            this.cncView.Size = new System.Drawing.Size(792, 366);
             this.cncView.TabIndex = 0;
             this.cncView.Load += new System.EventHandler(this.cncView_Load);
             // 
@@ -425,22 +431,11 @@
             this.logView.Size = new System.Drawing.Size(812, 151);
             this.logView.TabIndex = 13;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(486, 448);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(836, 628);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.logView);
@@ -493,7 +488,7 @@
         private Views.CNCView cncView;
         private System.Windows.Forms.ToolStripComboBox editBaudrate;
         private Views.DevicesControlView devicesControlView;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 

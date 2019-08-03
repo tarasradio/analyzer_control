@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StepperControlView));
             this.EditCountSteps = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
@@ -37,6 +38,7 @@
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonFwd = new System.Windows.Forms.Button();
             this.buttonHome = new System.Windows.Forms.Button();
+            this.StepperControlViewToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.EditCountSteps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.editFullSpeed)).BeginInit();
             this.SuspendLayout();
@@ -72,6 +74,7 @@
             this.label2.Size = new System.Drawing.Size(75, 13);
             this.label2.TabIndex = 31;
             this.label2.Text = "Speed (S / S):";
+            this.StepperControlViewToolTip.SetToolTip(this.label2, "Скорость движения (шагов в секунду)");
             // 
             // editFullSpeed
             // 
@@ -106,6 +109,7 @@
             this.useMoveStepsCheck.Size = new System.Drawing.Size(56, 17);
             this.useMoveStepsCheck.TabIndex = 35;
             this.useMoveStepsCheck.Text = "Steps:";
+            this.StepperControlViewToolTip.SetToolTip(this.useMoveStepsCheck, "Количество шагов");
             this.useMoveStepsCheck.UseVisualStyleBackColor = true;
             this.useMoveStepsCheck.CheckedChanged += new System.EventHandler(this.useMoveStepsCheck_CheckedChanged);
             // 
@@ -119,6 +123,7 @@
             this.buttonRev.Name = "buttonRev";
             this.buttonRev.Size = new System.Drawing.Size(44, 44);
             this.buttonRev.TabIndex = 36;
+            this.StepperControlViewToolTip.SetToolTip(this.buttonRev, "Обратный ход");
             this.buttonRev.UseVisualStyleBackColor = false;
             this.buttonRev.Click += new System.EventHandler(this.buttonRev_Click);
             // 
@@ -132,6 +137,7 @@
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(44, 44);
             this.buttonStop.TabIndex = 37;
+            this.StepperControlViewToolTip.SetToolTip(this.buttonStop, "Остановка");
             this.buttonStop.UseVisualStyleBackColor = false;
             this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
             // 
@@ -145,6 +151,7 @@
             this.buttonFwd.Name = "buttonFwd";
             this.buttonFwd.Size = new System.Drawing.Size(44, 44);
             this.buttonFwd.TabIndex = 38;
+            this.StepperControlViewToolTip.SetToolTip(this.buttonFwd, "Прямой ход");
             this.buttonFwd.UseVisualStyleBackColor = false;
             this.buttonFwd.Click += new System.EventHandler(this.buttonFwd_Click);
             // 
@@ -158,6 +165,7 @@
             this.buttonHome.Name = "buttonHome";
             this.buttonHome.Size = new System.Drawing.Size(44, 44);
             this.buttonHome.TabIndex = 39;
+            this.StepperControlViewToolTip.SetToolTip(this.buttonHome, "Поиск домашнего положения");
             this.buttonHome.UseVisualStyleBackColor = false;
             this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
             // 
@@ -192,5 +200,6 @@
         private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.Button buttonFwd;
         private System.Windows.Forms.Button buttonHome;
+        private System.Windows.Forms.ToolTip StepperControlViewToolTip;
     }
 }
