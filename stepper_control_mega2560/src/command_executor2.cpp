@@ -9,9 +9,9 @@
 enum StopType
 {
     STOP_SOFT = 0x00,
-    STOP_HARD = 0x01,
-    HiZ_SOFT = 0x02,
-    HiZ_HARD = 0x03
+    STOP_HARD,
+    HiZ_SOFT,
+    HiZ_HARD
 };
 
 enum HomingState
@@ -28,15 +28,9 @@ enum MoveType
     NO_MOVE
 };
 
-enum CommandExecutionState
-{
-    EXECUTION_RUN,
-    EXECUTION_SUCCESS
-};
-
 enum CommandExecutionType
 {
-    SIMPLE_COMMAND,
+    SIMPLE_COMMAND = 0x00,
     WAITING_COMMAND
 };
 
@@ -50,7 +44,7 @@ uint32_t steppersHomingSpeed[STEPPERS_COUNT];
 uint8_t currentMoveType = NO_MOVE;
 
 uint32_t lastCommandId = 0;
-uint8_t lastCommandState = EXECUTION_SUCCESS;
+uint8_t lastCommandState = COMMAND_DONE;
 uint8_t waitForCommandDone = 0;
 
 String messageToSend = "";
@@ -99,7 +93,7 @@ uint8_t CommandExecutor2::getSteppersInHoming()
                 steppersForHomingStates[i] = HOMING_SUCCESS;
             }
         }
-        else if (steppersForHomingStates[i] = WAIT_SW_RELEASED)
+        else if (steppersForHomingStates[i] == WAIT_SW_RELEASED)
         {
             if (getStepperMoveState(stepper) != 0)
             {
@@ -124,11 +118,12 @@ void CommandExecutor2::UpdateState()
     {
         if (getSteppersInMove() == 0 && getSteppersInHoming() == 0) // Моторы завершили движение
         {
-            printCommandStateResponse(lastCommandId, COMMAND_DONE);
+            lastCommandState = COMMAND_DONE;
             waitForCommandDone = 0;
-            lastCommandState = EXECUTION_SUCCESS;
         }
     }
+
+    printCommandStateResponse(lastCommandId, lastCommandState);
 }
 
 void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
@@ -232,22 +227,18 @@ bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
     if(lastCommandId == commandId)
     {
         isSame = true;
-        if(lastCommandState == EXECUTION_RUN)
-            printCommandStateResponse(commandId, COMMAND_OK);
-        else if(lastCommandState == EXECUTION_SUCCESS)
-            printCommandStateResponse(commandId, COMMAND_DONE);
     }
     else
     {
         lastCommandId = commandId;
-        lastCommandState = EXECUTION_RUN;
-        printCommandStateResponse(commandId, COMMAND_OK);
+        lastCommandState = COMMAND_OK;
 
         if(commandType == WAITING_COMMAND)
         {
             waitForCommandDone = 1;
         }
     }
+    printCommandStateResponse(commandId, lastCommandState);
 #ifdef DEBUG
     messageToSend = "Is same = " + String(isSame);
     printMessage(messageToSend);
@@ -266,7 +257,7 @@ void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength
 
     for (uint8_t i = 0; i < 12; i++)
     {
-        device_off(i);
+        Devices::device_off(i);
     }
 
 #ifdef DEBUG
@@ -448,15 +439,15 @@ void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint8_t pac
     if(checkSameCommand(packetId, SIMPLE_COMMAND))
         return;
 
-    device_set_state(device, state);
+    Devices::device_set_state(device, state);
 
-//#ifdef DEBUG
+#ifdef DEBUG
     messageToSend = "[Set device state] ";
     messageToSend += "device = " + String(device);
     messageToSend += ", state = " + String(state);
 
     printMessage(messageToSend);
-//#endif
+#endif
 }
 
 void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLength)
@@ -543,7 +534,7 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
 #ifdef DEBUG
         messageToSend = "[ stepper = " + String(stepper);
         messageToSend += ", dir = " + String(direction);
-        messageToSend += ", fullSpeed = " + String(fullSpeed) + "] ";
+        messageToSend += ", speed = " + String(fullSpeed) + "] ";
 
         printMessage(messageToSend);
 #endif
@@ -578,7 +569,7 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packet
 
 #ifdef DEBUG
         messageToSend = "[ stepper = " + String(stepper);
-        messageToSend += ", fullSpeed = " + String(fullSpeed) + "] ";
+        messageToSend += ", speed = " + String(fullSpeed) + "] ";
 
         printMessage(messageToSend);
 #endif
@@ -604,7 +595,7 @@ void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t 
     {
         uint8_t device = packet[i + 1];
 
-        device_set_state(device, state);
+        Devices::device_set_state(device, state);
 #ifdef DEBUG
         messageToSend = "[ dev = " + String(device) + "] ";
 

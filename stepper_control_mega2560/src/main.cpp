@@ -15,7 +15,7 @@ void setup()
 {
   Serial.begin(BAUDRATE);
 
-  devices_init_pins();
+  Devices::devices_init_pins();
   
   steppers_init_pins();
   steppers_reset();

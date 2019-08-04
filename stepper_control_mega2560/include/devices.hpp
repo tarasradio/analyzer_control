@@ -18,9 +18,13 @@
 #define DEVICES_G_DDR DDRG
 #define DEVICES_G_PORT PORTG // 5
 
-void devices_init_pins();
-void device_on(uint8_t device);
-void device_off(uint8_t device);
-void device_set_state(uint8_t device, uint8_t state);
+class Devices
+{
+public:
+    static void devices_init_pins();
+    static void device_on(uint8_t device);
+    static void device_off(uint8_t device);
+    static void device_set_state(uint8_t device, uint8_t state);
+};
 
 #endif
