@@ -31,7 +31,7 @@ void PacketManager::ReadPacket()
     }
 }
 
-void PacketManager::ProcessPacket()
+void PacketManager::FindPacket()
 {
     uint8_t i = 0;
 

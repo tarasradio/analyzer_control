@@ -14,6 +14,6 @@ TaskManager::TaskManager()
 void TaskManager::TaskLoop()
 {
     _packetManager.ReadPacket();
-    _packetManager.ProcessPacket();
+    _packetManager.FindPacket();
     _commandExecutor.UpdateState();
 }

@@ -11,7 +11,7 @@ private:
 public:
     PacketManager(CommandExecutor2 & );
     void ReadPacket();
-    void ProcessPacket();
+    void FindPacket();
 };
 
 #endif
