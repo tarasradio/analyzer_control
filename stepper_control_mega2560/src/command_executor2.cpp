@@ -4,7 +4,7 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 
-#define DEBUG
+//#define DEBUG
 
 enum StopType
 {
@@ -36,6 +36,8 @@ enum CommandExecutionType
 
 uint8_t steppersForMove[STEPPERS_COUNT];
 uint8_t countMoveSteppers = 0;
+
+uint8_t countHomeSteppers = 0;
 
 uint8_t steppersForHomingStates[STEPPERS_COUNT];
 uint8_t steppersHomingDirection[STEPPERS_COUNT];
@@ -79,11 +81,14 @@ uint8_t CommandExecutor2::getSteppersInHoming()
 {
     uint8_t steppersInHoming = 0;
 
-    for (int i = 0; i < countMoveSteppers; i++)
+    for (int i = 0; i < countHomeSteppers; i++)
     {
         uint8_t stepper = steppersForMove[i];
         if (steppersForHomingStates[i] == WAIT_SW_PRESSED)
         {
+            messageToSend = "wait pressed do " + String(stepper);
+            printMessage(messageToSend);
+
             if (getStepperMoveState(stepper) != 0)
             {
                 steppersInHoming++;
@@ -95,15 +100,20 @@ uint8_t CommandExecutor2::getSteppersInHoming()
         }
         else if (steppersForHomingStates[i] == WAIT_SW_RELEASED)
         {
-            if (getStepperMoveState(stepper) != 0)
-            {
-                steppersInHoming++;
-            }
-            else
+            steppersInHoming++;
+            if (getStepperMoveState(stepper) == 0)
             {
                 getStepper(stepper).goUntil(RESET_ABSPOS, steppersHomingDirection[i], steppersHomingSpeed[i]);
                 steppersForHomingStates[i] = WAIT_SW_PRESSED;
+
+                messageToSend = "wait released end " + String(stepper);
+                printMessage(messageToSend);
             }
+        }
+        else if(steppersForHomingStates[i] == HOMING_SUCCESS)
+        {
+            messageToSend = "homing success " + String(stepper);
+            printMessage(messageToSend);
         }
     }
 
@@ -116,14 +126,17 @@ void CommandExecutor2::UpdateState()
 
     if (waitForCommandDone != 0) // Есть команды, ожидающие завершения
     {
-        if (getSteppersInMove() == 0 && getSteppersInHoming() == 0) // Моторы завершили движение
+        if ((getSteppersInMove() == 0) && (getSteppersInHoming() == 0)) // Моторы завершили движение
         {
+            countMoveSteppers = 0;
+            countHomeSteppers = 0;
             lastCommandState = COMMAND_DONE;
             waitForCommandDone = 0;
+            printCommandStateResponse(lastCommandId, lastCommandState);
         }
     }
 
-    printCommandStateResponse(lastCommandId, lastCommandState);
+    //printCommandStateResponse(lastCommandId, lastCommandState);
 }
 
 void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
@@ -267,6 +280,7 @@ void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength
 #endif
 }
 
+//TODO: исправить
 void CommandExecutor2::executeGoUntilCommand(uint8_t *packet, uint8_t packetLength)
 {
     uint8_t stepper = packet[0];
@@ -280,7 +294,7 @@ void CommandExecutor2::executeGoUntilCommand(uint8_t *packet, uint8_t packetLeng
     if (!checkStepper(stepper))
         return;
 
-    countMoveSteppers = 1;
+    countHomeSteppers = 1;
     steppersForMove[0] = stepper;
 
     getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
@@ -418,7 +432,7 @@ void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint8_t packetLen
     if (!checkStepper(stepper))
         return;
 
-    getStepper(stepper).setMaxSpeed(fullSpeed);
+    getStepper(stepper).setMaxSpeed(fullSpeed << 2);
     getStepper(stepper).setFullSpeed(fullSpeed);
 
 #ifdef DEBUG
@@ -497,7 +511,7 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
     if(checkSameCommand(packetId, WAITING_COMMAND))
         return;
 
-    countMoveSteppers = countOfSteppers;
+    countHomeSteppers = countOfSteppers;
 
 #ifdef DEBUG
     messageToSend = "[CNC Home] ";
@@ -518,15 +532,24 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
             steppersHomingSpeed[i] = fullSpeed;
 
             uint8_t sw_status = getStepper(stepper).getStatus() & STATUS_SW_F;
-            if (sw_status != 0)
+            if (sw_status == 0)
             {
+#ifdef DEBUG
+                    messageToSend = "status = relesed";
+                    printMessage(messageToSend);
+#endif
                 steppersForHomingStates[i] = WAIT_SW_PRESSED;
                 getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
             }
             else
             {
                 steppersForHomingStates[i] = WAIT_SW_RELEASED;
-                uint8_t inverseDir = direction == FWD ? REV : FWD;
+#ifdef DEBUG
+                    messageToSend = "status = pressed";
+                    printMessage(messageToSend);
+#endif
+                uint8_t inverseDir = (direction == FWD) ? REV : FWD;
+                getStepper(stepper).setMinSpeed(30);
                 getStepper(stepper).releaseSw(RESET_ABSPOS, inverseDir); // настроить MIN SPEED
             }
         }
