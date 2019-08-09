@@ -65,7 +65,6 @@
     <Compile Include="CommunicationProtocol\Protocol.cs" />
     <Compile Include="CommunicationProtocol\Responses\SteppersStatesResponse.cs" />
     <Compile Include="MachineControl\CncExecutor.cs" />
-    <Compile Include="MachineControl\CncFrame.cs" />
     <Compile Include="MachineControl\CncParser.cs" />
     <Compile Include="MachineControl\CncProgram.cs" />
     <Compile Include="SerialCommunication\ByteStuffing.cs" />
