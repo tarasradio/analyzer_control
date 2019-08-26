@@ -15,7 +15,7 @@ namespace SteppersControlCore.MachineControl
         private Logger _logger;
         private SerialHelper _helper;
 
-        private static List<ICommand> _commandsToSend = new List<ICommand>();
+        private static List<IAbstractCommand> _commandsToSend = new List<IAbstractCommand>();
         private Thread _executionThread;
 
         private static uint _lastSuccesCommandId;
@@ -72,91 +72,104 @@ namespace SteppersControlCore.MachineControl
             return commandState;
         }
 
-        public void StartExecution(List<ICommand> commands)
+        public void StartExecution(List<IAbstractCommand> commands)
         {
             _commandsToSend = commands;
 
             _executionThread = new Thread(commandsExecution);
             _executionThread.Start();
 
-            _logger.AddMessage("Запущено выполнение программы.");
+            Logger.AddMessage("Запущено выполнение программы.");
         }
 
         public void AbortExecution()
         {
             _executionThread?.Abort();
-            _logger.AddMessage("Выполнение программы было прерванно.");
+            Logger.AddMessage("Выполнение программы было прерванно.");
+        }
+        
+        enum ExecutionStages
+        {
+            WAIT_OK,
+            WAIT_COMPLETE
         }
 
-        static int stage = 0;
+        static ExecutionStages stage = 0;
 
         private void commandsExecution()
         {
             stage = 0;
             int commandNumber = 0;
-            foreach (ICommand command in _commandsToSend)
+            foreach (IAbstractCommand command in _commandsToSend)
             {
-                _logger.AddMessage("Команда " + commandNumber + " отправленна !");
+                Logger.AddMessage("Команда " + commandNumber + " запущена !");
+
                 executeCommand(command);
-                
-                _logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
+
+                Logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
 
                 commandNumber++;
             }
-            _logger.AddMessage("Все команды выполнены успешно !");
-            _logger.AddMessage($"Пакетов с ошибками {countBadPackets}!");
-            _logger.AddMessage("Выполнение программы завершено.");
+            Logger.AddMessage("Все команды выполнены успешно !");
+            Logger.AddMessage($"Пакетов с ошибками {countBadPackets}!");
+            Logger.AddMessage("Выполнение программы завершено.");
         }
         
-        private void executeCommand(ICommand command)
+        private void executeCommand(IAbstractCommand command)
         {
             setSuccesCommandId(0);
 
-            _helper.SendBytes(command.GetBytes());
-            
-            bool isOk = false;
-
-            while (!isOk)
+            if(Protocol.CommandTypes.HOST_COMMAND == command.GetType())
             {
-                switch(command.GetType())
+                executeHostCommand(command);
+            }
+            else
+            {
+                executeDeviceCommand(command);
+            }
+        }
+
+        private void executeDeviceCommand(IAbstractCommand command)
+        {
+            _helper.SendBytes(((IDeviceCommand)command).GetBytes());
+
+            bool executionFinished = false;
+
+            while (!executionFinished)
+            {
+                if(Protocol.CommandTypes.SIMPLE_COMMAND == command.GetType())
                 {
-                    case Protocol.CommandType.SIMPLE_COMMAND:
-                        {
-                            if(getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
-                            {
-                                isOk = true;
-                                break;
-                            }
-                        }
+                    if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
+                    {
+                        executionFinished = true;
                         break;
-                    case Protocol.CommandType.WAITING_COMMAND:
+                    }
+                }
+                else if(Protocol.CommandTypes.WAITING_COMMAND == command.GetType())
+                {
+                    if(ExecutionStages.WAIT_OK == stage)
+                    {
+                        if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
                         {
-                            switch(stage)
-                            {
-                                case 0:
-                                    {
-                                        if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
-                                        {
-                                            stage++;
-                                        }
-                                    }
-                                    break;
-                                case 1:
-                                    {
-                                        if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_DONE)
-                                        {
-                                            stage = 0;
-                                            isOk = true;
-                                            break;
-                                        }
-                                    }
-                                    break;
-                            }
+                            stage = ExecutionStages.WAIT_COMPLETE;
                         }
-                        break;
+                    }
+                    else if(ExecutionStages.WAIT_COMPLETE == stage)
+                    {
+                        if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_DONE)
+                        {
+                            stage = ExecutionStages.WAIT_OK;
+                            executionFinished = true;
+                            break;
+                        }
+                    }
                 }
             }
         }
-        
+
+        private void executeHostCommand(IAbstractCommand command)
+        {
+            ((IHostCommand)command).Execute();
+        }
     }
 }

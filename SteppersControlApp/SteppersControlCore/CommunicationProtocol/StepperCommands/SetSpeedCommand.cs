@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class SetSpeedCommand : AbstractCommand, ICommand
+    public class SetSpeedCommand : AbstractCommand, IDeviceCommand
     {
         private byte _stepper;
         uint _speed;
 
-        public SetSpeedCommand(int stepper, uint speed, uint packetId) : base(packetId, Protocol.CommandType.SIMPLE_COMMAND)
+        public SetSpeedCommand(int stepper, uint speed, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
         {
             _stepper = (byte)stepper;
             _speed = speed;
@@ -23,7 +23,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 
             SendPacket packet = new SendPacket(6);
 
-            packet.SetPacketId(PacketId);
+            packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.SET_SPEED);
             packet.SetData(1, _stepper);

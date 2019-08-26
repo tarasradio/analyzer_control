@@ -8,13 +8,13 @@ using SteppersControlCore.CommunicationProtocol;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class MoveCommand : AbstractCommand, ICommand
+    public class MoveCommand : AbstractCommand, IDeviceCommand
     {
         private byte _stepper;
         private Protocol.Direction _direction;
         private uint _countSteps;
 
-        public MoveCommand(int stepper, Protocol.Direction direction, uint countSteps, uint packetId) : base(packetId, Protocol.CommandType.WAITING_COMMAND)
+        public MoveCommand(int stepper, Protocol.Direction direction, uint countSteps, uint packetId) : base(packetId, Protocol.CommandTypes.WAITING_COMMAND)
         {
             _stepper = (byte)stepper;
             _direction = direction;
@@ -26,7 +26,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
             byte[] stepsBytes = BitConverter.GetBytes(_countSteps);
 
             SendPacket packet = new SendPacket(7);
-            packet.SetPacketId(PacketId);
+            packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.MOVE);
             packet.SetData(1, _stepper);

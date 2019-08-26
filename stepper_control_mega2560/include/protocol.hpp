@@ -19,13 +19,14 @@ enum CommandStates
 enum Responses
 {
   STEPPERS_STATES = 0x10,
-  COMMAND_STATE = 0x11,
-  TEXT_MESSAGE = 0x12
+  SENSORS_VALUES,
+  COMMAND_STATE,
+  TEXT_MESSAGE
 };
 
 enum StepperCommands
 {
-  CMD_GO_UNTIL = 0x09,
+  CMD_HOME = 0x09,
   CMD_RUN = 0x10,
   CMD_MOVE = 0x11,
   CMD_STOP = 0x12,
@@ -35,12 +36,13 @@ enum StepperCommands
 enum AdditionalCommands
 {
 	CMD_SET_DEVICE_STATE = 0x14,
-	CMD_ABORT
+	CMD_ABORT,
+  CMD_WAIT_TIME
 };
 
 enum CncCommands
 {
-	CNC_MOVE = 0x16,
+	CNC_MOVE = 0x17,
 	CNC_SET_SPEED,
 	CNC_STOP,
 	CNC_HOME,

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
-    public class MoveCncCommand : AbstractCommand, ICommand
+    public class MoveCncCommand : AbstractCommand, IDeviceCommand
     {
         private Dictionary<int, int> _steps;
 
-        public MoveCncCommand(Dictionary<int, int> steps, uint packetId) : base(packetId, Protocol.CommandType.WAITING_COMMAND)
+        public MoveCncCommand(Dictionary<int, int> steps, uint packetId) : base(packetId, Protocol.CommandTypes.WAITING_COMMAND)
         {
             _steps = steps;
         }
@@ -18,7 +18,7 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
         public byte[] GetBytes()
         {
             SendPacket packet = new SendPacket(_steps.Count * 6 + 2);
-            packet.SetPacketId(PacketId);
+            packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.CncCommands.CNC_MOVE);
             packet.SetData(1, (byte)_steps.Count);

@@ -6,18 +6,14 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.Responses
 {
-    public class DebugResponse : AbstaractResponse
+    public class AbstaractResponse
     {
-        public DebugResponse(byte[] buffer) : base (buffer)
+        protected byte[] _buffer;
+
+        public AbstaractResponse(byte[] buffer)
         {
             _buffer = new byte[buffer.Length - 1];
             Array.Copy(buffer, 1, _buffer, 0, _buffer.Length - 1);
-        }
-
-        public String GetDebugMessage()
-        {
-            string message = Encoding.UTF8.GetString(_buffer, 0, _buffer.Length);
-            return message;
         }
     }
 }

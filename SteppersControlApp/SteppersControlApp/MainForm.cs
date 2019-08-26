@@ -27,7 +27,7 @@ namespace SteppersControlApp
         PackageReceiver _packageReceiver;
         PackageHandler _packageHandler;
         CncExecutor _cncExecutor;
-        
+
         ControlPanelForm controlPanel = new ControlPanelForm();
 
         string Configurationfilename = "settings.txt";
@@ -56,7 +56,7 @@ namespace SteppersControlApp
         private void InitializeAll()
         {
             _logger = _core.GetLogger();
-            _logger.OnNewMessageAdded += logView.AddMessage;
+            Logger.OnNewMessageAdded += logView.AddMessage;
 
             _packageReceiver = new PackageReceiver(Protocol.PacketHeader, Protocol.PacketEnd, _logger);
             _packageHandler = new PackageHandler(_logger);
@@ -66,6 +66,7 @@ namespace SteppersControlApp
             _packageHandler.SteppersStatesReceived += SteppersStatesReceived;
             _packageHandler.MessageReceived += MessageReceived;
             _packageHandler.CommandStateResponseReceived += OkResponseReceived;
+            _packageHandler.SensorsValuesReceived += SensorsValuesReceived;
 
             _helper = new SerialHelper(_logger, _packageReceiver);
 
@@ -75,7 +76,15 @@ namespace SteppersControlApp
             cncView.SetHelper(_helper);
             cncView.SetControlThread(_cncExecutor);
 
-            editBaudrate.SelectedIndex = 0;
+            editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
+
+            buttonConnect.Enabled = false;
+        }
+
+        private void SensorsValuesReceived(ushort[] values)
+        {
+            Action<ushort[]> action = UpdateSensorsValues;
+            Invoke(action, values);
         }
 
         private void OkResponseReceived(uint commandId, Protocol.CommandStates state)
@@ -95,7 +104,7 @@ namespace SteppersControlApp
             Action<ushort[]> action = UpdateSteppersState;
             Invoke(action, states);
         }
-        
+
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
         {
             controlPanel = new ControlPanelForm();
@@ -110,6 +119,7 @@ namespace SteppersControlApp
                 _helper.Disconnect();
 
                 steppersGridView.StopUpdate();
+                sensorsView.StopUpdate();
 
                 buttonConnect.Text = "Подключиться";
                 connectionState.Text = "Ожидание соединения";
@@ -126,26 +136,27 @@ namespace SteppersControlApp
                 if (isOK)
                 {
                     connectionState.Text = "Установленно соединение с " + portName;
-                    _logger.AddMessage(
+                    Logger.AddMessage(
                         "Открытие подключения - Подключение к " + portName + " открыто");
                     buttonConnect.Text = "Отключение";
 
                     steppersGridView.StartUpdate();
+                    sensorsView.StartUpdate();
                 }
                 else
                 {
-                    _logger.AddMessage(
+                    Logger.AddMessage(
                         "Открытие подключения - Ошибка при подключении!");
                     connectionState.Text = "Ожидание соединения";
                 }
             }
-            
+
             UpdateState();
         }
 
         private void HandleOkResponse(uint commandId, Protocol.CommandStates state)
         {
-            _logger.AddMessage("OK + " + commandId);
+            Logger.AddMessage("OK + " + commandId);
 
             _cncExecutor.ChangeSuccesCommandId(commandId, state);
         }
@@ -155,11 +166,17 @@ namespace SteppersControlApp
             steppersGridView.UpdateSteppersStatus(states);
         }
 
+        private void UpdateSensorsValues(ushort[] values)
+        {
+            sensorsView.UpdateSensorsValues(values);
+            _core.UpdateSensorsValues(values);
+        }
+
         private void ShowReceivedMessage(string message)
         {
-            _logger.AddMessage(message);
+            Logger.AddMessage(message);
         }
-        
+
         private void buttonUpdateList_Click(object sender, EventArgs e)
         {
             rescanOpenPorts();
@@ -177,14 +194,14 @@ namespace SteppersControlApp
 
             if (isOpen == true)
             {
-                _logger.AddMessage(
+                Logger.AddMessage(
                     "Поиск портов - Найдены открытые порты");
                 buttonConnect.Enabled = true;
                 portsListBox.SelectedIndex = 0;
             }
             else
             {
-                _logger.AddMessage(
+                Logger.AddMessage(
                     "Поиск портов - Открытых портов не найдено");
                 buttonConnect.Enabled = false;
                 portsListBox.SelectedText = "";
@@ -193,7 +210,7 @@ namespace SteppersControlApp
 
         private void DeviceButton_CheckedChanged(object sender, EventArgs e)
         {
-            if( ((CheckBox)sender).Checked )
+            if (((CheckBox)sender).Checked)
             {
                 ((CheckBox)sender).BackColor = Color.GreenYellow;
             }
@@ -202,7 +219,7 @@ namespace SteppersControlApp
                 ((CheckBox)sender).BackColor = Color.White;
             }
 
-            if( ((CheckBox) sender).Name == buttonUnit1.Name)
+            if (((CheckBox)sender).Name == buttonUnit1.Name)
             {
                 SetDeviceState(0, sender);
             }
@@ -287,18 +304,23 @@ namespace SteppersControlApp
 
                 devicesControlView.SetConfiguration(_core.getConfig());
                 devicesControlView.UpdateInformation();
+
+                sensorsView.SetConfiguration(_core.getConfig());
+                sensorsView.UpdateInformation();
+
+                _core.InitSensorsValues();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void testWrapUnwrap()
         {
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
 
-            byte[] packet = { 0x7D, 0x7D, 0xDD, 0x11, 0x12, 0x13, 0xDD, 0x13, 0x34, 0x55, 0x55, 0x45, 0x45, 0x34,0xDD, 0x7D };
+            byte[] packet = { 0x7D, 0x7D, 0xDD, 0x11, 0x12, 0x13, 0xDD, 0x13, 0x34, 0x55, 0x55, 0x45, 0x45, 0x34, 0xDD, 0x7D };
 
-            for(int i = 0; i < 100000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 byte[] wrapResult = ByteStuffing.wrapPacket(packet);
                 byte[] unwrapResult = ByteStuffing.unwrapPacket(wrapResult);
@@ -312,7 +334,38 @@ namespace SteppersControlApp
             ts.Hours, ts.Minutes, ts.Seconds,
             ts.Milliseconds / 10);
             Console.WriteLine("RunTime " + elapsedTime);
+        }
 
+        private void testWrapReceive()
+        {
+            String message = "Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!\n\r";
+
+            byte[] messageBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(message);
+            byte[] buffer = new byte [messageBytes.Length + 1];
+
+            Array.Copy(messageBytes, 0, buffer, 1, messageBytes.Length);
+
+            buffer[0] = 0x13;
+
+            byte[] WrapBuffer = ByteStuffing.wrapPacket(buffer);
+
+            byte[] sendBuffer = new byte[WrapBuffer.Length + 1];
+            Array.Copy(WrapBuffer, sendBuffer, WrapBuffer.Length);
+            sendBuffer[sendBuffer.Length - 1] = 0xDD;
+
+            byte[] bigSendBuffer = new byte[sendBuffer.Length * 6];
+
+            for(int i = 0; i < 6; i++)
+            {
+                Array.Copy(sendBuffer, 0, bigSendBuffer, i * sendBuffer.Length, sendBuffer.Length);
+            }
+
+            _packageReceiver.FindPacket(bigSendBuffer);
+        }
+
+        private void testButton_Click(object sender, EventArgs e)
+        {
+            testWrapReceive();
         }
     }
 }

@@ -51,40 +51,27 @@ namespace SteppersControlApp.Views
         {
             _logger = logger;
         }
-
-        AutocompleteMenu popupMenu;
-
-        readonly List<string> regularWords = new List<string>()
-        {
-            "MOVE M",
-            "SPEED M",
-            "STOP M",
-            "HOME M",
-            "ON U",
-            "OFF U"
-        };
-
+        
         private void InitilizeProgramtextBox()
         {
             programTextBox.TextChanged += ProgramTextBox_TextChanged;
-            popupMenu = new AutocompleteMenu(programTextBox);
-            popupMenu.AllowTabKey = true;
-            popupMenu.Items.SetAutocompleteItems(regularWords);
         }
 
         Style commentsStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
         Style motorCommandNameStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         Style simpleCommandNameStyle = new TextStyle(Brushes.Green, null, FontStyle.Bold);
         Style unitCommandNameStyle = new TextStyle(Brushes.DarkOrange, null, FontStyle.Bold);
-        Style motorNumberStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
+        Style deviceNumberStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
         Style commandsArgumentStyle = new TextStyle(Brushes.Purple, null, FontStyle.Bold);
+
+        Style WaitCommandNameStyle = new TextStyle(Brushes.DarkOrange, null, FontStyle.Bold);
 
         Style digitStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
 
         private void ProgramTextBox_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             e.ChangedRange.ClearStyle(motorCommandNameStyle);
-            e.ChangedRange.ClearStyle(motorNumberStyle);
+            e.ChangedRange.ClearStyle(deviceNumberStyle);
             e.ChangedRange.ClearStyle(unitCommandNameStyle);
             e.ChangedRange.ClearStyle(commandsArgumentStyle);
             e.ChangedRange.ClearStyle(simpleCommandNameStyle);
@@ -95,9 +82,11 @@ namespace SteppersControlApp.Views
             e.ChangedRange.SetStyle(motorCommandNameStyle, @"\b(?<range>MOVE|SPEED)\b", RegexOptions.IgnoreCase);
             e.ChangedRange.SetStyle(unitCommandNameStyle, @"\b(?<range>ON|OFF)\b", RegexOptions.IgnoreCase);
             e.ChangedRange.SetStyle(simpleCommandNameStyle, @"\b(?<range>HOME|STOP)\b", RegexOptions.IgnoreCase);
-            e.ChangedRange.SetStyle(motorNumberStyle, @"\b(?<range>M|D)(\d)+\b", RegexOptions.IgnoreCase);
-            e.ChangedRange.SetStyle(commandsArgumentStyle, @"\b(?<range>S)(-)?(\d)+\b", RegexOptions.IgnoreCase);
-            e.ChangedRange.SetStyle(digitStyle, @"\b(M|S)(?<range>(-)?\d+)\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(deviceNumberStyle, @"\b(?<range>M|D)(\d)+\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(commandsArgumentStyle, @"\b(?<range>S|V)(-)?(\d)+\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(digitStyle, @"\b(M|S|D|V)(?<range>(-)?\d+)\b", RegexOptions.IgnoreCase);
+
+            e.ChangedRange.SetStyle(WaitCommandNameStyle, @"\b(?<range>WAITF|WAITR|DELAY)\b", RegexOptions.IgnoreCase);
 
             //comment highlighting
             e.ChangedRange.SetStyle(commentsStyle, @"//.*$", RegexOptions.Multiline);
@@ -108,7 +97,7 @@ namespace SteppersControlApp.Views
             CncParser parser = new CncParser(_logger);
             _program = parser.Parse(programTextBox.Text);
 
-            _logger.AddMessage($"Программа содержит {_program.Commands.Count} команд.");
+            Logger.AddMessage($"Программа содержит {_program.Commands.Count} команд.");
 
             return true;
         }
@@ -132,7 +121,7 @@ namespace SteppersControlApp.Views
                 }
                 catch (System.IO.FileNotFoundException)
                 {
-                    _logger.AddMessage("Ошибка при открытии файла - Файл не найден.");
+                    Logger.AddMessage("Ошибка при открытии файла - Файл не найден.");
                 }
             }
         }
@@ -149,193 +138,30 @@ namespace SteppersControlApp.Views
                 }
                 catch(System.IO.FileNotFoundException)
                 {
-                    _logger.AddMessage("Ошибка при сохранении файла.");
+                    Logger.AddMessage("Ошибка при сохранении файла.");
                 }
                 
             }
         }
 
-        static List<ICommand> commandsToSend = new List<ICommand>();
+        static List<IAbstractCommand> commandsToSend = new List<IAbstractCommand>();
 
-        void LEDSBlink()
+        void DelayTest()
         {
             commandsToSend.Clear();
 
-            ICommand command;
+            IAbstractCommand command;
 
-            for (int k = 0; k < 2; k++)
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 6; i++)
-                {
-                    command = new SetDeviceStateCommand(i, SetDeviceStateCommand.DeviseState.DEVICE_ON, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                    command = new SetDeviceStateCommand(11 - i, SetDeviceStateCommand.DeviseState.DEVICE_ON, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 6; i >= 0; i--)
-                {
-                    command = new SetDeviceStateCommand(i, SetDeviceStateCommand.DeviseState.DEVICE_OFF, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                    command = new SetDeviceStateCommand(11 - i, SetDeviceStateCommand.DeviseState.DEVICE_OFF, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
+                command = new WaitTimeCommand(5000, Protocol.GetPacketId());
+                commandsToSend.Add(command);
             }
-
-            for (int k = 0; k < 2; k++)
-            {
-                for (int i = 0; i < 12; i++)
-                {
-                    command = new SetDeviceStateCommand(i, SetDeviceStateCommand.DeviseState.DEVICE_ON, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 12; i >= 0; i--)
-                {
-                    command = new SetDeviceStateCommand(i, SetDeviceStateCommand.DeviseState.DEVICE_OFF, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-            }
-
-            for (int k = 0; k < 2; k++)
-            {
-                for (int i = 12; i >= 0; i--)
-                {
-                    command = new SetDeviceStateCommand(i, SetDeviceStateCommand.DeviseState.DEVICE_ON, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 0; i < 12; i++)
-                {
-                    command = new SetDeviceStateCommand(i, SetDeviceStateCommand.DeviseState.DEVICE_OFF, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-            }
-        }
-
-        UInt32 HomePose = 1000;
-        UInt32 Degrees90 = 6400;
-
-        void Motor0Drive()
-        {
-            commandsToSend.Clear();
-            ICommand command;
-            
-            for(int  k = 0; k < 20; k++)
-            {
-                command = new SetSpeedCommand(1, 300, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                //home start
-                command = new GoUntilCommand(0, Protocol.Direction.REV, 100, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                command = new SetSpeedCommand(0, 200, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                command = new GoUntilCommand(1, Protocol.Direction.REV, 100, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                command = new SetSpeedCommand(1, 200, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-                // home end
-
-                command = new MoveCommand(0, Protocol.Direction.FWD, HomePose, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                command = new MoveCommand(1, Protocol.Direction.FWD, HomePose, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                //6400 = 90 degrees
-
-                command = new MoveCommand(0, Protocol.Direction.FWD, Degrees90 * 2, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                command = new MoveCommand(0, Protocol.Direction.REV, Degrees90 * 2, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                command = new MoveCommand(1, Protocol.Direction.FWD, Degrees90 * 2, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                command = new MoveCommand(1, Protocol.Direction.REV, Degrees90 * 2, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-
-                for (int i = 0; i < 2; i++)
-                {
-                    command = new MoveCommand(0, Protocol.Direction.FWD, Degrees90, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 0; i < 2; i++)
-                {
-                    command = new MoveCommand(1, Protocol.Direction.FWD, Degrees90, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int  i = 0; i < 2; i++)
-                {
-                    command = new MoveCommand(0, Protocol.Direction.REV, Degrees90, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 0; i < 2; i++)
-                {
-                    command = new MoveCommand(1, Protocol.Direction.REV, Degrees90, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 0; i < 4; i++)
-                {
-                    command = new MoveCommand(0, Protocol.Direction.FWD, Degrees90 / 2, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 0; i < 4; i++)
-                {
-                    command = new MoveCommand(1, Protocol.Direction.FWD, Degrees90 / 2, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 0; i < 4; i++)
-                {
-                    command = new MoveCommand(0, Protocol.Direction.REV, Degrees90 / 2, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-
-                for (int i = 0; i < 4; i++)
-                {
-                    command = new MoveCommand(1, Protocol.Direction.REV, Degrees90 / 2, Protocol.GetPacketId());
-                    commandsToSend.Add(command);
-                }
-            }
-            
-
-            //command = new MoveCommand(1, Protocol.Direction.REV, 20000, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
-
-            //command = new MoveCommand(0, Protocol.Direction.FWD, 20000, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
-            //command = new MoveCommand(1, Protocol.Direction.REV, 20000, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
-
-            //command = new SetSpeedCommand(1, 250, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
-
-            //command = new MoveCommand(0, Protocol.Direction.FWD, 20000, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
-            //command = new MoveCommand(1, Protocol.Direction.REV, 20000, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
-
-            //command = new MoveCommand(0, Protocol.Direction.FWD, 20000, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
-            //command = new MoveCommand(1, Protocol.Direction.REV, 20000, Protocol.GetPacketId());
-            //commandsToSend.Add(command);
         }
 
         private void buttonTestCNCMove_Click(object sender, EventArgs e)
         {
-            //LEDSBlink();
-            Motor0Drive();
+            DelayTest();
             _cncExecutor.StartExecution(commandsToSend);
         }
         

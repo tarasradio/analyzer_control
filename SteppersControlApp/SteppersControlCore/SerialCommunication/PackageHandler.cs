@@ -9,13 +9,14 @@ using SteppersControlCore.CommunicationProtocol.Responses;
 
 namespace SteppersControlCore.SerialCommunication
 {
-    public delegate void SteppersStatesReceivedDelegate(UInt16[] states);
+    public delegate void DeviseStatesReceivedDelegate(UInt16[] states);
     public delegate void MessageReceivedDelegate(string message);
     public delegate void CommandStateResponseReceivedDelegate(uint commandId, Protocol.CommandStates state);
 
     public class PackageHandler
     {
-        public event SteppersStatesReceivedDelegate SteppersStatesReceived;
+        public event DeviseStatesReceivedDelegate SteppersStatesReceived;
+        public event DeviseStatesReceivedDelegate SensorsValuesReceived;
         public event MessageReceivedDelegate MessageReceived;
         public event CommandStateResponseReceivedDelegate CommandStateResponseReceived;
 
@@ -35,41 +36,45 @@ namespace SteppersControlCore.SerialCommunication
 
             byte packetType = packet[0];
             
-            switch(packetType)
+            if((byte)Protocol.ResponsesTypes.DRIVERS_STATES == packetType)
             {
-                case (byte)Protocol.ResponsesTypes.DRIVERS_STATES:
+                UInt16[] states = new SteppersStatesResponse(packet).GetStates();
+                
+                if (states != null)
+                {
+                    if (states?.Length != Core._configuration.Steppers.Count)
                     {
-                        UInt16[] states = new SteppersStatesResponse(packet).GetStates();
-                        if (states?.Length != Core._configuration.Steppers.Count)
-                        {
-                            _logger.AddMessage("Число двигателей в пакете не верное!");
-                        }
-                        if (states != null)
-                        {
-                            SteppersStatesReceived(states);
-                        }
+                        Logger.AddMessage("Число двигателей в пакете не верное!");
                     }
-                    break;
-                case (byte)Protocol.ResponsesTypes.COMMAND_STATE_RESPONSE:
+                    else
+                        SteppersStatesReceived(states);
+                }
+            }
+            else if((byte)Protocol.ResponsesTypes.SENSORS_VALUES == packetType)
+            {
+                UInt16[] values = new SensorsValuesResponse(packet).GetStates();
+                
+                if (null != values)
+                {
+                    if (values?.Length != Core._configuration.Sensors.Count)
                     {
-                        CommandStateResponse response = new CommandStateResponse(packet);
-                        UInt32 commandId = response.GetCommandId();
-                        Protocol.CommandStates commandState = response.GetCommandState();
-                        CommandStateResponseReceived(commandId, commandState);
+                        Logger.AddMessage("Число датчиков в пакете не верное!");
                     }
-                    break;
-                case (byte)Protocol.ResponsesTypes.TEXT_MESSAGE:
-                    {
-                        string message = new DebugResponse(packet).GetDebugMessage();
-                        MessageReceived(message);
-                    }
-                    break;
-                default:
-                    {
-
-                    }
-                    break;
-
+                    else
+                        SensorsValuesReceived(values);
+                }
+            }
+            else if((byte)Protocol.ResponsesTypes.COMMAND_STATE_RESPONSE == packetType)
+            {
+                CommandStateResponse response = new CommandStateResponse(packet);
+                UInt32 commandId = response.GetCommandId();
+                Protocol.CommandStates commandState = response.GetCommandState();
+                CommandStateResponseReceived(commandId, commandState);
+            }
+            else if((byte)Protocol.ResponsesTypes.TEXT_MESSAGE == packetType)
+            {
+                string message = new DebugResponse(packet).GetDebugMessage();
+                MessageReceived(message);
             }
         }
     }

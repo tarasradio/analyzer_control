@@ -41,8 +41,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.buttonShowControlPanel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSteppers = new System.Windows.Forms.TabPage();
+            this.sensorsView = new SteppersControlApp.Views.SensorsView();
             this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
             this.tabPageUnits = new System.Windows.Forms.TabPage();
             this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
@@ -104,7 +106,8 @@
             this.buttonConnect,
             this.toolStripSeparator1,
             this.buttonShowControlPanel,
-            this.toolStripSeparator2});
+            this.toolStripSeparator2,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -176,6 +179,16 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(71, 36);
+            this.toolStripButton1.Text = "Test Button";
+            this.toolStripButton1.Click += new System.EventHandler(this.testButton_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -192,6 +205,7 @@
             // 
             // tabPageSteppers
             // 
+            this.tabPageSteppers.Controls.Add(this.sensorsView);
             this.tabPageSteppers.Controls.Add(this.steppersGridView);
             this.tabPageSteppers.Location = new System.Drawing.Point(4, 22);
             this.tabPageSteppers.Name = "tabPageSteppers";
@@ -201,14 +215,23 @@
             this.tabPageSteppers.Text = "Список моторов";
             this.tabPageSteppers.UseVisualStyleBackColor = true;
             // 
+            // sensorsView
+            // 
+            this.sensorsView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.sensorsView.Location = new System.Drawing.Point(6, 6);
+            this.sensorsView.Name = "sensorsView";
+            this.sensorsView.Size = new System.Drawing.Size(312, 366);
+            this.sensorsView.TabIndex = 14;
+            // 
             // steppersGridView
             // 
             this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.steppersGridView.Location = new System.Drawing.Point(3, 6);
+            this.steppersGridView.Location = new System.Drawing.Point(321, 6);
             this.steppersGridView.Name = "steppersGridView";
-            this.steppersGridView.Size = new System.Drawing.Size(795, 366);
+            this.steppersGridView.Size = new System.Drawing.Size(477, 366);
             this.steppersGridView.TabIndex = 11;
             // 
             // tabPageUnits
@@ -239,9 +262,9 @@
             this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.devicesControlView.Location = new System.Drawing.Point(402, 6);
+            this.devicesControlView.Location = new System.Drawing.Point(138, 6);
             this.devicesControlView.Name = "devicesControlView";
-            this.devicesControlView.Size = new System.Drawing.Size(396, 366);
+            this.devicesControlView.Size = new System.Drawing.Size(660, 366);
             this.devicesControlView.TabIndex = 12;
             // 
             // buttonUnit12
@@ -489,6 +512,8 @@
         private System.Windows.Forms.ToolStripComboBox editBaudrate;
         private Views.DevicesControlView devicesControlView;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private Views.SensorsView sensorsView;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 

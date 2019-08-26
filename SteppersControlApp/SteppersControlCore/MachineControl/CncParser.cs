@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 using SteppersControlCore.CommunicationProtocol.CncCommands;
+using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 
 namespace SteppersControlCore.MachineControl
 {
@@ -23,7 +24,7 @@ namespace SteppersControlCore.MachineControl
 
         Logger _logger;
 
-        readonly Regex cncCommandPattern = new Regex(@"(MOVE|SPEED|STOP|HOME|ON|OFF)(\s+\w+(-)?\d+)+", RegexOptions.IgnoreCase);
+        readonly Regex cncCommandPattern = new Regex(@"(MOVE|SPEED|STOP|HOME|ON|OFF|WAITR|WAITF|DELAY)(\s+\w+(-)?\d+)+", RegexOptions.IgnoreCase);
 
         readonly Regex moveCommandPattern = new Regex(@"MOVE(\s+\w+\d+)+", RegexOptions.IgnoreCase);
         readonly Regex moveArgumentPattern = new Regex(@"\s+M(?<motor>\d+)\s*S(?<steps>(-)?\d+)", RegexOptions.IgnoreCase);
@@ -40,6 +41,13 @@ namespace SteppersControlCore.MachineControl
         readonly Regex offCommandPattern = new Regex(@"OFF(\s+D\d+)+", RegexOptions.IgnoreCase);
 
         readonly Regex devArgumentPattern = new Regex(@"\s+D(?<device>\d+)", RegexOptions.IgnoreCase);
+
+        readonly Regex delayCommandPattern = new Regex(@"DELAY(\s+\w+\d+)+", RegexOptions.IgnoreCase);
+        readonly Regex delayArgumentPattern = new Regex(@"\s+M(?<time>\d+)", RegexOptions.IgnoreCase);
+
+        readonly Regex waitRisingCommandPattern = new Regex(@"WAITR(\s+\w+\d+)+", RegexOptions.IgnoreCase);
+        readonly Regex waitFallingCommandPattern = new Regex(@"WAITF(\s+\w+\d+)+", RegexOptions.IgnoreCase);
+        readonly Regex waitArgumentPattern = new Regex(@"\s+S(?<sensor>\d+)\s*V(?<value>(-)?\d+)", RegexOptions.IgnoreCase);
 
         public CncParser(Logger logger)
         {
@@ -67,7 +75,7 @@ namespace SteppersControlCore.MachineControl
 
                         if(motor < 0)
                         {
-                            _logger.AddMessage(" Номер мотора не может быть меньше 0");
+                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
                         }
                         arguments[motor] = steps;
 
@@ -88,7 +96,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (motor < 0)
                         {
-                            _logger.AddMessage(" Номер мотора не может быть меньше 0");
+                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
                         }
 
                         arguments[motor] = speed;
@@ -109,7 +117,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (motor < 0)
                         {
-                            _logger.AddMessage(" Номер мотора не может быть меньше 0");
+                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
                         }
 
                         arguments.Add(motor);
@@ -131,7 +139,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (motor < 0)
                         {
-                            _logger.AddMessage(" Номер мотора не может быть меньше 0");
+                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
                         }
 
                         arguments[motor] = speed;
@@ -152,7 +160,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (device < 0)
                         {
-                            _logger.AddMessage(" Номер устройства не может быть меньше 0");
+                            Logger.AddMessage(" Номер устройства не может быть меньше 0");
                         }
 
                         arguments.Add(device);
@@ -173,7 +181,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (device < 0)
                         {
-                            _logger.AddMessage(" Номер устройства не может быть меньше 0");
+                            Logger.AddMessage(" Номер устройства не может быть меньше 0");
                         }
 
                         arguments.Add(device);
@@ -183,8 +191,85 @@ namespace SteppersControlCore.MachineControl
 
                     program.Commands.Add(new OffDeviceCncCommand(arguments, Core.GetPacketId()));
                 }
+                else if (delayCommandPattern.IsMatch(commandString.Value))
+                {
+                    int timeMs = -1;
+                    parsedCommand = "DELAY {";
+
+                    Match arg = delayArgumentPattern.Match(commandString.Value);
+
+                    if(arg.Success)
+                    {
+                        timeMs = int.Parse(arg.Groups["time"].Value);
+
+                        if (timeMs < 0)
+                        {
+                            Logger.AddMessage(" Время задержки не может быть меньше 0");
+                        }
+
+                        parsedCommand += $"time = {timeMs} ms";
+                    }
+
+                    program.Commands.Add(new WaitTimeCommand((uint)timeMs, Core.GetPacketId()));
+                }
+                else if (waitRisingCommandPattern.IsMatch(commandString.Value))
+                {
+                    int sensor = -1;
+                    int value = -1;
+                    parsedCommand = "Wait rising {";
+
+                    Match arg = waitArgumentPattern.Match(commandString.Value);
+
+                    if (arg.Success)
+                    {
+                        sensor = int.Parse(arg.Groups["sensor"].Value);
+                        value = int.Parse(arg.Groups["value"].Value);
+
+                        if (sensor < 0)
+                        {
+                            Logger.AddMessage(" Номер датчика не может быть меньше 0");
+                        }
+
+                        if (value < 0)
+                        {
+                            Logger.AddMessage(" Значение датчика не может быть меньше 0");
+                        }
+
+                        parsedCommand += $"sensor = {sensor}, value = {value}";
+                    }
+
+                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor,(uint)value, ValueEdge.RisingEdge, Core.GetPacketId()));
+                }
+                else if (waitFallingCommandPattern.IsMatch(commandString.Value))
+                {
+                    int sensor = -1;
+                    int value = -1;
+                    parsedCommand = "Wait falling {";
+
+                    Match arg = waitArgumentPattern.Match(commandString.Value);
+
+                    if (arg.Success)
+                    {
+                        sensor = int.Parse(arg.Groups["sensor"].Value);
+                        value = int.Parse(arg.Groups["value"].Value);
+
+                        if (sensor < 0)
+                        {
+                            Logger.AddMessage(" Номер датчика не может быть меньше 0");
+                        }
+
+                        if (value < 0)
+                        {
+                            Logger.AddMessage(" Значение датчика не может быть меньше 0");
+                        }
+
+                        parsedCommand += $"sensor = {sensor}, value = {value}";
+                    }
+
+                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor, (uint)value, ValueEdge.FallingEdge, Core.GetPacketId()));
+                }
                 parsedCommand += "}";
-                _logger.AddMessage(parsedCommand);
+                Logger.AddMessage(parsedCommand);
             }
 
             return program;

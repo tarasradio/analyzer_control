@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class RunCommand : AbstractCommand, ICommand
+    public class RunCommand : AbstractCommand, IDeviceCommand
     {
         private byte _stepper;
         private Protocol.Direction _direction;
         private uint _speed;
 
-        public RunCommand(int stepper, Protocol.Direction direction, uint speed, uint packetId) : base(packetId, Protocol.CommandType.SIMPLE_COMMAND)
+        public RunCommand(int stepper, Protocol.Direction direction, uint speed, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
         {
             _stepper = (byte)stepper;
             _direction = direction;
@@ -24,7 +24,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
             byte[] speedBytes = BitConverter.GetBytes(_speed);
 
             SendPacket packet = new SendPacket(7);
-            packet.SetPacketId(PacketId);
+            packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.RUN);
             packet.SetData(1, _stepper);

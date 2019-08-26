@@ -10,6 +10,7 @@ private:
     void printCommandStateResponse(uint32_t commandId, uint8_t commandState);
     void printMessage(String messageText);
     void printSteppersStates();
+    void printSensorsValues();
 
     uint8_t getSteppersInHoming();
     uint8_t getSteppersInMove();
@@ -19,8 +20,9 @@ private:
 
     void addCommandForWait(uint32_t commandId);
 
+    void executeWaitTimeCommand(uint8_t *packet, uint8_t packetLength);
     void executeAbortCommand(uint8_t *packet, uint8_t packetLength);
-    void executeGoUntilCommand(uint8_t *packet, uint8_t packetLength);
+    void executeHomeCommand(uint8_t *packet, uint8_t packetLength);
     void executeRunCommand(uint8_t *packet, uint8_t packetLength);
     void executeMoveCommand(uint8_t *packet, uint8_t packetLength);
     void executeStopCommand(uint8_t *packet, uint8_t packetLength);

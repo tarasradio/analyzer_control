@@ -8,17 +8,25 @@ using System.Xml;
 
 namespace SteppersControlCore
 {
+    public struct Device
+    {
+        public int Number { get; set; }
+        public string Name { get; set; }
+    }
+
     public class Configuration
     {
         const string ROOTNAME = "SteppersTool";
 
-        public Dictionary<int, Stepper> Steppers { get; set; }
+        public Dictionary<int, Device> Steppers { get; set; }
         public Dictionary<int, Device> Devices { get; set; }
+        public Dictionary<int, Device> Sensors { get; set; }
 
         public Configuration()
         {
-            Steppers = new Dictionary<int, Stepper>();
+            Steppers = new Dictionary<int, Device>();
             Devices = new Dictionary<int, Device>();
+            Sensors = new Dictionary<int, Device>();
         }
 
         public bool LoadFromFile(string filename)
@@ -32,11 +40,11 @@ namespace SteppersControlCore
                 document.Load(filename);
 
                 XmlNodeList SteppersNode =
-                    document.SelectNodes("/" + ROOTNAME + "/Steppers/Stepper");
+                    document.SelectNodes($"/{ROOTNAME}/Steppers/Stepper");
 
                 foreach (XmlNode StepperNode in SteppersNode)
                 {
-                    Stepper item = new Stepper();
+                    Device item = new Device();
 
                     item.Number = int.Parse(StepperNode.SelectSingleNode("Number").InnerText);
 
@@ -44,13 +52,12 @@ namespace SteppersControlCore
                         throw new FormatException("Номер двигателя не может быть меньше 0.");
 
                     item.Name = StepperNode.SelectSingleNode("Name").InnerText;
-                    item.Speed = int.Parse(StepperNode.SelectSingleNode("Speed").InnerText);
 
                     Steppers.Add(item.Number, item);
                 }
 
                 XmlNodeList DevicesNode =
-                    document.SelectNodes("/" + ROOTNAME + "/Devices/Device");
+                    document.SelectNodes($"/{ROOTNAME}/Devices/Device");
 
                 foreach (XmlNode DeviceNode in DevicesNode)
                 {
@@ -64,6 +71,23 @@ namespace SteppersControlCore
                     item.Name = DeviceNode.SelectSingleNode("Name").InnerText;
 
                     Devices.Add(item.Number, item);
+                }
+
+                XmlNodeList sensorsNode =
+                    document.SelectNodes($"/{ROOTNAME}/Sensors/Sensor");
+
+                foreach (XmlNode sensorNode in sensorsNode)
+                {
+                    Device item = new Device();
+
+                    item.Number = int.Parse(sensorNode.SelectSingleNode("Number").InnerText);
+
+                    if (item.Number < 0)
+                        throw new FormatException("Номер датчика не может быть меньше 0.");
+
+                    item.Name = sensorNode.SelectSingleNode("Name").InnerText;
+
+                    Sensors.Add(item.Number, item);
                 }
             }
             catch { return false; }
@@ -82,28 +106,62 @@ namespace SteppersControlCore
             document.AppendChild(root);
             document.InsertBefore(xmlDeclaration, root);
 
-            XmlElement SteppersNode = document.CreateElement("Steppers");
+            XmlElement steppersNode = document.CreateElement("Steppers");
 
-            foreach (KeyValuePair<int, Stepper> stepper in Steppers)
+            foreach (KeyValuePair<int, Device> stepper in Steppers)
             {
-                XmlElement StepperNode = document.CreateElement("Stepper");
+                XmlElement stepperNode = document.CreateElement("Stepper");
 
-                XmlElement Number = document.CreateElement("Number");
-                Number.InnerText = stepper.Value.Number.ToString();
-                StepperNode.AppendChild(Number);
+                XmlElement number = document.CreateElement("Number");
+                number.InnerText = stepper.Value.Number.ToString();
+                stepperNode.AppendChild(number);
 
-                XmlElement Name = document.CreateElement("Name");
-                Name.InnerText = stepper.Value.Name;
-                StepperNode.AppendChild(Name);
+                XmlElement name = document.CreateElement("Name");
+                name.InnerText = stepper.Value.Name;
+                stepperNode.AppendChild(name);
 
-                XmlElement Speed = document.CreateElement("Speed");
-                Speed.InnerText = stepper.Value.Speed.ToString();
-                StepperNode.AppendChild(Speed);
-
-                SteppersNode.AppendChild(StepperNode);
+                steppersNode.AppendChild(stepperNode);
             }
 
-            root.AppendChild(SteppersNode);
+            root.AppendChild(steppersNode);
+
+            XmlElement devicesNode = document.CreateElement("Devices");
+
+            foreach (KeyValuePair<int, Device> device in Devices)
+            {
+                XmlElement deviceNode = document.CreateElement("Device");
+
+                XmlElement number = document.CreateElement("Number");
+                number.InnerText = device.Value.Number.ToString();
+                deviceNode.AppendChild(number);
+
+                XmlElement name = document.CreateElement("Name");
+                name.InnerText = device.Value.Name;
+                deviceNode.AppendChild(name);
+
+                devicesNode.AppendChild(deviceNode);
+            }
+
+            root.AppendChild(devicesNode);
+
+            XmlElement sensorsNode = document.CreateElement("Sensors");
+
+            foreach (KeyValuePair<int, Device> sensor in Sensors)
+            {
+                XmlElement sensorNode = document.CreateElement("Sensor");
+
+                XmlElement number = document.CreateElement("Number");
+                number.InnerText = sensor.Value.Number.ToString();
+                sensorNode.AppendChild(number);
+
+                XmlElement name = document.CreateElement("Name");
+                name.InnerText = sensor.Value.Name;
+                sensorNode.AppendChild(name);
+
+                sensorsNode.AppendChild(sensorNode);
+            }
+
+            root.AppendChild(sensorsNode);
 
             try
             {

@@ -10,11 +10,11 @@ namespace SteppersControlCore.MachineControl
 {
     public class CncProgram
     {
-        public List<ICommand> Commands { get; set; }
+        public List<IAbstractCommand> Commands { get; set; }
 
         public CncProgram()
         {
-            Commands = new List<ICommand>();
+            Commands = new List<IAbstractCommand>();
         }
     }
 }

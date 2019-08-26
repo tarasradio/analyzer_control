@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class StopCommand : AbstractCommand, ICommand
+    public class StopCommand : AbstractCommand, IDeviceCommand
     {
         public enum StopType
         {
@@ -17,7 +17,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         private byte _stepper;
         private byte _stopType;
 
-        public StopCommand(int stepper, StopType stopType, uint packetId) : base(packetId, Protocol.CommandType.SIMPLE_COMMAND)
+        public StopCommand(int stepper, StopType stopType, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
         {
             _stepper = (byte)stepper;
             _stopType = (byte)stopType;
@@ -26,7 +26,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         public byte[] GetBytes()
         {
             SendPacket packet = new SendPacket(3);
-            packet.SetPacketId(PacketId);
+            packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.STOP);
             packet.SetData(1, _stepper);

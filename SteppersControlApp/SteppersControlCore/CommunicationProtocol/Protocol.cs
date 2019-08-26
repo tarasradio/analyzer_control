@@ -27,8 +27,9 @@ namespace SteppersControlCore.CommunicationProtocol
         public enum ResponsesTypes
         {
             DRIVERS_STATES = 0x10,
-            COMMAND_STATE_RESPONSE = 0x11,
-            TEXT_MESSAGE = 0x12,
+            SENSORS_VALUES,
+            COMMAND_STATE_RESPONSE,
+            TEXT_MESSAGE
         }
 
         public enum StepperCommands
@@ -43,12 +44,13 @@ namespace SteppersControlCore.CommunicationProtocol
         public enum AdditionalCommands
         {
             SET_DEVICE_STATE = 0x14,
-            ABORT_EXECUTION
+            ABORT_EXECUTION,
+            WAIT_TIME
         }
 
         public enum CncCommands
         {
-            CNC_MOVE = 0x16,
+            CNC_MOVE = 0x17,
             CNC_SET_SPEED,
             CNC_STOP,
             CNC_HOME,
@@ -64,8 +66,9 @@ namespace SteppersControlCore.CommunicationProtocol
             FWD = 0x01
         }
 
-        public enum CommandType
+        public enum CommandTypes
         {
+            HOST_COMMAND,
             WAITING_COMMAND,
             SIMPLE_COMMAND
         }

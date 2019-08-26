@@ -65,7 +65,7 @@ namespace SteppersControlApp
             }
             catch(UnauthorizedAccessException)
             {
-                _logger.AddMessage($"Ошибка при открытии порта {portName}");
+                Logger.AddMessage($"Ошибка при открытии порта {portName}");
             }
             
 
@@ -278,7 +278,7 @@ namespace SteppersControlApp
             }
             catch (Exception)
             {
-                _logger.AddMessage("Ошибка при попытке записи в порт");
+                Logger.AddMessage("Ошибка при попытке записи в порт");
             }
         }
 
@@ -292,7 +292,7 @@ namespace SteppersControlApp
             }
             catch (Exception)
             {
-                _logger.AddMessage("Ошибка при попытке записи в порт");
+                Logger.AddMessage("Ошибка при попытке записи в порт");
             }
         }
 
@@ -315,7 +315,7 @@ namespace SteppersControlApp
                 }
                 catch (Exception)
                 {
-                    _logger.AddMessage("Ошибка при сканировании!");
+                    Logger.AddMessage("Ошибка при сканировании!");
                 }
             }
 

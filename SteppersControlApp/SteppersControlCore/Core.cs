@@ -13,6 +13,8 @@ namespace SteppersControlCore
         public static Configuration _configuration;
         private static uint lastPacketId = 0;
 
+        private static System.Threading.Mutex _mutex = new System.Threading.Mutex();
+
         public static uint GetPacketId()
         {
             return lastPacketId++;
@@ -23,7 +25,7 @@ namespace SteppersControlCore
             _logger = new Logger();
             _configuration = new Configuration();
 
-            _logger.AddMessage("Запись работы системы начата");
+            Logger.AddMessage("Запись работы системы начата");
         }
 
         public Logger GetLogger()
@@ -34,6 +36,35 @@ namespace SteppersControlCore
         public Configuration getConfig()
         {
             return _configuration;
+        }
+
+        private static ushort[] _sensorsValues = null;
+
+        public void InitSensorsValues()
+        {
+            _sensorsValues = new ushort[_configuration.Sensors.Count];
+        }
+
+        public void UpdateSensorsValues(ushort[] values)
+        {
+            if (values.Length != _configuration.Sensors.Count)
+                return;
+            _mutex.WaitOne();
+
+            Array.Copy(values, _sensorsValues, values.Length);
+
+            _mutex.ReleaseMutex();
+        }
+
+        public static ushort GetSensorValue(uint sensor)
+        {
+            ushort value = 0;
+
+            _mutex.WaitOne();
+            value = _sensorsValues[sensor];
+            _mutex.ReleaseMutex();
+
+            return value;
         }
     }
 }

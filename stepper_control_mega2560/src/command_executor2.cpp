@@ -5,6 +5,7 @@
 #include "devices.hpp"
 
 //#define DEBUG
+//#define SEND_STATE_PERMANENTLY
 
 enum StopType
 {
@@ -21,29 +22,23 @@ enum HomingState
     WAIT_SW_RELEASED
 };
 
-enum MoveType
-{
-    SIMPLE_MOVE = 0x00,
-    HOMING_MOVE,
-    NO_MOVE
-};
-
 enum CommandExecutionType
 {
     SIMPLE_COMMAND = 0x00,
     WAITING_COMMAND
 };
 
-uint8_t steppersForMove[STEPPERS_COUNT];
 uint8_t countMoveSteppers = 0;
+uint8_t steppersForMove[STEPPERS_COUNT];
 
 uint8_t countHomeSteppers = 0;
 
-uint8_t steppersForHomingStates[STEPPERS_COUNT];
-uint8_t steppersHomingDirection[STEPPERS_COUNT];
-uint32_t steppersHomingSpeed[STEPPERS_COUNT];
-
-uint8_t currentMoveType = NO_MOVE;
+struct HomingSteppersParams {
+    uint8_t stepper;
+    uint8_t state;
+    uint8_t direction;
+    uint32_t speed;
+} homingSteppers[STEPPERS_COUNT];
 
 uint32_t lastCommandId = 0;
 uint8_t lastCommandState = COMMAND_DONE;
@@ -70,7 +65,7 @@ uint8_t CommandExecutor2::getSteppersInMove()
     {
         uint8_t stepper = steppersForMove[i];
 
-        if (getStepperMoveState(stepper) != 0)
+        if (0 != getStepperMoveState(stepper))
             steppersInMove++;
     }
 
@@ -83,37 +78,22 @@ uint8_t CommandExecutor2::getSteppersInHoming()
 
     for (int i = 0; i < countHomeSteppers; i++)
     {
-        uint8_t stepper = steppersForMove[i];
-        if (steppersForHomingStates[i] == WAIT_SW_PRESSED)
+        uint8_t stepper = homingSteppers[i].stepper;
+        if(WAIT_SW_PRESSED == homingSteppers[i].state)
         {
-            messageToSend = "wait pressed do " + String(stepper);
-            printMessage(messageToSend);
-
-            if (getStepperMoveState(stepper) != 0)
-            {
+            if (0 != getStepperMoveState(stepper))
                 steppersInHoming++;
-            }
             else
-            {
-                steppersForHomingStates[i] = HOMING_SUCCESS;
-            }
+                homingSteppers[i].state = HOMING_SUCCESS;
         }
-        else if (steppersForHomingStates[i] == WAIT_SW_RELEASED)
+        else if(WAIT_SW_RELEASED == homingSteppers[i].state)
         {
             steppersInHoming++;
-            if (getStepperMoveState(stepper) == 0)
+            if (0 == getStepperMoveState(stepper))
             {
-                getStepper(stepper).goUntil(RESET_ABSPOS, steppersHomingDirection[i], steppersHomingSpeed[i]);
-                steppersForHomingStates[i] = WAIT_SW_PRESSED;
-
-                messageToSend = "wait released end " + String(stepper);
-                printMessage(messageToSend);
+                getStepper(stepper).goUntil(RESET_ABSPOS, homingSteppers[i].direction, homingSteppers[i].speed);
+                homingSteppers[i].state = WAIT_SW_PRESSED;
             }
-        }
-        else if(steppersForHomingStates[i] == HOMING_SUCCESS)
-        {
-            messageToSend = "homing success " + String(stepper);
-            printMessage(messageToSend);
         }
     }
 
@@ -123,10 +103,11 @@ uint8_t CommandExecutor2::getSteppersInHoming()
 void CommandExecutor2::UpdateState()
 {
     printSteppersStates();
+    printSensorsValues();
 
-    if (waitForCommandDone != 0) // Есть команды, ожидающие завершения
+    if (0 != waitForCommandDone) // Есть команды, ожидающие завершения
     {
-        if ((getSteppersInMove() == 0) && (getSteppersInHoming() == 0)) // Моторы завершили движение
+        if ((0 == getSteppersInMove()) && (0 == getSteppersInHoming())) // Моторы завершили движение
         {
             countMoveSteppers = 0;
             countHomeSteppers = 0;
@@ -135,8 +116,9 @@ void CommandExecutor2::UpdateState()
             printCommandStateResponse(lastCommandId, lastCommandState);
         }
     }
-
-    //printCommandStateResponse(lastCommandId, lastCommandState);
+#ifdef SEND_STATE_PERMANENTLY
+    printCommandStateResponse(lastCommandId, lastCommandState);
+#endif
 }
 
 void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
@@ -145,9 +127,9 @@ void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
 
     switch (commandType)
     {
-        case CMD_GO_UNTIL:
+        case CMD_HOME:
         {
-            executeGoUntilCommand(packet + 1, packetLength - 1);
+            executeHomeCommand(packet + 1, packetLength - 1);
         }
         break;
         case CMD_RUN:
@@ -205,6 +187,11 @@ void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
             executeAbortCommand(packet + 1, packetLength - 1);
         }
         break;
+        case CMD_WAIT_TIME:
+        {
+            executeWaitTimeCommand(packet + 1, packetLength - 1);
+        }
+        break;
         default:
         {
             printMessage("Unknown command!");
@@ -246,7 +233,7 @@ bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
         lastCommandId = commandId;
         lastCommandState = COMMAND_OK;
 
-        if(commandType == WAITING_COMMAND)
+        if(WAITING_COMMAND == commandType)
         {
             waitForCommandDone = 1;
         }
@@ -259,29 +246,41 @@ bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
     return isSame;
 }
 
+void CommandExecutor2::executeWaitTimeCommand(uint8_t *packet, uint8_t packetLength)
+{
+    uint32_t periodMs = readLong(packet + 0);
+    uint32_t packetId = readLong(packet + 4);
+
+    if(checkSameCommand(packetId, WAITING_COMMAND))
+        return;
+
+#ifdef DEBUG
+    messageToSend = "[Wait time] ";
+    messageToSend += "period = " + String(periodMs);
+    printMessage(messageToSend);
+#endif
+
+    //TODO: реализовать задержку
+}
+
 void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength)
 {
     waitForCommandDone = 0;
 
     for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
-    {
         getStepper(i).softHiZ();
-    }
 
     for (uint8_t i = 0; i < 12; i++)
-    {
         Devices::device_off(i);
-    }
 
 #ifdef DEBUG
     messageToSend = "[Abort] ";
-
     printMessage(messageToSend);
 #endif
 }
 
 //TODO: исправить
-void CommandExecutor2::executeGoUntilCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeHomeCommand(uint8_t *packet, uint8_t packetLength)
 {
     uint8_t stepper = packet[0];
     uint8_t direction = packet[1];
@@ -295,12 +294,28 @@ void CommandExecutor2::executeGoUntilCommand(uint8_t *packet, uint8_t packetLeng
         return;
 
     countHomeSteppers = 1;
-    steppersForMove[0] = stepper;
+    homingSteppers[0].stepper = stepper;
+    homingSteppers[0].direction = direction;
+    homingSteppers[0].speed = fullSpeed;
 
-    getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
+    uint8_t sw_status = getStepper(stepper).getStatus() & STATUS_SW_F;
+    if (0 == sw_status)
+    {
+        homingSteppers[0].state = WAIT_SW_PRESSED;
+
+        getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
+    }
+    else
+    {
+        homingSteppers[0].state = WAIT_SW_RELEASED;
+
+        uint8_t inverseDir = (direction == FWD) ? REV : FWD;
+        getStepper(stepper).setMinSpeed(30);
+        getStepper(stepper).releaseSw(RESET_ABSPOS, inverseDir); // настроить MIN SPEED
+    }
 
 #ifdef DEBUG
-    messageToSend = "[Go until] ";
+    messageToSend = "[Home] ";
     messageToSend += "stepper = " + String(stepper);
     messageToSend += ", dir = " + String(direction);
     messageToSend += ", speed = " + String(fullSpeed);
@@ -380,40 +395,37 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
     messageToSend += ", stopType = ";
 #endif
 
-    switch (stopType)
-    {
-    case STOP_SOFT:
+    if(STOP_SOFT == stopType)
     {
 #ifdef DEBUG
         messageToSend += "SOFT";
 #endif
         getStepper(stepper).softStop();
     }
-    break;
-    case STOP_HARD:
+    else if(HARD_STOP == stopType)
     {
 #ifdef DEBUG
         messageToSend += "HARD";
 #endif
         getStepper(stepper).hardStop();
     }
-    break;
-    case HiZ_SOFT:
+    else if(HiZ_SOFT == stopType)
     {
 #ifdef DEBUG
         messageToSend += "HiZ SOFT";
 #endif
         getStepper(stepper).softHiZ();
     }
-    break;
-    case HiZ_HARD:
+    else if(HiZ_HARD == stopType)
     {
 #ifdef DEBUG
         messageToSend += "HiZ HARD";
 #endif
         getStepper(stepper).hardHiZ();
     }
-    break;
+    else
+    {
+
     }
 #ifdef DEBUG
     printMessage(messageToSend);
@@ -527,27 +539,21 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
 
         if (checkStepper(stepper))
         {
-            steppersForMove[i] = stepper;
-            steppersHomingDirection[i] = direction;
-            steppersHomingSpeed[i] = fullSpeed;
+            homingSteppers[i].stepper = stepper;
+            homingSteppers[i].direction = direction;
+            homingSteppers[i].speed = fullSpeed;
 
             uint8_t sw_status = getStepper(stepper).getStatus() & STATUS_SW_F;
-            if (sw_status == 0)
+            if (0 == sw_status)
             {
-#ifdef DEBUG
-                    messageToSend = "status = relesed";
-                    printMessage(messageToSend);
-#endif
-                steppersForHomingStates[i] = WAIT_SW_PRESSED;
+                homingSteppers[i].state = WAIT_SW_PRESSED;
+
                 getStepper(stepper).goUntil(RESET_ABSPOS, direction, fullSpeed);
             }
             else
             {
-                steppersForHomingStates[i] = WAIT_SW_RELEASED;
-#ifdef DEBUG
-                    messageToSend = "status = pressed";
-                    printMessage(messageToSend);
-#endif
+                homingSteppers[i].state = WAIT_SW_RELEASED;
+
                 uint8_t inverseDir = (direction == FWD) ? REV : FWD;
                 getStepper(stepper).setMinSpeed(30);
                 getStepper(stepper).releaseSw(RESET_ABSPOS, inverseDir); // настроить MIN SPEED
@@ -652,6 +658,18 @@ void CommandExecutor2::printSteppersStates()
     {
         uint16_t stepperStatus = getStepper(i).getStatus();
         Serial.write((byte *)&stepperStatus, sizeof(stepperStatus));
+    }
+    Serial.write(packetEnd, packetEndLength);
+}
+
+void CommandExecutor2::printSensorsValues()
+{
+    Serial.write(packetHeader, packetHeaderLength);
+    Serial.write(SENSORS_VALUES);
+    for (uint8_t i = 0; i < 16; i++)
+    {
+        uint16_t sensorValue = Sensors::getSensorState(i);
+        Serial.write((byte *)&sensorValue, sizeof(sensorValue));
     }
     Serial.write(packetEnd, packetEndLength);
 }

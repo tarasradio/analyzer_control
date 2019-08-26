@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace SteppersControlCore.CommunicationProtocol
 {
-    public interface ICommand
+    public interface IHostCommand
     {
-        Protocol.CommandType GetType();
-        byte[] GetBytes();
-        uint GetId();
+        void Execute();
     }
 }

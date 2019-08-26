@@ -12,7 +12,7 @@ namespace SteppersControlCore
     public class Logger
     {
         public delegate void newMessageHandler(string message);
-        public event newMessageHandler OnNewMessageAdded;
+        public static event newMessageHandler OnNewMessageAdded;
 
         private string fileName;
 
@@ -22,9 +22,9 @@ namespace SteppersControlCore
             //fileName = "logs/Log_" + DateTime.Now.ToString("dd_MM_yyyy_#_HH_mm_ss") + ".txt";
         }
 
-        Mutex mutex = new Mutex();
+        static Mutex mutex = new Mutex();
 
-        public void AddMessage(string text)
+        public static void AddMessage(string text)
         {
             mutex.WaitOne();
 

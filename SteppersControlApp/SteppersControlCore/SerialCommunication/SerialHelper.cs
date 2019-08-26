@@ -43,7 +43,7 @@ namespace SteppersControlCore.SerialCommunication
             }
             catch (UnauthorizedAccessException)
             {
-                _logger.AddMessage($"Ошибка при открытии порта {portName}");
+                Logger.AddMessage($"Ошибка при открытии порта {portName}");
             }
 
 
@@ -87,7 +87,7 @@ namespace SteppersControlCore.SerialCommunication
             }
             catch (Exception)
             {
-                _logger.AddMessage("Ошибка при попытке записи в порт");
+                Logger.AddMessage("Ошибка при попытке записи в порт");
             }
         }
 
@@ -110,7 +110,7 @@ namespace SteppersControlCore.SerialCommunication
                 }
                 catch (Exception)
                 {
-                    _logger.AddMessage("Ошибка при сканировании!");
+                    Logger.AddMessage("Ошибка при сканировании!");
                 }
             }
 

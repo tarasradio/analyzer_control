@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.Responses
 {
-    public class CommandStateResponse
+    public class CommandStateResponse : AbstaractResponse
     {
-        byte[] _buffer;
-        
-        public CommandStateResponse(byte[] buffer)
+        public CommandStateResponse(byte[] buffer) : base(buffer)
         {
             _buffer = new byte[buffer.Length - 1];
             Array.Copy(buffer, 1, _buffer, 0, _buffer.Length - 1);

@@ -45,6 +45,78 @@ namespace SteppersControlCore.SerialCommunication
             _state = ReceiveState.RECEIVING_HEADER;
         }
 
+        private const uint maxPacketLength = 128;
+
+        private static byte[] _packetBuffer = new byte[maxPacketLength];
+        private static uint _currentPacketByte = 0;
+
+        static byte escSymbol = 0x7D;
+        static byte flagSymbol = 0xDD;
+
+        static bool escapeFlag = false;
+
+        public void FindPacket(byte[] buffer)
+        {
+            Logger.AddMessage($"Buffer: {buffer.Length} bytes");
+            
+            int currentBufferByte = 0;
+            
+            while (currentBufferByte < buffer.Length)
+            {
+                if( flagSymbol == buffer[currentBufferByte] )
+                {
+                    if(escapeFlag)
+                    {
+                        _packetBuffer[_currentPacketByte++] = buffer[currentBufferByte];
+
+                        if(_currentPacketByte == maxPacketLength)
+                        {
+                            Logger.AddMessage($"Packet size overflow");
+                            _currentPacketByte = 0;
+                        }
+                        escapeFlag = false;
+                    }
+                    else
+                    {
+                        // здесь обрабатываем прием пакета
+                        byte[] recvPacket = new byte[_currentPacketByte];
+                        Array.Copy(_packetBuffer, recvPacket, _currentPacketByte);
+                        PackageReceived(recvPacket);
+                        _currentPacketByte = 0;
+                    }
+                }
+                else if(escSymbol == buffer[currentBufferByte])
+                {
+                    if (escapeFlag)
+                    {
+                        _packetBuffer[_currentPacketByte++] = buffer[currentBufferByte];
+
+                        if (_currentPacketByte == maxPacketLength)
+                        {
+                            Logger.AddMessage($"Packet size overflow");
+                            _currentPacketByte = 0;
+                        }
+                        escapeFlag = false;
+                    }
+                    else
+                    {
+                        escapeFlag = true;
+                    }
+                }
+                else
+                {
+                    _packetBuffer[_currentPacketByte++] = buffer[currentBufferByte];
+
+                    if (_currentPacketByte == maxPacketLength)
+                    {
+                        Logger.AddMessage($"Packet size overflow");
+                        _currentPacketByte = 0;
+                    }
+                }
+                currentBufferByte++;
+            }
+        }
+
         public void HandleData(byte[] buffer)
         {
             //_logger.AddMessage($"Buffer: {buffer.Length} bytes");

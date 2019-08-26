@@ -35,14 +35,11 @@ namespace SteppersControlCore.CommunicationProtocol.Responses
         STATUS_MOT_STATUS = 0x0060      // field mask
     }
 
-    public class SteppersStatesResponse
+    public class SteppersStatesResponse : AbstaractResponse
     {
-        byte[] _buffer;
-
-        public SteppersStatesResponse(byte[] buffer)
+        public SteppersStatesResponse(byte[] buffer) : base(buffer)
         {
-            _buffer = new byte[buffer.Length - 1];
-            Array.Copy(buffer, 1, _buffer, 0, _buffer.Length - 1);
+
         }
 
         public UInt16[] GetStates()

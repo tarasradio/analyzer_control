@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SteppersControlCore.CommunicationProtocol.Responses
+namespace SteppersControlCore.CommunicationProtocol
 {
-    public class BadFormatResponse
+    public interface IDeviceCommand
     {
+        byte[] GetBytes();
     }
 }

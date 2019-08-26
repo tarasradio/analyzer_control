@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
-    public class AbortExecutionCommand : AbstractCommand, ICommand
+    public class AbortExecutionCommand : AbstractCommand, IDeviceCommand
     {
-        public AbortExecutionCommand(uint packetId) : base(packetId, Protocol.CommandType.SIMPLE_COMMAND)
+        public AbortExecutionCommand(uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
         {
 
         }
@@ -16,7 +16,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
         public byte[] GetBytes()
         {
             SendPacket packet = new SendPacket(1);
-            packet.SetPacketId(PacketId);
+            packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.AdditionalCommands.ABORT_EXECUTION);
 

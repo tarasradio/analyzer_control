@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol
 {
-    public class AbstractCommand
+    public class AbstractCommand : IAbstractCommand
     {
-        public uint PacketId;
-        Protocol.CommandType _type;
+        public uint _commandId;
+        Protocol.CommandTypes _type;
 
-        public AbstractCommand(uint packetId, Protocol.CommandType type)
+        public AbstractCommand(uint commandId, Protocol.CommandTypes type)
         {
-            PacketId = packetId;
+            _commandId = commandId;
             _type = type;
         }
 
         public uint GetId()
         {
-            return PacketId;
+            return _commandId;
         }
 
-        public Protocol.CommandType GetType()
+        public Protocol.CommandTypes GetType()
         {
             return _type;
         }
