@@ -36,7 +36,7 @@ namespace SteppersControlApp.Views
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            StopCommand.StopType type = StopCommand.StopType.SOFT_STOP;
+            StopCommand.StopType type = StopCommand.StopType.HARD_STOP;
             _helper.SendBytes(new StopCommand(stepperNumber, type, Protocol.GetPacketId()).GetBytes());
         }
 

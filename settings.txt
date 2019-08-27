@@ -3,92 +3,92 @@
   <Steppers>
     <Stepper>
       <Number>0</Number>
-      <Name>WTF Stepper 0</Name>
+      <Name>Не задано</Name>
       <Speed>200</Speed>
     </Stepper>
     <Stepper>
       <Number>1</Number>
-      <Name>Игла 2 (Вращение)</Name>
+      <Name>Не задано</Name>
       <Speed>200</Speed>
     </Stepper>
     <Stepper>
       <Number>2</Number>
-      <Name>WTF Stepper 2</Name>
+      <Name>Не задано</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>3</Number>
-      <Name>WTF Stepper 3</Name>
+      <Name>Не задано</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>4</Number>
-      <Name>Игла 1 (Вращение)</Name>
+      <Name>Не задано</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>5</Number>
-      <Name>Игла 1 (Вертикальное перемещение)</Name>
+      <Name>Не задано</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>6</Number>
-      <Name>Ротор</Name>
-      <Speed>200</Speed>
-    </Stepper>
-	<Stepper>
-      <Number>7</Number>
-      <Name>Игла 2 (Вертикальное перемещение)</Name>
-      <Speed>200</Speed>
-    </Stepper>
-	<Stepper>
-      <Number>8</Number>
       <Name>Лента конвейера</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
+      <Number>7</Number>
+      <Name>Ротор</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
+      <Number>8</Number>
+      <Name>Игла 1 (вращение)</Name>
+      <Speed>200</Speed>
+    </Stepper>
+	<Stepper>
       <Number>9</Number>
-      <Name>Вращение пробирки</Name>
+      <Name>Игла 2 (вращение)</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>10</Number>
-      <Name>Продольное перемещение челнока разгружающего устройства</Name>
+      <Name>Движение загрузки (поворот)</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>11</Number>
-      <Name>Движение челнока горизонтальное</Name>
+      <Name>Шприц (большой плунжер)</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>12</Number>
-      <Name>Иглы</Name>
+      <Name>Шприц (малый плунжер)</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>13</Number>
-      <Name>Вибромешалка</Name>
+      <Name>Wash буфер</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>14</Number>
-      <Name>WTF Stepper 14</Name>
+      <Name>Выгрузка</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>15</Number>
-      <Name>WTF Stepper 15</Name>
+      <Name>Загрузка</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>16</Number>
-      <Name>WTF Stepper 16</Name>
+      <Name>Игла 2 (подъем)</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>17</Number>
-      <Name>WTF Stepper 17</Name>
+      <Name>Игла 1 (Подъем)</Name>
       <Speed>200</Speed>
     </Stepper>
   </Steppers>

@@ -11,7 +11,9 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         public enum StopType
         {
             SOFT_STOP = 0x00,
-            HARD_STOP = 0x01
+            HARD_STOP = 0x01,
+            HiZ_SOFT,
+            HiZ_HARD
         }
 
         private byte _stepper;

@@ -4,7 +4,7 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 
-//#define DEBUG
+#define DEBUG
 //#define SEND_STATE_PERMANENTLY
 
 enum StopType
@@ -392,7 +392,7 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
 #ifdef DEBUG
     messageToSend = "[Stop] ";
     messageToSend += "stepper = " + String(stepper);
-    messageToSend += ", stopType = ";
+    messageToSend += ", type = ";
 #endif
 
     if(STOP_SOFT == stopType)
@@ -425,7 +425,7 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
     }
     else
     {
-
+        messageToSend += "huy znaet";
     }
 #ifdef DEBUG
     printMessage(messageToSend);
