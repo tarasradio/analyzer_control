@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 using System.Threading;
 using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.SerialCommunication;
+using System.Diagnostics;
 
 namespace SteppersControlCore.MachineControl
 {
+    public delegate void CommandExecutedDelegate(int executedCommandNumber);
+
     public class CncExecutor
     {
-        private Logger _logger;
+        public event CommandExecutedDelegate CommandExecuted;
+
         private SerialHelper _helper;
 
         private static List<IAbstractCommand> _commandsToSend = new List<IAbstractCommand>();
@@ -24,9 +28,8 @@ namespace SteppersControlCore.MachineControl
 
         private static int countBadPackets = 0;
 
-        public CncExecutor(Logger logger, SerialHelper helper)
+        public CncExecutor(SerialHelper helper)
         {
-            _logger = logger;
             _helper = helper;
         }
 
@@ -96,6 +99,8 @@ namespace SteppersControlCore.MachineControl
 
         static ExecutionStages stage = 0;
 
+        Stopwatch stopWatch = new Stopwatch();
+        
         private void commandsExecution()
         {
             stage = 0;
@@ -107,8 +112,10 @@ namespace SteppersControlCore.MachineControl
                 executeCommand(command);
 
                 Logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
-
+                
                 commandNumber++;
+
+                CommandExecuted(commandNumber);
             }
             Logger.AddMessage("Все команды выполнены успешно !");
             Logger.AddMessage($"Пакетов с ошибками {countBadPackets}!");
@@ -135,9 +142,22 @@ namespace SteppersControlCore.MachineControl
 
             bool executionFinished = false;
 
+            stopWatch.Start();
+
             while (!executionFinished)
             {
-                if(Protocol.CommandTypes.SIMPLE_COMMAND == command.GetType())
+                TimeSpan ts = stopWatch.Elapsed;
+
+                if(ts.Seconds >= 5)
+                {
+                    Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
+
+                    _helper.SendBytes(((IDeviceCommand)command).GetBytes());
+
+                    stopWatch.Restart();
+                }
+
+                if (Protocol.CommandTypes.SIMPLE_COMMAND == command.GetType())
                 {
                     if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
                     {
@@ -165,6 +185,8 @@ namespace SteppersControlCore.MachineControl
                     }
                 }
             }
+
+            stopWatch.Stop();
         }
 
         private void executeHostCommand(IAbstractCommand command)

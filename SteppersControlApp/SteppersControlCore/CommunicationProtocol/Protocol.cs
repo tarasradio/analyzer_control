@@ -56,14 +56,19 @@ namespace SteppersControlCore.CommunicationProtocol
             CNC_HOME,
             CNC_ON_DEVICE,
             CNC_OFF_DEVICE,
-            CNC_GO_TO_HAND,
-            CNC_GO_TO_PROGRAM
+            CNC_RUN
         }
 
         public enum Direction
         {
             REV = 0x00,
             FWD = 0x01
+        }
+
+        public enum ValueEdge
+        {
+            RisingEdge,
+            FallingEdge
         }
 
         public enum CommandTypes

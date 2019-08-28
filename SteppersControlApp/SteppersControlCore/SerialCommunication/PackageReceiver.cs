@@ -27,12 +27,8 @@ namespace SteppersControlCore.SerialCommunication
 
         private List<byte> _receivedQueue;
 
-        Logger _logger;
-
-        public PackageReceiver(byte[] header, byte[] end, Logger logger)
+        public PackageReceiver(byte[] header, byte[] end)
         {
-            _logger = logger;
-
             _packetHeader = new byte[header.Length];
             Array.Copy(header, _packetHeader, header.Length);
 

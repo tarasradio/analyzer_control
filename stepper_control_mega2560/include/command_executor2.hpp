@@ -17,6 +17,7 @@ private:
     uint8_t getStepperMoveState(uint8_t stepper);
 
     uint32_t readLong(uint8_t *buffer);
+    uint16_t readInt(uint8_t *buffer);
 
     void addCommandForWait(uint32_t commandId);
 
@@ -30,6 +31,7 @@ private:
     void executeSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength);
 
     void executeCncMoveCommand(uint8_t *packet, uint8_t packetLength);
+    void executeCncRunCommand(uint8_t *packet, uint8_t packetLength);
     void executeCncHomeCommand(uint8_t *packet, uint8_t packetLength);
     void executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength);
     void executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state);

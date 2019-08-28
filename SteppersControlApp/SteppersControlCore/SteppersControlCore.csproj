@@ -50,6 +50,7 @@
     <Compile Include="CommunicationProtocol\CncCommands\MoveCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\OffDeviceCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\OnDeviceCncCommand.cs" />
+    <Compile Include="CommunicationProtocol\CncCommands\RunCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\SetSpeedCncCommand.cs" />
     <Compile Include="CommunicationProtocol\IAbstractCommand.cs" />
     <Compile Include="CommunicationProtocol\IDeviceCommand.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="SerialCommunication\SerialHelper.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\RegexHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

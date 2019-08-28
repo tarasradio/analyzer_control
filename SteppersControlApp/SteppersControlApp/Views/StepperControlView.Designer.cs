@@ -37,8 +37,8 @@
             this.buttonRev = new System.Windows.Forms.Button();
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonFwd = new System.Windows.Forms.Button();
-            this.buttonHome = new System.Windows.Forms.Button();
             this.StepperControlViewToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.StepperName = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.EditCountSteps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.editFullSpeed)).BeginInit();
             this.SuspendLayout();
@@ -50,7 +50,7 @@
             0,
             0,
             0});
-            this.EditCountSteps.Location = new System.Drawing.Point(81, 2);
+            this.EditCountSteps.Location = new System.Drawing.Point(82, 29);
             this.EditCountSteps.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -69,7 +69,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(0, 30);
+            this.label2.Location = new System.Drawing.Point(1, 57);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(75, 13);
             this.label2.TabIndex = 31;
@@ -83,7 +83,7 @@
             0,
             0,
             0});
-            this.editFullSpeed.Location = new System.Drawing.Point(81, 28);
+            this.editFullSpeed.Location = new System.Drawing.Point(82, 55);
             this.editFullSpeed.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -104,7 +104,7 @@
             this.useMoveStepsCheck.AutoSize = true;
             this.useMoveStepsCheck.Checked = true;
             this.useMoveStepsCheck.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useMoveStepsCheck.Location = new System.Drawing.Point(3, 3);
+            this.useMoveStepsCheck.Location = new System.Drawing.Point(4, 30);
             this.useMoveStepsCheck.Name = "useMoveStepsCheck";
             this.useMoveStepsCheck.Size = new System.Drawing.Size(56, 17);
             this.useMoveStepsCheck.TabIndex = 35;
@@ -119,7 +119,7 @@
             this.buttonRev.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRev.Image = ((System.Drawing.Image)(resources.GetObject("buttonRev.Image")));
             this.buttonRev.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.buttonRev.Location = new System.Drawing.Point(3, 54);
+            this.buttonRev.Location = new System.Drawing.Point(4, 81);
             this.buttonRev.Name = "buttonRev";
             this.buttonRev.Size = new System.Drawing.Size(44, 44);
             this.buttonRev.TabIndex = 36;
@@ -133,7 +133,7 @@
             this.buttonStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonStop.Image = ((System.Drawing.Image)(resources.GetObject("buttonStop.Image")));
             this.buttonStop.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonStop.Location = new System.Drawing.Point(53, 54);
+            this.buttonStop.Location = new System.Drawing.Point(54, 81);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(44, 44);
             this.buttonStop.TabIndex = 37;
@@ -147,7 +147,7 @@
             this.buttonFwd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonFwd.Image = ((System.Drawing.Image)(resources.GetObject("buttonFwd.Image")));
             this.buttonFwd.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.buttonFwd.Location = new System.Drawing.Point(103, 54);
+            this.buttonFwd.Location = new System.Drawing.Point(104, 81);
             this.buttonFwd.Name = "buttonFwd";
             this.buttonFwd.Size = new System.Drawing.Size(44, 44);
             this.buttonFwd.TabIndex = 38;
@@ -155,25 +155,22 @@
             this.buttonFwd.UseVisualStyleBackColor = false;
             this.buttonFwd.Click += new System.EventHandler(this.buttonFwd_Click);
             // 
-            // buttonHome
+            // StepperName
             // 
-            this.buttonHome.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonHome.Image = ((System.Drawing.Image)(resources.GetObject("buttonHome.Image")));
-            this.buttonHome.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonHome.Location = new System.Drawing.Point(53, 104);
-            this.buttonHome.Name = "buttonHome";
-            this.buttonHome.Size = new System.Drawing.Size(44, 44);
-            this.buttonHome.TabIndex = 39;
-            this.StepperControlViewToolTip.SetToolTip(this.buttonHome, "Поиск домашнего положения");
-            this.buttonHome.UseVisualStyleBackColor = false;
-            this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
+            this.StepperName.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.StepperName.Location = new System.Drawing.Point(3, 3);
+            this.StepperName.Name = "StepperName";
+            this.StepperName.ReadOnly = true;
+            this.StepperName.Size = new System.Drawing.Size(145, 20);
+            this.StepperName.TabIndex = 40;
+            this.StepperName.Text = "Имя мотора и номер";
+            this.StepperName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // StepperControlView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.buttonHome);
+            this.Controls.Add(this.StepperName);
             this.Controls.Add(this.buttonFwd);
             this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.buttonRev);
@@ -182,7 +179,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.editFullSpeed);
             this.Name = "StepperControlView";
-            this.Size = new System.Drawing.Size(151, 153);
+            this.Size = new System.Drawing.Size(151, 128);
             this.Load += new System.EventHandler(this.StepperControlView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.EditCountSteps)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.editFullSpeed)).EndInit();
@@ -199,7 +196,7 @@
         private System.Windows.Forms.Button buttonRev;
         private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.Button buttonFwd;
-        private System.Windows.Forms.Button buttonHome;
         private System.Windows.Forms.ToolTip StepperControlViewToolTip;
+        private System.Windows.Forms.TextBox StepperName;
     }
 }

@@ -39,6 +39,9 @@
             this.buttonClearFile = new System.Windows.Forms.Button();
             this.buttonTestFile = new System.Windows.Forms.Button();
             this.CNCViewToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.executionProgressBar = new System.Windows.Forms.ProgressBar();
+            this.executionStatusLabel = new System.Windows.Forms.Label();
+            this.executionProgressLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,14 +68,13 @@
             this.programTextBox.CharWidth = 8;
             this.programTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.programTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.programTextBox.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.programTextBox.IsReplaceMode = false;
             this.programTextBox.Location = new System.Drawing.Point(3, 53);
             this.programTextBox.Name = "programTextBox";
             this.programTextBox.Paddings = new System.Windows.Forms.Padding(0);
             this.programTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.programTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("programTextBox.ServiceColors")));
-            this.programTextBox.Size = new System.Drawing.Size(855, 371);
+            this.programTextBox.Size = new System.Drawing.Size(855, 329);
             this.programTextBox.TabIndex = 5;
             this.programTextBox.Text = "// ВВЕДИТЕ КОД ПРОГРАММЫ ЗДЕСЬ";
             this.programTextBox.Zoom = 100;
@@ -175,10 +177,44 @@
             this.buttonTestFile.UseVisualStyleBackColor = false;
             this.buttonTestFile.Click += new System.EventHandler(this.buttonTestProgram_Click);
             // 
+            // executionProgressBar
+            // 
+            this.executionProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.executionProgressBar.Location = new System.Drawing.Point(3, 401);
+            this.executionProgressBar.Name = "executionProgressBar";
+            this.executionProgressBar.Size = new System.Drawing.Size(855, 23);
+            this.executionProgressBar.Step = 1;
+            this.executionProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.executionProgressBar.TabIndex = 44;
+            // 
+            // executionStatusLabel
+            // 
+            this.executionStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.executionStatusLabel.AutoSize = true;
+            this.executionStatusLabel.Location = new System.Drawing.Point(3, 385);
+            this.executionStatusLabel.Name = "executionStatusLabel";
+            this.executionStatusLabel.Size = new System.Drawing.Size(168, 13);
+            this.executionStatusLabel.TabIndex = 45;
+            this.executionStatusLabel.Text = "Статус выполнения программы";
+            // 
+            // executionProgressLabel
+            // 
+            this.executionProgressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.executionProgressLabel.AutoSize = true;
+            this.executionProgressLabel.Location = new System.Drawing.Point(708, 385);
+            this.executionProgressLabel.Name = "executionProgressLabel";
+            this.executionProgressLabel.Size = new System.Drawing.Size(150, 13);
+            this.executionProgressLabel.TabIndex = 46;
+            this.executionProgressLabel.Text = "Сколько выполнено команд";
+            // 
             // CNCView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.executionProgressLabel);
+            this.Controls.Add(this.executionStatusLabel);
+            this.Controls.Add(this.executionProgressBar);
             this.Controls.Add(this.buttonTestFile);
             this.Controls.Add(this.buttonClearFile);
             this.Controls.Add(this.buttonSaveFile);
@@ -191,6 +227,7 @@
             this.Size = new System.Drawing.Size(861, 427);
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -205,5 +242,8 @@
         private System.Windows.Forms.Button buttonClearFile;
         private System.Windows.Forms.Button buttonTestFile;
         private System.Windows.Forms.ToolTip CNCViewToolTip;
+        private System.Windows.Forms.ProgressBar executionProgressBar;
+        private System.Windows.Forms.Label executionStatusLabel;
+        private System.Windows.Forms.Label executionProgressLabel;
     }
 }

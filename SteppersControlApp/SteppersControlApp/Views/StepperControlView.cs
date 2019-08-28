@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using SteppersControlCore;
 using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.StepperCommands;
 using SteppersControlCore.SerialCommunication;
@@ -27,6 +28,8 @@ namespace SteppersControlApp.Views
         public void setStepperNumber(int number)
         {
             this.stepperNumber = number;
+
+            this.StepperName.Text = $"{number} - {Core._configuration.Steppers[number].Name}";
         }
 
         public void SetSerialHelper(SerialHelper helper)
@@ -36,7 +39,7 @@ namespace SteppersControlApp.Views
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            StopCommand.StopType type = StopCommand.StopType.HARD_STOP;
+            StopCommand.StopType type = StopCommand.StopType.SOFT_STOP;
             _helper.SendBytes(new StopCommand(stepperNumber, type, Protocol.GetPacketId()).GetBytes());
         }
 

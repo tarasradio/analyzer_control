@@ -47,7 +47,8 @@ enum CncCommands
 	CNC_STOP,
 	CNC_HOME,
 	CNC_ON_DEVICE,
-	CNC_OFF_DEVICE
+	CNC_OFF_DEVICE,
+  CNC_RUN
 };
 
 #endif

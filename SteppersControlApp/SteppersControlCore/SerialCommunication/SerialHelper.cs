@@ -10,14 +10,12 @@ namespace SteppersControlCore.SerialCommunication
 {
     public class SerialHelper
     {
-        Logger _logger;
         PackageReceiver _packageReceiver;
 
         SerialPort _serialPort;
 
-        public SerialHelper(Logger logger, PackageReceiver packageReceiver)
+        public SerialHelper(PackageReceiver packageReceiver)
         {
-            _logger = logger;
             _packageReceiver = packageReceiver;
             _serialPort = new SerialPort();
             _serialPort.DataReceived += Port_DataReceived;
@@ -57,7 +55,14 @@ namespace SteppersControlCore.SerialCommunication
 
         public void Disconnect()
         {
-            _serialPort.Close();
+            try
+            {
+                _serialPort.Close();
+            }
+            catch (System.IO.IOException)
+            {
+                Logger.AddMessage($"Ошибка при закрытии порта {_serialPort.PortName}");
+            }
         }
 
         public void CloseConnection()

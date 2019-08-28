@@ -25,7 +25,6 @@ namespace SteppersControlApp.Views
 {
     public partial class CNCView : UserControl
     {
-        static Logger _logger;
         static SerialHelper _helper;
         CncExecutor _cncExecutor;
 
@@ -37,19 +36,14 @@ namespace SteppersControlApp.Views
             InitilizeProgramtextBox();
         }
 
-        public void SetControlThread(CncExecutor controlThread)
+        public void SetExecutor(CncExecutor executor)
         {
-            _cncExecutor = controlThread;
+            _cncExecutor = executor;
         }
 
         public void SetHelper(SerialHelper helper)
         {
             _helper = helper;
-        }
-
-        public void SetLogger(Logger logger)
-        {
-            _logger = logger;
         }
         
         private void InitilizeProgramtextBox()
@@ -79,22 +73,21 @@ namespace SteppersControlApp.Views
 
             e.ChangedRange.ClearStyle(commentsStyle);
 
-            e.ChangedRange.SetStyle(motorCommandNameStyle, @"\b(?<range>MOVE|SPEED)\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(motorCommandNameStyle, @"\b(?<range>MOVE|HOME|RUN)\b", RegexOptions.IgnoreCase);
             e.ChangedRange.SetStyle(unitCommandNameStyle, @"\b(?<range>ON|OFF)\b", RegexOptions.IgnoreCase);
-            e.ChangedRange.SetStyle(simpleCommandNameStyle, @"\b(?<range>HOME|STOP)\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(simpleCommandNameStyle, @"\b(?<range>SPEED|STOP)\b", RegexOptions.IgnoreCase);
             e.ChangedRange.SetStyle(deviceNumberStyle, @"\b(?<range>M|D)(\d)+\b", RegexOptions.IgnoreCase);
-            e.ChangedRange.SetStyle(commandsArgumentStyle, @"\b(?<range>S|V)(-)?(\d)+\b", RegexOptions.IgnoreCase);
-            e.ChangedRange.SetStyle(digitStyle, @"\b(M|S|D|V)(?<range>(-)?\d+)\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(commandsArgumentStyle, @"\b(?<range>S|V|R|F)(-)?(\d)+\b", RegexOptions.IgnoreCase);
+            e.ChangedRange.SetStyle(digitStyle, @"\b(M|S|D|V|R|F)(?<range>(-)?\d+)\b", RegexOptions.IgnoreCase);
 
             e.ChangedRange.SetStyle(WaitCommandNameStyle, @"\b(?<range>WAITF|WAITR|DELAY)\b", RegexOptions.IgnoreCase);
 
-            //comment highlighting
             e.ChangedRange.SetStyle(commentsStyle, @"//.*$", RegexOptions.Multiline);
         }
 
         bool testProgram()
         {
-            CncParser parser = new CncParser(_logger);
+            CncParser parser = new CncParser();
             _program = parser.Parse(programTextBox.Text);
 
             Logger.AddMessage($"Программа содержит {_program.Commands.Count} команд.");
@@ -140,7 +133,6 @@ namespace SteppersControlApp.Views
                 {
                     Logger.AddMessage("Ошибка при сохранении файла.");
                 }
-                
             }
         }
 
@@ -169,7 +161,24 @@ namespace SteppersControlApp.Views
         {
             if(testProgram())
             {
+                executionStatusLabel.Text = "Выполнение программы запущено";
+                executionProgressLabel.Text = $"Выполнено команд: {0} из {_program.Commands.Count}";
+                executionProgressBar.Value = 0;
+
                 _cncExecutor.StartExecution(_program.Commands);
+            }
+        }
+
+        public void UpdateExecutionProgress(int executedCommandNumber)
+        {
+            double progress = ((double)executedCommandNumber / _program.Commands.Count) * 100.0;
+            executionProgressBar.Value = (int)progress;
+
+            executionProgressLabel.Text = $"Выполнено команд: {executedCommandNumber} из {_program.Commands.Count}";
+
+            if(executedCommandNumber == _program.Commands.Count)
+            {
+                executionStatusLabel.Text = "Выполнение программы завершено";
             }
         }
 
@@ -177,6 +186,7 @@ namespace SteppersControlApp.Views
         {
             _cncExecutor.AbortExecution();
             _helper.SendBytes(new AbortExecutionCommand(Protocol.GetPacketId()).GetBytes());
+            executionStatusLabel.Text = "Выполнение программы было прерванно";
         }
 
         private void buttonClearFile_Click(object sender, EventArgs e)

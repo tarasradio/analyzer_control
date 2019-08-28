@@ -20,8 +20,6 @@ namespace SteppersControlApp
     public partial class MainForm : Form
     {
         Core _core;
-
-        Logger _logger;
         SerialHelper _helper;
 
         PackageReceiver _packageReceiver;
@@ -55,11 +53,10 @@ namespace SteppersControlApp
 
         private void InitializeAll()
         {
-            _logger = _core.GetLogger();
             Logger.OnNewMessageAdded += logView.AddMessage;
 
-            _packageReceiver = new PackageReceiver(Protocol.PacketHeader, Protocol.PacketEnd, _logger);
-            _packageHandler = new PackageHandler(_logger);
+            _packageReceiver = new PackageReceiver(Protocol.PacketHeader, Protocol.PacketEnd);
+            _packageHandler = new PackageHandler();
 
             _packageReceiver.PackageReceived += _packageHandler.ProcessPacket;
 
@@ -68,41 +65,48 @@ namespace SteppersControlApp
             _packageHandler.CommandStateResponseReceived += OkResponseReceived;
             _packageHandler.SensorsValuesReceived += SensorsValuesReceived;
 
-            _helper = new SerialHelper(_logger, _packageReceiver);
+            _helper = new SerialHelper(_packageReceiver);
 
-            _cncExecutor = new CncExecutor(_logger, _helper);
-
-            cncView.SetLogger(_logger);
+            _cncExecutor = new CncExecutor(_helper);
+            
             cncView.SetHelper(_helper);
-            cncView.SetControlThread(_cncExecutor);
+            cncView.SetExecutor(_cncExecutor);
+
+            _cncExecutor.CommandExecuted += _cncExecutor_CommandExecuted;
 
             editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
 
             buttonConnect.Enabled = false;
         }
 
+        private void _cncExecutor_CommandExecuted(int executedCommandNumber)
+        {
+            Action<int> action = cncView.UpdateExecutionProgress;
+            Invoke(action, executedCommandNumber);
+        }
+
         private void SensorsValuesReceived(ushort[] values)
         {
             Action<ushort[]> action = UpdateSensorsValues;
-            Invoke(action, values);
+            BeginInvoke(action, values);
         }
 
         private void OkResponseReceived(uint commandId, Protocol.CommandStates state)
         {
             Action<uint, Protocol.CommandStates> action = HandleOkResponse;
-            Invoke(action, commandId, state);
+            BeginInvoke(action, commandId, state);
         }
 
         private void MessageReceived(string message)
         {
             Action<String> action = ShowReceivedMessage;
-            Invoke(action, message);
+            BeginInvoke(action, message);
         }
 
         private void SteppersStatesReceived(ushort[] states)
         {
             Action<ushort[]> action = UpdateSteppersState;
-            Invoke(action, states);
+            BeginInvoke(action, states);
         }
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)

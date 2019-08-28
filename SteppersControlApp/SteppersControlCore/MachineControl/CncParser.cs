@@ -6,25 +6,16 @@ using System.Threading.Tasks;
 
 using System.Text.RegularExpressions;
 
+using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
+using SteppersControlCore.Utils;
 
 namespace SteppersControlCore.MachineControl
 {
     public class CncParser
     {
-        // BEGIN
-        // MOVE M1S2000 M2S300 (frame)
-        // SPEED M1S100 M2S300 (frame)
-        // STOP M1 M2 (frame)
-        // HOME M1 M2 (frame)
-        // ON D1 D2 (frame)
-        // OFF D1 D2 (frame)
-        // END
-
-        Logger _logger;
-
-        readonly Regex cncCommandPattern = new Regex(@"(MOVE|SPEED|STOP|HOME|ON|OFF|WAITR|WAITF|DELAY)(\s+\w+(-)?\d+)+", RegexOptions.IgnoreCase);
+        readonly Regex cncCommandPattern = new Regex(@"(MOVE|SPEED|STOP|HOME|ON|OFF|WAITR|WAITF|DELAY|RUN)(\s+\w+(-)?\d+)+", RegexOptions.IgnoreCase);
 
         readonly Regex moveCommandPattern = new Regex(@"MOVE(\s+\w+\d+)+", RegexOptions.IgnoreCase);
         readonly Regex moveArgumentPattern = new Regex(@"\s+M(?<motor>\d+)\s*S(?<steps>(-)?\d+)", RegexOptions.IgnoreCase);
@@ -49,20 +40,24 @@ namespace SteppersControlCore.MachineControl
         readonly Regex waitFallingCommandPattern = new Regex(@"WAITF(\s+\w+\d+)+", RegexOptions.IgnoreCase);
         readonly Regex waitArgumentPattern = new Regex(@"\s+S(?<sensor>\d+)\s*V(?<value>(-)?\d+)", RegexOptions.IgnoreCase);
 
-        public CncParser(Logger logger)
-        {
-            _logger = logger;
-        }
+        readonly Regex runCommandPattern = new Regex(@"RUN(\s+\w+\d+)+", RegexOptions.IgnoreCase);
+        readonly Regex sensorArgumentPattern = new Regex(@"\s+S(?<sensor>\d+)\s*(?<edgeType>R|F)(?<value>(-)?\d+)", RegexOptions.IgnoreCase);
 
+        public CncParser()
+        {
+
+        }
+        
         public CncProgram Parse(string programText)
         {
             CncProgram program = new CncProgram();
 
             string parsedCommand = "";
 
-            foreach (Match commandString in cncCommandPattern.Matches(programText))
-            {
+            string noComments = RegexHelper.GetNoCommentString(programText);
 
+            foreach (Match commandString in cncCommandPattern.Matches(noComments))
+            {
                 if (moveCommandPattern.IsMatch(commandString.Value))
                 {
                     Dictionary<int, int> arguments = new Dictionary<int, int>();
@@ -238,7 +233,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"sensor = {sensor}, value = {value}";
                     }
 
-                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor,(uint)value, ValueEdge.RisingEdge, Core.GetPacketId()));
+                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor,(uint)value, Protocol.ValueEdge.RisingEdge, Core.GetPacketId()));
                 }
                 else if (waitFallingCommandPattern.IsMatch(commandString.Value))
                 {
@@ -266,7 +261,55 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"sensor = {sensor}, value = {value}";
                     }
 
-                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor, (uint)value, ValueEdge.FallingEdge, Core.GetPacketId()));
+                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor, (uint)value, Protocol.ValueEdge.FallingEdge, Core.GetPacketId()));
+                }
+                else if (runCommandPattern.IsMatch(commandString.Value))
+                {
+                    Protocol.ValueEdge edgeType = Protocol.ValueEdge.RisingEdge;
+                    int sensor = -1;
+                    int value = -1;
+
+                    Dictionary<int, int> arguments = new Dictionary<int, int>();
+
+                    parsedCommand = "Run {";
+
+                    foreach (Match speedArgStr in speedArgumentPattern.Matches(commandString.Value))
+                    {
+                        int motor = int.Parse(speedArgStr.Groups["motor"].Value);
+                        int speed = int.Parse(speedArgStr.Groups["speed"].Value);
+
+                        if (motor < 0)
+                        {
+                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
+                        }
+
+                        arguments[motor] = speed;
+
+                        parsedCommand += $" M{motor} S = {speed}";
+                    }
+
+                    Match arg = sensorArgumentPattern.Match(commandString.Value);
+
+                    if (arg.Success)
+                    {
+                        edgeType = arg.Groups["edgeType"].Value == "r" ? Protocol.ValueEdge.RisingEdge : Protocol.ValueEdge.FallingEdge;
+                        sensor = int.Parse(arg.Groups["sensor"].Value);
+                        value = int.Parse(arg.Groups["value"].Value);
+                        
+                        if (sensor < 0)
+                        {
+                            Logger.AddMessage(" Номер датчика не может быть меньше 0");
+                        }
+
+                        if (value < 0)
+                        {
+                            Logger.AddMessage(" Значение датчика не может быть меньше 0");
+                        }
+
+                        parsedCommand += $" | sensor = {sensor}, value = {value}, edge = {edgeType}";
+                    }
+
+                    program.Commands.Add(new RunCncCommand(arguments, (uint)sensor, (uint)value, edgeType, Core.GetPacketId()));
                 }
                 parsedCommand += "}";
                 Logger.AddMessage(parsedCommand);

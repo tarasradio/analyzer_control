@@ -44,6 +44,18 @@ uint32_t lastCommandId = 0;
 uint8_t lastCommandState = COMMAND_DONE;
 uint8_t waitForCommandDone = 0;
 
+enum EdgeTypes
+{
+    RisingEdge,
+    FallingEdge
+};
+
+uint8_t waitSensorNumber = 0;
+uint16_t waitSensorValue = 0;
+uint8_t valueEdgeType = RisingEdge;
+
+uint8_t runExecutionState = 0;
+
 String messageToSend = "";
 
 CommandExecutor2::CommandExecutor2()
@@ -107,7 +119,52 @@ void CommandExecutor2::UpdateState()
 
     if (0 != waitForCommandDone) // Есть команды, ожидающие завершения
     {
-        if ((0 == getSteppersInMove()) && (0 == getSteppersInHoming())) // Моторы завершили движение
+        if(0 != runExecutionState)
+        {
+            uint16_t value = Sensors::getSensorValue(waitSensorNumber);
+#ifdef DEBUG
+            messageToSend = "Run: wait value = ";
+            messageToSend += String(waitSensorValue);
+            messageToSend +=", real value = ";
+            messageToSend += String(value);
+            printMessage(messageToSend);
+#endif
+            if(RisingEdge == valueEdgeType)
+            {
+                if(value > waitSensorValue)
+                {
+                    runExecutionState = 0;
+                }
+            }
+            else if(FallingEdge == valueEdgeType)
+            {
+                if(value < waitSensorValue)
+                {
+                    runExecutionState = 0;
+                }
+            }
+            
+            if(0 == runExecutionState)
+            {
+                for (int i = 0; i < countMoveSteppers; i++)
+                {
+                    uint8_t stepper = steppersForMove[i];
+
+                    getStepper(stepper).softStop();
+                }
+
+                countMoveSteppers = 0;
+                lastCommandState = COMMAND_DONE;
+                waitForCommandDone = 0;
+                printCommandStateResponse(lastCommandId, lastCommandState);
+
+#ifdef DEBUG
+        messageToSend = "Run success";
+        printMessage(messageToSend);
+#endif
+            }
+        }
+        else if ((0 == getSteppersInMove()) && (0 == getSteppersInHoming())) // Моторы завершили движение
         {
             countMoveSteppers = 0;
             countHomeSteppers = 0;
@@ -182,6 +239,11 @@ void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
             executeCncSetDeviceStateCommand(packet + 1, packetLength - 1, 0);
         }
         break;
+        case CNC_RUN:
+        {
+            executeCncRunCommand(packet + 1, packetLength - 1);
+        }
+        break;
         case CMD_ABORT:
         {
             executeAbortCommand(packet + 1, packetLength - 1);
@@ -202,18 +264,23 @@ void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
 
 bool CommandExecutor2::checkStepper(uint8_t stepper)
 {
-  bool result = (stepper >= 0 && stepper < STEPPERS_COUNT) ? true : false;
-  if(!result)
-  {
-    messageToSend = "wrong stepper = " + String(stepper);
-    printMessage(messageToSend);
-  }
-  return result;
+    bool result = (stepper >= 0 && stepper < STEPPERS_COUNT) ? true : false;
+    if(!result)
+    {
+        messageToSend = "wrong stepper = " + String(stepper);
+        printMessage(messageToSend);
+    }
+    return result;
 }
 
 uint32_t CommandExecutor2::readLong(uint8_t *buffer)
 {
-  return *((unsigned long *)(buffer));
+    return *((unsigned long *)(buffer));
+}
+
+uint16_t CommandExecutor2::readInt(uint8_t *buffer)
+{
+    return *((unsigned int *)(buffer));
 }
 
 bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
@@ -402,7 +469,7 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
 #endif
         getStepper(stepper).softStop();
     }
-    else if(HARD_STOP == stopType)
+    else if(STOP_HARD == stopType)
     {
 #ifdef DEBUG
         messageToSend += "HARD";
@@ -425,7 +492,7 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
     }
     else
     {
-        messageToSend += "huy znaet";
+        messageToSend += "Undefined";
     }
 #ifdef DEBUG
     printMessage(messageToSend);
@@ -570,6 +637,73 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
     }
 }
 
+void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint8_t packetLength)
+{
+    uint8_t countOfSteppers = packet[0];
+
+    uint32_t packetId = readLong(packet + countOfSteppers * 6 + 4 + 1);
+
+    if(checkSameCommand(packetId, WAITING_COMMAND))
+        return;
+
+    countMoveSteppers = countOfSteppers;
+
+#ifdef DEBUG
+    messageToSend = "[CNC Run] ";
+    messageToSend += "Steppers = " + String(countOfSteppers);
+    printMessage(messageToSend);
+#endif
+
+    for (int i = 0; i < countOfSteppers; i++)
+    {
+        uint8_t stepper = packet[i * 6 + 1];
+        uint8_t direction = packet[i * 6 + 2];
+        uint32_t fullSpeed = readLong(packet + i * 6 + 3);
+
+        if (checkStepper(stepper))
+        {
+            steppersForMove[i] = stepper;
+            getStepper(stepper).setMaxSpeed(fullSpeed);
+            getStepper(stepper).run(direction, fullSpeed);
+        }
+
+#ifdef DEBUG
+        messageToSend = "[ stepper = " + String(stepper);
+        messageToSend += ", dir = " + String(direction);
+        messageToSend += ", speed = " + String(fullSpeed) + "] ";
+
+        printMessage(messageToSend);
+#endif
+    }
+
+    waitSensorNumber = packet[countOfSteppers * 6 + 1];
+    waitSensorValue = readInt(packet + countOfSteppers * 6 + 2);
+    valueEdgeType = packet[countOfSteppers * 6 + 4];
+
+#ifdef DEBUG
+    messageToSend = "[ sensor = " + String(waitSensorNumber);
+    messageToSend += ", value = " + String(waitSensorValue);
+    messageToSend += ", edgeType = ";
+#endif
+
+    if(RisingEdge == valueEdgeType)
+    {
+#ifdef DEBUG
+        messageToSend += "rising]";
+#endif
+    }
+    else if(FallingEdge == valueEdgeType)
+    {
+#ifdef DEBUG
+        messageToSend += "falling]";
+#endif
+    }
+
+    runExecutionState = 1;
+    
+    printMessage(messageToSend);
+}
+
 void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength)
 {
     uint8_t countOfSteppers = packet[0];
@@ -668,7 +802,7 @@ void CommandExecutor2::printSensorsValues()
     Serial.write(SENSORS_VALUES);
     for (uint8_t i = 0; i < 16; i++)
     {
-        uint16_t sensorValue = Sensors::getSensorState(i);
+        uint16_t sensorValue = Sensors::getSensorValue(i);
         Serial.write((byte *)&sensorValue, sizeof(sensorValue));
     }
     Serial.write(packetEnd, packetEndLength);

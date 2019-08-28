@@ -19,12 +19,10 @@ namespace SteppersControlCore.SerialCommunication
         public event DeviseStatesReceivedDelegate SensorsValuesReceived;
         public event MessageReceivedDelegate MessageReceived;
         public event CommandStateResponseReceivedDelegate CommandStateResponseReceived;
-
-        Logger _logger;
-
-        public PackageHandler(Logger logger)
+        
+        public PackageHandler()
         {
-            _logger = logger;
+
         }
 
         public void ProcessPacket(byte[] packet)

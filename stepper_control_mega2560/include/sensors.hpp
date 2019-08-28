@@ -6,7 +6,7 @@
 class Sensors
 {
 public:
-    static int16_t getSensorState(int sensorNumber);
+    static int16_t getSensorValue(int sensorNumber);
 };
 
 

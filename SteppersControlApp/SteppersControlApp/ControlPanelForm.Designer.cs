@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonEmmergencyStop = new System.Windows.Forms.Button();
             this.stepperControlView17 = new SteppersControlApp.Views.StepperControlView();
             this.stepperControlView16 = new SteppersControlApp.Views.StepperControlView();
             this.stepperControlView15 = new SteppersControlApp.Views.StepperControlView();
@@ -49,109 +48,94 @@
             this.stepperControlView0 = new SteppersControlApp.Views.StepperControlView();
             this.SuspendLayout();
             // 
-            // buttonEmmergencyStop
-            // 
-            this.buttonEmmergencyStop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonEmmergencyStop.BackColor = System.Drawing.Color.OrangeRed;
-            this.buttonEmmergencyStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonEmmergencyStop.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonEmmergencyStop.Location = new System.Drawing.Point(3, 487);
-            this.buttonEmmergencyStop.Name = "buttonEmmergencyStop";
-            this.buttonEmmergencyStop.Size = new System.Drawing.Size(950, 111);
-            this.buttonEmmergencyStop.TabIndex = 18;
-            this.buttonEmmergencyStop.Text = "Emergency Stop!";
-            this.buttonEmmergencyStop.UseVisualStyleBackColor = false;
-            this.buttonEmmergencyStop.Click += new System.EventHandler(this.buttonEmmergencyStop_Click);
-            // 
             // stepperControlView17
             // 
             this.stepperControlView17.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView17.Location = new System.Drawing.Point(797, 328);
+            this.stepperControlView17.Location = new System.Drawing.Point(797, 280);
             this.stepperControlView17.Name = "stepperControlView17";
-            this.stepperControlView17.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView17.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView17.TabIndex = 17;
             // 
             // stepperControlView16
             // 
-            this.stepperControlView16.Location = new System.Drawing.Point(640, 328);
+            this.stepperControlView16.Location = new System.Drawing.Point(640, 280);
             this.stepperControlView16.Name = "stepperControlView16";
-            this.stepperControlView16.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView16.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView16.TabIndex = 16;
             // 
             // stepperControlView15
             // 
             this.stepperControlView15.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView15.Location = new System.Drawing.Point(483, 328);
+            this.stepperControlView15.Location = new System.Drawing.Point(483, 280);
             this.stepperControlView15.Name = "stepperControlView15";
-            this.stepperControlView15.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView15.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView15.TabIndex = 15;
             // 
             // stepperControlView14
             // 
-            this.stepperControlView14.Location = new System.Drawing.Point(326, 328);
+            this.stepperControlView14.Location = new System.Drawing.Point(326, 280);
             this.stepperControlView14.Name = "stepperControlView14";
-            this.stepperControlView14.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView14.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView14.TabIndex = 14;
             // 
             // stepperControlView13
             // 
             this.stepperControlView13.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView13.Location = new System.Drawing.Point(169, 328);
+            this.stepperControlView13.Location = new System.Drawing.Point(169, 280);
             this.stepperControlView13.Name = "stepperControlView13";
-            this.stepperControlView13.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView13.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView13.TabIndex = 13;
             // 
             // stepperControlView12
             // 
-            this.stepperControlView12.Location = new System.Drawing.Point(12, 328);
+            this.stepperControlView12.Location = new System.Drawing.Point(12, 280);
             this.stepperControlView12.Name = "stepperControlView12";
-            this.stepperControlView12.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView12.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView12.TabIndex = 12;
             // 
             // stepperControlView11
             // 
-            this.stepperControlView11.Location = new System.Drawing.Point(797, 170);
+            this.stepperControlView11.Location = new System.Drawing.Point(797, 146);
             this.stepperControlView11.Name = "stepperControlView11";
-            this.stepperControlView11.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView11.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView11.TabIndex = 11;
             // 
             // stepperControlView10
             // 
             this.stepperControlView10.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView10.Location = new System.Drawing.Point(640, 170);
+            this.stepperControlView10.Location = new System.Drawing.Point(640, 146);
             this.stepperControlView10.Name = "stepperControlView10";
-            this.stepperControlView10.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView10.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView10.TabIndex = 10;
             // 
             // stepperControlView9
             // 
-            this.stepperControlView9.Location = new System.Drawing.Point(483, 170);
+            this.stepperControlView9.Location = new System.Drawing.Point(483, 146);
             this.stepperControlView9.Name = "stepperControlView9";
-            this.stepperControlView9.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView9.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView9.TabIndex = 9;
             // 
             // stepperControlView8
             // 
             this.stepperControlView8.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView8.Location = new System.Drawing.Point(326, 170);
+            this.stepperControlView8.Location = new System.Drawing.Point(326, 146);
             this.stepperControlView8.Name = "stepperControlView8";
-            this.stepperControlView8.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView8.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView8.TabIndex = 8;
             // 
             // stepperControlView7
             // 
-            this.stepperControlView7.Location = new System.Drawing.Point(169, 170);
+            this.stepperControlView7.Location = new System.Drawing.Point(169, 146);
             this.stepperControlView7.Name = "stepperControlView7";
-            this.stepperControlView7.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView7.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView7.TabIndex = 7;
             // 
             // stepperControlView6
             // 
             this.stepperControlView6.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView6.Location = new System.Drawing.Point(12, 170);
+            this.stepperControlView6.Location = new System.Drawing.Point(12, 146);
             this.stepperControlView6.Name = "stepperControlView6";
-            this.stepperControlView6.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView6.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView6.TabIndex = 6;
             // 
             // stepperControlView5
@@ -159,14 +143,14 @@
             this.stepperControlView5.BackColor = System.Drawing.SystemColors.ControlDark;
             this.stepperControlView5.Location = new System.Drawing.Point(797, 12);
             this.stepperControlView5.Name = "stepperControlView5";
-            this.stepperControlView5.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView5.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView5.TabIndex = 5;
             // 
             // stepperControlView4
             // 
             this.stepperControlView4.Location = new System.Drawing.Point(640, 12);
             this.stepperControlView4.Name = "stepperControlView4";
-            this.stepperControlView4.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView4.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView4.TabIndex = 4;
             // 
             // stepperControlView3
@@ -174,14 +158,14 @@
             this.stepperControlView3.BackColor = System.Drawing.SystemColors.ControlDark;
             this.stepperControlView3.Location = new System.Drawing.Point(483, 12);
             this.stepperControlView3.Name = "stepperControlView3";
-            this.stepperControlView3.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView3.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView3.TabIndex = 3;
             // 
             // stepperControlView2
             // 
             this.stepperControlView2.Location = new System.Drawing.Point(326, 12);
             this.stepperControlView2.Name = "stepperControlView2";
-            this.stepperControlView2.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView2.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView2.TabIndex = 2;
             // 
             // stepperControlView1
@@ -189,22 +173,21 @@
             this.stepperControlView1.BackColor = System.Drawing.SystemColors.ControlDark;
             this.stepperControlView1.Location = new System.Drawing.Point(169, 12);
             this.stepperControlView1.Name = "stepperControlView1";
-            this.stepperControlView1.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView1.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView1.TabIndex = 1;
             // 
             // stepperControlView0
             // 
             this.stepperControlView0.Location = new System.Drawing.Point(12, 12);
             this.stepperControlView0.Name = "stepperControlView0";
-            this.stepperControlView0.Size = new System.Drawing.Size(151, 152);
+            this.stepperControlView0.Size = new System.Drawing.Size(151, 128);
             this.stepperControlView0.TabIndex = 0;
             // 
             // ControlPanelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 604);
-            this.Controls.Add(this.buttonEmmergencyStop);
+            this.ClientSize = new System.Drawing.Size(960, 419);
             this.Controls.Add(this.stepperControlView17);
             this.Controls.Add(this.stepperControlView16);
             this.Controls.Add(this.stepperControlView15);
@@ -251,6 +234,5 @@
         private Views.StepperControlView stepperControlView15;
         private Views.StepperControlView stepperControlView16;
         private Views.StepperControlView stepperControlView17;
-        private System.Windows.Forms.Button buttonEmmergencyStop;
     }
 }

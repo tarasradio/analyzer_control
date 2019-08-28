@@ -21,7 +21,16 @@ namespace SteppersControlApp
         public ControlPanelForm()
         {
             InitializeComponent();
+        }
 
+        public void setSerialHelper(SerialHelper helper)
+        {
+            this.helper = helper;
+            initDriveControls();
+        }
+
+        private void initDriveControls()
+        {
             stepperControlView0.setStepperNumber(0);
             stepperControlView1.setStepperNumber(1);
             stepperControlView2.setStepperNumber(2);
@@ -40,16 +49,7 @@ namespace SteppersControlApp
             stepperControlView15.setStepperNumber(15);
             stepperControlView16.setStepperNumber(16);
             stepperControlView17.setStepperNumber(17);
-        }
 
-        public void setSerialHelper(SerialHelper helper)
-        {
-            this.helper = helper;
-            initDriveControls();
-        }
-
-        private void initDriveControls()
-        {
             stepperControlView0.SetSerialHelper(helper);
             stepperControlView1.SetSerialHelper(helper);
             stepperControlView2.SetSerialHelper(helper);

@@ -14,8 +14,6 @@ namespace SteppersControlCore
         public delegate void newMessageHandler(string message);
         public static event newMessageHandler OnNewMessageAdded;
 
-        private string fileName;
-
         public Logger()
         {
             //Directory.CreateDirectory("logs");
