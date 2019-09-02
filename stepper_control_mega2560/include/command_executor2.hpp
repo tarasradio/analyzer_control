@@ -8,13 +8,10 @@ class CommandExecutor2
 private:
     bool checkStepper(uint8_t stepper);
     void printCommandStateResponse(uint32_t commandId, uint8_t commandState);
-    void printMessage(String messageText);
     void printSteppersStates();
     void printSensorsValues();
 
-    uint8_t getSteppersInHoming();
     uint8_t getSteppersInMove();
-    uint8_t getStepperMoveState(uint8_t stepper);
 
     uint32_t readLong(uint8_t *buffer);
     uint16_t readInt(uint8_t *buffer);
@@ -37,6 +34,8 @@ private:
     void executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state);
 
     bool checkSameCommand(uint32_t commandId, uint8_t commandType);
+    
+    String messageToSend = "";
 public:
     CommandExecutor2();
     void UpdateState();

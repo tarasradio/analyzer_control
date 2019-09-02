@@ -76,14 +76,21 @@ void steppers_default_init()
     steppers[i].setVoltageComp(VS_COMP_DISABLE);
     steppers[i].setSwitchMode(SW_USER);  
     steppers[i].setOscMode(INT_16MHZ);
-  
+
     steppers[i].setRunKVAL(64);
     steppers[i].setAccKVAL(64);
     steppers[i].setDecKVAL(64);
     steppers[i].setHoldKVAL(32);
-  
+
     steppers[i].setParam(ALARM_EN, 0x8F);
-  
+
     steppers[i].getStatus();
   }
+}
+
+// 0 - not move, 1 - move
+uint8_t get_stepper_move_state(uint8_t stepper)
+{
+  uint16_t stepperStatus = getStepper(stepper).getStatus() & STATUS_MOT_STATUS;
+  return (uint8_t)stepperStatus;
 }

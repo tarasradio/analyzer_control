@@ -83,3 +83,11 @@ void PacketManager::FindPacket()
         i++;
     }
 }
+
+void PacketManager::printMessage(String messageText)
+{
+    Serial.write(packetHeader, packetHeaderLength);
+    Serial.write(TEXT_MESSAGE);
+    Serial.println(messageText);
+    Serial.write(packetEnd, packetEndLength);
+}

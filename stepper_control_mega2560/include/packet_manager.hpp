@@ -12,6 +12,7 @@ public:
     PacketManager(CommandExecutor2 & );
     void ReadPacket();
     void FindPacket();
+    static void printMessage(String messageText);
 };
 
 #endif
