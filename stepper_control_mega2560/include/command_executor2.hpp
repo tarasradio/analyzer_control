@@ -20,6 +20,7 @@ private:
 
     void executeWaitTimeCommand(uint8_t *packet, uint8_t packetLength);
     void executeAbortCommand(uint8_t *packet, uint8_t packetLength);
+    void executeBarStartCommand(uint8_t *packet, uint8_t packetLength);
     void executeHomeCommand(uint8_t *packet, uint8_t packetLength);
     void executeRunCommand(uint8_t *packet, uint8_t packetLength);
     void executeMoveCommand(uint8_t *packet, uint8_t packetLength);

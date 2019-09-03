@@ -6,6 +6,8 @@
 #include "moving_controller.hpp"
 #include "running_controller.hpp"
 
+#include "bar_scanner.hpp"
+
 #include "protocol.hpp"
 #include "steppers.hpp"
 #include "sensors.hpp"
@@ -36,17 +38,21 @@ HomingController _homingController;
 MovingController _movingController;
 RunningController _runningController;
 
+BarScanner _barScanner;
+
 CommandExecutor2::CommandExecutor2()
 {
-    _homingController = HomingController();
-    _movingController = MovingController();
-    _runningController = RunningController();
+    // _homingController = HomingController();
+    // _movingController = MovingController();
+    // _runningController = RunningController();
+    // _barScanner = BarScanner();
 }
 
 void CommandExecutor2::UpdateState()
 {
     printSteppersStates();
     printSensorsValues();
+    _barScanner.updateState();
 
     if (0 != waitForCommandDone) // Есть команды, ожидающие завершения
     {
@@ -141,6 +147,11 @@ void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
             executeWaitTimeCommand(packet + 1, packetLength - 1);
         }
         break;
+        case CMD_BAR_START:
+        {
+            executeBarStartCommand(packet + 1, packetLength - 1);
+        }
+        break;
         default:
         {
             PacketManager::printMessage("Unknown command!");
@@ -233,6 +244,18 @@ void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength
 
 #ifdef DEBUG
     messageToSend = "[Abort] ";
+    PacketManager::printMessage(messageToSend);
+#endif
+}
+
+void CommandExecutor2::executeBarStartCommand(uint8_t *packet, uint8_t packetLength)
+{
+    uint32_t packetId = readLong(packet + 0);
+    if(checkSameCommand(packetId, SIMPLE_COMMAND))
+        return;
+    _barScanner.startScan();
+#ifdef DEBUG
+    messageToSend = "[Bar start]";
     PacketManager::printMessage(messageToSend);
 #endif
 }
@@ -425,7 +448,7 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLeng
 
 #ifdef DEBUG
     messageToSend = "[CNC Move] ";
-    messageToSend += "Steppers = " + String(countOfSteppers);
+    messageToSend += "steppers = " + String(countOfSteppers);
     PacketManager::printMessage(messageToSend);
 #endif
 
@@ -554,7 +577,7 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packet
 
         if (checkStepper(stepper))
         {
-            getStepper(stepper).setMaxSpeed(fullSpeed);
+            getStepper(stepper).setMaxSpeed(fullSpeed << 2);
             getStepper(stepper).setFullSpeed(fullSpeed);
         }
 

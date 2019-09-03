@@ -28,6 +28,8 @@ namespace SteppersControlCore.MachineControl
 
         private static int countBadPackets = 0;
 
+        public bool isExecute = false;
+
         public CncExecutor(SerialHelper helper)
         {
             _helper = helper;
@@ -82,11 +84,14 @@ namespace SteppersControlCore.MachineControl
             _executionThread = new Thread(commandsExecution);
             _executionThread.Start();
 
+            isExecute = true;
+
             Logger.AddMessage("Запущено выполнение программы.");
         }
 
         public void AbortExecution()
         {
+            isExecute = false;
             _executionThread?.Abort();
             Logger.AddMessage("Выполнение программы было прерванно.");
         }
@@ -117,6 +122,8 @@ namespace SteppersControlCore.MachineControl
 
                 CommandExecuted(commandNumber);
             }
+
+            isExecute = false;
             Logger.AddMessage("Все команды выполнены успешно !");
             Logger.AddMessage($"Пакетов с ошибками {countBadPackets}!");
             Logger.AddMessage("Выполнение программы завершено.");
@@ -148,7 +155,7 @@ namespace SteppersControlCore.MachineControl
             {
                 TimeSpan ts = stopWatch.Elapsed;
 
-                if(ts.Seconds >= 5)
+                if(ts.Seconds >= 1)
                 {
                     Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
 

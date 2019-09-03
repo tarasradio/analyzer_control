@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CommunicationProtocol\AbstractCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\AbortExecutionCommand.cs" />
+    <Compile Include="CommunicationProtocol\AdditionalCommands\BarStartCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\SetDeviceStateCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\WaitSensorValueCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\WaitTimeCommand.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="CommunicationProtocol\IDeviceCommand.cs" />
     <Compile Include="CommunicationProtocol\IHostCommand.cs" />
     <Compile Include="CommunicationProtocol\Responses\AbstaractResponse.cs" />
+    <Compile Include="CommunicationProtocol\Responses\BarCodeResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\DebugResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\CommandStateResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\SensorsValuesResponse.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="MachineControl\CncExecutor.cs" />
     <Compile Include="MachineControl\CncParser.cs" />
     <Compile Include="MachineControl\CncProgram.cs" />
+    <Compile Include="MachineControl\TaskExecutor.cs" />
     <Compile Include="SerialCommunication\ByteStuffing.cs" />
     <Compile Include="SerialCommunication\PackageHandler.cs" />
     <Compile Include="SerialCommunication\PackageReceiver.cs" />

@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CNCView));
             this.programTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.buttonTestCNCMove = new System.Windows.Forms.Button();
+            this.scanTubesTaskButton = new System.Windows.Forms.Button();
             this.buttonAbortExecution = new System.Windows.Forms.Button();
             this.buttonRunExecution = new System.Windows.Forms.Button();
             this.buttonOpenFile = new System.Windows.Forms.Button();
@@ -42,7 +42,10 @@
             this.executionProgressBar = new System.Windows.Forms.ProgressBar();
             this.executionStatusLabel = new System.Windows.Forms.Label();
             this.executionProgressLabel = new System.Windows.Forms.Label();
+            this.washingPompTaskButton = new System.Windows.Forms.Button();
+            this.editWashingCount = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editWashingCount)).BeginInit();
             this.SuspendLayout();
             // 
             // programTextBox
@@ -68,6 +71,7 @@
             this.programTextBox.CharWidth = 8;
             this.programTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.programTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.programTextBox.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.programTextBox.IsReplaceMode = false;
             this.programTextBox.Location = new System.Drawing.Point(3, 53);
             this.programTextBox.Name = "programTextBox";
@@ -80,16 +84,16 @@
             this.programTextBox.Zoom = 100;
             this.programTextBox.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.ProgramTextBox_TextChanged);
             // 
-            // buttonTestCNCMove
+            // scanTubesTaskButton
             // 
-            this.buttonTestCNCMove.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.buttonTestCNCMove.Location = new System.Drawing.Point(445, 14);
-            this.buttonTestCNCMove.Name = "buttonTestCNCMove";
-            this.buttonTestCNCMove.Size = new System.Drawing.Size(99, 23);
-            this.buttonTestCNCMove.TabIndex = 8;
-            this.buttonTestCNCMove.Text = "Test CNC Move";
-            this.buttonTestCNCMove.UseVisualStyleBackColor = true;
-            this.buttonTestCNCMove.Click += new System.EventHandler(this.buttonTestCNCMove_Click);
+            this.scanTubesTaskButton.BackColor = System.Drawing.Color.GreenYellow;
+            this.scanTubesTaskButton.Location = new System.Drawing.Point(203, 3);
+            this.scanTubesTaskButton.Name = "scanTubesTaskButton";
+            this.scanTubesTaskButton.Size = new System.Drawing.Size(88, 44);
+            this.scanTubesTaskButton.TabIndex = 8;
+            this.scanTubesTaskButton.Text = "Сканирование пробирок";
+            this.scanTubesTaskButton.UseVisualStyleBackColor = false;
+            this.scanTubesTaskButton.Click += new System.EventHandler(this.scanTubesTaskButton_Click);
             // 
             // buttonAbortExecution
             // 
@@ -208,10 +212,35 @@
             this.executionProgressLabel.TabIndex = 46;
             this.executionProgressLabel.Text = "Сколько выполнено команд";
             // 
+            // washingPompTaskButton
+            // 
+            this.washingPompTaskButton.BackColor = System.Drawing.Color.Yellow;
+            this.washingPompTaskButton.Location = new System.Drawing.Point(297, 3);
+            this.washingPompTaskButton.Name = "washingPompTaskButton";
+            this.washingPompTaskButton.Size = new System.Drawing.Size(88, 44);
+            this.washingPompTaskButton.TabIndex = 47;
+            this.washingPompTaskButton.Text = "Промывка насоса";
+            this.washingPompTaskButton.UseVisualStyleBackColor = false;
+            this.washingPompTaskButton.Click += new System.EventHandler(this.washingPompTaskButton_Click);
+            // 
+            // editWashingCount
+            // 
+            this.editWashingCount.Location = new System.Drawing.Point(391, 17);
+            this.editWashingCount.Name = "editWashingCount";
+            this.editWashingCount.Size = new System.Drawing.Size(63, 20);
+            this.editWashingCount.TabIndex = 48;
+            this.editWashingCount.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
             // CNCView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.editWashingCount);
+            this.Controls.Add(this.washingPompTaskButton);
             this.Controls.Add(this.executionProgressLabel);
             this.Controls.Add(this.executionStatusLabel);
             this.Controls.Add(this.executionProgressBar);
@@ -221,11 +250,12 @@
             this.Controls.Add(this.buttonOpenFile);
             this.Controls.Add(this.buttonRunExecution);
             this.Controls.Add(this.buttonAbortExecution);
-            this.Controls.Add(this.buttonTestCNCMove);
+            this.Controls.Add(this.scanTubesTaskButton);
             this.Controls.Add(this.programTextBox);
             this.Name = "CNCView";
             this.Size = new System.Drawing.Size(861, 427);
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editWashingCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,7 +264,7 @@
         #endregion
 
         private FastColoredTextBoxNS.FastColoredTextBox programTextBox;
-        private System.Windows.Forms.Button buttonTestCNCMove;
+        private System.Windows.Forms.Button scanTubesTaskButton;
         private System.Windows.Forms.Button buttonAbortExecution;
         private System.Windows.Forms.Button buttonRunExecution;
         private System.Windows.Forms.Button buttonOpenFile;
@@ -245,5 +275,7 @@
         private System.Windows.Forms.ProgressBar executionProgressBar;
         private System.Windows.Forms.Label executionStatusLabel;
         private System.Windows.Forms.Label executionProgressLabel;
+        private System.Windows.Forms.Button washingPompTaskButton;
+        private System.Windows.Forms.NumericUpDown editWashingCount;
     }
 }

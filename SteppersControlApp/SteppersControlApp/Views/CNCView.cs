@@ -20,6 +20,7 @@ using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.StepperCommands;
 using SteppersControlCore.SerialCommunication;
+using System.Threading;
 
 namespace SteppersControlApp.Views
 {
@@ -27,7 +28,8 @@ namespace SteppersControlApp.Views
     {
         static SerialHelper _helper;
         CncExecutor _cncExecutor;
-
+        TaskExecutor _taskExecutor;
+        
         CncProgram _program;
 
         public CNCView()
@@ -39,6 +41,7 @@ namespace SteppersControlApp.Views
         public void SetExecutor(CncExecutor executor)
         {
             _cncExecutor = executor;
+            _taskExecutor = new TaskExecutor(_cncExecutor);
         }
 
         public void SetHelper(SerialHelper helper)
@@ -135,26 +138,10 @@ namespace SteppersControlApp.Views
                 }
             }
         }
-
-        static List<IAbstractCommand> commandsToSend = new List<IAbstractCommand>();
-
-        void DelayTest()
+        
+        private void scanTubesTaskButton_Click(object sender, EventArgs e)
         {
-            commandsToSend.Clear();
-
-            IAbstractCommand command;
-
-            for (int i = 0; i < 10; i++)
-            {
-                command = new WaitTimeCommand(5000, Protocol.GetPacketId());
-                commandsToSend.Add(command);
-            }
-        }
-
-        private void buttonTestCNCMove_Click(object sender, EventArgs e)
-        {
-            DelayTest();
-            _cncExecutor.StartExecution(commandsToSend);
+            _taskExecutor.StartScanTubesTask();
         }
         
         private void buttonRunProgram_Click(object sender, EventArgs e)
@@ -171,12 +158,24 @@ namespace SteppersControlApp.Views
 
         public void UpdateExecutionProgress(int executedCommandNumber)
         {
-            double progress = ((double)executedCommandNumber / _program.Commands.Count) * 100.0;
+            double progress = 0;
+            int commandsCount = 0;
+
+            if (_taskExecutor.GetCommandsCount() > 0)
+            {
+                commandsCount = _taskExecutor.GetCommandsCount();
+            }
+            else
+            {
+                commandsCount = _program.Commands.Count;
+            }
+
+            progress = ((double)executedCommandNumber / commandsCount) * 100.0;
             executionProgressBar.Value = (int)progress;
+            
+            executionProgressLabel.Text = $"Выполнено команд: {executedCommandNumber} из {commandsCount}";
 
-            executionProgressLabel.Text = $"Выполнено команд: {executedCommandNumber} из {_program.Commands.Count}";
-
-            if(executedCommandNumber == _program.Commands.Count)
+            if(executedCommandNumber == commandsCount)
             {
                 executionStatusLabel.Text = "Выполнение программы завершено";
             }
@@ -184,6 +183,7 @@ namespace SteppersControlApp.Views
 
         private void buttonAbortExecution_Click(object sender, EventArgs e)
         {
+            _taskExecutor.AbortExecution();
             _cncExecutor.AbortExecution();
             _helper.SendBytes(new AbortExecutionCommand(Protocol.GetPacketId()).GetBytes());
             executionStatusLabel.Text = "Выполнение программы было прерванно";
@@ -192,6 +192,11 @@ namespace SteppersControlApp.Views
         private void buttonClearFile_Click(object sender, EventArgs e)
         {
             programTextBox.Clear();
+        }
+
+        private void washingPompTaskButton_Click(object sender, EventArgs e)
+        {
+            _taskExecutor.StartWashingPompTask();
         }
     }
 }

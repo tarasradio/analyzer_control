@@ -91,3 +91,11 @@ void PacketManager::printMessage(String messageText)
     Serial.println(messageText);
     Serial.write(packetEnd, packetEndLength);
 }
+
+void PacketManager::printBarCode(String barCode)
+{
+    Serial.write(packetHeader, packetHeaderLength);
+    Serial.write(BAR_CODE_MESSAGE);
+    Serial.println(barCode);
+    Serial.write(packetEnd, packetEndLength);
+}

@@ -13,6 +13,7 @@ public:
     void ReadPacket();
     void FindPacket();
     static void printMessage(String messageText);
+    static void printBarCode(String barCode);
 };
 
 #endif

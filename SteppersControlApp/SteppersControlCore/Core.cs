@@ -66,5 +66,28 @@ namespace SteppersControlCore
 
             return value;
         }
+
+        private static string _lastBarCode = null;
+
+        public void UpdateBarCode(string barCode)
+        {
+            _mutex.WaitOne();
+
+            _lastBarCode = barCode;
+
+            _mutex.ReleaseMutex();
+        }
+
+        public static string GetLastBarCode()
+        {
+            string barCode = null;
+
+            _mutex.WaitOne();
+            barCode = _lastBarCode;
+            _lastBarCode = null;
+            _mutex.ReleaseMutex();
+
+            return barCode;
+        }
     }
 }

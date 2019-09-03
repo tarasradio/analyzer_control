@@ -63,6 +63,7 @@
             this.tabPageCNC = new System.Windows.Forms.TabPage();
             this.cncView = new SteppersControlApp.Views.CNCView();
             this.logView = new SteppersControlApp.Views.LogView();
+            this.barStartButton = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -107,7 +108,8 @@
             this.toolStripSeparator1,
             this.buttonShowControlPanel,
             this.toolStripSeparator2,
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.barStartButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -454,6 +456,16 @@
             this.logView.Size = new System.Drawing.Size(812, 151);
             this.logView.TabIndex = 13;
             // 
+            // barStartButton
+            // 
+            this.barStartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.barStartButton.Image = ((System.Drawing.Image)(resources.GetObject("barStartButton.Image")));
+            this.barStartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.barStartButton.Name = "barStartButton";
+            this.barStartButton.Size = new System.Drawing.Size(67, 36);
+            this.barStartButton.Text = "BAR SCAN";
+            this.barStartButton.Click += new System.EventHandler(this.barStartButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -514,6 +526,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private Views.SensorsView sensorsView;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton barStartButton;
     }
 }
 

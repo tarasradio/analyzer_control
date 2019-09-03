@@ -6,6 +6,8 @@
 #include "steppers.hpp"
 #include "sensors.hpp"
 
+#define FILTER_VALUE 10
+
 enum EdgeTypes
 {
     RisingEdge,
@@ -19,6 +21,8 @@ uint8_t waitSensorNumber = 0;
 uint16_t waitSensorValue = 0;
 uint8_t valueEdgeType = RisingEdge;
 
+uint8_t acceptedNeedValueCount = 0;
+
 RunningController::RunningController()
 {
     
@@ -29,6 +33,7 @@ void RunningController::addStepperForRun(uint8_t stepper, uint8_t direction, uin
     steppersForRun[countRunSteppers++] = stepper;
     getStepper(stepper).setMaxSpeed(speed);
     getStepper(stepper).run(direction, speed);
+
 }
 
 void RunningController::setRunParams(uint8_t sensor, uint16_t sensorValue, uint8_t edgeType)
@@ -58,6 +63,8 @@ void RunningController::setRunParams(uint8_t sensor, uint16_t sensorValue, uint8
 #ifdef DEBUG
     PacketManager::printMessage(messageToSend);
 #endif
+
+    acceptedNeedValueCount = 0;
 }
 
 uint8_t RunningController::updateState()
@@ -66,27 +73,39 @@ uint8_t RunningController::updateState()
     {
         uint16_t value = Sensors::getSensorValue(waitSensorNumber);
 #ifdef DEBUG
-        messageToSend = "Run: wait value = ";
-        messageToSend += String(waitSensorValue);
-        messageToSend +=", real value = ";
-        messageToSend += String(value);
-        PacketManager::printMessage(messageToSend);
+            messageToSend = "Run: wait value = ";
+            messageToSend += String(waitSensorValue);
+            messageToSend += ", real value = ";
+            messageToSend += String(value);
+            messageToSend += ", Filter num = ";
+            messageToSend += String(acceptedNeedValueCount);
+            printMessage(messageToSend);
 #endif
-        if(RisingEdge == valueEdgeType)
-        {
-            if(value > waitSensorValue)
+            if (RisingEdge == valueEdgeType)
             {
-                clearState();
+                if (value > waitSensorValue)
+                {
+                    if (acceptedNeedValueCount == FILTER_VALUE)
+                    {
+                        clearState();
+                    }
+                    acceptedNeedValueCount++;
+                }
             }
-        }
-        else if(FallingEdge == valueEdgeType)
-        {
-            if(value < waitSensorValue)
+            else if (FallingEdge == valueEdgeType)
             {
-                clearState();
+                if (value < waitSensorValue)
+                {
+                    if (acceptedNeedValueCount == FILTER_VALUE)
+                    {
+                        clearState();
+                    }
+                    acceptedNeedValueCount++;
+                }
             }
-        }
     }
+
+    return countRunSteppers;
 }
 
 void RunningController::clearState()

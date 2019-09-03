@@ -64,6 +64,7 @@ namespace SteppersControlApp
             _packageHandler.MessageReceived += MessageReceived;
             _packageHandler.CommandStateResponseReceived += OkResponseReceived;
             _packageHandler.SensorsValuesReceived += SensorsValuesReceived;
+            _packageHandler.BarCodeReceived += BarCodeReceived;
 
             _helper = new SerialHelper(_packageReceiver);
 
@@ -77,6 +78,18 @@ namespace SteppersControlApp
             editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
 
             buttonConnect.Enabled = false;
+        }
+
+        private void UpdateBarCode(string barCode)
+        {
+            _core.UpdateBarCode(barCode);
+            Logger.AddMessage($"Принят код :{barCode}");
+        }
+
+        private void BarCodeReceived(string message)
+        {
+            Action<string> action = UpdateBarCode;
+            BeginInvoke(action, message);
         }
 
         private void _cncExecutor_CommandExecuted(int executedCommandNumber)
@@ -370,6 +383,11 @@ namespace SteppersControlApp
         private void testButton_Click(object sender, EventArgs e)
         {
             testWrapReceive();
+        }
+
+        private void barStartButton_Click(object sender, EventArgs e)
+        {
+            _helper.SendBytes(new BarStartCommand(Protocol.GetPacketId()).GetBytes());
         }
     }
 }

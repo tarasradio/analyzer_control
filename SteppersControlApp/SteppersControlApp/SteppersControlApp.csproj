@@ -83,6 +83,12 @@
     <Compile Include="Views\LogView.Designer.cs">
       <DependentUpon>LogView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\ScanView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ScanView.Designer.cs">
+      <DependentUpon>ScanView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\SensorsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -125,6 +131,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\LogView.resx">
       <DependentUpon>LogView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ScanView.resx">
+      <DependentUpon>ScanView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SensorsView.resx">
       <DependentUpon>SensorsView.cs</DependentUpon>

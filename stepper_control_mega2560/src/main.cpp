@@ -11,8 +11,21 @@
 
 TaskManager _taskManager = TaskManager();
 
+void initLED()
+{
+  DDRA |= (1 << 5);
+  DDRA |= (1 << 6);
+  DDRA |= (1 << 7);
+
+  PORTA |= (1 << 5);
+  PORTA |= (1 << 6);
+  PORTA |= (1 << 7);
+}
+
 void setup()
 {
+  initLED();
+
   Serial.begin(BAUDRATE);
 
   Devices::devices_init_pins();

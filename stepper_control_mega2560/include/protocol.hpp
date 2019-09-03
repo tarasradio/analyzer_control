@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 
-static uint8_t packetHeader[] = {0x55, 0x55};
-static uint8_t packetHeaderLength = 2;
+static const uint8_t packetHeader[] = {0x55, 0x55};
+static const uint8_t packetHeaderLength = 2;
 
-static uint8_t packetEnd[] = {0xAA, 0xAA};
-static uint8_t packetEndLength = 2;
+static const uint8_t packetEnd[] = {0xAA, 0xAA};
+static const uint8_t packetEndLength = 2;
 
 enum CommandStates
 {
@@ -21,7 +21,8 @@ enum Responses
   STEPPERS_STATES = 0x10,
   SENSORS_VALUES,
   COMMAND_STATE,
-  TEXT_MESSAGE
+  TEXT_MESSAGE,
+  BAR_CODE_MESSAGE
 };
 
 enum StepperCommands
@@ -37,12 +38,13 @@ enum AdditionalCommands
 {
 	CMD_SET_DEVICE_STATE = 0x14,
 	CMD_ABORT,
-  CMD_WAIT_TIME
+  CMD_WAIT_TIME,
+  CMD_BAR_START
 };
 
 enum CncCommands
 {
-	CNC_MOVE = 0x17,
+	CNC_MOVE = 0x18,
 	CNC_SET_SPEED,
 	CNC_STOP,
 	CNC_HOME,
