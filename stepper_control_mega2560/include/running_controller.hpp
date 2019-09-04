@@ -6,7 +6,7 @@
 class RunningController
 {
 private:
-    String messageToSend = "";
+
 public:
     RunningController();
     void addStepperForRun(uint8_t stepper, uint8_t direction, uint32_t speed);

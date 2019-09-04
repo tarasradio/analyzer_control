@@ -6,7 +6,7 @@
 class BarScanner
 {
 private:
-    String messageToSend = "";
+    
 public:
     BarScanner();
     void updateState();

@@ -42,9 +42,7 @@ void PacketManager::FindPacket()
 
     while (i != _currentBufferByte)
     {
-        switch (state)
-        {
-        case RECEIVING_HEADER:
+        if(RECEIVING_HEADER == state)
         {
             if (_incomingBuffer[i] == packetHeader[currentHeaderByte])
                 currentHeaderByte++;
@@ -58,8 +56,7 @@ void PacketManager::FindPacket()
                 currentPacketByte = 0;
             }
         }
-        break;
-        case RECEIVING_BODY:
+        else if(RECEIVING_BODY == state)
         {
             _packetBuffer[currentPacketByte++] = _incomingBuffer[i];
 
@@ -78,13 +75,11 @@ void PacketManager::FindPacket()
                 _commandExecutor.ExecuteCommand(_packetBuffer, packetLength);
             }
         }
-        break;
-        }
         i++;
     }
 }
 
-void PacketManager::printMessage(String messageText)
+void PacketManager::printMessage(const String & messageText)
 {
     Serial.write(packetHeader, packetHeaderLength);
     Serial.write(TEXT_MESSAGE);
@@ -92,7 +87,7 @@ void PacketManager::printMessage(String messageText)
     Serial.write(packetEnd, packetEndLength);
 }
 
-void PacketManager::printBarCode(String barCode)
+void PacketManager::printBarCode(const String & barCode)
 {
     Serial.write(packetHeader, packetHeaderLength);
     Serial.write(BAR_CODE_MESSAGE);

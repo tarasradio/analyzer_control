@@ -19,15 +19,15 @@ powerSTEP stepper_15(15, CS_PIN, RESET_PIN);
 powerSTEP stepper_16(16, CS_PIN, RESET_PIN);
 powerSTEP stepper_17(17, CS_PIN, RESET_PIN);
 
-powerSTEP steppers[STEPPERS_COUNT] = {
-  stepper_0,    stepper_1,    stepper_2,
-  stepper_3,    stepper_4,    stepper_5, 
-  stepper_6,    stepper_7,    stepper_8,
-  stepper_9,    stepper_10,   stepper_11, 
-  stepper_12,   stepper_13,   stepper_14,
-  stepper_15,   stepper_16,   stepper_17 };
+static powerSTEP steppers[STEPPERS_COUNT] = {
+    stepper_0, stepper_1, stepper_2,
+    stepper_3, stepper_4, stepper_5,
+    stepper_6, stepper_7, stepper_8,
+    stepper_9, stepper_10, stepper_11,
+    stepper_12, stepper_13, stepper_14,
+    stepper_15, stepper_16, stepper_17};
 
-powerSTEP getStepper(uint8_t stepper_id)
+powerSTEP & getStepper(uint8_t stepper_id)
 {
   return steppers[stepper_id];
 }
@@ -57,24 +57,24 @@ void steppers_default_init()
   SPI.begin();
   SPI.setDataMode(SPI_MODE3);
 
-  for(int i = 0; i < STEPPERS_COUNT; i++)
+  for (int i = 0; i < STEPPERS_COUNT; i++)
   {
     steppers[i].SPIPortConnect(&SPI);
-    steppers[i].configSyncPin(BUSY_PIN, 0); 
+    steppers[i].configSyncPin(BUSY_PIN, 0);
     steppers[i].configStepMode(STEP_FS_128);
-                                  
+
     steppers[i].setMaxSpeed(1000);
     steppers[i].setFullSpeed(2000);
     steppers[i].setAcc(2000);
     steppers[i].setDec(2000);
-    
+
     steppers[i].setSlewRate(SR_520V_us);
     steppers[i].setOCThreshold(8);
     steppers[i].setOCShutdown(OC_SD_ENABLE);
-    
+
     steppers[i].setPWMFreq(PWM_DIV_1, PWM_MUL_0_75);
     steppers[i].setVoltageComp(VS_COMP_DISABLE);
-    steppers[i].setSwitchMode(SW_USER);  
+    steppers[i].setSwitchMode(SW_USER);
     steppers[i].setOscMode(INT_16MHZ);
 
     steppers[i].setRunKVAL(64);

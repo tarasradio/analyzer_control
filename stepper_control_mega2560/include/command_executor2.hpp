@@ -18,7 +18,6 @@ private:
 
     void addCommandForWait(uint32_t commandId);
 
-    void executeWaitTimeCommand(uint8_t *packet, uint8_t packetLength);
     void executeAbortCommand(uint8_t *packet, uint8_t packetLength);
     void executeBarStartCommand(uint8_t *packet, uint8_t packetLength);
     void executeHomeCommand(uint8_t *packet, uint8_t packetLength);
@@ -34,9 +33,7 @@ private:
     void executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength);
     void executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state);
 
-    bool checkSameCommand(uint32_t commandId, uint8_t commandType);
-    
-    String messageToSend = "";
+    bool checkRepeatCommand(uint32_t commandId, uint8_t commandType);
 public:
     CommandExecutor2();
     void UpdateState();

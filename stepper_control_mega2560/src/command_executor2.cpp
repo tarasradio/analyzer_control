@@ -142,11 +142,6 @@ void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
             executeAbortCommand(packet + 1, packetLength - 1);
         }
         break;
-        case CMD_WAIT_TIME:
-        {
-            executeWaitTimeCommand(packet + 1, packetLength - 1);
-        }
-        break;
         case CMD_BAR_START:
         {
             executeBarStartCommand(packet + 1, packetLength - 1);
@@ -165,8 +160,8 @@ bool CommandExecutor2::checkStepper(uint8_t stepper)
     bool result = (stepper >= 0 && stepper < STEPPERS_COUNT) ? true : false;
     if(!result)
     {
-        messageToSend = "wrong stepper = " + String(stepper);
-        PacketManager::printMessage(messageToSend);
+        String message = "wrong stepper = " + String(stepper);
+        PacketManager::printMessage(message);
     }
     return result;
 }
@@ -181,17 +176,25 @@ uint16_t CommandExecutor2::readInt(uint8_t *buffer)
     return *((unsigned int *)(buffer));
 }
 
-bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
+bool CommandExecutor2::checkRepeatCommand(uint32_t commandId, uint8_t commandType)
 {
 #ifdef DEBUG
-    messageToSend = "command id = " + String(commandId);
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[cmd id = " + String(commandId);
+        PacketManager::printMessage(message);
+    }
 #endif
 
-    bool isSame = false;
+    bool isRepeat = false;
     if(lastCommandId == commandId)
     {
-        isSame = true;
+        isRepeat = true;
+#ifdef DEBUG
+        {
+            String message = ", repeat command]";
+            PacketManager::printMessage(message);
+        }
+#endif
     }
     else
     {
@@ -204,28 +207,8 @@ bool CommandExecutor2::checkSameCommand(uint32_t commandId, uint8_t commandType)
         }
     }
     printCommandStateResponse(commandId, lastCommandState);
-#ifdef DEBUG
-    messageToSend = "Is same = " + String(isSame);
-    PacketManager::printMessage(messageToSend);
-#endif
-    return isSame;
-}
 
-void CommandExecutor2::executeWaitTimeCommand(uint8_t *packet, uint8_t packetLength)
-{
-    uint32_t periodMs = readLong(packet + 0);
-    uint32_t packetId = readLong(packet + 4);
-
-    if(checkSameCommand(packetId, WAITING_COMMAND))
-        return;
-
-#ifdef DEBUG
-    messageToSend = "[Wait time] ";
-    messageToSend += "period = " + String(periodMs);
-    PacketManager::printMessage(messageToSend);
-#endif
-
-    //TODO: реализовать задержку
+    return isRepeat;
 }
 
 void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength)
@@ -243,20 +226,25 @@ void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength
         Devices::device_off(i);
 
 #ifdef DEBUG
-    messageToSend = "[Abort] ";
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[Abort]";
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
 void CommandExecutor2::executeBarStartCommand(uint8_t *packet, uint8_t packetLength)
 {
     uint32_t packetId = readLong(packet + 0);
-    if(checkSameCommand(packetId, SIMPLE_COMMAND))
-        return;
+
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+
     _barScanner.startScan();
 #ifdef DEBUG
-    messageToSend = "[Bar start]";
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[Bar start]";
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
@@ -268,22 +256,21 @@ void CommandExecutor2::executeHomeCommand(uint8_t *packet, uint8_t packetLength)
     uint32_t fullSpeed = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if(checkSameCommand(packetId, WAITING_COMMAND))
-        return;
-
-    if (!checkStepper(stepper))
-        return;
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+    if(!checkStepper(stepper)) return;
 
     _homingController.clearState();
     _homingController.addStepperForHoming(stepper, direction, fullSpeed);
 
 #ifdef DEBUG
-    messageToSend = "[Home] ";
-    messageToSend += "stepper = " + String(stepper);
-    messageToSend += ", dir = " + String(direction);
-    messageToSend += ", speed = " + String(fullSpeed);
+    {
+        String message = "[Home] ";
+        message += "stepper = " + String(stepper);
+        message += ", dir = " + String(direction);
+        message += ", spd = " + String(fullSpeed);
 
-    PacketManager::printMessage(messageToSend);
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
@@ -294,21 +281,20 @@ void CommandExecutor2::executeRunCommand(uint8_t *packet, uint8_t packetLength)
     uint32_t fullSpeed = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if(checkSameCommand(packetId, WAITING_COMMAND))
-        return;
-
-    if (!checkStepper(stepper))
-        return;
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+    if(!checkStepper(stepper)) return;
 
     getStepper(stepper).run(direction, fullSpeed);
 
 #ifdef DEBUG
-    messageToSend = "[Run] ";
-    messageToSend += "stepper = " + String(stepper);
-    messageToSend += ", dir = " + String(direction);
-    messageToSend += ", speed = " + String(fullSpeed);
+    {
+        String message = "[Run] ";
+        message += "stepper = " + String(stepper);
+        message += ", dir = " + String(direction);
+        message += ", speed = " + String(fullSpeed);
 
-    PacketManager::printMessage(messageToSend);
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
@@ -319,21 +305,20 @@ void CommandExecutor2::executeMoveCommand(uint8_t *packet, uint8_t packetLength)
     uint32_t steps = readLong(packet + 2);
     uint32_t packetId = readLong(packet + 6);
 
-    if(checkSameCommand(packetId, WAITING_COMMAND))
-        return;
-
-    if (!checkStepper(stepper))
-        return;
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+    if(!checkStepper(stepper)) return;
 
     _movingController.addStepperForMove(stepper, direction, steps);
 
 #ifdef DEBUG
-    messageToSend = "[Move] ";
-    messageToSend += "stepper = " + String(stepper);
-    messageToSend += ", dir = " + String(direction);
-    messageToSend += ", steps = " + String(steps);
+    {
+        String message = "[Move] ";
+        message += "stepper = " + String(stepper);
+        message += ", dir = " + String(direction);
+        message += ", steps = " + String(steps);
 
-    PacketManager::printMessage(messageToSend);
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
@@ -343,52 +328,32 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
     uint8_t stopType = packet[1];
     uint32_t packetId = readLong(packet + 2);
 
-    if(checkSameCommand(packetId, SIMPLE_COMMAND))
-        return;
-
-    if (!checkStepper(stepper))
-        return;
-
-#ifdef DEBUG
-    messageToSend = "[Stop] ";
-    messageToSend += "stepper = " + String(stepper);
-    messageToSend += ", type = ";
-#endif
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+    if(!checkStepper(stepper)) return;
 
     if(STOP_SOFT == stopType)
     {
-#ifdef DEBUG
-        messageToSend += "SOFT";
-#endif
         getStepper(stepper).softStop();
     }
     else if(STOP_HARD == stopType)
     {
-#ifdef DEBUG
-        messageToSend += "HARD";
-#endif
         getStepper(stepper).hardStop();
     }
     else if(HiZ_SOFT == stopType)
     {
-#ifdef DEBUG
-        messageToSend += "HiZ SOFT";
-#endif
         getStepper(stepper).softHiZ();
     }
     else if(HiZ_HARD == stopType)
     {
-#ifdef DEBUG
-        messageToSend += "HiZ HARD";
-#endif
         getStepper(stepper).hardHiZ();
     }
-    else
-    {
-        messageToSend += "Undefined";
-    }
+
 #ifdef DEBUG
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[Stop]";
+        message += " stepper = " + String(stepper);
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
@@ -398,21 +363,20 @@ void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint8_t packetLen
     uint32_t fullSpeed = readLong(packet + 1);
     uint32_t packetId = readLong(packet + 5);
 
-    if(checkSameCommand(packetId, SIMPLE_COMMAND))
-        return;
-
-    if (!checkStepper(stepper))
-        return;
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+    if(!checkStepper(stepper)) return;
 
     getStepper(stepper).setMaxSpeed(fullSpeed << 2);
     getStepper(stepper).setFullSpeed(fullSpeed);
 
 #ifdef DEBUG
-    messageToSend = "[Set speed] ";
-    messageToSend += "stepper = " + String(stepper);
-    messageToSend += ", speed = " + String(fullSpeed);
+    {
+        String message = "[Set speed] ";
+        message += "stepper = " + String(stepper);
+        message += ", spd = " + String(fullSpeed);
 
-    PacketManager::printMessage(messageToSend);
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
@@ -422,17 +386,18 @@ void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint8_t pac
     uint8_t state = packet[1];
     uint32_t packetId = readLong(packet + 2);
 
-    if(checkSameCommand(packetId, SIMPLE_COMMAND))
-        return;
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
     Devices::device_set_state(device, state);
 
 #ifdef DEBUG
-    messageToSend = "[Set device state] ";
-    messageToSend += "device = " + String(device);
-    messageToSend += ", state = " + String(state);
+    {
+        String message = "[Set dev state] ";
+        message += "dev = " + String(device);
+        message += ", state = " + String(state);
 
-    PacketManager::printMessage(messageToSend);
+        PacketManager::printMessage(message);
+    }
 #endif
 }
 
@@ -441,15 +406,16 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLeng
     uint8_t countOfSteppers = packet[0];
     uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
 
-    if(checkSameCommand(packetId, WAITING_COMMAND))
-        return;
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
     _movingController.clearState();
 
 #ifdef DEBUG
-    messageToSend = "[CNC Move] ";
-    messageToSend += "steppers = " + String(countOfSteppers);
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[CNC Move] ";
+        message += "steppers = " + String(countOfSteppers);
+        PacketManager::printMessage(message);
+    }
 #endif
 
     for (int i = 0; i < countOfSteppers; i++)
@@ -464,11 +430,13 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLeng
         }
 
 #ifdef DEBUG
-        messageToSend = "[ stepper = " + String(stepper);
-        messageToSend += ", dir = " + String(direction);
-        messageToSend += ", steps = " + String(steps) + "] ";
+        {
+            String message = "[stepper = " + String(stepper);
+            message += ", dir = " + String(direction);
+            message += ", steps = " + String(steps) + "] ";
 
-        PacketManager::printMessage(messageToSend);
+            PacketManager::printMessage(message);
+        }
 #endif
     }
 }
@@ -479,15 +447,16 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
 
     uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
 
-    if(checkSameCommand(packetId, WAITING_COMMAND))
-        return;
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
     _homingController.clearState();
 
 #ifdef DEBUG
-    messageToSend = "[CNC Home] ";
-    messageToSend += "Steppers = " + String(countOfSteppers);
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[CNC Home] ";
+        message += "steppers = " + String(countOfSteppers);
+        PacketManager::printMessage(message);
+    }
 #endif
 
     for (int i = 0; i < countOfSteppers; i++)
@@ -502,11 +471,13 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
         }
 
 #ifdef DEBUG
-        messageToSend = "[ stepper = " + String(stepper);
-        messageToSend += ", dir = " + String(direction);
-        messageToSend += ", speed = " + String(fullSpeed) + "] ";
+        {
+            String message = "[stepper = " + String(stepper);
+            message += ", dir = " + String(direction);
+            message += ", speed = " + String(fullSpeed) + "] ";
 
-        PacketManager::printMessage(messageToSend);
+            PacketManager::printMessage(message);
+        }
 #endif
     }
 }
@@ -517,15 +488,16 @@ void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint8_t packetLengt
 
     uint32_t packetId = readLong(packet + countOfSteppers * 6 + 4 + 1);
 
-    if(checkSameCommand(packetId, WAITING_COMMAND))
-        return;
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
     _runningController.clearState();
 
 #ifdef DEBUG
-    messageToSend = "[CNC Run] ";
-    messageToSend += "Steppers = " + String(countOfSteppers);
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[CNC Run] ";
+        message += "Steppers = " + String(countOfSteppers);
+        PacketManager::printMessage(message);
+    }
 #endif
 
     for (int i = 0; i < countOfSteppers; i++)
@@ -540,11 +512,13 @@ void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint8_t packetLengt
         }
 
 #ifdef DEBUG
-        messageToSend = "[ stepper = " + String(stepper);
-        messageToSend += ", dir = " + String(direction);
-        messageToSend += ", speed = " + String(fullSpeed) + "] ";
+        {
+            String message = "[stepper = " + String(stepper);
+            message += ", dir = " + String(direction);
+            message += ", speed = " + String(fullSpeed) + "] ";
 
-        PacketManager::printMessage(messageToSend);
+            PacketManager::printMessage(message);
+        }
 #endif
     }
 
@@ -561,13 +535,14 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packet
 
     uint32_t packetId = readLong(packet + countOfSteppers * 5 + 1);
 
-    if(checkSameCommand(packetId, SIMPLE_COMMAND))
-        return;
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
 #ifdef DEBUG
-    messageToSend = "[CNC Set speed] ";
-    messageToSend += "Steppers = " + String(countOfSteppers);
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[CNC Set speed] ";
+        message += "steppers = " + String(countOfSteppers);
+        PacketManager::printMessage(message);
+    }
 #endif
 
     for (int i = 0; i < countOfSteppers; i++)
@@ -582,10 +557,12 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packet
         }
 
 #ifdef DEBUG
-        messageToSend = "[ stepper = " + String(stepper);
-        messageToSend += ", speed = " + String(fullSpeed) + "] ";
+        {
+            String message = "[ stepper = " + String(stepper);
+            message += ", speed = " + String(fullSpeed) + "] ";
 
-        PacketManager::printMessage(messageToSend);
+            PacketManager::printMessage(message);
+        }
 #endif
     }
 }
@@ -596,13 +573,14 @@ void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t 
 
     uint32_t packetId = readLong(packet + countOfDevices * 1 + 1);
 
-    if(checkSameCommand(packetId, SIMPLE_COMMAND))
-        return;
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
 #ifdef DEBUG
-    messageToSend = "[CNC Set dev state] ";
-    messageToSend += "devs = " + String(countOfDevices);
-    PacketManager::printMessage(messageToSend);
+    {
+        String message = "[CNC Set dev state] ";
+        message += "devs = " + String(countOfDevices);
+        PacketManager::printMessage(message);
+    }
 #endif
 
     for (int i = 0; i < countOfDevices; i++)
@@ -611,9 +589,10 @@ void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t 
 
         Devices::device_set_state(device, state);
 #ifdef DEBUG
-        messageToSend = "[ dev = " + String(device) + "] ";
-
-        PacketManager::printMessage(messageToSend);
+        {
+            String message = "[ dev = " + String(device) + "] ";
+            PacketManager::printMessage(message);
+        }
 #endif
     }
 }

@@ -7,6 +7,7 @@
 #include "sensors.hpp"
 
 #define FILTER_VALUE 10
+#define DEBUG
 
 enum EdgeTypes
 {
@@ -43,27 +44,33 @@ void RunningController::setRunParams(uint8_t sensor, uint16_t sensorValue, uint8
     valueEdgeType = edgeType;
 
 #ifdef DEBUG
-    messageToSend = "[ sensor = " + String(sensorNumber);
-    messageToSend += ", value = " + String(sensorValue);
-    messageToSend += ", edgeType = ";
+    {
+        String message = "[sensor = " + String(sensor);
+        message += ", value = " + String(sensorValue);
+        message += ", edgeType = ";
+
+        PacketManager::printMessage(message);
+    }
 #endif
 
     if(RisingEdge == valueEdgeType)
     {
 #ifdef DEBUG
-        messageToSend += "rising]";
+        {
+            String message = "rising]";
+            PacketManager::printMessage(message);
+        }
 #endif
     }
     else if(FallingEdge == valueEdgeType)
     {
 #ifdef DEBUG
-        messageToSend += "falling]";
+        {
+            String message = "falling]";
+            PacketManager::printMessage(message);
+        }
 #endif
     }
-#ifdef DEBUG
-    PacketManager::printMessage(messageToSend);
-#endif
-
     acceptedNeedValueCount = 0;
 }
 
@@ -73,13 +80,15 @@ uint8_t RunningController::updateState()
     {
         uint16_t value = Sensors::getSensorValue(waitSensorNumber);
 #ifdef DEBUG
-            messageToSend = "Run: wait value = ";
-            messageToSend += String(waitSensorValue);
-            messageToSend += ", real value = ";
-            messageToSend += String(value);
-            messageToSend += ", Filter num = ";
-            messageToSend += String(acceptedNeedValueCount);
-            printMessage(messageToSend);
+        {
+            String message = "Run: wait value = ";
+            message += String(waitSensorValue);
+            message += ", real value = ";
+            message += String(value);
+            message += ", Filter num = ";
+            message += String(acceptedNeedValueCount);
+            PacketManager::printMessage(message);
+        }
 #endif
             if (RisingEdge == valueEdgeType)
             {
