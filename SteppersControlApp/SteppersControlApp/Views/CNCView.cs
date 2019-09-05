@@ -185,7 +185,7 @@ namespace SteppersControlApp.Views
         {
             _taskExecutor.AbortExecution();
             _cncExecutor.AbortExecution();
-            _helper.SendBytes(new AbortExecutionCommand(Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new AbortExecutionCommand(Protocol.GetPacketId()).GetBytes());
             executionStatusLabel.Text = "Выполнение программы было прерванно";
         }
 

@@ -61,6 +61,7 @@
     <Compile Include="CommunicationProtocol\Responses\DebugResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\CommandStateResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\SensorsValuesResponse.cs" />
+    <Compile Include="CommunicationProtocol\SendPacket2.cs" />
     <Compile Include="CommunicationProtocol\SendPacket.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\GoUntilCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\MoveCommand.cs" />

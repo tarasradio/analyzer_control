@@ -71,7 +71,6 @@
             this.programTextBox.CharWidth = 8;
             this.programTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.programTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.programTextBox.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.programTextBox.IsReplaceMode = false;
             this.programTextBox.Location = new System.Drawing.Point(3, 53);
             this.programTextBox.Name = "programTextBox";
@@ -205,12 +204,12 @@
             // executionProgressLabel
             // 
             this.executionProgressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.executionProgressLabel.AutoSize = true;
-            this.executionProgressLabel.Location = new System.Drawing.Point(708, 385);
+            this.executionProgressLabel.Location = new System.Drawing.Point(557, 385);
             this.executionProgressLabel.Name = "executionProgressLabel";
-            this.executionProgressLabel.Size = new System.Drawing.Size(150, 13);
+            this.executionProgressLabel.Size = new System.Drawing.Size(301, 13);
             this.executionProgressLabel.TabIndex = 46;
             this.executionProgressLabel.Text = "Сколько выполнено команд";
+            this.executionProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // washingPompTaskButton
             // 

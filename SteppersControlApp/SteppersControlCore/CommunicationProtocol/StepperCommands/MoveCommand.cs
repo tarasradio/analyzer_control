@@ -25,7 +25,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         {
             byte[] stepsBytes = BitConverter.GetBytes(_countSteps);
 
-            SendPacket packet = new SendPacket(7);
+            SendPacket2 packet = new SendPacket2(7);
             packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.MOVE);

@@ -40,7 +40,7 @@ namespace SteppersControlApp.Views
         private void buttonStop_Click(object sender, EventArgs e)
         {
             StopCommand.StopType type = StopCommand.StopType.SOFT_STOP;
-            _helper.SendBytes(new StopCommand(stepperNumber, type, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new StopCommand(stepperNumber, type, Protocol.GetPacketId()).GetBytes());
         }
 
         private void buttonRev_Click(object sender, EventArgs e)
@@ -64,16 +64,16 @@ namespace SteppersControlApp.Views
         private void move(Protocol.Direction direction, uint countSteps)
         {
             uint speed = (uint)editFullSpeed.Value;
-            _helper.SendBytes(new StopCommand(stepperNumber, StopCommand.StopType.SOFT_STOP, Protocol.GetPacketId()).GetBytes());
-            _helper.SendBytes(new SetSpeedCommand(stepperNumber, speed, Protocol.GetPacketId()).GetBytes());
-            _helper.SendBytes(new MoveCommand(stepperNumber, direction, countSteps, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new StopCommand(stepperNumber, StopCommand.StopType.SOFT_STOP, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new SetSpeedCommand(stepperNumber, speed, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new MoveCommand(stepperNumber, direction, countSteps, Protocol.GetPacketId()).GetBytes());
         }
 
         private void run(Protocol.Direction direction)
         {
             uint speed = (uint)editFullSpeed.Value;
-            _helper.SendBytes(new StopCommand(stepperNumber, StopCommand.StopType.SOFT_STOP, Protocol.GetPacketId()).GetBytes());
-            _helper.SendBytes(new RunCommand(stepperNumber, direction, speed, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new StopCommand(stepperNumber, StopCommand.StopType.SOFT_STOP, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new RunCommand(stepperNumber, direction, speed, Protocol.GetPacketId()).GetBytes());
         }
 
         private void StepperControlView_Load(object sender, EventArgs e)
@@ -95,8 +95,8 @@ namespace SteppersControlApp.Views
         {
             uint speed = (uint)editFullSpeed.Value;
             
-            _helper.SendBytes(new StopCommand(stepperNumber, StopCommand.StopType.SOFT_STOP, Protocol.GetPacketId()).GetBytes());
-            _helper.SendBytes(new GoUntilCommand(stepperNumber, direction, speed, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new StopCommand(stepperNumber, StopCommand.StopType.SOFT_STOP, Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new GoUntilCommand(stepperNumber, direction, speed, Protocol.GetPacketId()).GetBytes());
         }
     }
 }

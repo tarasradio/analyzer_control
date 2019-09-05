@@ -73,7 +73,7 @@ namespace SteppersControlApp
         private void buttonEmmergencyStop_Click(object sender, EventArgs e)
         {
             for(int i = 0; i < 18; i++)
-                helper.SendBytes(new StopCommand(
+                helper.SendPacket(new StopCommand(
                     i, StopCommand.StopType.HARD_STOP, 0).GetBytes());
         }
     }

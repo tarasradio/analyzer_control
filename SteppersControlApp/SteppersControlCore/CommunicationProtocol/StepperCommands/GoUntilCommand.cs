@@ -23,7 +23,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         {
             byte[] speedBytes = BitConverter.GetBytes(_speed);
 
-            SendPacket packet = new SendPacket(7);
+            SendPacket2 packet = new SendPacket2(7);
             packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.GO_UNTIL);

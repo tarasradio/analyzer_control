@@ -295,7 +295,8 @@ namespace SteppersControlApp
 
             uint packetId = Protocol.GetPacketId();
 
-            _helper.SendBytes(new SetDeviceStateCommand(device, state, packetId).GetBytes());
+            //_helper.SendBytes(new SetDeviceStateCommand(device, state, packetId).GetBytes());
+            _helper.SendPacket(new SetDeviceStateCommand(device, state, packetId).GetBytes());
         }
 
         private void cncView_Load(object sender, EventArgs e)
@@ -363,7 +364,7 @@ namespace SteppersControlApp
 
         private void barStartButton_Click(object sender, EventArgs e)
         {
-            _helper.SendBytes(new BarStartCommand(Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new BarStartCommand(Protocol.GetPacketId()).GetBytes());
         }
     }
 }

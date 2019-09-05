@@ -17,7 +17,7 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
 
         public byte[] GetBytes()
         {
-            SendPacket packet = new SendPacket(_speeds.Count * 5 + 2);
+            SendPacket2 packet = new SendPacket2(_speeds.Count * 5 + 2);
             packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.CncCommands.CNC_SET_SPEED);

@@ -145,7 +145,7 @@ namespace SteppersControlCore.MachineControl
 
         private void executeDeviceCommand(IAbstractCommand command)
         {
-            _helper.SendBytes(((IDeviceCommand)command).GetBytes());
+            _helper.SendPacket(((IDeviceCommand)command).GetBytes());
 
             bool executionFinished = false;
 
@@ -159,7 +159,7 @@ namespace SteppersControlCore.MachineControl
                 {
                     Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
 
-                    _helper.SendBytes(((IDeviceCommand)command).GetBytes());
+                    _helper.SendPacket(((IDeviceCommand)command).GetBytes());
 
                     stopWatch.Restart();
                 }

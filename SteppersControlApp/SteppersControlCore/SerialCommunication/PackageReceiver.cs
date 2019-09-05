@@ -56,7 +56,7 @@ namespace SteppersControlCore.SerialCommunication
             
             while (currentBufferByte < buffer.Length)
             {
-                if(ByteStuffing.EscSymbol == buffer[currentBufferByte] )
+                if(ByteStuffing.FlagSymbol == buffer[currentBufferByte] )
                 {
                     if(escapeFlag)
                     {
