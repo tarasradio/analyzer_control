@@ -3,7 +3,7 @@
 #include "packet_manager.hpp"
 
 byte barBuffer[64];
-byte currentBarByte = 0;
+uint8_t currentBarByte = 0;
 
 BarScanner::BarScanner()
 {
@@ -21,10 +21,8 @@ void BarScanner::updateState()
             // Обработка приема сообщения
 
             barBuffer[currentBarByte] = '\0';
-
-            messageToSend = "[Bar read] ";
-            messageToSend += "code = " + String((char*)barBuffer);
-            PacketManager::printMessage(messageToSend);
+            String message = "[Bar read] code = " + String((char*)barBuffer);
+            PacketManager::printMessage(message);
 
             PacketManager::printBarCode(String((char*)barBuffer));
 
@@ -36,6 +34,8 @@ void BarScanner::updateState()
             if(currentBarByte >= 64)
             {
                 // слишком длинное сообщение
+                PacketManager::printMessage("[Bar read] overflow");
+                currentBarByte = 0;
             }
         }
     }

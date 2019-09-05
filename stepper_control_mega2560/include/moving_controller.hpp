@@ -7,7 +7,6 @@ class MovingController
 {
 private:
     uint8_t getSteppersInMoving();
-    String messageToSend = "";
 public:
     MovingController();
     void addStepperForMove(uint8_t stepper, uint8_t direction, uint32_t steps);

@@ -14,7 +14,7 @@
 void steppers_init_pins();
 void steppers_reset();
 void steppers_default_init();
-powerSTEP getStepper(uint8_t stepper_id);
+powerSTEP& getStepper(uint8_t stepper_id);
 uint8_t get_stepper_move_state(uint8_t stepper);
 
 #endif

@@ -7,7 +7,6 @@ class HomingController
 {
 private:
     uint8_t getSteppersInHoming();
-    String messageToSend = "";
 public:
     HomingController();
     void addStepperForHoming(uint8_t stepper, uint8_t direction, uint32_t speed);

@@ -12,8 +12,8 @@ public:
     PacketManager(CommandExecutor2 & );
     void ReadPacket();
     void FindPacket();
-    static void printMessage(String messageText);
-    static void printBarCode(String barCode);
+    static void printMessage(const String & messageText);
+    static void printBarCode(const String & barCode);
 };
 
 #endif
