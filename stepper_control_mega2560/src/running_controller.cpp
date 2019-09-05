@@ -32,8 +32,8 @@ RunningController::RunningController()
 void RunningController::addStepperForRun(uint8_t stepper, uint8_t direction, uint32_t speed)
 {
     steppersForRun[countRunSteppers++] = stepper;
-    getStepper(stepper).setMaxSpeed(speed);
-    getStepper(stepper).run(direction, speed);
+    Steppers::get(stepper).setMaxSpeed(speed);
+    Steppers::get(stepper).run(direction, speed);
 
 }
 
@@ -123,7 +123,7 @@ void RunningController::clearState()
     {
         uint8_t stepper = steppersForRun[i];
 
-        getStepper(stepper).softStop();
+        Steppers::get(stepper).softStop();
     }
     countRunSteppers = 0;
 }

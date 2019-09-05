@@ -1,6 +1,6 @@
 #include "devices.hpp"
 
-void Devices::devices_init_pins()
+void Devices::initPins()
 {
     DEVICES_J_DDR |= (1 << 1) | (1 << 0);
     DEVICES_B_DDR |= (1 << 5) | (1 << 4);
@@ -9,17 +9,17 @@ void Devices::devices_init_pins()
     DEVICES_G_DDR |= (1 << 5);
 }
 
-void Devices::device_on(uint8_t device)
+void Devices::on(uint8_t device)
 {
-    device_set_state(device, 1);
+    setState(device, 1);
 }
 
-void Devices::device_off(uint8_t device)
+void Devices::off(uint8_t device)
 {
-    device_set_state(device, 0);
+    setState(device, 0);
 }
 
-void Devices::device_set_state(uint8_t device, uint8_t state)
+void Devices::setState(uint8_t device, uint8_t state)
 {
     if (device >= 0 && device <= 1) // VALVES_B : (1, 0)
     {

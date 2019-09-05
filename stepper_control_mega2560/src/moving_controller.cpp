@@ -20,7 +20,7 @@ uint8_t MovingController::getSteppersInMoving()
     {
         uint8_t stepper = steppersForMove[i];
 
-        if (0 != get_stepper_move_state(stepper))
+        if (0 != Steppers::getMoveState(stepper))
             steppersInMove++;
     }
 
@@ -30,7 +30,7 @@ uint8_t MovingController::getSteppersInMoving()
 void MovingController::addStepperForMove(uint8_t stepper, uint8_t direction, uint32_t steps)
 {
     steppersForMove[countMoveSteppers++] = stepper;
-    getStepper(stepper).move(direction, steps);
+    Steppers::get(stepper).move(direction, steps);
 }
 
 uint8_t MovingController::updateState()

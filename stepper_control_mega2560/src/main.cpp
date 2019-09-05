@@ -27,11 +27,11 @@ void setup()
 
   Serial.begin(BAUDRATE);
 
-  Devices::devices_init_pins();
+  Devices::initPins();
   
-  steppers_init_pins();
-  steppers_reset();
-  steppers_default_init();
+  Steppers::initPins();
+  Steppers::reset();
+  Steppers::defaultInit();
 }
 
 void loop()
