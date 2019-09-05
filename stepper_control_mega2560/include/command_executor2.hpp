@@ -18,20 +18,20 @@ private:
 
     void addCommandForWait(uint32_t commandId);
 
-    void executeAbortCommand(uint8_t *packet, uint8_t packetLength);
-    void executeBarStartCommand(uint8_t *packet, uint8_t packetLength);
-    void executeHomeCommand(uint8_t *packet, uint8_t packetLength);
-    void executeRunCommand(uint8_t *packet, uint8_t packetLength);
-    void executeMoveCommand(uint8_t *packet, uint8_t packetLength);
-    void executeStopCommand(uint8_t *packet, uint8_t packetLength);
-    void executeSetSpeedCommand(uint8_t *packet, uint8_t packetLength);
-    void executeSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength);
+    void executeAbortCommand(uint8_t *packet, uint32_t packetId);
+    void executeBarStartCommand(uint8_t *packet, uint32_t packetId);
+    void executeHomeCommand(uint8_t *packet, uint32_t packetId);
+    void executeRunCommand(uint8_t *packet, uint32_t packetId);
+    void executeMoveCommand(uint8_t *packet, uint32_t packetId);
+    void executeStopCommand(uint8_t *packet, uint32_t packetId);
+    void executeSetSpeedCommand(uint8_t *packet, uint32_t packetId);
+    void executeSetDeviceStateCommand(uint8_t *packet, uint32_t packetId);
 
-    void executeCncMoveCommand(uint8_t *packet, uint8_t packetLength);
-    void executeCncRunCommand(uint8_t *packet, uint8_t packetLength);
-    void executeCncHomeCommand(uint8_t *packet, uint8_t packetLength);
-    void executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength);
-    void executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state);
+    void executeCncMoveCommand(uint8_t *packet, uint32_t packetId);
+    void executeCncRunCommand(uint8_t *packet, uint32_t packetId);
+    void executeCncHomeCommand(uint8_t *packet, uint32_t packetId);
+    void executeCncSetSpeedCommand(uint8_t *packet, uint32_t packetId);
+    void executeCncSetDeviceStateCommand(uint8_t *packet, uint32_t packetId, uint8_t state);
 
     bool checkRepeatCommand(uint32_t commandId, uint8_t commandType);
 public:

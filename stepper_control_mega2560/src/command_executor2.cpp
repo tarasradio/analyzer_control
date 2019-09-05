@@ -73,78 +73,79 @@ void CommandExecutor2::UpdateState()
 
 void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
 {
-    byte commandType = packet[0];
+    uint32_t packetId = readLong(packet + 0);
+    byte commandType = packet[4];
 
     switch (commandType)
     {
         case CMD_HOME:
         {
-            executeHomeCommand(packet + 1, packetLength - 1);
+            executeHomeCommand(packet + 5, packetId);
         }
         break;
         case CMD_RUN:
         {
-            executeRunCommand(packet + 1, packetLength - 1);
+            executeRunCommand(packet + 5, packetId);
         }
         break;
         case CMD_MOVE:
         {
-            executeMoveCommand(packet + 1, packetLength - 1);
+            executeMoveCommand(packet + 5, packetId);
         }
         break;
         case CMD_STOP:
         {
-            executeStopCommand(packet + 1, packetLength - 1);
+            executeStopCommand(packet + 5, packetId);
         }
         break;
         case CMD_SET_SPEED:
         {
-            executeSetSpeedCommand(packet + 1, packetLength - 1);
+            executeSetSpeedCommand(packet + 5, packetId);
         }
         break;
         case CMD_SET_DEVICE_STATE:
         {
-            executeSetDeviceStateCommand(packet + 1, packetLength - 1);
+            executeSetDeviceStateCommand(packet + 5, packetId);
         }
         break;
         case CNC_MOVE:
         {
-            executeCncMoveCommand(packet + 1, packetLength - 1);
+            executeCncMoveCommand(packet + 5, packetId);
         }
         break;
         case CNC_SET_SPEED:
         {
-            executeCncSetSpeedCommand(packet + 1, packetLength - 1);
+            executeCncSetSpeedCommand(packet + 5, packetId);
         }
         break;
         case CNC_HOME:
         {
-            executeCncHomeCommand(packet + 1, packetLength - 1);
+            executeCncHomeCommand(packet + 5, packetId);
         }
         break;
         case CNC_ON_DEVICE:
         {
-            executeCncSetDeviceStateCommand(packet + 1, packetLength - 1, 1);
+            executeCncSetDeviceStateCommand(packet + 5, packetId, 1);
         }
         break;
         case CNC_OFF_DEVICE:
         {
-            executeCncSetDeviceStateCommand(packet + 1, packetLength - 1, 0);
+            executeCncSetDeviceStateCommand(packet + 5, packetId, 0);
         }
         break;
         case CNC_RUN:
         {
-            executeCncRunCommand(packet + 1, packetLength - 1);
+            executeCncRunCommand(packet + 5, packetId);
         }
         break;
         case CMD_ABORT:
         {
-            executeAbortCommand(packet + 1, packetLength - 1);
+            executeAbortCommand(packet + 5, packetId);
         }
         break;
         case CMD_BAR_START:
         {
-            executeBarStartCommand(packet + 1, packetLength - 1);
+            executeBarStartCommand(packet + 5, packetId);
         }
         break;
         default:
@@ -211,7 +212,7 @@ bool CommandExecutor2::checkRepeatCommand(uint32_t commandId, uint8_t commandTyp
     return isRepeat;
 }
 
-void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint32_t packetId)
 {
     waitForCommandDone = 0;
 
@@ -233,10 +234,8 @@ void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint8_t packetLength
 #endif
 }
 
-void CommandExecutor2::executeBarStartCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeBarStartCommand(uint8_t *packet, uint32_t packetId)
 {
-    uint32_t packetId = readLong(packet + 0);
-
     if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
     _barScanner.startScan();
@@ -249,14 +248,14 @@ void CommandExecutor2::executeBarStartCommand(uint8_t *packet, uint8_t packetLen
 }
 
 //TODO: исправить
-void CommandExecutor2::executeHomeCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeHomeCommand(uint8_t *packet, uint32_t packetId)
 {
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+    
     uint8_t stepper = packet[0];
     uint8_t direction = packet[1];
     uint32_t fullSpeed = readLong(packet + 2);
-    uint32_t packetId = readLong(packet + 6);
 
-    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
     if(!checkStepper(stepper)) return;
 
     _homingController.clearState();
@@ -274,14 +273,14 @@ void CommandExecutor2::executeHomeCommand(uint8_t *packet, uint8_t packetLength)
 #endif
 }
 
-void CommandExecutor2::executeRunCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeRunCommand(uint8_t *packet, uint32_t packetId)
 {
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
     uint8_t stepper = packet[0];
     uint8_t direction = packet[1];
     uint32_t fullSpeed = readLong(packet + 2);
-    uint32_t packetId = readLong(packet + 6);
 
-    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
     if(!checkStepper(stepper)) return;
 
     getStepper(stepper).run(direction, fullSpeed);
@@ -298,14 +297,14 @@ void CommandExecutor2::executeRunCommand(uint8_t *packet, uint8_t packetLength)
 #endif
 }
 
-void CommandExecutor2::executeMoveCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeMoveCommand(uint8_t *packet, uint32_t packetId)
 {
+    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
     uint8_t stepper = packet[0];
     uint8_t direction = packet[1];
     uint32_t steps = readLong(packet + 2);
-    uint32_t packetId = readLong(packet + 6);
 
-    if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
     if(!checkStepper(stepper)) return;
 
     _movingController.addStepperForMove(stepper, direction, steps);
@@ -322,13 +321,13 @@ void CommandExecutor2::executeMoveCommand(uint8_t *packet, uint8_t packetLength)
 #endif
 }
 
-void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeStopCommand(uint8_t *packet, uint32_t packetId)
 {
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+
     uint8_t stepper = packet[0];
     uint8_t stopType = packet[1];
-    uint32_t packetId = readLong(packet + 2);
 
-    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
     if(!checkStepper(stepper)) return;
 
     if(STOP_SOFT == stopType)
@@ -357,13 +356,13 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint8_t packetLength)
 #endif
 }
 
-void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint32_t packetId)
 {
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+
     uint8_t stepper = packet[0];
     uint32_t fullSpeed = readLong(packet + 1);
-    uint32_t packetId = readLong(packet + 5);
 
-    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
     if(!checkStepper(stepper)) return;
 
     getStepper(stepper).setMaxSpeed(fullSpeed << 2);
@@ -380,13 +379,12 @@ void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint8_t packetLen
 #endif
 }
 
-void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint32_t packetId)
 {
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+
     uint8_t device = packet[0];
     uint8_t state = packet[1];
-    uint32_t packetId = readLong(packet + 2);
-
-    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
     Devices::device_set_state(device, state);
 
@@ -401,12 +399,11 @@ void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint8_t pac
 #endif
 }
 
-void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint32_t packetId)
 {
-    uint8_t countOfSteppers = packet[0];
-    uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
-
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
+    uint8_t countOfSteppers = packet[0];
 
     _movingController.clearState();
 
@@ -441,13 +438,11 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint8_t packetLeng
     }
 }
 
-void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
 {
-    uint8_t countOfSteppers = packet[0];
-
-    uint32_t packetId = readLong(packet + countOfSteppers * 6 + 1);
-
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
+    uint8_t countOfSteppers = packet[0];
 
     _homingController.clearState();
 
@@ -482,13 +477,11 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint8_t packetLeng
     }
 }
 
-void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint32_t packetId)
 {
-    uint8_t countOfSteppers = packet[0];
-
-    uint32_t packetId = readLong(packet + countOfSteppers * 6 + 4 + 1);
-
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
+    uint8_t countOfSteppers = packet[0];
 
     _runningController.clearState();
 
@@ -529,13 +522,11 @@ void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint8_t packetLengt
     _runningController.setRunParams(sensorNumber, sensorValue, valueEdgeType);
 }
 
-void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint32_t packetId)
 {
-    uint8_t countOfSteppers = packet[0];
-
-    uint32_t packetId = readLong(packet + countOfSteppers * 5 + 1);
-
     if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+    
+    uint8_t countOfSteppers = packet[0];
 
 #ifdef DEBUG
     {
@@ -567,13 +558,11 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint8_t packet
     }
 }
 
-void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint8_t packetLength, uint8_t state)
+void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint32_t packetId, uint8_t state)
 {
-    uint8_t countOfDevices = packet[0];
-
-    uint32_t packetId = readLong(packet + countOfDevices * 1 + 1);
-
     if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
+
+    uint8_t countOfDevices = packet[0];
 
 #ifdef DEBUG
     {
