@@ -35,7 +35,7 @@ uint8_t HomingController::getSteppersInHoming()
         uint8_t stepper = homingSteppers[i].stepper;
         if(WAIT_SW_PRESSED == homingSteppers[i].state)
         {
-            if (0 != get_stepper_move_state(stepper))
+            if (0 != Steppers::getMoveState(stepper))
                 steppersInHoming++;
             else
                 homingSteppers[i].state = HOMING_SUCCESS;
@@ -43,9 +43,9 @@ uint8_t HomingController::getSteppersInHoming()
         else if(WAIT_SW_RELEASED == homingSteppers[i].state)
         {
             steppersInHoming++;
-            if (0 == get_stepper_move_state(stepper))
+            if (0 == Steppers::getMoveState(stepper))
             {
-                getStepper(stepper).goUntil(RESET_ABSPOS, homingSteppers[i].direction, homingSteppers[i].speed);
+                Steppers::get(stepper).goUntil(RESET_ABSPOS, homingSteppers[i].direction, homingSteppers[i].speed);
                 homingSteppers[i].state = WAIT_SW_PRESSED;
             }
         }
@@ -60,20 +60,20 @@ void HomingController::addStepperForHoming(uint8_t stepper, uint8_t direction, u
     homingSteppers[countHomeSteppers].direction = direction;
     homingSteppers[countHomeSteppers].speed = speed;
 
-    uint8_t sw_status = getStepper(stepper).getStatus() & STATUS_SW_F;
+    uint8_t sw_status = Steppers::get(stepper).getStatus() & STATUS_SW_F;
     if (0 == sw_status)
     {
         homingSteppers[countHomeSteppers].state = WAIT_SW_PRESSED;
 
-        getStepper(stepper).goUntil(RESET_ABSPOS, direction, speed);
+        Steppers::get(stepper).goUntil(RESET_ABSPOS, direction, speed);
     }
     else
     {
         homingSteppers[countHomeSteppers].state = WAIT_SW_RELEASED;
 
         uint8_t inverseDir = (direction == FWD) ? REV : FWD;
-        getStepper(stepper).setMinSpeed(30); //TODO: пофиксить
-        getStepper(stepper).releaseSw(RESET_ABSPOS, inverseDir); // настроить MIN SPEED
+        Steppers::get(stepper).setMinSpeed(30); //TODO: пофиксить
+        Steppers::get(stepper).releaseSw(RESET_ABSPOS, inverseDir); // настроить MIN SPEED
     }
 
     countHomeSteppers++;

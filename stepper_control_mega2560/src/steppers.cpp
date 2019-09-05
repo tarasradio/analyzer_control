@@ -1,40 +1,34 @@
 #include "steppers.hpp"
 
-powerSTEP stepper_0(0, CS_PIN, RESET_PIN);
-powerSTEP stepper_1(1, CS_PIN, RESET_PIN);
-powerSTEP stepper_2(2, CS_PIN, RESET_PIN);
-powerSTEP stepper_3(3, CS_PIN, RESET_PIN);
-powerSTEP stepper_4(4, CS_PIN, RESET_PIN);
-powerSTEP stepper_5(5, CS_PIN, RESET_PIN);
-powerSTEP stepper_6(6, CS_PIN, RESET_PIN);
-powerSTEP stepper_7(7, CS_PIN, RESET_PIN);
-powerSTEP stepper_8(8, CS_PIN, RESET_PIN);
-powerSTEP stepper_9(9, CS_PIN, RESET_PIN);
-powerSTEP stepper_10(10, CS_PIN, RESET_PIN);
-powerSTEP stepper_11(11, CS_PIN, RESET_PIN);
-powerSTEP stepper_12(12, CS_PIN, RESET_PIN);
-powerSTEP stepper_13(13, CS_PIN, RESET_PIN);
-powerSTEP stepper_14(14, CS_PIN, RESET_PIN);
-powerSTEP stepper_15(15, CS_PIN, RESET_PIN);
-powerSTEP stepper_16(16, CS_PIN, RESET_PIN);
-powerSTEP stepper_17(17, CS_PIN, RESET_PIN);
-
-static powerSTEP steppers[STEPPERS_COUNT] = {
-    stepper_0, stepper_1, stepper_2,
-    stepper_3, stepper_4, stepper_5,
-    stepper_6, stepper_7, stepper_8,
-    stepper_9, stepper_10, stepper_11,
-    stepper_12, stepper_13, stepper_14,
-    stepper_15, stepper_16, stepper_17};
-
-powerSTEP & getStepper(uint8_t stepper_id)
+static powerSTEP steppers[STEPPERS_COUNT] = 
 {
-  return steppers[stepper_id];
+  powerSTEP(0, CS_PIN, RESET_PIN),
+  powerSTEP(1, CS_PIN, RESET_PIN),
+  powerSTEP(2, CS_PIN, RESET_PIN),
+  powerSTEP(3, CS_PIN, RESET_PIN),
+  powerSTEP(4, CS_PIN, RESET_PIN),
+  powerSTEP(5, CS_PIN, RESET_PIN),
+  powerSTEP(6, CS_PIN, RESET_PIN),
+  powerSTEP(7, CS_PIN, RESET_PIN),
+  powerSTEP(8, CS_PIN, RESET_PIN),
+  powerSTEP(9, CS_PIN, RESET_PIN),
+  powerSTEP(10, CS_PIN, RESET_PIN),
+  powerSTEP(11, CS_PIN, RESET_PIN),
+  powerSTEP(12, CS_PIN, RESET_PIN),
+  powerSTEP(13, CS_PIN, RESET_PIN),
+  powerSTEP(14, CS_PIN, RESET_PIN),
+  powerSTEP(15, CS_PIN, RESET_PIN),
+  powerSTEP(16, CS_PIN, RESET_PIN),
+  powerSTEP(17, CS_PIN, RESET_PIN)
+};
+
+powerSTEP & Steppers::get(uint8_t stepper)
+{
+  return steppers[stepper];
 }
 
-void steppers_init_pins()
+void Steppers::initPins()
 {
-  // Prepare pins
   pinMode(RESET_PIN, OUTPUT);
   pinMode(CS_PIN, OUTPUT);
   pinMode(MOSI, OUTPUT);
@@ -42,18 +36,16 @@ void steppers_init_pins()
   pinMode(SCK, OUTPUT);
 }
 
-void steppers_reset()
+void Steppers::reset()
 {
-  // Reset powerSTEP and set CS
   digitalWrite(RESET_PIN, HIGH);
   digitalWrite(RESET_PIN, LOW);
   digitalWrite(RESET_PIN, HIGH);
   digitalWrite(CS_PIN, HIGH);
 }
 
-void steppers_default_init()
+void Steppers::defaultInit()
 {
-  // Start SPI
   SPI.begin();
   SPI.setDataMode(SPI_MODE3);
 
@@ -89,8 +81,8 @@ void steppers_default_init()
 }
 
 // 0 - not move, 1 - move
-uint8_t get_stepper_move_state(uint8_t stepper)
+uint8_t Steppers::getMoveState(uint8_t stepper)
 {
-  uint16_t stepperStatus = getStepper(stepper).getStatus() & STATUS_MOT_STATUS;
+  uint16_t stepperStatus = steppers[stepper].getStatus() & STATUS_MOT_STATUS;
   return (uint8_t)stepperStatus;
 }

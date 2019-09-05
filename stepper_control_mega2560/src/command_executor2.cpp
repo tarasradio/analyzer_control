@@ -221,10 +221,10 @@ void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint32_t packetId)
     _runningController.clearState();
 
     for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
-        getStepper(i).softHiZ();
+        Steppers::get(i).softHiZ();
 
     for (uint8_t i = 0; i < 12; i++)
-        Devices::device_off(i);
+        Devices::off(i);
 
 #ifdef DEBUG
     {
@@ -283,7 +283,7 @@ void CommandExecutor2::executeRunCommand(uint8_t *packet, uint32_t packetId)
 
     if(!checkStepper(stepper)) return;
 
-    getStepper(stepper).run(direction, fullSpeed);
+    Steppers::get(stepper).run(direction, fullSpeed);
 
 #ifdef DEBUG
     {
@@ -332,19 +332,19 @@ void CommandExecutor2::executeStopCommand(uint8_t *packet, uint32_t packetId)
 
     if(STOP_SOFT == stopType)
     {
-        getStepper(stepper).softStop();
+        Steppers::get(stepper).softStop();
     }
     else if(STOP_HARD == stopType)
     {
-        getStepper(stepper).hardStop();
+        Steppers::get(stepper).hardStop();
     }
     else if(HiZ_SOFT == stopType)
     {
-        getStepper(stepper).softHiZ();
+        Steppers::get(stepper).softHiZ();
     }
     else if(HiZ_HARD == stopType)
     {
-        getStepper(stepper).hardHiZ();
+        Steppers::get(stepper).hardHiZ();
     }
 
 #ifdef DEBUG
@@ -365,8 +365,8 @@ void CommandExecutor2::executeSetSpeedCommand(uint8_t *packet, uint32_t packetId
 
     if(!checkStepper(stepper)) return;
 
-    getStepper(stepper).setMaxSpeed(fullSpeed << 2);
-    getStepper(stepper).setFullSpeed(fullSpeed);
+    Steppers::get(stepper).setMaxSpeed(fullSpeed << 2);
+    Steppers::get(stepper).setFullSpeed(fullSpeed);
 
 #ifdef DEBUG
     {
@@ -386,7 +386,7 @@ void CommandExecutor2::executeSetDeviceStateCommand(uint8_t *packet, uint32_t pa
     uint8_t device = packet[0];
     uint8_t state = packet[1];
 
-    Devices::device_set_state(device, state);
+    Devices::setState(device, state);
 
 #ifdef DEBUG
     {
@@ -543,8 +543,8 @@ void CommandExecutor2::executeCncSetSpeedCommand(uint8_t *packet, uint32_t packe
 
         if (checkStepper(stepper))
         {
-            getStepper(stepper).setMaxSpeed(fullSpeed << 2);
-            getStepper(stepper).setFullSpeed(fullSpeed);
+            Steppers::get(stepper).setMaxSpeed(fullSpeed << 2);
+            Steppers::get(stepper).setFullSpeed(fullSpeed);
         }
 
 #ifdef DEBUG
@@ -576,7 +576,7 @@ void CommandExecutor2::executeCncSetDeviceStateCommand(uint8_t *packet, uint32_t
     {
         uint8_t device = packet[i + 1];
 
-        Devices::device_set_state(device, state);
+        Devices::setState(device, state);
 #ifdef DEBUG
         {
             String message = "[ dev = " + String(device) + "] ";
@@ -601,7 +601,7 @@ void CommandExecutor2::printSteppersStates()
     Serial.write(STEPPERS_STATES);
     for (uint8_t i = 0; i < 18; i++)
     {
-        uint16_t stepperStatus = getStepper(i).getStatus();
+        uint16_t stepperStatus = Steppers::get(i).getStatus();
         Serial.write((byte *)&stepperStatus, sizeof(stepperStatus));
     }
     Serial.write(packetEnd, packetEndLength);

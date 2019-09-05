@@ -11,10 +11,17 @@
 #define RESET_PIN 48 // PL1
 #define FLAG_PIN 49 // PL0
 
-void steppers_init_pins();
-void steppers_reset();
-void steppers_default_init();
-powerSTEP& getStepper(uint8_t stepper_id);
-uint8_t get_stepper_move_state(uint8_t stepper);
+class Steppers
+{
+private:
+
+public:
+    Steppers();
+    static void initPins();
+    static void reset();
+    static void defaultInit();
+    static powerSTEP& get(uint8_t stepper);
+    static uint8_t getMoveState(uint8_t stepper);
+};
 
 #endif

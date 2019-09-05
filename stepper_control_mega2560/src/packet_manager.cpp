@@ -1,10 +1,12 @@
 #include "packet_manager.hpp"
 #include "protocol.hpp"
 
-uint8_t _incomingBuffer[64];
-uint8_t _currentBufferByte = 0;
+#define PACKET_SIZE 64
 
-uint8_t _packetBuffer[64];
+static uint8_t buffer[PACKET_SIZE * 2];
+static uint8_t bufferTail = 0;
+
+uint8_t packetBuffer[PACKET_SIZE];
 
 enum ReceiveState
 {
@@ -19,15 +21,74 @@ PacketManager::PacketManager(CommandExecutor2 & commandExecutor)
 
 void PacketManager::ReadPacket()
 {
-    _currentBufferByte = 0;
+    bufferTail = 0;
     uint8_t countBytes = Serial.available();
     if (countBytes > 0)
     {
         while (countBytes != 0)
         {
-            _incomingBuffer[_currentBufferByte++] = Serial.read();
+            buffer[bufferTail++] = Serial.read();
             countBytes--;
         }
+    }
+}
+
+const uint8_t EscSymbol = 0x7D;
+const uint8_t FlagSymbol = 0xDD;
+
+static bool escapeFlag = false;
+
+static uint8_t packetTail = 0;
+
+void PacketManager::tryPacketBuild(uint8_t bufferPosition)
+{
+    packetBuffer[packetTail++] = buffer[bufferPosition];
+
+    if(packetTail == PACKET_SIZE)
+    {
+#ifdef DEBUG
+        String message = "Packet size overflow";
+        printMessage(message);
+#endif
+        packetTail = 0;
+    }
+    escapeFlag = false;
+}
+
+void PacketManager::findByteStuffingPacket()
+{
+    uint8_t position = 0;
+
+    while(position < bufferTail)
+    {
+        if(FlagSymbol == buffer[position])
+        {
+            if(escapeFlag)
+            {
+                tryPacketBuild(position);
+            }
+            else
+            {
+                _commandExecutor.ExecuteCommand(packetBuffer, packetTail-1);
+                packetTail = 0;
+            }
+        }
+        else if(EscSymbol == buffer[position])
+        {
+            if(escapeFlag)
+            {
+                tryPacketBuild(position);
+            }
+            else
+            {
+                escapeFlag = true;
+            }
+        }
+        else
+        {
+            tryPacketBuild(position);
+        }
+        position++;
     }
 }
 
@@ -40,11 +101,11 @@ void PacketManager::FindPacket()
     uint8_t currentEndByte = 0;
     uint8_t currentPacketByte = 0;
 
-    while (i != _currentBufferByte)
+    while (i != bufferTail)
     {
         if(RECEIVING_HEADER == state)
         {
-            if (_incomingBuffer[i] == packetHeader[currentHeaderByte])
+            if (buffer[i] == packetHeader[currentHeaderByte])
                 currentHeaderByte++;
             else
                 currentHeaderByte = 0;
@@ -58,9 +119,9 @@ void PacketManager::FindPacket()
         }
         else if(RECEIVING_BODY == state)
         {
-            _packetBuffer[currentPacketByte++] = _incomingBuffer[i];
+            packetBuffer[currentPacketByte++] = buffer[i];
 
-            if (_incomingBuffer[i] == packetEnd[currentEndByte])
+            if (buffer[i] == packetEnd[currentEndByte])
                 currentEndByte++;
             else
                 currentEndByte = 0;
@@ -72,7 +133,7 @@ void PacketManager::FindPacket()
 
                 uint8_t packetLength = currentPacketByte - packetEndLength;
 
-                _commandExecutor.ExecuteCommand(_packetBuffer, packetLength);
+                _commandExecutor.ExecuteCommand(packetBuffer, packetLength);
             }
         }
         i++;
