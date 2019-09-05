@@ -42,12 +42,10 @@
             this.buttonShowControlPanel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.barStartButton = new System.Windows.Forms.ToolStripButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSteppers = new System.Windows.Forms.TabPage();
-            this.sensorsView = new SteppersControlApp.Views.SensorsView();
-            this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
             this.tabPageUnits = new System.Windows.Forms.TabPage();
-            this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
             this.buttonUnit12 = new System.Windows.Forms.CheckBox();
             this.buttonUnit11 = new System.Windows.Forms.CheckBox();
             this.buttonUnit10 = new System.Windows.Forms.CheckBox();
@@ -61,9 +59,11 @@
             this.buttonUnit2 = new System.Windows.Forms.CheckBox();
             this.buttonUnit1 = new System.Windows.Forms.CheckBox();
             this.tabPageCNC = new System.Windows.Forms.TabPage();
+            this.sensorsView = new SteppersControlApp.Views.SensorsView();
+            this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
+            this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
             this.cncView = new SteppersControlApp.Views.CNCView();
             this.logView = new SteppersControlApp.Views.LogView();
-            this.barStartButton = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -94,7 +94,7 @@
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(836, 22);
             this.statusStrip1.TabIndex = 10;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.Text = "statusStrip";
             // 
             // toolStrip1
             // 
@@ -115,7 +115,7 @@
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.toolStrip1.Size = new System.Drawing.Size(836, 39);
             this.toolStrip1.TabIndex = 14;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.Text = "toolStrip";
             // 
             // toolStripSeparator3
             // 
@@ -191,6 +191,16 @@
             this.toolStripButton1.Text = "Test Button";
             this.toolStripButton1.Click += new System.EventHandler(this.testButton_Click);
             // 
+            // barStartButton
+            // 
+            this.barStartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.barStartButton.Image = ((System.Drawing.Image)(resources.GetObject("barStartButton.Image")));
+            this.barStartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.barStartButton.Name = "barStartButton";
+            this.barStartButton.Size = new System.Drawing.Size(67, 36);
+            this.barStartButton.Text = "BAR SCAN";
+            this.barStartButton.Click += new System.EventHandler(this.barStartButton_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -217,25 +227,6 @@
             this.tabPageSteppers.Text = "Список моторов";
             this.tabPageSteppers.UseVisualStyleBackColor = true;
             // 
-            // sensorsView
-            // 
-            this.sensorsView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.sensorsView.Location = new System.Drawing.Point(6, 6);
-            this.sensorsView.Name = "sensorsView";
-            this.sensorsView.Size = new System.Drawing.Size(312, 366);
-            this.sensorsView.TabIndex = 14;
-            // 
-            // steppersGridView
-            // 
-            this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.steppersGridView.Location = new System.Drawing.Point(321, 6);
-            this.steppersGridView.Name = "steppersGridView";
-            this.steppersGridView.Size = new System.Drawing.Size(477, 366);
-            this.steppersGridView.TabIndex = 11;
-            // 
             // tabPageUnits
             // 
             this.tabPageUnits.Controls.Add(this.devicesControlView);
@@ -258,16 +249,6 @@
             this.tabPageUnits.TabIndex = 2;
             this.tabPageUnits.Text = "Управление клапанами и насосами";
             this.tabPageUnits.UseVisualStyleBackColor = true;
-            // 
-            // devicesControlView
-            // 
-            this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.devicesControlView.Location = new System.Drawing.Point(138, 6);
-            this.devicesControlView.Name = "devicesControlView";
-            this.devicesControlView.Size = new System.Drawing.Size(660, 366);
-            this.devicesControlView.TabIndex = 12;
             // 
             // buttonUnit12
             // 
@@ -436,6 +417,35 @@
             this.tabPageCNC.Text = "Программное управление";
             this.tabPageCNC.UseVisualStyleBackColor = true;
             // 
+            // sensorsView
+            // 
+            this.sensorsView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.sensorsView.Location = new System.Drawing.Point(6, 6);
+            this.sensorsView.Name = "sensorsView";
+            this.sensorsView.Size = new System.Drawing.Size(312, 366);
+            this.sensorsView.TabIndex = 14;
+            // 
+            // steppersGridView
+            // 
+            this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.steppersGridView.Location = new System.Drawing.Point(321, 6);
+            this.steppersGridView.Name = "steppersGridView";
+            this.steppersGridView.Size = new System.Drawing.Size(477, 366);
+            this.steppersGridView.TabIndex = 11;
+            // 
+            // devicesControlView
+            // 
+            this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.devicesControlView.Location = new System.Drawing.Point(138, 6);
+            this.devicesControlView.Name = "devicesControlView";
+            this.devicesControlView.Size = new System.Drawing.Size(660, 366);
+            this.devicesControlView.TabIndex = 12;
+            // 
             // cncView
             // 
             this.cncView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -455,16 +465,6 @@
             this.logView.Name = "logView";
             this.logView.Size = new System.Drawing.Size(812, 151);
             this.logView.TabIndex = 13;
-            // 
-            // barStartButton
-            // 
-            this.barStartButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.barStartButton.Image = ((System.Drawing.Image)(resources.GetObject("barStartButton.Image")));
-            this.barStartButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.barStartButton.Name = "barStartButton";
-            this.barStartButton.Size = new System.Drawing.Size(67, 36);
-            this.barStartButton.Text = "BAR SCAN";
-            this.barStartButton.Click += new System.EventHandler(this.barStartButton_Click);
             // 
             // MainForm
             // 

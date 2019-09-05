@@ -45,10 +45,7 @@ namespace SteppersControlCore.SerialCommunication
 
         private static byte[] _packetBuffer = new byte[maxPacketLength];
         private static uint _currentPacketByte = 0;
-
-        static byte escSymbol = 0x7D;
-        static byte flagSymbol = 0xDD;
-
+        
         static bool escapeFlag = false;
 
         public void FindPacket(byte[] buffer)
@@ -59,7 +56,7 @@ namespace SteppersControlCore.SerialCommunication
             
             while (currentBufferByte < buffer.Length)
             {
-                if( flagSymbol == buffer[currentBufferByte] )
+                if(ByteStuffing.EscSymbol == buffer[currentBufferByte] )
                 {
                     if(escapeFlag)
                     {
@@ -74,14 +71,13 @@ namespace SteppersControlCore.SerialCommunication
                     }
                     else
                     {
-                        // здесь обрабатываем прием пакета
                         byte[] recvPacket = new byte[_currentPacketByte];
                         Array.Copy(_packetBuffer, recvPacket, _currentPacketByte);
                         PackageReceived(recvPacket);
                         _currentPacketByte = 0;
                     }
                 }
-                else if(escSymbol == buffer[currentBufferByte])
+                else if(ByteStuffing.EscSymbol == buffer[currentBufferByte])
                 {
                     if (escapeFlag)
                     {

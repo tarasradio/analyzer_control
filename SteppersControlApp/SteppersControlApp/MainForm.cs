@@ -205,7 +205,7 @@ namespace SteppersControlApp
 
             List<string> portsNames = new List<string>();
 
-            bool isOpen = _helper.getOpenPorts(ref portsNames);
+            bool isOpen = _helper.GetOpenPorts(ref portsNames);
 
             portsListBox.Items.AddRange(portsNames.ToArray());
 
@@ -328,31 +328,7 @@ namespace SteppersControlApp
                 _core.InitSensorsValues();
             }
         }
-
-        private void testWrapUnwrap()
-        {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-
-            byte[] packet = { 0x7D, 0x7D, 0xDD, 0x11, 0x12, 0x13, 0xDD, 0x13, 0x34, 0x55, 0x55, 0x45, 0x45, 0x34, 0xDD, 0x7D };
-
-            for (int i = 0; i < 100000; i++)
-            {
-                byte[] wrapResult = ByteStuffing.wrapPacket(packet);
-                byte[] unwrapResult = ByteStuffing.unwrapPacket(wrapResult);
-            }
-
-            stopWatch.Stop();
-
-            TimeSpan ts = stopWatch.Elapsed;
-
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10);
-            Console.WriteLine("RunTime " + elapsedTime);
-        }
-
+        
         private void testWrapReceive()
         {
             String message = "Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!\n\r";
@@ -364,7 +340,7 @@ namespace SteppersControlApp
 
             buffer[0] = 0x13;
 
-            byte[] WrapBuffer = ByteStuffing.wrapPacket(buffer);
+            byte[] WrapBuffer = ByteStuffing.WrapPacket(buffer);
 
             byte[] sendBuffer = new byte[WrapBuffer.Length + 1];
             Array.Copy(WrapBuffer, sendBuffer, WrapBuffer.Length);

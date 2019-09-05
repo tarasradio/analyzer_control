@@ -8,44 +8,22 @@ namespace SteppersControlCore.SerialCommunication
 {
     public class ByteStuffing
     {
-        static byte escSymbol = 0x7D;
-        static byte flagSymbol = 0xDD;
+        public const byte EscSymbol = 0x7D;
+        public const byte FlagSymbol = 0xDD;
 
-        public static byte[] wrapPacket(byte [] packet)
+        public static byte[] WrapPacket(byte [] packet)
         {
             List<byte> _result = new List<byte>();
 
             foreach (byte symbol in packet)
             {
-                if (symbol == escSymbol || symbol == flagSymbol)
+                if ( (symbol == EscSymbol) || (symbol == FlagSymbol) )
                 {
-                    _result.Add(escSymbol);
+                    _result.Add(EscSymbol);
                 }
                 _result.Add(symbol);
             }
-
-            return _result.ToArray();
-        }
-
-        public static byte[] unwrapPacket(byte[] packet)
-        {
-            List<byte> _result = new List<byte>();
-
-            bool isEsc = false;
-
-            foreach (byte symbol in packet)
-            {
-                if (symbol == escSymbol)
-                {
-                    if(isEsc) isEsc = false;
-                    else
-                    {
-                        isEsc = true;
-                        continue;
-                    }
-                }
-                _result.Add(symbol);
-            }
+            _result.Add(FlagSymbol);
 
             return _result.ToArray();
         }

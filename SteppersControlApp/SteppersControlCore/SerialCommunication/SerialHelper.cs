@@ -82,26 +82,31 @@ namespace SteppersControlCore.SerialCommunication
             _packageReceiver.HandleData(buffer);
         }
 
+        public void SendPacket(byte[] packet)
+        {
+            byte[] wrappedPacket = ByteStuffing.WrapPacket(packet);
+
+            SendBytes(wrappedPacket);
+        }
+
         public void SendBytes(byte[] bytes)
         {
             try
             {
                 _serialPort.Write(bytes, 0, bytes.Length);
-
-                //while (_serialPort.BytesToWrite != 0) ;
             }
             catch (Exception)
             {
-                Logger.AddMessage("Ошибка при попытке записи в порт");
+                Logger.AddMessage("Ошибка записи в порт");
             }
         }
 
-        public static string[] getPortsList()
+        public static string[] GetPortsList()
         {
             return SerialPort.GetPortNames();
         }
 
-        public bool getOpenPorts(ref List<string> ports)
+        public bool GetOpenPorts(ref List<string> ports)
         {
             List<string> Ports = new List<string>();
             bool available = false;

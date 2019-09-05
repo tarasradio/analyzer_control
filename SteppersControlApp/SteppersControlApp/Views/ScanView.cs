@@ -82,7 +82,7 @@ namespace SteppersControlApp.Views
 
         private void fillGrid()
         {
-            tubesList.RowCount = 55;
+            tubesList.RowCount = 54;
 
             for (int i = 0; i < _configuration.Sensors.Count; i++)
             {

@@ -22,7 +22,7 @@ namespace SteppersControlCore.CommunicationProtocol
             return _commandId;
         }
 
-        public Protocol.CommandTypes GetType()
+        public new Protocol.CommandTypes GetType()
         {
             return _type;
         }
