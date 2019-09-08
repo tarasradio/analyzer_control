@@ -198,5 +198,21 @@ namespace SteppersControlApp.Views
         {
             _taskExecutor.StartWashingPompTask();
         }
+
+        private void MoveLoadTaskButton_Click(object sender, EventArgs e)
+        {
+            int place = (int)editLoadPlaceNumber.Value;
+            _taskExecutor.StartMoveLoadTask(place);
+        }
+
+        private void HomingLoadShuttleTaskButton_Click(object sender, EventArgs e)
+        {
+            _taskExecutor.StartHomingLoadShuttleTask();
+        }
+
+        private void LoadingTaskButton_Click(object sender, EventArgs e)
+        {
+            _taskExecutor.StartLoadingTask();
+        }
     }
 }

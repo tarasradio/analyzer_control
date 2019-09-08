@@ -25,7 +25,21 @@ namespace SteppersControlCore.MachineControl
 
         CncExecutor _cncExecutor;
 
-        private const int tubesCount = 54;
+        private const int allTubesCount = 54;
+
+        class TubeInfo
+        {
+            public int id = 0; // номер пробирки
+            public bool needHandle = false; // нужно ли обрабатывать пробирку
+            public string barCode = "";
+
+            public TubeInfo()
+            {
+
+            }
+        };
+
+        private TubeInfo[] tubes = new TubeInfo[allTubesCount];
 
         public TaskExecutor(CncExecutor executor)
         {
@@ -54,6 +68,25 @@ namespace SteppersControlCore.MachineControl
             _executionThread.Start();
         }
 
+        public void StartMoveLoadTask(int place)
+        {
+            needPlace = place;
+            _executionThread = new Thread(MoveLoadTask);
+            _executionThread.Start();
+        }
+
+        public void StartHomingLoadShuttleTask()
+        {
+            _executionThread = new Thread(HomingLoadShuttleTask);
+            _executionThread.Start();
+        }
+
+        public void StartLoadingTask()
+        {
+            _executionThread = new Thread(LoadingTask);
+            _executionThread.Start();
+        }
+
         private void WaitExecution()
         {
             _cncExecutor.StartExecution(commands);
@@ -72,30 +105,102 @@ namespace SteppersControlCore.MachineControl
 
             PrepareTubesBeforeScanning(); WaitExecution();
 
-            for (int i = 0; i < tubesCount; i++)
+            for (int i = 0; i < allTubesCount; i++)
             {
                 GoToNextTube(); WaitExecution();
 
+                tubes[i] = new TubeInfo();
+
                 if (Core.GetLastBarCode() != null)
                 {
+                    tubes[i].needHandle = true;
+                    tubes[i].barCode = Core.GetLastBarCode();
                     Logger.AddMessage($"Пробирка под номером {i} прочитана!");
                     lastScanTube = i;
                     countScanTubes++;
                 }
+
+                if(i >= 7) // первая пробирка уже под иглой
+                {
+                    if(true == tubes[i - 7].needHandle)
+                    {
+                        // обработка пробирки
+                        MoveTube(oneTubeSteps / 2); WaitExecution();
+
+                        MoveNeedleOnTube(); WaitExecution(); // подъезд иглы и опускание в пробирку
+
+                        moveCartridgeToNeedle(); WaitExecution();
+
+                        Suction(); WaitExecution(); // набор из пробирки
+
+                        MoveNeedleToCartridge(false); WaitExecution();
+
+                        Unsuction(); WaitExecution(); // Слив из иглы в картридж
+                        
+                        WashingPompTask(); // промывка иглы
+
+                        MoveNeedleToCartridge(true); WaitExecution();
+
+                        Suction(); WaitExecution(); // набор из картриджа
+
+                        NeedleHoming(); WaitExecution();
+
+                        MoveTube(-oneTubeSteps / 2); WaitExecution();
+
+                        Logger.AddMessage($"Пробирка под номером {i - 7} обработана!");
+                    }
+                }
             }
 
-            int countTubes = lastScanTube - countScanTubes + 9;
+            Logger.AddMessage($"Все пробирки отсканированны!");
 
-            MoveFirstTubeUnderNeedle(countTubes); WaitExecution();
+            //int countTubes = lastScanTube - countScanTubes;
 
-            MoveNeedleOnTube(); WaitExecution();
+            //Logger.AddMessage($"Нужно отъехать на {countTubes} пробирок.");
+
+            //MoveFirstTubeUnderNeedle(countTubes); WaitExecution();
+
+            //MoveNeedleOnTube(); WaitExecution();
         }
 
         private void WashingPompTask()
         {
-            WashingPomp(50); WaitExecution();
+            NeedleHoming(); WaitExecution();
+            MoveNeedleOnWashingPlace(); WaitExecution();
+            WashingPomp(4); WaitExecution();
+            HomingPomp(); WaitExecution();
+            //NeedleHoming(); WaitExecution();
         }
 
+        private void HomingLoadShuttleTask()
+        {
+            homingLoadShuttle(); WaitExecution();
+        }
+
+        private void LoadingTask()
+        {
+            loadingShuttle(); WaitExecution();
+        }
+
+        void HomingPomp()
+        {
+            commands.Clear();
+
+            command = new OnDeviceCncCommand(new List<int>() { 0 }, Protocol.GetPacketId());
+            commands.Add(command);
+
+            command = new OffDeviceCncCommand(new List<int>() { 1 }, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 11, 950 }, { 12, 950 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 11, 950 }, { 12, 950 } };
+            command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+        
         void WashingPomp(int cycles)
         {
             commands.Clear();
@@ -152,6 +257,19 @@ namespace SteppersControlCore.MachineControl
             commands.Add(command);
         }
 
+        //сдвиг на одну пробирку
+        void MoveTube(int steps)
+        {
+            commands.Clear();
+            
+            command = new SetSpeedCommand(6, 50, Protocol.GetPacketId());
+            commands.Add(command);
+            
+            steppers = new Dictionary<int, int>() { { 6, steps } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
         void GoToNextTube()
         {
             commands.Clear();
@@ -196,11 +314,10 @@ namespace SteppersControlCore.MachineControl
         void NeedleHoming()
         {
             commands.Clear();
-            
+             //Поднятие иглы
             command = new SetSpeedCommand(17, 1000, Protocol.GetPacketId());
             commands.Add(command);
-
-            //Поднятие иглы
+            
             steppers = new Dictionary<int, int>() { { 17, -500 } };
             command = new HomeCncCommand(steppers, Protocol.GetPacketId());
             commands.Add(command);
@@ -209,8 +326,29 @@ namespace SteppersControlCore.MachineControl
             commands.Add(command);
 
             //Поворот иглы
-            steppers = new Dictionary<int, int>() { { 8, 200 } };
+            steppers = new Dictionary<int, int>() { { 8, 100 } };
             command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void MoveNeedleOnWashingPlace()
+        {
+            commands.Clear();
+
+            //Поворот иглы до очистки
+            command = new SetSpeedCommand(8, 100, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 8, -55000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            //Опусание иглы до жидкости в пробирке
+            command = new SetSpeedCommand(17, 500, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 17, 5000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
             commands.Add(command);
         }
 
@@ -219,10 +357,10 @@ namespace SteppersControlCore.MachineControl
             commands.Clear();
 
             //Поворот иглы до пробирки
-            command = new SetSpeedCommand(8, 200, Protocol.GetPacketId());
+            command = new SetSpeedCommand(8, 100, Protocol.GetPacketId());
             commands.Add(command);
 
-            steppers = new Dictionary<int, int>() { { 8, -14000 } };
+            steppers = new Dictionary<int, int>() { { 8, -14500 } };
             command = new MoveCncCommand(steppers, Protocol.GetPacketId());
             commands.Add(command);
 
@@ -232,6 +370,239 @@ namespace SteppersControlCore.MachineControl
 
             steppers = new Dictionary<int, int>() { { 17, 500 } };
             command = new RunCncCommand(steppers, 0, 1000, Protocol.ValueEdge.RisingEdge, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void Suction()
+        {
+            commands.Clear();
+
+            command = new OffDeviceCncCommand(new List<int>() { 0 }, Protocol.GetPacketId());
+            commands.Add(command);
+
+            command = new OnDeviceCncCommand(new List<int>() { 1 }, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 12, 200 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 12, -100000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            command = new OffDeviceCncCommand(new List<int>() { 1 }, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void Unsuction()
+        {
+            commands.Clear();
+
+            command = new OnDeviceCncCommand(new List<int>() { 0 }, Protocol.GetPacketId());
+            commands.Add(command);
+
+            command = new OffDeviceCncCommand(new List<int>() { 1 }, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 12, 200 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 12, 200 } };
+            command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            command = new OffDeviceCncCommand(new List<int>() { 0 }, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void MoveNeedleToCartridge(bool fromWashingPlace)
+        {
+            commands.Clear();
+            
+            //Поднятие иглы
+            command = new SetSpeedCommand(17, 1000, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 17, -500 } };
+            command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+            
+            //поворот иглы до картриджа
+            command = new SetSpeedCommand(8, 100, Protocol.GetPacketId());
+            commands.Add(command);
+
+            int steps = -31000;
+
+            if (fromWashingPlace) steps = 10000;
+
+            steppers = new Dictionary<int, int>() { { 8, steps } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            //Протыкание картриджа
+            command = new SetSpeedCommand(17, 200, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 17, 270000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void moveCartridgeToNeedle()
+        {
+            commands.Clear();
+            
+            command = new SetSpeedCommand(7, 100, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 7, -100 } };
+            command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            command = new SetSpeedCommand(7, 50, Protocol.GetPacketId());
+            commands.Add(command);
+
+            //поворот ротора под загрузку картриджа (5 место)
+            steppers = new Dictionary<int, int>() { { 7, 81360 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            // поврот ротора под иглу
+            steppers = new Dictionary<int, int>() { { 7, -71600 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        int needPlace = 0;
+
+        private void MoveLoadTask()
+        {
+            HomingLoad(); WaitExecution();
+            MoveLoadToPlace(needPlace); WaitExecution();
+        }
+
+        static int currentRotorPlace = 0;
+        const int oneRotorPlaseSteps = 3400;
+
+        int[] loadPlaces = 
+        {
+            800,
+            4000,
+            6800,
+            10000,
+            13200,
+            16000,
+            19300,
+            22300,
+            25300,
+            28500
+        };
+
+        void HomingLoad()
+        {
+            commands.Clear();
+            
+            steppers = new Dictionary<int, int>() { { 10, 50 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 10, -50 } };
+            command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void MoveLoadToFirstPlace()
+        {
+            currentRotorPlace = 0;
+            commands.Clear();
+
+            steppers = new Dictionary<int, int>() { { 10, 30 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 10, 800 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void MoveLoadToPlace(int i)
+        {
+            currentRotorPlace = i;
+            
+            commands.Clear();
+
+            steppers = new Dictionary<int, int>() { { 10, 30 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 10, loadPlaces[i] } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void homingRotor()
+        {
+            commands.Clear();
+
+            steppers = new Dictionary<int, int>() { { 7, 50 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 7, -50 } };
+            command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void moveRotorToLoad()
+        {
+            commands.Clear();
+
+            steppers = new Dictionary<int, int>() { { 7, 50 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 7, 20000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void homingLoadShuttle()
+        {
+            commands.Clear();
+
+            steppers = new Dictionary<int, int>() { { 15, 500 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 15, 500 } };
+            command = new HomeCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 15, -20000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+        }
+
+        void loadingShuttle()
+        {
+            commands.Clear();
+
+            steppers = new Dictionary<int, int>() { { 15, 200 } };
+            command = new SetSpeedCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 15, -1000000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 15, -1000000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
+            commands.Add(command);
+
+            steppers = new Dictionary<int, int>() { { 15, -840000 } };
+            command = new MoveCncCommand(steppers, Protocol.GetPacketId());
             commands.Add(command);
         }
     }

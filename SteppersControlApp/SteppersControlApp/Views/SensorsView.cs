@@ -44,10 +44,18 @@ namespace SteppersControlApp.Views
             Array.Copy(_values, localValues, _values.Length);
 
             _mutex.ReleaseMutex();
-
+            
             for (int i = 0; i < _configuration.Sensors.Count; i++)
             {
-                sensorsList[2, i].Value = localValues[i];
+                if(i == 15)
+                {
+                    sensorsList[2, i].Value = (double)localValues[i] * 0.00488281;
+                }
+                else
+                {
+                    sensorsList[2, i].Value = localValues[i];
+                }
+                
             }
         }
 

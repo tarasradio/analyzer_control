@@ -43,9 +43,12 @@
             this.executionStatusLabel = new System.Windows.Forms.Label();
             this.executionProgressLabel = new System.Windows.Forms.Label();
             this.washingPompTaskButton = new System.Windows.Forms.Button();
-            this.editWashingCount = new System.Windows.Forms.NumericUpDown();
+            this.editLoadPlaceNumber = new System.Windows.Forms.NumericUpDown();
+            this.MoveLoadTaskButton = new System.Windows.Forms.Button();
+            this.HomingLoadShuttleTaskButton = new System.Windows.Forms.Button();
+            this.LoadingTaskButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.editWashingCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editLoadPlaceNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // programTextBox
@@ -71,6 +74,7 @@
             this.programTextBox.CharWidth = 8;
             this.programTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.programTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.programTextBox.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.programTextBox.IsReplaceMode = false;
             this.programTextBox.Location = new System.Drawing.Point(3, 53);
             this.programTextBox.Name = "programTextBox";
@@ -218,27 +222,63 @@
             this.washingPompTaskButton.Name = "washingPompTaskButton";
             this.washingPompTaskButton.Size = new System.Drawing.Size(88, 44);
             this.washingPompTaskButton.TabIndex = 47;
-            this.washingPompTaskButton.Text = "Промывка насоса";
+            this.washingPompTaskButton.Text = "Промывка иглы";
             this.washingPompTaskButton.UseVisualStyleBackColor = false;
             this.washingPompTaskButton.Click += new System.EventHandler(this.washingPompTaskButton_Click);
             // 
-            // editWashingCount
+            // editLoadPlaceNumber
             // 
-            this.editWashingCount.Location = new System.Drawing.Point(391, 17);
-            this.editWashingCount.Name = "editWashingCount";
-            this.editWashingCount.Size = new System.Drawing.Size(63, 20);
-            this.editWashingCount.TabIndex = 48;
-            this.editWashingCount.Value = new decimal(new int[] {
-            50,
+            this.editLoadPlaceNumber.Location = new System.Drawing.Point(485, 17);
+            this.editLoadPlaceNumber.Name = "editLoadPlaceNumber";
+            this.editLoadPlaceNumber.Size = new System.Drawing.Size(63, 20);
+            this.editLoadPlaceNumber.TabIndex = 48;
+            this.editLoadPlaceNumber.Value = new decimal(new int[] {
+            4,
             0,
             0,
             0});
+            // 
+            // MoveLoadTaskButton
+            // 
+            this.MoveLoadTaskButton.BackColor = System.Drawing.Color.Yellow;
+            this.MoveLoadTaskButton.Location = new System.Drawing.Point(391, 3);
+            this.MoveLoadTaskButton.Name = "MoveLoadTaskButton";
+            this.MoveLoadTaskButton.Size = new System.Drawing.Size(88, 44);
+            this.MoveLoadTaskButton.TabIndex = 49;
+            this.MoveLoadTaskButton.Text = "Установка загрузки";
+            this.MoveLoadTaskButton.UseVisualStyleBackColor = false;
+            this.MoveLoadTaskButton.Click += new System.EventHandler(this.MoveLoadTaskButton_Click);
+            // 
+            // HomingLoadShuttleTaskButton
+            // 
+            this.HomingLoadShuttleTaskButton.BackColor = System.Drawing.Color.MediumSpringGreen;
+            this.HomingLoadShuttleTaskButton.Location = new System.Drawing.Point(554, 3);
+            this.HomingLoadShuttleTaskButton.Name = "HomingLoadShuttleTaskButton";
+            this.HomingLoadShuttleTaskButton.Size = new System.Drawing.Size(64, 44);
+            this.HomingLoadShuttleTaskButton.TabIndex = 50;
+            this.HomingLoadShuttleTaskButton.Text = "Дом загрузки";
+            this.HomingLoadShuttleTaskButton.UseVisualStyleBackColor = false;
+            this.HomingLoadShuttleTaskButton.Click += new System.EventHandler(this.HomingLoadShuttleTaskButton_Click);
+            // 
+            // LoadingTaskButton
+            // 
+            this.LoadingTaskButton.BackColor = System.Drawing.Color.MediumSpringGreen;
+            this.LoadingTaskButton.Location = new System.Drawing.Point(624, 3);
+            this.LoadingTaskButton.Name = "LoadingTaskButton";
+            this.LoadingTaskButton.Size = new System.Drawing.Size(64, 44);
+            this.LoadingTaskButton.TabIndex = 51;
+            this.LoadingTaskButton.Text = "Загрузка";
+            this.LoadingTaskButton.UseVisualStyleBackColor = false;
+            this.LoadingTaskButton.Click += new System.EventHandler(this.LoadingTaskButton_Click);
             // 
             // CNCView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.editWashingCount);
+            this.Controls.Add(this.LoadingTaskButton);
+            this.Controls.Add(this.HomingLoadShuttleTaskButton);
+            this.Controls.Add(this.MoveLoadTaskButton);
+            this.Controls.Add(this.editLoadPlaceNumber);
             this.Controls.Add(this.washingPompTaskButton);
             this.Controls.Add(this.executionProgressLabel);
             this.Controls.Add(this.executionStatusLabel);
@@ -254,7 +294,7 @@
             this.Name = "CNCView";
             this.Size = new System.Drawing.Size(861, 427);
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.editWashingCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editLoadPlaceNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -275,6 +315,9 @@
         private System.Windows.Forms.Label executionStatusLabel;
         private System.Windows.Forms.Label executionProgressLabel;
         private System.Windows.Forms.Button washingPompTaskButton;
-        private System.Windows.Forms.NumericUpDown editWashingCount;
+        private System.Windows.Forms.NumericUpDown editLoadPlaceNumber;
+        private System.Windows.Forms.Button MoveLoadTaskButton;
+        private System.Windows.Forms.Button HomingLoadShuttleTaskButton;
+        private System.Windows.Forms.Button LoadingTaskButton;
     }
 }

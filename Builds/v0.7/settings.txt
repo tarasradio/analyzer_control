@@ -18,17 +18,17 @@
     </Stepper>
 	<Stepper>
       <Number>3</Number>
-      <Name>Не задано</Name>
+      <Name>Выгрузка</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>4</Number>
-      <Name>Не задано</Name>
+      <Name>Нажимание картриджа</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
       <Number>5</Number>
-      <Name>Не задано</Name>
+      <Name>Вращение пробирки</Name>
       <Speed>200</Speed>
     </Stepper>
 	<Stepper>
