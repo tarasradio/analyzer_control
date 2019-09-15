@@ -17,7 +17,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
         private byte _device;
         private byte _state;
 
-        public SetDeviceStateCommand(int device, DeviseState state, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public SetDeviceStateCommand(int device, DeviseState state) : base()
         {
             _device = (byte)device;
             _state = (byte)state;
@@ -33,6 +33,11 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
             packet.SetData(2, _state);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

@@ -28,39 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.devicesList = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.devicesList)).BeginInit();
+            this.devicesList2 = new ViewLibrary.DoubleBufferedDataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.devicesList2)).BeginInit();
             this.SuspendLayout();
             // 
-            // devicesList
+            // devicesList2
             // 
-            this.devicesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.devicesList2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.devicesList.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.devicesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.devicesList.Location = new System.Drawing.Point(3, 3);
-            this.devicesList.Name = "devicesList";
-            this.devicesList.Size = new System.Drawing.Size(818, 360);
-            this.devicesList.TabIndex = 1;
-            this.devicesList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.devicesList_CellClick);
-            this.devicesList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.devicesList_CellContentClick);
-            this.devicesList.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.devicesList_CellMouseDown);
+            this.devicesList2.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.devicesList2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.devicesList2.Location = new System.Drawing.Point(3, 3);
+            this.devicesList2.Name = "devicesList2";
+            this.devicesList2.Size = new System.Drawing.Size(818, 360);
+            this.devicesList2.TabIndex = 2;
             // 
             // DevicesControlView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.devicesList);
+            this.Controls.Add(this.devicesList2);
             this.Name = "DevicesControlView";
             this.Size = new System.Drawing.Size(824, 366);
-            ((System.ComponentModel.ISupportInitialize)(this.devicesList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.devicesList2)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView devicesList;
+        private ViewLibrary.DoubleBufferedDataGridView devicesList2;
     }
 }

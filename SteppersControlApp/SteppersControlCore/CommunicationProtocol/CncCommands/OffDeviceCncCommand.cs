@@ -10,7 +10,7 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
     {
         private List<int> _devices;
 
-        public OffDeviceCncCommand(List<int> devices, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public OffDeviceCncCommand(List<int> devices) : base()
         {
             _devices = devices;
         }
@@ -32,6 +32,11 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
             }
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

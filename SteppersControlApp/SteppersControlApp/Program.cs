@@ -16,7 +16,18 @@ namespace SteppersControlApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            AuthForm authForm = new AuthForm();
+            MainForm mainForm = new MainForm();
+            authForm.StartPosition = FormStartPosition.CenterScreen;
+            mainForm.StartPosition = FormStartPosition.CenterScreen;
+
+            Application.Run(authForm);
+
+            if(authForm.IsAuthenticated)
+            {
+                Application.Run(mainForm);
+            }
         }
     }
 }

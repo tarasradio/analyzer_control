@@ -77,7 +77,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" M{motor} S = {steps}";
                     }
 
-                    program.Commands.Add(new MoveCncCommand(arguments, Core.GetPacketId()));
+                    program.Commands.Add(new MoveCncCommand(arguments));
                 }
                 else if (speedCommandPattern.IsMatch(commandString.Value))
                 {
@@ -99,7 +99,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" M{motor} S = {speed}";
                     }
 
-                    program.Commands.Add(new SetSpeedCncCommand(arguments, Core.GetPacketId()));
+                    program.Commands.Add(new SetSpeedCncCommand(arguments));
                 }
                 else if (stopCommandPattern.IsMatch(commandString.Value))
                 {
@@ -142,7 +142,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" M{motor} S = {speed}";
                     }
 
-                    program.Commands.Add(new HomeCncCommand(arguments, Core.GetPacketId()));
+                    program.Commands.Add(new HomeCncCommand(arguments));
                 }
                 else if (onCommandPattern.IsMatch(commandString.Value))
                 {
@@ -163,7 +163,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" D{device}";
                     }
 
-                    program.Commands.Add(new OnDeviceCncCommand(arguments, Core.GetPacketId()));
+                    program.Commands.Add(new OnDeviceCncCommand(arguments));
                 }
                 else if (offCommandPattern.IsMatch(commandString.Value))
                 {
@@ -184,7 +184,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" D{device}";
                     }
 
-                    program.Commands.Add(new OffDeviceCncCommand(arguments, Core.GetPacketId()));
+                    program.Commands.Add(new OffDeviceCncCommand(arguments));
                 }
                 else if (delayCommandPattern.IsMatch(commandString.Value))
                 {
@@ -205,7 +205,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"time = {timeMs} ms";
                     }
 
-                    program.Commands.Add(new WaitTimeCommand((uint)timeMs, Core.GetPacketId()));
+                    program.Commands.Add(new WaitTimeCommand((uint)timeMs));
                 }
                 else if (waitRisingCommandPattern.IsMatch(commandString.Value))
                 {
@@ -233,7 +233,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"sensor = {sensor}, value = {value}";
                     }
 
-                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor,(uint)value, Protocol.ValueEdge.RisingEdge, Core.GetPacketId()));
+                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor,(uint)value, Protocol.ValueEdge.RisingEdge));
                 }
                 else if (waitFallingCommandPattern.IsMatch(commandString.Value))
                 {
@@ -261,7 +261,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"sensor = {sensor}, value = {value}";
                     }
 
-                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor, (uint)value, Protocol.ValueEdge.FallingEdge, Core.GetPacketId()));
+                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor, (uint)value, Protocol.ValueEdge.FallingEdge));
                 }
                 else if (runCommandPattern.IsMatch(commandString.Value))
                 {
@@ -309,7 +309,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" | sensor = {sensor}, value = {value}, edge = {edgeType}";
                     }
 
-                    program.Commands.Add(new RunCncCommand(arguments, (uint)sensor, (uint)value, edgeType, Core.GetPacketId()));
+                    program.Commands.Add(new RunCncCommand(arguments, (uint)sensor, (uint)value, edgeType));
                 }
                 parsedCommand += "}";
                 Logger.AddMessage(parsedCommand);

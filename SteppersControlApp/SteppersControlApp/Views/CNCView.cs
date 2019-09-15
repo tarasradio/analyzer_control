@@ -161,7 +161,7 @@ namespace SteppersControlApp.Views
             double progress = 0;
             int commandsCount = 0;
 
-            if (_taskExecutor.GetCommandsCount() > 0)
+            if (_taskExecutor.GetState() == ThreadState.Running)
             {
                 commandsCount = _taskExecutor.GetCommandsCount();
             }
@@ -185,7 +185,7 @@ namespace SteppersControlApp.Views
         {
             _taskExecutor.AbortExecution();
             _cncExecutor.AbortExecution();
-            _helper.SendPacket(new AbortExecutionCommand(Protocol.GetPacketId()).GetBytes());
+            _helper.SendPacket(new AbortExecutionCommand().GetBytes());
             executionStatusLabel.Text = "Выполнение программы было прерванно";
         }
 

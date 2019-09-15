@@ -83,7 +83,7 @@ namespace SteppersControlApp.Views
         
         private void drawGrid()
         {
-            ViewStyler.styleGrid(ref sensorsList);
+            ViewStyler.styleGrid(sensorsList);
 
             sensorsList.DefaultCellStyle.SelectionBackColor = Color.White;
             sensorsList.DefaultCellStyle.SelectionForeColor = Color.Black;

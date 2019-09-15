@@ -11,7 +11,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         private byte _stepper;
         uint _speed;
 
-        public SetSpeedCommand(int stepper, uint speed, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public SetSpeedCommand(int stepper, uint speed) : base()
         {
             _stepper = (byte)stepper;
             _speed = speed;
@@ -30,6 +30,11 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
             packet.SetData(2, speedBytes);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
     public class BarStartCommand : AbstractCommand, IDeviceCommand
     {
-        public BarStartCommand(uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public BarStartCommand() : base()
         {
 
         }
@@ -21,6 +21,11 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
             packet.SetData(0, (byte)Protocol.AdditionalCommands.BAR_START);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

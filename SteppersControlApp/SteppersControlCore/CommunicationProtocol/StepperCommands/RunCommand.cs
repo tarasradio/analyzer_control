@@ -12,7 +12,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         private Protocol.Direction _direction;
         private uint _speed;
 
-        public RunCommand(int stepper, Protocol.Direction direction, uint speed, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public RunCommand(int stepper, Protocol.Direction direction, uint speed) : base()
         {
             _stepper = (byte)stepper;
             _direction = direction;
@@ -32,6 +32,11 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
             packet.SetData(3, speedBytes);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

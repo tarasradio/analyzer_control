@@ -14,6 +14,8 @@ namespace SteppersControlCore
         public delegate void newMessageHandler(string message);
         public static event newMessageHandler OnNewMessageAdded;
 
+        private static object _syncRoot = new object();
+
         public Logger()
         {
             //Directory.CreateDirectory("logs");
@@ -24,19 +26,17 @@ namespace SteppersControlCore
 
         public static void AddMessage(string text)
         {
-            mutex.WaitOne();
+            lock(_syncRoot)
+            {
+                //StreamWriter writer = new StreamWriter(fileName, true);
 
-            //StreamWriter writer = new StreamWriter(fileName, true);
+                string line = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") +
+                    " - " + text + "\n";
 
-            string line = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss") +
-                " - " + text + "\n";
-
-            //writer.WriteLine(line);
-            //writer.Close();
-
-            mutex.ReleaseMutex();
-
-            OnNewMessageAdded?.Invoke(line);
+                //writer.WriteLine(line);
+                //writer.Close();
+                OnNewMessageAdded?.Invoke(line);
+            }
         }
     }
 }

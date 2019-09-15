@@ -15,6 +15,8 @@ namespace SteppersControlCore.MachineControl
 
     public class CncExecutor
     {
+        private static object _syncRoot = new object();
+
         public event CommandExecutedDelegate CommandExecuted;
 
         private SerialHelper _helper;
@@ -43,25 +45,28 @@ namespace SteppersControlCore.MachineControl
 
         private static void setSuccesCommandId(uint commandId)
         {
-            _mutex.WaitOne();
-            _lastSuccesCommandId = commandId;
-            _mutex.ReleaseMutex();
+            lock(_syncRoot)
+            {
+                _lastSuccesCommandId = commandId;
+            }
         }
 
         private static void setSuccesCommandState(Protocol.CommandStates state)
         {
-            _mutex.WaitOne();
-            _lastCommandState = state;
-            _mutex.ReleaseMutex();
+            lock(_syncRoot)
+            {
+                _lastCommandState = state;
+            }
         }
 
         private static uint getSuccesCommandId()
         {
             uint commandId;
 
-            _mutex.WaitOne();
-            commandId = _lastSuccesCommandId;
-            _mutex.ReleaseMutex();
+            lock (_syncRoot)
+            {
+                commandId = _lastSuccesCommandId;
+            }
 
             return commandId;
         }
@@ -70,9 +75,10 @@ namespace SteppersControlCore.MachineControl
         {
             Protocol.CommandStates commandState;
 
-            _mutex.WaitOne();
-            commandState = _lastCommandState;
-            _mutex.ReleaseMutex();
+            lock (_syncRoot)
+            {
+                commandState = _lastCommandState;
+            }
 
             return commandState;
         }
@@ -81,7 +87,10 @@ namespace SteppersControlCore.MachineControl
         {
             _commandsToSend = commands;
 
+            if (_executionThread != null && _executionThread.IsAlive)
+                _executionThread.Abort();
             _executionThread = new Thread(commandsExecution);
+            _executionThread.Priority = ThreadPriority.Lowest;
             _executionThread.Start();
 
             while (_executionThread.ThreadState == System.Threading.ThreadState.Running);
@@ -92,7 +101,11 @@ namespace SteppersControlCore.MachineControl
         {
             _commandsToSend = commands;
 
+            if (_executionThread != null && _executionThread.IsAlive)
+                _executionThread.Abort();
             _executionThread = new Thread(commandsExecution);
+            _executionThread.Priority = ThreadPriority.Lowest;
+            _executionThread.IsBackground = true;
             _executionThread.Start();
 
             isExecute = true;
@@ -103,7 +116,8 @@ namespace SteppersControlCore.MachineControl
         public void AbortExecution()
         {
             isExecute = false;
-            _executionThread?.Abort();
+            if (_executionThread != null && _executionThread.IsAlive)
+                _executionThread.Abort();
             Logger.AddMessage("Выполнение программы было прерванно.");
         }
         
@@ -144,33 +158,29 @@ namespace SteppersControlCore.MachineControl
         {
             setSuccesCommandId(0);
 
-            if(Protocol.CommandTypes.HOST_COMMAND == command.GetType())
+            if(command is IHostCommand)
             {
-                executeHostCommand(command);
+                executeHostCommand((IHostCommand)command);
             }
-            else
+            else if(command is IDeviceCommand)
             {
-                executeDeviceCommand(command);
+                executeDeviceCommand((IDeviceCommand)command);
             }
         }
 
-        private void executeDeviceCommand(IAbstractCommand command)
+        private void executeDeviceCommand(IDeviceCommand command)
         {
-            _helper.SendPacket(((IDeviceCommand)command).GetBytes());
+            _helper.SendPacket((command).GetBytes());
 
-            bool executionFinished = false;
+            stopWatch.Restart();
 
-            stopWatch.Start();
-
-            while (!executionFinished)
+            while (true)
             {
-                TimeSpan ts = stopWatch.Elapsed;
-
-                if(ts.Seconds >= 1)
+                if(stopWatch.ElapsedMilliseconds >= 2000)
                 {
                     Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
 
-                    _helper.SendPacket(((IDeviceCommand)command).GetBytes());
+                    _helper.SendPacket((command).GetBytes());
 
                     stopWatch.Restart();
                 }
@@ -179,7 +189,6 @@ namespace SteppersControlCore.MachineControl
                 {
                     if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
                     {
-                        executionFinished = true;
                         break;
                     }
                 }
@@ -197,7 +206,6 @@ namespace SteppersControlCore.MachineControl
                         if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_DONE)
                         {
                             stage = ExecutionStages.WAIT_OK;
-                            executionFinished = true;
                             break;
                         }
                     }
@@ -207,9 +215,9 @@ namespace SteppersControlCore.MachineControl
             stopWatch.Stop();
         }
 
-        private void executeHostCommand(IAbstractCommand command)
+        private void executeHostCommand(IHostCommand command)
         {
-            ((IHostCommand)command).Execute();
+            (command).Execute();
         }
     }
 }

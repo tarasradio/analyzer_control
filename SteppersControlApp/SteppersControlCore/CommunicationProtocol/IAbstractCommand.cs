@@ -9,7 +9,6 @@ namespace SteppersControlCore.CommunicationProtocol
 {
     public interface IAbstractCommand
     {
-        Protocol.CommandTypes GetType();
         uint GetId();
     }
 }

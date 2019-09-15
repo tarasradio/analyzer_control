@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class GoUntilCommand : AbstractCommand, IDeviceCommand
+    public class HomeCommand : AbstractCommand, IDeviceCommand
     {
         private byte _stepper;
         private Protocol.Direction _direction;
         private uint _speed;
 
-        public GoUntilCommand(int stepper, Protocol.Direction direction, uint speed, uint packetId) : base(packetId, Protocol.CommandTypes.WAITING_COMMAND)
+        public HomeCommand(int stepper, Protocol.Direction direction, uint speed) : base()
         {
             _stepper = (byte)stepper;
             _direction = direction;
@@ -32,6 +32,11 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
             packet.SetData(3, speedBytes);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.WAITING_COMMAND;
         }
     }
 }

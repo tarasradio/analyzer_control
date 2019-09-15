@@ -12,7 +12,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
     {
         uint _timePeriodMs = 0;
 
-        public WaitTimeCommand(uint timePeriodMs, uint packetId) : base(packetId, Protocol.CommandTypes.HOST_COMMAND)
+        public WaitTimeCommand(uint timePeriodMs) : base()
         {
             _timePeriodMs = timePeriodMs;
         }

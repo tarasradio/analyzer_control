@@ -10,7 +10,7 @@ namespace SteppersControlApp.Views
 {
     class ViewStyler
     {
-        public static void styleGrid(ref System.Windows.Forms.DataGridView view)
+        public static void styleGrid(DataGridView view)
         {
             view.DefaultCellStyle.SelectionForeColor = System.Drawing.Color.Black;
             view.DefaultCellStyle.SelectionBackColor = System.Drawing.SystemColors.GradientInactiveCaption;

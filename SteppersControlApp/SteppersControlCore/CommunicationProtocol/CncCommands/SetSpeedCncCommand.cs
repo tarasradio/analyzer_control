@@ -10,7 +10,7 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
     {
         private Dictionary<int, int> _speeds;
 
-        public SetSpeedCncCommand(Dictionary<int, int> speeds, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public SetSpeedCncCommand(Dictionary<int, int> speeds) : base()
         {
             _speeds = speeds;
         }
@@ -34,6 +34,11 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
             }
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

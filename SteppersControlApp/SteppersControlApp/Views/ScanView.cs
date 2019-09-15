@@ -57,7 +57,7 @@ namespace SteppersControlApp.Views
 
         private void drawGrid()
         {
-            ViewStyler.styleGrid(ref tubesList);
+            ViewStyler.styleGrid(tubesList);
 
             tubesList.DefaultCellStyle.SelectionBackColor = Color.White;
             tubesList.DefaultCellStyle.SelectionForeColor = Color.Black;

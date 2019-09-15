@@ -43,7 +43,6 @@
             this.steppersGrid.Name = "steppersGrid";
             this.steppersGrid.Size = new System.Drawing.Size(705, 414);
             this.steppersGrid.TabIndex = 0;
-            this.steppersGrid.SelectionChanged += new System.EventHandler(this.steppersGrid_SelectionChanged);
             // 
             // SteppersGridView
             // 

@@ -14,7 +14,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         private Protocol.Direction _direction;
         private uint _countSteps;
 
-        public MoveCommand(int stepper, Protocol.Direction direction, uint countSteps, uint packetId) : base(packetId, Protocol.CommandTypes.WAITING_COMMAND)
+        public MoveCommand(int stepper, Protocol.Direction direction, uint countSteps) : base()
         {
             _stepper = (byte)stepper;
             _direction = direction;
@@ -34,6 +34,11 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
             packet.SetData(3, stepsBytes);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.WAITING_COMMAND;
         }
     }
 }

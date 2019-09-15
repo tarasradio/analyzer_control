@@ -19,7 +19,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         private byte _stepper;
         private byte _stopType;
 
-        public StopCommand(int stepper, StopType stopType, uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public StopCommand(int stepper, StopType stopType) : base()
         {
             _stepper = (byte)stepper;
             _stopType = (byte)stopType;
@@ -35,6 +35,11 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
             packet.SetData(2, _stopType);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

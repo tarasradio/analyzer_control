@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AuthForm.Designer.cs">
+      <DependentUpon>AuthForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControlPanelForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,12 +100,6 @@
     <Compile Include="Views\SensorsView.Designer.cs">
       <DependentUpon>SensorsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\StepperControlView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\StepperControlView.Designer.cs">
-      <DependentUpon>StepperControlView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\SteppersGridView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -113,6 +113,9 @@
       <DependentUpon>StepperTurningView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewStyler.cs" />
+    <EmbeddedResource Include="AuthForm.resx">
+      <DependentUpon>AuthForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelForm.resx">
       <DependentUpon>ControlPanelForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -143,9 +146,6 @@
     <EmbeddedResource Include="Views\SensorsView.resx">
       <DependentUpon>SensorsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\StepperControlView.resx">
-      <DependentUpon>StepperControlView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\SteppersGridView.resx">
       <DependentUpon>SteppersGridView.cs</DependentUpon>
     </EmbeddedResource>
@@ -170,6 +170,10 @@
     <ProjectReference Include="..\SteppersControlCore\SteppersControlCore.csproj">
       <Project>{c75697ab-d456-44eb-86a4-a1c23bc776ec}</Project>
       <Name>SteppersControlCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ViewLibrary\ViewLibrary.csproj">
+      <Project>{A53E0FD6-6A44-44F8-B959-21273F508D6F}</Project>
+      <Name>ViewLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

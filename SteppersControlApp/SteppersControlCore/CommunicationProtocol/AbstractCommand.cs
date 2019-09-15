@@ -8,23 +8,16 @@ namespace SteppersControlCore.CommunicationProtocol
 {
     public class AbstractCommand : IAbstractCommand
     {
-        public uint _commandId;
-        Protocol.CommandTypes _type;
+        protected static uint _commandId = 0;
 
-        public AbstractCommand(uint commandId, Protocol.CommandTypes type)
+        public AbstractCommand()
         {
-            _commandId = commandId;
-            _type = type;
+            _commandId++;// = Protocol.GetPacketId();
         }
 
         public uint GetId()
         {
             return _commandId;
-        }
-
-        public new Protocol.CommandTypes GetType()
-        {
-            return _type;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
     public class AbortExecutionCommand : AbstractCommand, IDeviceCommand
     {
-        public AbortExecutionCommand(uint packetId) : base(packetId, Protocol.CommandTypes.SIMPLE_COMMAND)
+        public AbortExecutionCommand() : base()
         {
 
         }
@@ -21,6 +21,11 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
             packet.SetData(0, (byte)Protocol.AdditionalCommands.ABORT_EXECUTION);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.SIMPLE_COMMAND;
         }
     }
 }

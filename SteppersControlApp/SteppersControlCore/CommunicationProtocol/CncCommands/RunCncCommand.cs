@@ -16,7 +16,7 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
         uint _value = 0;
         Protocol.ValueEdge _valueEdge = Protocol.ValueEdge.RisingEdge;
 
-        public RunCncCommand(Dictionary<int, int> speeds, uint sensor, uint value, Protocol.ValueEdge edge, uint packetId) : base(packetId, Protocol.CommandTypes.WAITING_COMMAND)
+        public RunCncCommand(Dictionary<int, int> speeds, uint sensor, uint value, Protocol.ValueEdge edge) : base()
         {
             _speeds = speeds;
 
@@ -57,6 +57,11 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
             packet.SetData(_speeds.Count * 6 + 5, (byte)_valueEdge);
 
             return packet.GetBytes();
+        }
+
+        public new Protocol.CommandTypes GetType()
+        {
+            return Protocol.CommandTypes.WAITING_COMMAND;
         }
     }
 }

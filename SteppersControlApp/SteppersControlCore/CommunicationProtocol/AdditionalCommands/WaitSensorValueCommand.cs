@@ -16,7 +16,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
         uint _value = 0;
         Protocol.ValueEdge _valueEdge = Protocol.ValueEdge.RisingEdge;
 
-        public WaitSensorValueCommand(uint sensor, uint value, Protocol.ValueEdge edge, uint packetId) : base(packetId, Protocol.CommandTypes.HOST_COMMAND)
+        public WaitSensorValueCommand(uint sensor, uint value, Protocol.ValueEdge edge) : base()
         {
             _sensor = sensor;
             _value = value;

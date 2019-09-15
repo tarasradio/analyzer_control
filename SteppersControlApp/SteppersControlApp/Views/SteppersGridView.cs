@@ -58,7 +58,7 @@ namespace SteppersControlApp.Views
 
         private void drawGrid()
         {
-            ViewStyler.styleGrid(ref steppersGrid);
+            ViewStyler.styleGrid(steppersGrid);
 
             steppersGrid.ColumnCount = Columns;
 

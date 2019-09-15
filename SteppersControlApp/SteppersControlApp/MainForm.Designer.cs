@@ -33,6 +33,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.buttonSaveConfig = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.buttonUpdateList = new System.Windows.Forms.ToolStripButton();
             this.portsListBox = new System.Windows.Forms.ToolStripComboBox();
@@ -43,49 +44,42 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSteppers = new System.Windows.Forms.TabPage();
-            this.tabPageDevices = new System.Windows.Forms.TabPage();
-            this.buttonUnit12 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit11 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit10 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit9 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit8 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit7 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit6 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit5 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit4 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit3 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit2 = new System.Windows.Forms.CheckBox();
-            this.buttonUnit1 = new System.Windows.Forms.CheckBox();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
+            this.sensorsView = new SteppersControlApp.Views.SensorsView();
+            this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
             this.tabPageSensors = new System.Windows.Forms.TabPage();
             this.tabPageCNC = new System.Windows.Forms.TabPage();
-            this.buttonSaveConfig = new System.Windows.Forms.ToolStripButton();
-            this.stepperTurningView = new SteppersControlApp.Views.StepperTurningView();
-            this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
-            this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
-            this.sensorsView = new SteppersControlApp.Views.SensorsView();
             this.cncView = new SteppersControlApp.Views.CNCView();
             this.logView = new SteppersControlApp.Views.LogView();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageSteppers.SuspendLayout();
-            this.tabPageDevices.SuspendLayout();
-            this.tabPageSensors.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.tabPageCNC.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // connectionState
             // 
             this.connectionState.ForeColor = System.Drawing.Color.Brown;
             this.connectionState.Name = "connectionState";
-            this.connectionState.Size = new System.Drawing.Size(94, 17);
-            this.connectionState.Text = "DISCONNECTED";
+            this.connectionState.Size = new System.Drawing.Size(101, 17);
+            this.connectionState.Text = "НЕ ПОДКЛЮЧЕН";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(100, 17);
-            this.toolStripStatusLabel1.Text = "Connection state:";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(125, 17);
+            this.toolStripStatusLabel1.Text = "Статус подключения:";
             // 
             // statusStrip1
             // 
@@ -117,6 +111,17 @@
             this.toolStrip1.Size = new System.Drawing.Size(836, 39);
             this.toolStrip1.TabIndex = 14;
             this.toolStrip1.Text = "toolStrip";
+            // 
+            // buttonSaveConfig
+            // 
+            this.buttonSaveConfig.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonSaveConfig.Image = ((System.Drawing.Image)(resources.GetObject("buttonSaveConfig.Image")));
+            this.buttonSaveConfig.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.buttonSaveConfig.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonSaveConfig.Name = "buttonSaveConfig";
+            this.buttonSaveConfig.Size = new System.Drawing.Size(36, 36);
+            this.buttonSaveConfig.Text = "Сохранить настройки";
+            this.buttonSaveConfig.Click += new System.EventHandler(this.buttonSaveConfig_Click);
             // 
             // toolStripSeparator3
             // 
@@ -188,7 +193,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageSteppers);
-            this.tabControl1.Controls.Add(this.tabPageDevices);
             this.tabControl1.Controls.Add(this.tabPageSensors);
             this.tabControl1.Controls.Add(this.tabPageCNC);
             this.tabControl1.Location = new System.Drawing.Point(12, 42);
@@ -199,8 +203,7 @@
             // 
             // tabPageSteppers
             // 
-            this.tabPageSteppers.Controls.Add(this.stepperTurningView);
-            this.tabPageSteppers.Controls.Add(this.steppersGridView);
+            this.tabPageSteppers.Controls.Add(this.splitContainer);
             this.tabPageSteppers.Location = new System.Drawing.Point(4, 22);
             this.tabPageSteppers.Name = "tabPageSteppers";
             this.tabPageSteppers.Padding = new System.Windows.Forms.Padding(3);
@@ -209,194 +212,64 @@
             this.tabPageSteppers.Text = "Двигатели";
             this.tabPageSteppers.UseVisualStyleBackColor = true;
             // 
-            // tabPageDevices
+            // splitContainer
             // 
-            this.tabPageDevices.Controls.Add(this.devicesControlView);
-            this.tabPageDevices.Controls.Add(this.buttonUnit12);
-            this.tabPageDevices.Controls.Add(this.buttonUnit11);
-            this.tabPageDevices.Controls.Add(this.buttonUnit10);
-            this.tabPageDevices.Controls.Add(this.buttonUnit9);
-            this.tabPageDevices.Controls.Add(this.buttonUnit8);
-            this.tabPageDevices.Controls.Add(this.buttonUnit7);
-            this.tabPageDevices.Controls.Add(this.buttonUnit6);
-            this.tabPageDevices.Controls.Add(this.buttonUnit5);
-            this.tabPageDevices.Controls.Add(this.buttonUnit4);
-            this.tabPageDevices.Controls.Add(this.buttonUnit3);
-            this.tabPageDevices.Controls.Add(this.buttonUnit2);
-            this.tabPageDevices.Controls.Add(this.buttonUnit1);
-            this.tabPageDevices.Location = new System.Drawing.Point(4, 22);
-            this.tabPageDevices.Name = "tabPageDevices";
-            this.tabPageDevices.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDevices.Size = new System.Drawing.Size(804, 378);
-            this.tabPageDevices.TabIndex = 2;
-            this.tabPageDevices.Text = "Устройства";
-            this.tabPageDevices.UseVisualStyleBackColor = true;
+            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer.Location = new System.Drawing.Point(6, 6);
+            this.splitContainer.Name = "splitContainer";
             // 
-            // buttonUnit12
+            // splitContainer.Panel1
             // 
-            this.buttonUnit12.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit12.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit12.Location = new System.Drawing.Point(6, 325);
-            this.buttonUnit12.Name = "buttonUnit12";
-            this.buttonUnit12.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit12.TabIndex = 11;
-            this.buttonUnit12.Text = "Насос / клапан 12";
-            this.buttonUnit12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit12.UseVisualStyleBackColor = true;
-            this.buttonUnit12.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
+            this.splitContainer.Panel1.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainer.Panel1.Controls.Add(this.steppersGridView);
             // 
-            // buttonUnit11
+            // splitContainer.Panel2
             // 
-            this.buttonUnit11.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit11.Location = new System.Drawing.Point(6, 296);
-            this.buttonUnit11.Name = "buttonUnit11";
-            this.buttonUnit11.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit11.TabIndex = 10;
-            this.buttonUnit11.Text = "Насос / клапан 11";
-            this.buttonUnit11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit11.UseVisualStyleBackColor = true;
-            this.buttonUnit11.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
+            this.splitContainer.Panel2.Controls.Add(this.splitContainer1);
+            this.splitContainer.Size = new System.Drawing.Size(792, 366);
+            this.splitContainer.SplitterDistance = 514;
+            this.splitContainer.TabIndex = 18;
             // 
-            // buttonUnit10
+            // steppersGridView
             // 
-            this.buttonUnit10.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit10.Location = new System.Drawing.Point(6, 267);
-            this.buttonUnit10.Name = "buttonUnit10";
-            this.buttonUnit10.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit10.TabIndex = 9;
-            this.buttonUnit10.Text = "Насос / клапан 10";
-            this.buttonUnit10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit10.UseVisualStyleBackColor = true;
-            this.buttonUnit10.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
+            this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.steppersGridView.Location = new System.Drawing.Point(3, 3);
+            this.steppersGridView.Name = "steppersGridView";
+            this.steppersGridView.Size = new System.Drawing.Size(508, 360);
+            this.steppersGridView.TabIndex = 11;
             // 
-            // buttonUnit9
+            // sensorsView
             // 
-            this.buttonUnit9.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit9.Location = new System.Drawing.Point(6, 238);
-            this.buttonUnit9.Name = "buttonUnit9";
-            this.buttonUnit9.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit9.TabIndex = 8;
-            this.buttonUnit9.Text = "Насос / клапан 9";
-            this.buttonUnit9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit9.UseVisualStyleBackColor = true;
-            this.buttonUnit9.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
+            this.sensorsView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sensorsView.Location = new System.Drawing.Point(3, 3);
+            this.sensorsView.Name = "sensorsView";
+            this.sensorsView.Size = new System.Drawing.Size(262, 170);
+            this.sensorsView.TabIndex = 18;
             // 
-            // buttonUnit8
+            // devicesControlView
             // 
-            this.buttonUnit8.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit8.Location = new System.Drawing.Point(6, 209);
-            this.buttonUnit8.Name = "buttonUnit8";
-            this.buttonUnit8.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit8.TabIndex = 7;
-            this.buttonUnit8.Text = "Насос / клапан 8";
-            this.buttonUnit8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit8.UseVisualStyleBackColor = true;
-            this.buttonUnit8.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
-            // 
-            // buttonUnit7
-            // 
-            this.buttonUnit7.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit7.Location = new System.Drawing.Point(6, 180);
-            this.buttonUnit7.Name = "buttonUnit7";
-            this.buttonUnit7.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit7.TabIndex = 6;
-            this.buttonUnit7.Text = "Насос / клапан 7";
-            this.buttonUnit7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit7.UseVisualStyleBackColor = true;
-            this.buttonUnit7.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
-            // 
-            // buttonUnit6
-            // 
-            this.buttonUnit6.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit6.Location = new System.Drawing.Point(6, 151);
-            this.buttonUnit6.Name = "buttonUnit6";
-            this.buttonUnit6.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit6.TabIndex = 5;
-            this.buttonUnit6.Text = "Насос / клапан 6";
-            this.buttonUnit6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit6.UseVisualStyleBackColor = true;
-            this.buttonUnit6.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
-            // 
-            // buttonUnit5
-            // 
-            this.buttonUnit5.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit5.Location = new System.Drawing.Point(6, 122);
-            this.buttonUnit5.Name = "buttonUnit5";
-            this.buttonUnit5.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit5.TabIndex = 4;
-            this.buttonUnit5.Text = "Насос / клапан 5";
-            this.buttonUnit5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit5.UseVisualStyleBackColor = true;
-            this.buttonUnit5.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
-            // 
-            // buttonUnit4
-            // 
-            this.buttonUnit4.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit4.Location = new System.Drawing.Point(6, 93);
-            this.buttonUnit4.Name = "buttonUnit4";
-            this.buttonUnit4.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit4.TabIndex = 3;
-            this.buttonUnit4.Text = "Насос / клапан 4";
-            this.buttonUnit4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit4.UseVisualStyleBackColor = true;
-            this.buttonUnit4.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
-            // 
-            // buttonUnit3
-            // 
-            this.buttonUnit3.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit3.Location = new System.Drawing.Point(6, 64);
-            this.buttonUnit3.Name = "buttonUnit3";
-            this.buttonUnit3.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit3.TabIndex = 2;
-            this.buttonUnit3.Text = "Насос / клапан 3";
-            this.buttonUnit3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit3.UseVisualStyleBackColor = true;
-            this.buttonUnit3.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
-            // 
-            // buttonUnit2
-            // 
-            this.buttonUnit2.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit2.Location = new System.Drawing.Point(6, 35);
-            this.buttonUnit2.Name = "buttonUnit2";
-            this.buttonUnit2.Size = new System.Drawing.Size(126, 23);
-            this.buttonUnit2.TabIndex = 1;
-            this.buttonUnit2.Text = "Насос / клапан 2";
-            this.buttonUnit2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit2.UseVisualStyleBackColor = true;
-            this.buttonUnit2.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
-            // 
-            // buttonUnit1
-            // 
-            this.buttonUnit1.Appearance = System.Windows.Forms.Appearance.Button;
-            this.buttonUnit1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnit1.Location = new System.Drawing.Point(6, 6);
-            this.buttonUnit1.Name = "buttonUnit1";
-            this.buttonUnit1.Size = new System.Drawing.Size(126, 24);
-            this.buttonUnit1.TabIndex = 0;
-            this.buttonUnit1.Text = "Насос / клапан 1";
-            this.buttonUnit1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.buttonUnit1.UseVisualStyleBackColor = true;
-            this.buttonUnit1.CheckedChanged += new System.EventHandler(this.DeviceButton_CheckedChanged);
+            this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.devicesControlView.Location = new System.Drawing.Point(3, 3);
+            this.devicesControlView.Name = "devicesControlView";
+            this.devicesControlView.Size = new System.Drawing.Size(262, 174);
+            this.devicesControlView.TabIndex = 17;
             // 
             // tabPageSensors
             // 
-            this.tabPageSensors.Controls.Add(this.sensorsView);
             this.tabPageSensors.Location = new System.Drawing.Point(4, 22);
             this.tabPageSensors.Name = "tabPageSensors";
             this.tabPageSensors.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageSensors.Size = new System.Drawing.Size(804, 378);
             this.tabPageSensors.TabIndex = 3;
-            this.tabPageSensors.Text = "Датчики";
+            this.tabPageSensors.Text = "Устройства и датчики";
             this.tabPageSensors.UseVisualStyleBackColor = true;
             // 
             // tabPageCNC
@@ -409,56 +282,6 @@
             this.tabPageCNC.TabIndex = 1;
             this.tabPageCNC.Text = "Программное управление";
             this.tabPageCNC.UseVisualStyleBackColor = true;
-            // 
-            // buttonSaveConfig
-            // 
-            this.buttonSaveConfig.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonSaveConfig.Image = ((System.Drawing.Image)(resources.GetObject("buttonSaveConfig.Image")));
-            this.buttonSaveConfig.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.buttonSaveConfig.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonSaveConfig.Name = "buttonSaveConfig";
-            this.buttonSaveConfig.Size = new System.Drawing.Size(36, 36);
-            this.buttonSaveConfig.Text = "Сохранить настройки";
-            this.buttonSaveConfig.Click += new System.EventHandler(this.buttonSaveConfig_Click);
-            // 
-            // stepperTurningView
-            // 
-            this.stepperTurningView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.stepperTurningView.Location = new System.Drawing.Point(596, 6);
-            this.stepperTurningView.Name = "stepperTurningView";
-            this.stepperTurningView.Size = new System.Drawing.Size(202, 366);
-            this.stepperTurningView.TabIndex = 12;
-            // 
-            // steppersGridView
-            // 
-            this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.steppersGridView.Location = new System.Drawing.Point(6, 6);
-            this.steppersGridView.Name = "steppersGridView";
-            this.steppersGridView.Size = new System.Drawing.Size(584, 366);
-            this.steppersGridView.TabIndex = 11;
-            // 
-            // devicesControlView
-            // 
-            this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.devicesControlView.Location = new System.Drawing.Point(138, 6);
-            this.devicesControlView.Name = "devicesControlView";
-            this.devicesControlView.Size = new System.Drawing.Size(660, 366);
-            this.devicesControlView.TabIndex = 12;
-            // 
-            // sensorsView
-            // 
-            this.sensorsView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sensorsView.Location = new System.Drawing.Point(6, 6);
-            this.sensorsView.Name = "sensorsView";
-            this.sensorsView.Size = new System.Drawing.Size(792, 366);
-            this.sensorsView.TabIndex = 15;
             // 
             // cncView
             // 
@@ -479,6 +302,26 @@
             this.logView.Size = new System.Drawing.Size(812, 151);
             this.logView.TabIndex = 13;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.devicesControlView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.sensorsView);
+            this.splitContainer1.Size = new System.Drawing.Size(268, 360);
+            this.splitContainer1.SplitterDistance = 180;
+            this.splitContainer1.TabIndex = 19;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -498,9 +341,15 @@
             this.toolStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPageSteppers.ResumeLayout(false);
-            this.tabPageDevices.ResumeLayout(false);
-            this.tabPageSensors.ResumeLayout(false);
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.tabPageCNC.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -522,27 +371,15 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPageSteppers;
         private System.Windows.Forms.TabPage tabPageCNC;
-        private System.Windows.Forms.TabPage tabPageDevices;
-        private System.Windows.Forms.CheckBox buttonUnit1;
-        private System.Windows.Forms.CheckBox buttonUnit12;
-        private System.Windows.Forms.CheckBox buttonUnit11;
-        private System.Windows.Forms.CheckBox buttonUnit10;
-        private System.Windows.Forms.CheckBox buttonUnit9;
-        private System.Windows.Forms.CheckBox buttonUnit8;
-        private System.Windows.Forms.CheckBox buttonUnit7;
-        private System.Windows.Forms.CheckBox buttonUnit6;
-        private System.Windows.Forms.CheckBox buttonUnit5;
-        private System.Windows.Forms.CheckBox buttonUnit4;
-        private System.Windows.Forms.CheckBox buttonUnit3;
-        private System.Windows.Forms.CheckBox buttonUnit2;
         private Views.CNCView cncView;
         private System.Windows.Forms.ToolStripComboBox editBaudrate;
-        private Views.DevicesControlView devicesControlView;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.TabPage tabPageSensors;
-        private Views.SensorsView sensorsView;
-        private Views.StepperTurningView stepperTurningView;
         private System.Windows.Forms.ToolStripButton buttonSaveConfig;
+        private System.Windows.Forms.SplitContainer splitContainer;
+        private Views.SensorsView sensorsView;
+        private Views.DevicesControlView devicesControlView;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 

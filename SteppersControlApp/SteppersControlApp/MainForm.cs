@@ -14,6 +14,7 @@ using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.SerialCommunication;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SteppersControlApp
 {
@@ -35,13 +36,13 @@ namespace SteppersControlApp
             if (_helper.IsConnected())
             {
                 buttonConnect.Text = "Отключиться";
-                connectionState.Text = "CONNECTED";
+                connectionState.Text = "Подключен";
                 connectionState.ForeColor = Color.DarkGreen;
             }
             else
             {
                 buttonConnect.Text = "Подключиться";
-                connectionState.Text = "DISCONNECTED";
+                connectionState.Text = "Не подключен";
                 connectionState.ForeColor = Color.Brown;
             }
         }
@@ -79,7 +80,7 @@ namespace SteppersControlApp
 
             buttonConnect.Enabled = false;
 
-            stepperTurningView.SetSerialHelper(_helper);
+            devicesControlView.SetSerialHelper(_helper);
         }
 
         private void UpdateBarCode(string barCode)
@@ -96,8 +97,8 @@ namespace SteppersControlApp
 
         private void _cncExecutor_CommandExecuted(int executedCommandNumber)
         {
-            Action<int> action = cncView.UpdateExecutionProgress;
-            Invoke(action, executedCommandNumber);
+            //Action<int> action = cncView.UpdateExecutionProgress;
+            //Invoke(action, executedCommandNumber);
         }
 
         private void SensorsValuesReceived(ushort[] values)
@@ -156,7 +157,7 @@ namespace SteppersControlApp
                 {
                     connectionState.Text = "Установленно соединение с " + portName;
                     Logger.AddMessage(
-                        "Открытие подключения - Подключение к " + portName + " открыто");
+                        "Открытие подключения - подключение к " + portName + " открыто");
                     buttonConnect.Text = "Отключение";
 
                     steppersGridView.StartUpdate();
@@ -214,100 +215,26 @@ namespace SteppersControlApp
             if (isOpen == true)
             {
                 Logger.AddMessage(
-                    "Поиск портов - Найдены открытые порты");
+                    "Поиск портов - найдены открытые порты");
                 buttonConnect.Enabled = true;
                 portsListBox.SelectedIndex = 0;
             }
             else
             {
                 Logger.AddMessage(
-                    "Поиск портов - Открытых портов не найдено");
+                    "Поиск портов - открытых портов не найдено");
                 buttonConnect.Enabled = false;
                 portsListBox.SelectedText = "";
             }
         }
 
-        private void DeviceButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (((CheckBox)sender).Checked)
-            {
-                ((CheckBox)sender).BackColor = Color.GreenYellow;
-            }
-            else
-            {
-                ((CheckBox)sender).BackColor = Color.White;
-            }
-
-            if (((CheckBox)sender).Name == buttonUnit1.Name)
-            {
-                SetDeviceState(0, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit2.Name)
-            {
-                SetDeviceState(1, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit3.Name)
-            {
-                SetDeviceState(2, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit4.Name)
-            {
-                SetDeviceState(3, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit5.Name)
-            {
-                SetDeviceState(4, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit6.Name)
-            {
-                SetDeviceState(5, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit7.Name)
-            {
-                SetDeviceState(6, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit8.Name)
-            {
-                SetDeviceState(7, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit9.Name)
-            {
-                SetDeviceState(8, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit10.Name)
-            {
-                SetDeviceState(9, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit11.Name)
-            {
-                SetDeviceState(10, sender);
-            }
-            if (((CheckBox)sender).Name == buttonUnit12.Name)
-            {
-                SetDeviceState(11, sender);
-            }
-        }
-
-        private void SetDeviceState(int device, object sender)
-        {
-            //_helper.SendBytes(new SetUnitStateCommand(device, ((CheckBox)sender).Checked).getBytes());
-            SetDeviceStateCommand.DeviseState state = SetDeviceStateCommand.DeviseState.DEVICE_OFF;
-            if (((CheckBox)sender).Checked == true)
-                state = SetDeviceStateCommand.DeviseState.DEVICE_ON;
-
-            uint packetId = Protocol.GetPacketId();
-
-            //_helper.SendBytes(new SetDeviceStateCommand(device, state, packetId).GetBytes());
-            _helper.SendPacket(new SetDeviceStateCommand(device, state, packetId).GetBytes());
-        }
-        
         private void MainForm_Load(object sender, EventArgs e)
         {
             _core = new Core();
 
             if (!Core.GetConfig().LoadFromFile(ConfigurationFilename))
             {
-                MessageBox.Show("Ошибка при отрытии файла конфурации!");
+                MessageBox.Show("Ошибка при открытии файла конфигурации!");
                 Close(); Dispose(); return;
             }
             else
@@ -315,13 +242,23 @@ namespace SteppersControlApp
                 InitializeAll();
                 
                 steppersGridView.UpdateInformation();
-                stepperTurningView.UpdateInformation();
                 devicesControlView.UpdateInformation();
                 sensorsView.UpdateInformation();
-
-                steppersGridView.StepperChanged += stepperTurningView.ChangeStepper;
                 
                 _core.InitSensorsValues();
+            }
+
+            Thread thread = new Thread(LogStuffThread);
+            //thread.IsBackground = true;
+            //thread.Start();
+        }
+
+        private void LogStuffThread()
+        {
+            while (true)
+            {
+                Logger.AddMessage("Hello");
+                Thread.Sleep(2);
             }
         }
 

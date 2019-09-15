@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol
 {
-    public interface IDeviceCommand
+    public interface IDeviceCommand : IAbstractCommand
     {
+        Protocol.CommandTypes GetType();
         byte[] GetBytes();
     }
 }
