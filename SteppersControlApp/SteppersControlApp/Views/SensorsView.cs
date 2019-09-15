@@ -15,9 +15,7 @@ namespace SteppersControlApp.Views
     public partial class SensorsView : UserControl
     {
         string[] _columnHeaders = { "#", "Название", "Значение" };
-
-        Configuration _configuration;
-
+        
         Timer _updateTimer = new Timer();
 
         private System.Threading.Mutex _mutex;
@@ -38,14 +36,16 @@ namespace SteppersControlApp.Views
         
         private void updateValues(object sender, EventArgs e)
         {
+            if (_values == null)
+                return;
             _mutex.WaitOne();
-
-            ushort[] localValues = new ushort[_configuration.Sensors.Count];
+            
+            ushort[] localValues = new ushort[Core.GetConfig().Sensors.Count];
             Array.Copy(_values, localValues, _values.Length);
 
             _mutex.ReleaseMutex();
             
-            for (int i = 0; i < _configuration.Sensors.Count; i++)
+            for (int i = 0; i < Core.GetConfig().Sensors.Count; i++)
             {
                 if(i == 15)
                 {
@@ -61,10 +61,11 @@ namespace SteppersControlApp.Views
 
         public void UpdateSensorsValues(ushort[] values)
         {
-            if (values.Length != _configuration.Sensors.Count)
+            if (values.Length != Core.GetConfig().Sensors.Count)
                 return;
             _mutex.WaitOne();
-            
+
+            _values = new ushort[Core.GetConfig().Sensors.Count];
             Array.Copy(values, _values, values.Length);
 
             _mutex.ReleaseMutex();
@@ -79,14 +80,7 @@ namespace SteppersControlApp.Views
         {
             _updateTimer.Stop();
         }
-
-        public void SetConfiguration(Configuration configuration)
-        {
-            _configuration = configuration;
-
-            _values = new ushort[_configuration.Sensors.Count];
-        }
-
+        
         private void drawGrid()
         {
             ViewStyler.styleGrid(ref sensorsList);
@@ -114,12 +108,15 @@ namespace SteppersControlApp.Views
 
         private void fillGrid()
         {
-            sensorsList.RowCount = _configuration.Sensors.Count;
+            if (Core.GetConfig() == null)
+                return;
 
-            for (int i = 0; i < _configuration.Sensors.Count; i++)
+            sensorsList.RowCount = Core.GetConfig().Sensors.Count;
+
+            for (int i = 0; i < Core.GetConfig().Sensors.Count; i++)
             {
-                sensorsList[0, i].Value = _configuration.Sensors[i].Number;
-                sensorsList[1, i].Value = _configuration.Sensors[i].Name;
+                sensorsList[0, i].Value = Core.GetConfig().Sensors[i].Number;
+                sensorsList[1, i].Value = Core.GetConfig().Sensors[i].Name;
                 sensorsList[2, i].Value = "Не задано";
             }
         }

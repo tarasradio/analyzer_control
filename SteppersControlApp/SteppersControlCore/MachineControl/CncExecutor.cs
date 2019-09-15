@@ -77,6 +77,17 @@ namespace SteppersControlCore.MachineControl
             return commandState;
         }
 
+        public void ExecuteTask(List<IAbstractCommand> commands)
+        {
+            _commandsToSend = commands;
+
+            _executionThread = new Thread(commandsExecution);
+            _executionThread.Start();
+
+            while (_executionThread.ThreadState == System.Threading.ThreadState.Running);
+            Logger.AddMessage("Запущено выполнение задания");
+        }
+
         public void StartExecution(List<IAbstractCommand> commands)
         {
             _commandsToSend = commands;

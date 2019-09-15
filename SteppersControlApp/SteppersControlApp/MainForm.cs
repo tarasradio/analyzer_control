@@ -28,7 +28,7 @@ namespace SteppersControlApp
 
         ControlPanelForm controlPanel = new ControlPanelForm();
 
-        string Configurationfilename = "settings.txt";
+        string ConfigurationFilename = "settings.xml";
 
         private void UpdateState()
         {
@@ -78,6 +78,8 @@ namespace SteppersControlApp
             editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
 
             buttonConnect.Enabled = false;
+
+            stepperTurningView.SetSerialHelper(_helper);
         }
 
         private void UpdateBarCode(string barCode)
@@ -298,73 +300,50 @@ namespace SteppersControlApp
             //_helper.SendBytes(new SetDeviceStateCommand(device, state, packetId).GetBytes());
             _helper.SendPacket(new SetDeviceStateCommand(device, state, packetId).GetBytes());
         }
-
-        private void cncView_Load(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void MainForm_Load(object sender, EventArgs e)
         {
             _core = new Core();
 
-            if (!_core.getConfig().LoadFromFile(Configurationfilename))
+            if (!Core.GetConfig().LoadFromFile(ConfigurationFilename))
             {
-                MessageBox.Show("Файл настроек не найден!");
+                MessageBox.Show("Ошибка при отрытии файла конфурации!");
                 Close(); Dispose(); return;
             }
             else
             {
                 InitializeAll();
-
-                steppersGridView.SetConfiguration(_core.getConfig());
+                
                 steppersGridView.UpdateInformation();
-
-                devicesControlView.SetConfiguration(_core.getConfig());
+                stepperTurningView.UpdateInformation();
                 devicesControlView.UpdateInformation();
-
-                sensorsView.SetConfiguration(_core.getConfig());
                 sensorsView.UpdateInformation();
 
+                steppersGridView.StepperChanged += stepperTurningView.ChangeStepper;
+                
                 _core.InitSensorsValues();
             }
         }
-        
-        private void testWrapReceive()
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            String message = "Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!Hello, Dear Friends!\n\r";
+            DialogResult dialogResult = MessageBox.Show(
+                "Сохранить настройки при выходе из программы?",
+                "Сохранение настроек при выходе из программы",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button1,
+                MessageBoxOptions.DefaultDesktopOnly);
 
-            byte[] messageBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(message);
-            byte[] buffer = new byte [messageBytes.Length + 1];
-
-            Array.Copy(messageBytes, 0, buffer, 1, messageBytes.Length);
-
-            buffer[0] = 0x13;
-
-            byte[] WrapBuffer = ByteStuffing.WrapPacket(buffer);
-
-            byte[] sendBuffer = new byte[WrapBuffer.Length + 1];
-            Array.Copy(WrapBuffer, sendBuffer, WrapBuffer.Length);
-            sendBuffer[sendBuffer.Length - 1] = 0xDD;
-
-            byte[] bigSendBuffer = new byte[sendBuffer.Length * 6];
-
-            for(int i = 0; i < 6; i++)
+            if(dialogResult == DialogResult.Yes)
             {
-                Array.Copy(sendBuffer, 0, bigSendBuffer, i * sendBuffer.Length, sendBuffer.Length);
+                Core.GetConfig().SaveToFile(ConfigurationFilename);
             }
-
-            _packageReceiver.FindPacket(bigSendBuffer);
         }
 
-        private void testButton_Click(object sender, EventArgs e)
+        private void buttonSaveConfig_Click(object sender, EventArgs e)
         {
-            testWrapReceive();
-        }
-
-        private void barStartButton_Click(object sender, EventArgs e)
-        {
-            _helper.SendPacket(new BarStartCommand(Protocol.GetPacketId()).GetBytes());
+            Core.GetConfig().SaveToFile(ConfigurationFilename);
         }
     }
 }

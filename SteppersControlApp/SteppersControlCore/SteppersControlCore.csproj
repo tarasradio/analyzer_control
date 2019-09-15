@@ -82,7 +82,10 @@
     <Compile Include="SerialCommunication\SerialHelper.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemControl\TubesManager.cs" />
+    <Compile Include="SystemControl\CassetteDeck.cs" />
+    <Compile Include="SystemControl\Cell.cs" />
+    <Compile Include="SystemControl\CartridgesTransporter.cs" />
+    <Compile Include="SystemControl\TubesTransporter.cs" />
     <Compile Include="Utils\RegexHelper.cs" />
   </ItemGroup>
   <ItemGroup />

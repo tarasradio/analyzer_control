@@ -13,17 +13,21 @@ using SteppersControlCore;
 
 namespace SteppersControlApp.Views
 {
+    public delegate void SelectionChangedDelegate(int position);
+
     public partial class SteppersGridView : UserControl
     {
+        public event SelectionChangedDelegate StepperChanged;
+
         string[] GridHeaders = { "#", "Название", "Статус", "Концевик" };
 
         int Columns = 4;
 
-        Configuration _configuration;
-
         Timer updateTimer = new Timer();
 
         private System.Threading.Mutex mutex;
+
+        bool gridFilled = false;
 
         public SteppersGridView()
         {
@@ -75,13 +79,18 @@ namespace SteppersControlApp.Views
 
         private void fillGrid()
         {
-            steppersGrid.RowCount = _configuration.Steppers.Count;
+            if (Core.GetConfig() == null)
+                return;
 
-            for(int i = 0; i < _configuration.Steppers.Count; i++)
+            steppersGrid.RowCount = Core.GetConfig().Steppers.Count;
+
+            for(int i = 0; i < Core.GetConfig().Steppers.Count; i++)
             {
-                steppersGrid[0, i].Value = _configuration.Steppers[i].Number;
-                steppersGrid[1, i].Value = _configuration.Steppers[i].Name;
+                steppersGrid[0, i].Value = Core.GetConfig().Steppers[i].Number;
+                steppersGrid[1, i].Value = Core.GetConfig().Steppers[i].Name;
             }
+
+            gridFilled = true;
         }
 
         public void UpdateInformation()
@@ -102,23 +111,23 @@ namespace SteppersControlApp.Views
 
             for (int i = 0; i < 18; i++)
             {
-                string stateStr = "Stopped";
+                string stateStr = "Остановлен";
                 if ((localStates[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.ACCELERATION)
-                    stateStr = "Acceleration";
+                    stateStr = "Ускорение";
                 if ((localStates[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.DECELERATION)
-                    stateStr = "Deceleration";
+                    stateStr = "Замедление";
                 if ((localStates[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.CONSTANT_SPEED)
-                    stateStr = "Constant speed";
+                    stateStr = "В движении";
                 steppersGrid[2, i].Value = stateStr;
 
                 if ((localStates[i] & (ushort)DriverState.STATUS_SW_F) != 0)
                 {
-                    steppersGrid[3, i].Value = "PRESSED";
+                    steppersGrid[3, i].Value = "Нажат";
                     steppersGrid[3, i].Style.BackColor = Color.Red;
                 }
                 else
                 {
-                    steppersGrid[3, i].Value = "LEAVE";
+                    steppersGrid[3, i].Value = "Отпущен";
                     steppersGrid[3, i].Style.BackColor = Color.GreenYellow;
                 }
             }
@@ -134,10 +143,15 @@ namespace SteppersControlApp.Views
 
             mutex.ReleaseMutex();
         }
-
-        public void SetConfiguration(Configuration configuration)
+        
+        private void steppersGrid_SelectionChanged(object sender, EventArgs e)
         {
-            _configuration = configuration;
+            int index = steppersGrid.CurrentRow.Index;
+            if (gridFilled == false)
+                return;
+            
+            int stepper = (int)(steppersGrid[0, steppersGrid.CurrentRow.Index].Value);
+            StepperChanged(stepper);
         }
     }
 }

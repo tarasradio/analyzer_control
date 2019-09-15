@@ -31,50 +31,43 @@ namespace SteppersControlApp
 
         private void initDriveControls()
         {
-            stepperControlView0.setStepperNumber(0);
-            stepperControlView1.setStepperNumber(1);
-            stepperControlView2.setStepperNumber(2);
-            stepperControlView3.setStepperNumber(3);
-            stepperControlView4.setStepperNumber(4);
-            stepperControlView5.setStepperNumber(5);
-            stepperControlView6.setStepperNumber(6);
-            stepperControlView7.setStepperNumber(7);
-            stepperControlView8.setStepperNumber(8);
-            stepperControlView9.setStepperNumber(9);
-            stepperControlView10.setStepperNumber(10);
-            stepperControlView11.setStepperNumber(11);
-            stepperControlView12.setStepperNumber(12);
-            stepperControlView13.setStepperNumber(13);
-            stepperControlView14.setStepperNumber(14);
-            stepperControlView15.setStepperNumber(15);
-            stepperControlView16.setStepperNumber(16);
-            stepperControlView17.setStepperNumber(17);
+            stepperTurningView0.SetStepper(0);
+            stepperTurningView1.SetStepper(1);
+            stepperTurningView2.SetStepper(2);
+            stepperTurningView3.SetStepper(3);
+            stepperTurningView4.SetStepper(4);
+            stepperTurningView5.SetStepper(5);
+            stepperTurningView6.SetStepper(6);
+            stepperTurningView7.SetStepper(7);
+            stepperTurningView8.SetStepper(8);
+            stepperTurningView9.SetStepper(9);
+            stepperTurningView10.SetStepper(10);
+            stepperTurningView11.SetStepper(11);
+            stepperTurningView12.SetStepper(12);
+            stepperTurningView13.SetStepper(13);
+            stepperTurningView14.SetStepper(14);
+            stepperTurningView15.SetStepper(15);
+            stepperTurningView16.SetStepper(16);
+            stepperTurningView17.SetStepper(17);
 
-            stepperControlView0.SetSerialHelper(helper);
-            stepperControlView1.SetSerialHelper(helper);
-            stepperControlView2.SetSerialHelper(helper);
-            stepperControlView3.SetSerialHelper(helper);
-            stepperControlView4.SetSerialHelper(helper);
-            stepperControlView5.SetSerialHelper(helper);
-            stepperControlView6.SetSerialHelper(helper);
-            stepperControlView7.SetSerialHelper(helper);
-            stepperControlView8.SetSerialHelper(helper);
-            stepperControlView9.SetSerialHelper(helper);
-            stepperControlView10.SetSerialHelper(helper);
-            stepperControlView11.SetSerialHelper(helper);
-            stepperControlView12.SetSerialHelper(helper);
-            stepperControlView13.SetSerialHelper(helper);
-            stepperControlView14.SetSerialHelper(helper);
-            stepperControlView15.SetSerialHelper(helper);
-            stepperControlView16.SetSerialHelper(helper);
-            stepperControlView17.SetSerialHelper(helper);
-        }
-
-        private void buttonEmmergencyStop_Click(object sender, EventArgs e)
-        {
-            for(int i = 0; i < 18; i++)
-                helper.SendPacket(new StopCommand(
-                    i, StopCommand.StopType.HARD_STOP, 0).GetBytes());
+            stepperTurningView0.SetSerialHelper(helper);
+            stepperTurningView1.SetSerialHelper(helper);
+            stepperTurningView2.SetSerialHelper(helper);
+            stepperTurningView3.SetSerialHelper(helper);
+            stepperTurningView4.SetSerialHelper(helper);
+            stepperTurningView5.SetSerialHelper(helper);
+            stepperTurningView6.SetSerialHelper(helper);
+            stepperTurningView7.SetSerialHelper(helper);
+            stepperTurningView8.SetSerialHelper(helper);
+            stepperTurningView9.SetSerialHelper(helper);
+            stepperTurningView10.SetSerialHelper(helper);
+            stepperTurningView11.SetSerialHelper(helper);
+            stepperTurningView12.SetSerialHelper(helper);
+            stepperTurningView13.SetSerialHelper(helper);
+            stepperTurningView14.SetSerialHelper(helper);
+            stepperTurningView15.SetSerialHelper(helper);
+            stepperTurningView16.SetSerialHelper(helper);
+            stepperTurningView17.SetSerialHelper(helper);
         }
     }
 }

@@ -15,9 +15,7 @@ namespace SteppersControlApp.Views
     public partial class DevicesControlView : UserControl
     {
         string[] _columnHeaders = { "#", "Название"};
-
-        Configuration _configuration;
-
+        
         Timer updateTimer = new Timer();
 
         private System.Threading.Mutex mutex; // Заменить на lock
@@ -104,19 +102,17 @@ namespace SteppersControlApp.Views
 
         private void fillGrid()
         {
-            devicesList.RowCount = _configuration.Devices.Count;
+            if (Core.GetConfig() == null)
+                return;
 
-            for (int i = 0; i < _configuration.Devices.Count; i++)
+            devicesList.RowCount = Core.GetConfig().Devices.Count;
+
+            for (int i = 0; i < Core.GetConfig().Devices.Count; i++)
             {
-                devicesList[0, i].Value = _configuration.Devices[i].Number;
-                devicesList[1, i].Value = _configuration.Devices[i].Name;
+                devicesList[0, i].Value = Core.GetConfig().Devices[i].Number;
+                devicesList[1, i].Value = Core.GetConfig().Devices[i].Name;
                 devicesList[2, i].Value = "Включить";
             }
-        }
-
-        public void SetConfiguration(Configuration configuration)
-        {
-            _configuration = configuration;
         }
 
         private void devicesList_CellClick(object sender, DataGridViewCellEventArgs e)

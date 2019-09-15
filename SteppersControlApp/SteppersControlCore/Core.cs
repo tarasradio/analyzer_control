@@ -28,12 +28,12 @@ namespace SteppersControlCore
             Logger.AddMessage("Запись работы системы начата");
         }
 
-        public Logger GetLogger()
+        public static Logger GetLogger()
         {
             return _logger;
         }
 
-        public Configuration getConfig()
+        public static Configuration GetConfig()
         {
             return _configuration;
         }

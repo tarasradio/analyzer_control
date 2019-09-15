@@ -28,211 +28,211 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.stepperControlView17 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView16 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView15 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView14 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView13 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView12 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView11 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView10 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView9 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView8 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView7 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView6 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView5 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView4 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView3 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView2 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView1 = new SteppersControlApp.Views.StepperControlView();
-            this.stepperControlView0 = new SteppersControlApp.Views.StepperControlView();
+            this.stepperTurningView0 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView1 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView2 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView3 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView4 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView5 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView6 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView7 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView8 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView9 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView10 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView11 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView12 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView13 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView14 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView15 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView16 = new SteppersControlApp.Views.StepperTurningView();
+            this.stepperTurningView17 = new SteppersControlApp.Views.StepperTurningView();
             this.SuspendLayout();
             // 
-            // stepperControlView17
+            // stepperTurningView0
             // 
-            this.stepperControlView17.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView17.Location = new System.Drawing.Point(797, 280);
-            this.stepperControlView17.Name = "stepperControlView17";
-            this.stepperControlView17.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView17.TabIndex = 17;
+            this.stepperTurningView0.Location = new System.Drawing.Point(12, 12);
+            this.stepperTurningView0.Name = "stepperTurningView0";
+            this.stepperTurningView0.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView0.TabIndex = 18;
             // 
-            // stepperControlView16
+            // stepperTurningView1
             // 
-            this.stepperControlView16.Location = new System.Drawing.Point(640, 280);
-            this.stepperControlView16.Name = "stepperControlView16";
-            this.stepperControlView16.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView16.TabIndex = 16;
+            this.stepperTurningView1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView1.Location = new System.Drawing.Point(220, 12);
+            this.stepperTurningView1.Name = "stepperTurningView1";
+            this.stepperTurningView1.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView1.TabIndex = 19;
             // 
-            // stepperControlView15
+            // stepperTurningView2
             // 
-            this.stepperControlView15.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView15.Location = new System.Drawing.Point(483, 280);
-            this.stepperControlView15.Name = "stepperControlView15";
-            this.stepperControlView15.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView15.TabIndex = 15;
+            this.stepperTurningView2.Location = new System.Drawing.Point(428, 12);
+            this.stepperTurningView2.Name = "stepperTurningView2";
+            this.stepperTurningView2.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView2.TabIndex = 20;
             // 
-            // stepperControlView14
+            // stepperTurningView3
             // 
-            this.stepperControlView14.Location = new System.Drawing.Point(326, 280);
-            this.stepperControlView14.Name = "stepperControlView14";
-            this.stepperControlView14.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView14.TabIndex = 14;
+            this.stepperTurningView3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView3.Location = new System.Drawing.Point(636, 12);
+            this.stepperTurningView3.Name = "stepperTurningView3";
+            this.stepperTurningView3.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView3.TabIndex = 21;
             // 
-            // stepperControlView13
+            // stepperTurningView4
             // 
-            this.stepperControlView13.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView13.Location = new System.Drawing.Point(169, 280);
-            this.stepperControlView13.Name = "stepperControlView13";
-            this.stepperControlView13.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView13.TabIndex = 13;
+            this.stepperTurningView4.Location = new System.Drawing.Point(844, 12);
+            this.stepperTurningView4.Name = "stepperTurningView4";
+            this.stepperTurningView4.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView4.TabIndex = 22;
             // 
-            // stepperControlView12
+            // stepperTurningView5
             // 
-            this.stepperControlView12.Location = new System.Drawing.Point(12, 280);
-            this.stepperControlView12.Name = "stepperControlView12";
-            this.stepperControlView12.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView12.TabIndex = 12;
+            this.stepperTurningView5.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView5.Location = new System.Drawing.Point(1052, 12);
+            this.stepperTurningView5.Name = "stepperTurningView5";
+            this.stepperTurningView5.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView5.TabIndex = 23;
             // 
-            // stepperControlView11
+            // stepperTurningView6
             // 
-            this.stepperControlView11.Location = new System.Drawing.Point(797, 146);
-            this.stepperControlView11.Name = "stepperControlView11";
-            this.stepperControlView11.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView11.TabIndex = 11;
+            this.stepperTurningView6.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView6.Location = new System.Drawing.Point(12, 163);
+            this.stepperTurningView6.Name = "stepperTurningView6";
+            this.stepperTurningView6.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView6.TabIndex = 24;
             // 
-            // stepperControlView10
+            // stepperTurningView7
             // 
-            this.stepperControlView10.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView10.Location = new System.Drawing.Point(640, 146);
-            this.stepperControlView10.Name = "stepperControlView10";
-            this.stepperControlView10.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView10.TabIndex = 10;
+            this.stepperTurningView7.Location = new System.Drawing.Point(220, 163);
+            this.stepperTurningView7.Name = "stepperTurningView7";
+            this.stepperTurningView7.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView7.TabIndex = 25;
             // 
-            // stepperControlView9
+            // stepperTurningView8
             // 
-            this.stepperControlView9.Location = new System.Drawing.Point(483, 146);
-            this.stepperControlView9.Name = "stepperControlView9";
-            this.stepperControlView9.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView9.TabIndex = 9;
+            this.stepperTurningView8.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView8.Location = new System.Drawing.Point(428, 163);
+            this.stepperTurningView8.Name = "stepperTurningView8";
+            this.stepperTurningView8.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView8.TabIndex = 26;
             // 
-            // stepperControlView8
+            // stepperTurningView9
             // 
-            this.stepperControlView8.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView8.Location = new System.Drawing.Point(326, 146);
-            this.stepperControlView8.Name = "stepperControlView8";
-            this.stepperControlView8.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView8.TabIndex = 8;
+            this.stepperTurningView9.Location = new System.Drawing.Point(636, 163);
+            this.stepperTurningView9.Name = "stepperTurningView9";
+            this.stepperTurningView9.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView9.TabIndex = 27;
             // 
-            // stepperControlView7
+            // stepperTurningView10
             // 
-            this.stepperControlView7.Location = new System.Drawing.Point(169, 146);
-            this.stepperControlView7.Name = "stepperControlView7";
-            this.stepperControlView7.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView7.TabIndex = 7;
+            this.stepperTurningView10.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView10.Location = new System.Drawing.Point(844, 163);
+            this.stepperTurningView10.Name = "stepperTurningView10";
+            this.stepperTurningView10.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView10.TabIndex = 28;
             // 
-            // stepperControlView6
+            // stepperTurningView11
             // 
-            this.stepperControlView6.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView6.Location = new System.Drawing.Point(12, 146);
-            this.stepperControlView6.Name = "stepperControlView6";
-            this.stepperControlView6.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView6.TabIndex = 6;
+            this.stepperTurningView11.Location = new System.Drawing.Point(1052, 163);
+            this.stepperTurningView11.Name = "stepperTurningView11";
+            this.stepperTurningView11.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView11.TabIndex = 29;
             // 
-            // stepperControlView5
+            // stepperTurningView12
             // 
-            this.stepperControlView5.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView5.Location = new System.Drawing.Point(797, 12);
-            this.stepperControlView5.Name = "stepperControlView5";
-            this.stepperControlView5.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView5.TabIndex = 5;
+            this.stepperTurningView12.Location = new System.Drawing.Point(12, 314);
+            this.stepperTurningView12.Name = "stepperTurningView12";
+            this.stepperTurningView12.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView12.TabIndex = 30;
             // 
-            // stepperControlView4
+            // stepperTurningView13
             // 
-            this.stepperControlView4.Location = new System.Drawing.Point(640, 12);
-            this.stepperControlView4.Name = "stepperControlView4";
-            this.stepperControlView4.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView4.TabIndex = 4;
+            this.stepperTurningView13.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView13.Location = new System.Drawing.Point(220, 314);
+            this.stepperTurningView13.Name = "stepperTurningView13";
+            this.stepperTurningView13.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView13.TabIndex = 31;
             // 
-            // stepperControlView3
+            // stepperTurningView14
             // 
-            this.stepperControlView3.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView3.Location = new System.Drawing.Point(483, 12);
-            this.stepperControlView3.Name = "stepperControlView3";
-            this.stepperControlView3.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView3.TabIndex = 3;
+            this.stepperTurningView14.Location = new System.Drawing.Point(428, 314);
+            this.stepperTurningView14.Name = "stepperTurningView14";
+            this.stepperTurningView14.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView14.TabIndex = 32;
             // 
-            // stepperControlView2
+            // stepperTurningView15
             // 
-            this.stepperControlView2.Location = new System.Drawing.Point(326, 12);
-            this.stepperControlView2.Name = "stepperControlView2";
-            this.stepperControlView2.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView2.TabIndex = 2;
+            this.stepperTurningView15.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView15.Location = new System.Drawing.Point(636, 314);
+            this.stepperTurningView15.Name = "stepperTurningView15";
+            this.stepperTurningView15.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView15.TabIndex = 33;
             // 
-            // stepperControlView1
+            // stepperTurningView16
             // 
-            this.stepperControlView1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.stepperControlView1.Location = new System.Drawing.Point(169, 12);
-            this.stepperControlView1.Name = "stepperControlView1";
-            this.stepperControlView1.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView1.TabIndex = 1;
+            this.stepperTurningView16.Location = new System.Drawing.Point(844, 314);
+            this.stepperTurningView16.Name = "stepperTurningView16";
+            this.stepperTurningView16.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView16.TabIndex = 34;
             // 
-            // stepperControlView0
+            // stepperTurningView17
             // 
-            this.stepperControlView0.Location = new System.Drawing.Point(12, 12);
-            this.stepperControlView0.Name = "stepperControlView0";
-            this.stepperControlView0.Size = new System.Drawing.Size(151, 128);
-            this.stepperControlView0.TabIndex = 0;
+            this.stepperTurningView17.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.stepperTurningView17.Location = new System.Drawing.Point(1052, 314);
+            this.stepperTurningView17.Name = "stepperTurningView17";
+            this.stepperTurningView17.Size = new System.Drawing.Size(202, 145);
+            this.stepperTurningView17.TabIndex = 35;
             // 
             // ControlPanelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 419);
-            this.Controls.Add(this.stepperControlView17);
-            this.Controls.Add(this.stepperControlView16);
-            this.Controls.Add(this.stepperControlView15);
-            this.Controls.Add(this.stepperControlView14);
-            this.Controls.Add(this.stepperControlView13);
-            this.Controls.Add(this.stepperControlView12);
-            this.Controls.Add(this.stepperControlView11);
-            this.Controls.Add(this.stepperControlView10);
-            this.Controls.Add(this.stepperControlView9);
-            this.Controls.Add(this.stepperControlView8);
-            this.Controls.Add(this.stepperControlView7);
-            this.Controls.Add(this.stepperControlView6);
-            this.Controls.Add(this.stepperControlView5);
-            this.Controls.Add(this.stepperControlView4);
-            this.Controls.Add(this.stepperControlView3);
-            this.Controls.Add(this.stepperControlView2);
-            this.Controls.Add(this.stepperControlView1);
-            this.Controls.Add(this.stepperControlView0);
+            this.ClientSize = new System.Drawing.Size(1264, 466);
+            this.Controls.Add(this.stepperTurningView17);
+            this.Controls.Add(this.stepperTurningView16);
+            this.Controls.Add(this.stepperTurningView15);
+            this.Controls.Add(this.stepperTurningView14);
+            this.Controls.Add(this.stepperTurningView13);
+            this.Controls.Add(this.stepperTurningView12);
+            this.Controls.Add(this.stepperTurningView11);
+            this.Controls.Add(this.stepperTurningView10);
+            this.Controls.Add(this.stepperTurningView9);
+            this.Controls.Add(this.stepperTurningView8);
+            this.Controls.Add(this.stepperTurningView7);
+            this.Controls.Add(this.stepperTurningView6);
+            this.Controls.Add(this.stepperTurningView5);
+            this.Controls.Add(this.stepperTurningView4);
+            this.Controls.Add(this.stepperTurningView3);
+            this.Controls.Add(this.stepperTurningView2);
+            this.Controls.Add(this.stepperTurningView1);
+            this.Controls.Add(this.stepperTurningView0);
             this.MaximizeBox = false;
             this.Name = "ControlPanelForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ControlPanelForm";
+            this.Text = "Управление двигателями";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private Views.StepperControlView stepperControlView0;
-        private Views.StepperControlView stepperControlView1;
-        private Views.StepperControlView stepperControlView2;
-        private Views.StepperControlView stepperControlView3;
-        private Views.StepperControlView stepperControlView4;
-        private Views.StepperControlView stepperControlView5;
-        private Views.StepperControlView stepperControlView6;
-        private Views.StepperControlView stepperControlView7;
-        private Views.StepperControlView stepperControlView8;
-        private Views.StepperControlView stepperControlView9;
-        private Views.StepperControlView stepperControlView10;
-        private Views.StepperControlView stepperControlView11;
-        private Views.StepperControlView stepperControlView12;
-        private Views.StepperControlView stepperControlView13;
-        private Views.StepperControlView stepperControlView14;
-        private Views.StepperControlView stepperControlView15;
-        private Views.StepperControlView stepperControlView16;
-        private Views.StepperControlView stepperControlView17;
+        private Views.StepperTurningView stepperTurningView0;
+        private Views.StepperTurningView stepperTurningView1;
+        private Views.StepperTurningView stepperTurningView2;
+        private Views.StepperTurningView stepperTurningView3;
+        private Views.StepperTurningView stepperTurningView4;
+        private Views.StepperTurningView stepperTurningView5;
+        private Views.StepperTurningView stepperTurningView6;
+        private Views.StepperTurningView stepperTurningView7;
+        private Views.StepperTurningView stepperTurningView8;
+        private Views.StepperTurningView stepperTurningView9;
+        private Views.StepperTurningView stepperTurningView10;
+        private Views.StepperTurningView stepperTurningView11;
+        private Views.StepperTurningView stepperTurningView12;
+        private Views.StepperTurningView stepperTurningView13;
+        private Views.StepperTurningView stepperTurningView14;
+        private Views.StepperTurningView stepperTurningView15;
+        private Views.StepperTurningView stepperTurningView16;
+        private Views.StepperTurningView stepperTurningView17;
     }
 }

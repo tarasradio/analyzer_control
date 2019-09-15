@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StepperControlView));
-            this.EditCountSteps = new System.Windows.Forms.NumericUpDown();
+            this.editNumberSteps = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.editFullSpeed = new System.Windows.Forms.NumericUpDown();
             this.useMoveStepsCheck = new System.Windows.Forms.CheckBox();
@@ -38,29 +38,29 @@
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonFwd = new System.Windows.Forms.Button();
             this.StepperControlViewToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.StepperName = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.EditCountSteps)).BeginInit();
+            this.labelStepperName = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.editNumberSteps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.editFullSpeed)).BeginInit();
             this.SuspendLayout();
             // 
-            // EditCountSteps
+            // editNumberSteps
             // 
-            this.EditCountSteps.Increment = new decimal(new int[] {
+            this.editNumberSteps.Increment = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.EditCountSteps.Location = new System.Drawing.Point(82, 29);
-            this.EditCountSteps.Maximum = new decimal(new int[] {
+            this.editNumberSteps.Location = new System.Drawing.Point(82, 29);
+            this.editNumberSteps.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
-            this.EditCountSteps.Name = "EditCountSteps";
-            this.EditCountSteps.Size = new System.Drawing.Size(66, 20);
-            this.EditCountSteps.TabIndex = 26;
-            this.EditCountSteps.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.EditCountSteps.Value = new decimal(new int[] {
+            this.editNumberSteps.Name = "editNumberSteps";
+            this.editNumberSteps.Size = new System.Drawing.Size(66, 20);
+            this.editNumberSteps.TabIndex = 26;
+            this.editNumberSteps.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.editNumberSteps.Value = new decimal(new int[] {
             100000,
             0,
             0,
@@ -155,33 +155,33 @@
             this.buttonFwd.UseVisualStyleBackColor = false;
             this.buttonFwd.Click += new System.EventHandler(this.buttonFwd_Click);
             // 
-            // StepperName
+            // labelStepperName
             // 
-            this.StepperName.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.StepperName.Location = new System.Drawing.Point(3, 3);
-            this.StepperName.Name = "StepperName";
-            this.StepperName.ReadOnly = true;
-            this.StepperName.Size = new System.Drawing.Size(145, 20);
-            this.StepperName.TabIndex = 40;
-            this.StepperName.Text = "Имя мотора и номер";
-            this.StepperName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.labelStepperName.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.labelStepperName.Location = new System.Drawing.Point(3, 3);
+            this.labelStepperName.Name = "labelStepperName";
+            this.labelStepperName.ReadOnly = true;
+            this.labelStepperName.Size = new System.Drawing.Size(145, 20);
+            this.labelStepperName.TabIndex = 40;
+            this.labelStepperName.Text = "Имя мотора и номер";
+            this.labelStepperName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // StepperControlView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.StepperName);
+            this.Controls.Add(this.labelStepperName);
             this.Controls.Add(this.buttonFwd);
             this.Controls.Add(this.buttonStop);
             this.Controls.Add(this.buttonRev);
-            this.Controls.Add(this.EditCountSteps);
+            this.Controls.Add(this.editNumberSteps);
             this.Controls.Add(this.useMoveStepsCheck);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.editFullSpeed);
             this.Name = "StepperControlView";
             this.Size = new System.Drawing.Size(151, 128);
             this.Load += new System.EventHandler(this.StepperControlView_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.EditCountSteps)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editNumberSteps)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.editFullSpeed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -189,7 +189,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.NumericUpDown EditCountSteps;
+        private System.Windows.Forms.NumericUpDown editNumberSteps;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown editFullSpeed;
         private System.Windows.Forms.CheckBox useMoveStepsCheck;
@@ -197,6 +197,6 @@
         private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.Button buttonFwd;
         private System.Windows.Forms.ToolTip StepperControlViewToolTip;
-        private System.Windows.Forms.TextBox StepperName;
+        private System.Windows.Forms.TextBox labelStepperName;
     }
 }
