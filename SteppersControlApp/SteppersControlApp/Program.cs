@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SteppersControlCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,16 +18,29 @@ namespace SteppersControlApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            AuthForm authForm = new AuthForm();
-            MainForm mainForm = new MainForm();
-            authForm.StartPosition = FormStartPosition.CenterScreen;
-            mainForm.StartPosition = FormStartPosition.CenterScreen;
-
-            Application.Run(authForm);
-
-            if(authForm.IsAuthenticated)
+            try
             {
-                Application.Run(mainForm);
+                Core core = new Core("config.xml");
+
+                AuthForm authForm = new AuthForm();
+                MainForm mainForm = new MainForm();
+
+                authForm.StartPosition = FormStartPosition.CenterScreen;
+                mainForm.StartPosition = FormStartPosition.CenterScreen;
+
+                Application.Run(authForm);
+
+                if (authForm.IsAuthenticated)
+                {
+                    Application.Run(mainForm);
+                }
+
+                core.SaveSettings();
+            }
+            catch(System.IO.FileLoadException)
+            {
+                MessageBox.Show("Ошибка при открытии файла конфигурации!");
+                return;
             }
         }
     }

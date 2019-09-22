@@ -13,7 +13,7 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 
-#define DEBUG
+//#define DEBUG
 //#define SEND_STATE_PERMANENTLY
 
 enum StopType
@@ -164,6 +164,11 @@ bool CommandExecutor2::checkStepper(uint8_t stepper)
         String message = "wrong stepper = " + String(stepper);
         PacketManager::printMessage(message);
     }
+    else
+    {
+        Steppers::get(stepper).setMinSpeed(5);
+    }
+    
     return result;
 }
 

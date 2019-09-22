@@ -16,16 +16,9 @@ namespace SteppersControlApp
 {
     public partial class ControlPanelForm : Form
     {
-        SerialHelper helper;
-
         public ControlPanelForm()
         {
             InitializeComponent();
-        }
-
-        public void setSerialHelper(SerialHelper helper)
-        {
-            this.helper = helper;
             initDriveControls();
         }
 
@@ -49,25 +42,6 @@ namespace SteppersControlApp
             stepperTurningView15.SetStepper(15);
             stepperTurningView16.SetStepper(16);
             stepperTurningView17.SetStepper(17);
-
-            stepperTurningView0.SetSerialHelper(helper);
-            stepperTurningView1.SetSerialHelper(helper);
-            stepperTurningView2.SetSerialHelper(helper);
-            stepperTurningView3.SetSerialHelper(helper);
-            stepperTurningView4.SetSerialHelper(helper);
-            stepperTurningView5.SetSerialHelper(helper);
-            stepperTurningView6.SetSerialHelper(helper);
-            stepperTurningView7.SetSerialHelper(helper);
-            stepperTurningView8.SetSerialHelper(helper);
-            stepperTurningView9.SetSerialHelper(helper);
-            stepperTurningView10.SetSerialHelper(helper);
-            stepperTurningView11.SetSerialHelper(helper);
-            stepperTurningView12.SetSerialHelper(helper);
-            stepperTurningView13.SetSerialHelper(helper);
-            stepperTurningView14.SetSerialHelper(helper);
-            stepperTurningView15.SetSerialHelper(helper);
-            stepperTurningView16.SetSerialHelper(helper);
-            stepperTurningView17.SetSerialHelper(helper);
         }
     }
 }

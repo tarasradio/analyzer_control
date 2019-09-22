@@ -26,27 +26,12 @@ namespace SteppersControlApp.Views
 {
     public partial class CNCView : UserControl
     {
-        static SerialHelper _helper;
-        CncExecutor _cncExecutor;
-        TaskExecutor _taskExecutor;
-        
         CncProgram _program;
 
         public CNCView()
         {
             InitializeComponent();
             InitilizeProgramtextBox();
-        }
-
-        public void SetExecutor(CncExecutor executor)
-        {
-            _cncExecutor = executor;
-            _taskExecutor = new TaskExecutor(_cncExecutor);
-        }
-
-        public void SetHelper(SerialHelper helper)
-        {
-            _helper = helper;
         }
         
         private void InitilizeProgramtextBox()
@@ -139,11 +124,6 @@ namespace SteppersControlApp.Views
             }
         }
         
-        private void scanTubesTaskButton_Click(object sender, EventArgs e)
-        {
-            _taskExecutor.StartScanTubesTask();
-        }
-        
         private void buttonRunProgram_Click(object sender, EventArgs e)
         {
             if(testProgram())
@@ -152,7 +132,7 @@ namespace SteppersControlApp.Views
                 executionProgressLabel.Text = $"Выполнено команд: {0} из {_program.Commands.Count}";
                 executionProgressBar.Value = 0;
 
-                _cncExecutor.StartExecution(_program.Commands);
+                Core.CNCExecutor.StartExecution(_program.Commands);
             }
         }
 
@@ -161,9 +141,9 @@ namespace SteppersControlApp.Views
             double progress = 0;
             int commandsCount = 0;
 
-            if (_taskExecutor.GetState() == ThreadState.Running)
+            if (Core.Executor.GetState() == ThreadState.Running)
             {
-                commandsCount = _taskExecutor.GetCommandsCount();
+                //commandsCount = _taskExecutor.GetCommandsCount();
             }
             else
             {
@@ -183,36 +163,15 @@ namespace SteppersControlApp.Views
 
         private void buttonAbortExecution_Click(object sender, EventArgs e)
         {
-            _taskExecutor.AbortExecution();
-            _cncExecutor.AbortExecution();
-            _helper.SendPacket(new AbortExecutionCommand().GetBytes());
+            Core.Executor.AbortExecution();
+            Core.CNCExecutor.AbortExecution();
+            Core.Serial.SendPacket(new AbortExecutionCommand().GetBytes());
             executionStatusLabel.Text = "Выполнение программы было прерванно";
         }
 
         private void buttonClearFile_Click(object sender, EventArgs e)
         {
             programTextBox.Clear();
-        }
-
-        private void washingPompTaskButton_Click(object sender, EventArgs e)
-        {
-            _taskExecutor.StartWashingPompTask();
-        }
-
-        private void MoveLoadTaskButton_Click(object sender, EventArgs e)
-        {
-            int place = (int)editLoadPlaceNumber.Value;
-            _taskExecutor.StartMoveLoadTask(place);
-        }
-
-        private void HomingLoadShuttleTaskButton_Click(object sender, EventArgs e)
-        {
-            _taskExecutor.StartHomingLoadShuttleTask();
-        }
-
-        private void LoadingTaskButton_Click(object sender, EventArgs e)
-        {
-            _taskExecutor.StartLoadingTask();
         }
     }
 }

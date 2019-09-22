@@ -5,6 +5,8 @@
 #include "protocol.hpp"
 #include "steppers.hpp"
 
+//#define DEBUG
+
 enum HomingState
 {
     HOMING_SUCCESS = 0x00,
@@ -14,7 +16,8 @@ enum HomingState
 
 uint8_t countHomeSteppers = 0;
 
-struct HomingSteppersParams {
+struct HomingSteppersParams
+{
     uint8_t stepper;
     uint8_t state;
     uint8_t direction;
@@ -23,7 +26,6 @@ struct HomingSteppersParams {
 
 HomingController::HomingController()
 {
-    
 }
 
 uint8_t HomingController::getSteppersInHoming()
@@ -33,19 +35,24 @@ uint8_t HomingController::getSteppersInHoming()
     for (int i = 0; i < countHomeSteppers; i++)
     {
         uint8_t stepper = homingSteppers[i].stepper;
-        if(WAIT_SW_PRESSED == homingSteppers[i].state)
+        if (WAIT_SW_PRESSED == homingSteppers[i].state)
         {
             if (0 != Steppers::getMoveState(stepper))
                 steppersInHoming++;
             else
                 homingSteppers[i].state = HOMING_SUCCESS;
         }
-        else if(WAIT_SW_RELEASED == homingSteppers[i].state)
+        else if (WAIT_SW_RELEASED == homingSteppers[i].state)
         {
             steppersInHoming++;
             if (0 == Steppers::getMoveState(stepper))
             {
-                Steppers::get(stepper).goUntil(RESET_ABSPOS, homingSteppers[i].direction, homingSteppers[i].speed);
+                Steppers::get(stepper).setMinSpeed(5);
+                Steppers::get(stepper).goUntil(
+                    RESET_ABSPOS,
+                    homingSteppers[i].direction,
+                    homingSteppers[i].speed);
+
                 homingSteppers[i].state = WAIT_SW_PRESSED;
             }
         }
@@ -64,16 +71,17 @@ void HomingController::addStepperForHoming(uint8_t stepper, uint8_t direction, u
     if (0 == sw_status)
     {
         homingSteppers[countHomeSteppers].state = WAIT_SW_PRESSED;
-
         Steppers::get(stepper).goUntil(RESET_ABSPOS, direction, speed);
     }
     else
     {
+        return;
+
         homingSteppers[countHomeSteppers].state = WAIT_SW_RELEASED;
 
         uint8_t inverseDir = (direction == FWD) ? REV : FWD;
-        Steppers::get(stepper).setMinSpeed(30); //TODO: пофиксить
-        Steppers::get(stepper).releaseSw(RESET_ABSPOS, inverseDir); // настроить MIN SPEED
+        Steppers::get(stepper).setMinSpeed(speed);
+        Steppers::get(stepper).releaseSw(RESET_ABSPOS, inverseDir);
     }
 
     countHomeSteppers++;
@@ -81,7 +89,7 @@ void HomingController::addStepperForHoming(uint8_t stepper, uint8_t direction, u
 
 uint8_t HomingController::updateState()
 {
-    if(0 == getSteppersInHoming())
+    if (0 == getSteppersInHoming())
     {
         countHomeSteppers = 0;
     }
@@ -92,4 +100,3 @@ void HomingController::clearState()
 {
     countHomeSteppers = 0;
 }
-

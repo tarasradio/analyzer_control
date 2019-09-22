@@ -3,38 +3,38 @@
   <Steppers>
     <Stepper>
       <Number>0</Number>
-      <Name>Не задано 1</Name>
+      <Name>Выталкивание картриджа</Name>
       <Reverse>False</Reverse>
-      <FullSpeed>1000</FullSpeed>
-      <NumberSteps>100000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>1</Number>
       <Name>Не задано 2</Name>
       <Reverse>False</Reverse>
       <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <NumberSteps>1000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>2</Number>
-      <Name>Не задано 3</Name>
+      <Name>Трясучка</Name>
       <Reverse>False</Reverse>
-      <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>200</FullSpeed>
+      <NumberSteps>100000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>3</Number>
-      <Name>Не задано 4</Name>
+      <Name>Пресс</Name>
       <Reverse>False</Reverse>
-      <FullSpeed>500</FullSpeed>
-      <NumberSteps>50000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>1000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>4</Number>
       <Name>Нажимание картриджа</Name>
       <Reverse>False</Reverse>
       <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <NumberSteps>2300</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>5</Number>
@@ -61,8 +61,8 @@
       <Number>8</Number>
       <Name>Игла 1 (вращение)</Name>
       <Reverse>False</Reverse>
-      <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>50</FullSpeed>
+      <NumberSteps>1000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>9</Number>
@@ -116,16 +116,16 @@
     <Stepper>
       <Number>16</Number>
       <Name>Игла 2 (подъем)</Name>
-      <Reverse>False</Reverse>
+      <Reverse>True</Reverse>
       <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <NumberSteps>50000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>17</Number>
       <Name>Игла 1 (Подъем)</Name>
-      <Reverse>False</Reverse>
+      <Reverse>True</Reverse>
       <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <NumberSteps>1000</NumberSteps>
     </Stepper>
   </Steppers>
   <Devices>

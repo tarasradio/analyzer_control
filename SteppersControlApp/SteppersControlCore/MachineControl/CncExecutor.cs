@@ -19,8 +19,6 @@ namespace SteppersControlCore.MachineControl
 
         public event CommandExecutedDelegate CommandExecuted;
 
-        private SerialHelper _helper;
-
         private static List<IAbstractCommand> _commandsToSend = new List<IAbstractCommand>();
         private Thread _executionThread;
 
@@ -32,9 +30,9 @@ namespace SteppersControlCore.MachineControl
 
         public bool isExecute = false;
 
-        public CncExecutor(SerialHelper helper)
+        public CncExecutor()
         {
-            _helper = helper;
+
         }
 
         public void ChangeSuccesCommandId(uint commandId, Protocol.CommandStates state)
@@ -82,7 +80,7 @@ namespace SteppersControlCore.MachineControl
 
             return commandState;
         }
-
+        
         public void ExecuteTask(List<IAbstractCommand> commands)
         {
             _commandsToSend = commands;
@@ -92,9 +90,13 @@ namespace SteppersControlCore.MachineControl
             _executionThread = new Thread(commandsExecution);
             _executionThread.Priority = ThreadPriority.Lowest;
             _executionThread.Start();
+            isExecute = true;
+            //Logger.AddMessage("Запущено выполнение задания");
 
-            while (_executionThread.ThreadState == System.Threading.ThreadState.Running);
-            Logger.AddMessage("Запущено выполнение задания");
+            while (isExecute)
+            {
+
+            }
         }
 
         public void StartExecution(List<IAbstractCommand> commands)
@@ -110,7 +112,7 @@ namespace SteppersControlCore.MachineControl
 
             isExecute = true;
 
-            Logger.AddMessage("Запущено выполнение программы.");
+            //Logger.AddMessage("Запущено выполнение программы.");
         }
 
         public void AbortExecution()
@@ -137,11 +139,11 @@ namespace SteppersControlCore.MachineControl
             int commandNumber = 0;
             foreach (IAbstractCommand command in _commandsToSend)
             {
-                Logger.AddMessage("Команда " + commandNumber + " запущена !");
+                //Logger.AddMessage("Команда " + commandNumber + " запущена !");
 
                 executeCommand(command);
 
-                Logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
+                //Logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
                 
                 commandNumber++;
 
@@ -149,9 +151,9 @@ namespace SteppersControlCore.MachineControl
             }
 
             isExecute = false;
-            Logger.AddMessage("Все команды выполнены успешно !");
-            Logger.AddMessage($"Пакетов с ошибками {countBadPackets}!");
-            Logger.AddMessage("Выполнение программы завершено.");
+            //Logger.AddMessage("Все команды выполнены успешно !");
+            //Logger.AddMessage($"Пакетов с ошибками {countBadPackets}!");
+            //Logger.AddMessage("Выполнение программы завершено.");
         }
         
         private void executeCommand(IAbstractCommand command)
@@ -170,7 +172,7 @@ namespace SteppersControlCore.MachineControl
 
         private void executeDeviceCommand(IDeviceCommand command)
         {
-            _helper.SendPacket((command).GetBytes());
+            Core.Serial.SendPacket(command.GetBytes());
 
             stopWatch.Restart();
 
@@ -178,9 +180,9 @@ namespace SteppersControlCore.MachineControl
             {
                 if(stopWatch.ElapsedMilliseconds >= 2000)
                 {
-                    Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
+                    //Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
 
-                    _helper.SendPacket((command).GetBytes());
+                    Core.Serial.SendPacket(command.GetBytes());
 
                     stopWatch.Restart();
                 }

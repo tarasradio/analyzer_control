@@ -6,8 +6,8 @@
 #include "steppers.hpp"
 #include "sensors.hpp"
 
-#define FILTER_VALUE 10
-#define DEBUG
+#define FILTER_VALUE 5
+//#define DEBUG
 
 enum EdgeTypes
 {

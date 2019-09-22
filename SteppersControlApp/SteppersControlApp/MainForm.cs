@@ -20,20 +20,11 @@ namespace SteppersControlApp
 {
     public partial class MainForm : Form
     {
-        Core _core;
-        SerialHelper _helper;
-
-        PackageReceiver _packageReceiver;
-        PackageHandler _packageHandler;
-        CncExecutor _cncExecutor;
-
         ControlPanelForm controlPanel = new ControlPanelForm();
-
-        string ConfigurationFilename = "settings.xml";
-
+        
         private void UpdateState()
         {
-            if (_helper.IsConnected())
+            if (Core.Serial.IsConnected())
             {
                 buttonConnect.Text = "Отключиться";
                 connectionState.Text = "Подключен";
@@ -55,37 +46,23 @@ namespace SteppersControlApp
         private void InitializeAll()
         {
             Logger.OnNewMessageAdded += logView.AddMessage;
-
-            _packageReceiver = new PackageReceiver(Protocol.PacketHeader, Protocol.PacketEnd);
-            _packageHandler = new PackageHandler();
-
-            _packageReceiver.PackageReceived += _packageHandler.ProcessPacket;
-
-            _packageHandler.SteppersStatesReceived += SteppersStatesReceived;
-            _packageHandler.MessageReceived += MessageReceived;
-            _packageHandler.CommandStateResponseReceived += OkResponseReceived;
-            _packageHandler.SensorsValuesReceived += SensorsValuesReceived;
-            _packageHandler.BarCodeReceived += BarCodeReceived;
-
-            _helper = new SerialHelper(_packageReceiver);
-
-            _cncExecutor = new CncExecutor(_helper);
             
-            cncView.SetHelper(_helper);
-            cncView.SetExecutor(_cncExecutor);
-
-            _cncExecutor.CommandExecuted += _cncExecutor_CommandExecuted;
+            Core.PackHandler.SteppersStatesReceived += SteppersStatesReceived;
+            Core.PackHandler.MessageReceived += MessageReceived;
+            Core.PackHandler.CommandStateResponseReceived += OkResponseReceived;
+            Core.PackHandler.SensorsValuesReceived += SensorsValuesReceived;
+            Core.PackHandler.BarCodeReceived += BarCodeReceived;
+            
+            Core.CNCExecutor.CommandExecuted += _cncExecutor_CommandExecuted;
 
             editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
 
             buttonConnect.Enabled = false;
-
-            devicesControlView.SetSerialHelper(_helper);
         }
 
         private void UpdateBarCode(string barCode)
         {
-            _core.UpdateBarCode(barCode);
+            Core.UpdateBarCode(barCode);
             Logger.AddMessage($"Принят код :{barCode}");
         }
 
@@ -128,15 +105,14 @@ namespace SteppersControlApp
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
         {
             controlPanel = new ControlPanelForm();
-            controlPanel.setSerialHelper(_helper);
             controlPanel.Show();
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            if (_helper.IsConnected())
+            if (Core.Serial.IsConnected())
             {
-                _helper.Disconnect();
+                Core.Serial.Disconnect();
 
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();
@@ -151,7 +127,7 @@ namespace SteppersControlApp
                 string portName = portsListBox.SelectedItem.ToString();
                 int baudrate = int.Parse(editBaudrate.SelectedItem.ToString());
 
-                bool isOK = _helper.OpenConnection(portName, baudrate);
+                bool isOK = Core.Serial.OpenConnection(portName, baudrate);
 
                 if (isOK)
                 {
@@ -176,9 +152,9 @@ namespace SteppersControlApp
 
         private void HandleOkResponse(uint commandId, Protocol.CommandStates state)
         {
-            Logger.AddMessage("OK + " + commandId);
+            //Logger.AddMessage("OK + " + commandId);
 
-            _cncExecutor.ChangeSuccesCommandId(commandId, state);
+            Core.CNCExecutor.ChangeSuccesCommandId(commandId, state);
         }
 
         private void UpdateSteppersState(ushort[] states)
@@ -189,7 +165,7 @@ namespace SteppersControlApp
         private void UpdateSensorsValues(ushort[] values)
         {
             sensorsView.UpdateSensorsValues(values);
-            _core.UpdateSensorsValues(values);
+            Core.UpdateSensorsValues(values);
         }
 
         private void ShowReceivedMessage(string message)
@@ -208,7 +184,7 @@ namespace SteppersControlApp
 
             List<string> portsNames = new List<string>();
 
-            bool isOpen = _helper.GetOpenPorts(ref portsNames);
+            bool isOpen = Core.Serial.GetOpenPorts(ref portsNames);
 
             portsListBox.Items.AddRange(portsNames.ToArray());
 
@@ -230,36 +206,15 @@ namespace SteppersControlApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _core = new Core();
+            InitializeAll();
 
-            if (!Core.GetConfig().LoadFromFile(ConfigurationFilename))
-            {
-                MessageBox.Show("Ошибка при открытии файла конфигурации!");
-                Close(); Dispose(); return;
-            }
-            else
-            {
-                InitializeAll();
-                
-                steppersGridView.UpdateInformation();
-                devicesControlView.UpdateInformation();
-                sensorsView.UpdateInformation();
-                
-                _core.InitSensorsValues();
-            }
+            steppersGridView.UpdateInformation();
+            devicesControlView.UpdateInformation();
+            sensorsView.UpdateInformation();
 
-            Thread thread = new Thread(LogStuffThread);
-            //thread.IsBackground = true;
-            //thread.Start();
-        }
+            demoExecutorView.StartUpdate();
 
-        private void LogStuffThread()
-        {
-            while (true)
-            {
-                Logger.AddMessage("Hello");
-                Thread.Sleep(2);
-            }
+            Core.InitSensorsValues();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -274,13 +229,35 @@ namespace SteppersControlApp
 
             if(dialogResult == DialogResult.Yes)
             {
-                Core.GetConfig().SaveToFile(ConfigurationFilename);
+                Core.GetConfig().SaveToFile("config.xml");
+            }
+
+            demoExecutorView.StopUpdate();
+
+            if (Core.Serial.IsConnected())
+            {
+                Core.Serial.Disconnect();
+
+                steppersGridView.StopUpdate();
+                sensorsView.StopUpdate();
             }
         }
 
         private void buttonSaveConfig_Click(object sender, EventArgs e)
         {
-            Core.GetConfig().SaveToFile(ConfigurationFilename);
+            Core.GetConfig().SaveToFile("config.xml");
+        }
+
+        private void abortExecutionButton_Click(object sender, EventArgs e)
+        {
+            Core.Executor.AbortExecution();
+            Core.CNCExecutor.AbortExecution();
+            Core.Serial.SendPacket(new AbortExecutionCommand().GetBytes());
+        }
+
+        private void buttonStartDemo_Click(object sender, EventArgs e)
+        {
+            Core.Demo.StartDemo();
         }
     }
 }

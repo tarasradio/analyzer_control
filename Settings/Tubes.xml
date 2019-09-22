@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTubeInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TubeInfo>
+    <Position>0</Position>
+    <BarCode>RedMary4590</BarCode>
+    <Stages>
+      <Stage>
+        <CartridgeNumber>0</CartridgeNumber>
+        <Cell>FirstCell</Cell>
+        <TimeToPerform>5</TimeToPerform>
+      </Stage>
+    </Stages>
+    <CurrentStage>0</CurrentStage>
+    <TimeToStageComplete>5</TimeToStageComplete>
+    <IsFind>false</IsFind>
+  </TubeInfo>
+</ArrayOfTubeInfo>

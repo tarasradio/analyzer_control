@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LoadControllerPropetries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LoadStepper>10</LoadStepper>
+  <ShuttleStepper>15</ShuttleStepper>
+  <PushStepper>1</PushStepper>
+  <LoadStepperHomeSpeed>30</LoadStepperHomeSpeed>
+  <LoadStepperSpeed>20</LoadStepperSpeed>
+  <ShuttleStepperHomeSpeed>500</ShuttleStepperHomeSpeed>
+  <ShuttleStepperSpeed>200</ShuttleStepperSpeed>
+  <PushStepperHomeSpeed>500</PushStepperHomeSpeed>
+  <PushStepperSpeed>200</PushStepperSpeed>
+  <CellsSteps>
+    <int>955</int>
+    <int>4000</int>
+    <int>6800</int>
+    <int>10000</int>
+    <int>13210</int>
+    <int>16150</int>
+    <int>19380</int>
+    <int>22450</int>
+    <int>25400</int>
+    <int>28670</int>
+  </CellsSteps>
+  <StepsShuttleToStart>20000</StepsShuttleToStart>
+  <StepsShuttleToCassette>2840000</StepsShuttleToCassette>
+</LoadControllerPropetries>

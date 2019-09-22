@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SteppersTool>
+  <Steppers>
+    <Stepper>
+      <Number>0</Number>
+      <Name>Не задано 1</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>1000</FullSpeed>
+      <NumberSteps>100000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>1</Number>
+      <Name>Не задано 2</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>2</Number>
+      <Name>Не задано 3</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>3</Number>
+      <Name>Не задано 4</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>500</FullSpeed>
+      <NumberSteps>50000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>4</Number>
+      <Name>Нажимание картриджа</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>5</Number>
+      <Name>Вращение пробирки</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>6</Number>
+      <Name>Лента конвейера</Name>
+      <Reverse>True</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>3000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>7</Number>
+      <Name>Ротор</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>8</Number>
+      <Name>Игла 1 (вращение)</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>50</FullSpeed>
+      <NumberSteps>1000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>9</Number>
+      <Name>Игла 2 (вращение)</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>10</Number>
+      <Name>Движение загрузки (поворот)</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>11</Number>
+      <Name>Шприц (большой плунжер)</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>12</Number>
+      <Name>Шприц (малый плунжер)</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>13</Number>
+      <Name>Wash буфер</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>14</Number>
+      <Name>Выгрузка</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>15</Number>
+      <Name>Загрузка</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>16</Number>
+      <Name>Игла 2 (подъем)</Name>
+      <Reverse>False</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>50000</NumberSteps>
+    </Stepper>
+    <Stepper>
+      <Number>17</Number>
+      <Name>Игла 1 (Подъем)</Name>
+      <Reverse>True</Reverse>
+      <FullSpeed>100</FullSpeed>
+      <NumberSteps>50000</NumberSteps>
+    </Stepper>
+  </Steppers>
+  <Devices>
+    <Device>
+      <Number>0</Number>
+      <Name>Насос / клапан 0</Name>
+    </Device>
+    <Device>
+      <Number>1</Number>
+      <Name>Насос / клапан 1</Name>
+    </Device>
+    <Device>
+      <Number>2</Number>
+      <Name>Насос / клапан 2</Name>
+    </Device>
+    <Device>
+      <Number>3</Number>
+      <Name>Насос / клапан 3</Name>
+    </Device>
+    <Device>
+      <Number>4</Number>
+      <Name>Насос / клапан 4</Name>
+    </Device>
+    <Device>
+      <Number>5</Number>
+      <Name>Насос / клапан 5</Name>
+    </Device>
+    <Device>
+      <Number>6</Number>
+      <Name>Насос / клапан 6</Name>
+    </Device>
+    <Device>
+      <Number>7</Number>
+      <Name>Насос / клапан 7</Name>
+    </Device>
+    <Device>
+      <Number>8</Number>
+      <Name>Насос / клапан 8</Name>
+    </Device>
+    <Device>
+      <Number>9</Number>
+      <Name>Насос / клапан 9</Name>
+    </Device>
+    <Device>
+      <Number>10</Number>
+      <Name>Насос / клапан 10</Name>
+    </Device>
+    <Device>
+      <Number>11</Number>
+      <Name>Насос / клапан 11</Name>
+    </Device>
+  </Devices>
+  <Sensors>
+    <Sensor>
+      <Number>0</Number>
+      <Name>Датчик 0</Name>
+    </Sensor>
+    <Sensor>
+      <Number>1</Number>
+      <Name>Датчик 1</Name>
+    </Sensor>
+    <Sensor>
+      <Number>2</Number>
+      <Name>Датчик 2</Name>
+    </Sensor>
+    <Sensor>
+      <Number>3</Number>
+      <Name>Датчик 3</Name>
+    </Sensor>
+    <Sensor>
+      <Number>4</Number>
+      <Name>Датчик 4</Name>
+    </Sensor>
+    <Sensor>
+      <Number>5</Number>
+      <Name>Датчик 5</Name>
+    </Sensor>
+    <Sensor>
+      <Number>6</Number>
+      <Name>Датчик 6</Name>
+    </Sensor>
+    <Sensor>
+      <Number>7</Number>
+      <Name>Датчик 7</Name>
+    </Sensor>
+    <Sensor>
+      <Number>8</Number>
+      <Name>Датчик 8</Name>
+    </Sensor>
+    <Sensor>
+      <Number>9</Number>
+      <Name>Датчик 9</Name>
+    </Sensor>
+    <Sensor>
+      <Number>10</Number>
+      <Name>Датчик 10</Name>
+    </Sensor>
+    <Sensor>
+      <Number>11</Number>
+      <Name>Датчик 11</Name>
+    </Sensor>
+    <Sensor>
+      <Number>12</Number>
+      <Name>Датчик 12</Name>
+    </Sensor>
+    <Sensor>
+      <Number>13</Number>
+      <Name>Датчик 13</Name>
+    </Sensor>
+    <Sensor>
+      <Number>14</Number>
+      <Name>Датчик 14</Name>
+    </Sensor>
+    <Sensor>
+      <Number>15</Number>
+      <Name>Датчик прозрачности</Name>
+    </Sensor>
+  </Sensors>
+</SteppersTool>

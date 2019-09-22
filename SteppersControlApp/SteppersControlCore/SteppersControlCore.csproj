@@ -69,6 +69,8 @@
     <Compile Include="CommunicationProtocol\StepperCommands\SetSpeedCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\StopCommand.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Controllers\DemoExecutor.cs" />
+    <Compile Include="Elements\Elements.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="CommunicationProtocol\Protocol.cs" />
     <Compile Include="CommunicationProtocol\Responses\SteppersStatesResponse.cs" />
@@ -82,10 +84,12 @@
     <Compile Include="SerialCommunication\SerialHelper.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemControl\CassetteDeck.cs" />
-    <Compile Include="SystemControl\Cell.cs" />
-    <Compile Include="SystemControl\CartridgesTransporter.cs" />
-    <Compile Include="SystemControl\TubesTransporter.cs" />
+    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\ArmController.cs" />
+    <Compile Include="Controllers\LoadController.cs" />
+    <Compile Include="Controllers\PompController.cs" />
+    <Compile Include="Controllers\RotorController.cs" />
+    <Compile Include="Controllers\TransporterController.cs" />
     <Compile Include="Utils\RegexHelper.cs" />
   </ItemGroup>
   <ItemGroup />

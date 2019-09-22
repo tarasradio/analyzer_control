@@ -8,11 +8,11 @@ namespace SteppersControlCore.CommunicationProtocol
 {
     public class AbstractCommand : IAbstractCommand
     {
-        protected static uint _commandId = 0;
+        protected uint _commandId = 0;
 
         public AbstractCommand()
         {
-            _commandId++;// = Protocol.GetPacketId();
+            _commandId = Protocol.GetPacketId();
         }
 
         public uint GetId()

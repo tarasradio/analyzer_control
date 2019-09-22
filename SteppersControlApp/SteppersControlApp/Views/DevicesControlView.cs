@@ -18,19 +18,12 @@ namespace SteppersControlApp.Views
     {
         string[] _columnHeaders = { "#", "Название"};
         
-        SerialHelper _helper;
-
         public DevicesControlView()
         {
             InitializeComponent();
             drawGrid();
         }
-
-        public void SetSerialHelper(SerialHelper helper)
-        {
-            this._helper = helper;
-        }
-
+        
         private void drawGrid()
         {
             DataGridViewButtonColumn column = new DataGridViewButtonColumn();
@@ -116,7 +109,7 @@ namespace SteppersControlApp.Views
                     state = SetDeviceStateCommand.DeviseState.DEVICE_OFF;
                 }
 
-                _helper.SendPacket(new SetDeviceStateCommand(device, state).GetBytes());
+                Core.Serial.SendPacket(new SetDeviceStateCommand(device, state).GetBytes());
             }
         }
     }

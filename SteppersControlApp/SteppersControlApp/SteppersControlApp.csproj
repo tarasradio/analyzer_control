@@ -55,6 +55,54 @@
     <Compile Include="AuthForm.Designer.cs">
       <DependentUpon>AuthForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AdditionalMovesView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\AdditionalMovesView.Designer.cs">
+      <DependentUpon>AdditionalMovesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\ArmControllerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\ArmControllerView.Designer.cs">
+      <DependentUpon>ArmControllerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\DemoExecutorView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\DemoExecutorView.Designer.cs">
+      <DependentUpon>DemoExecutorView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\LoadControllerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\LoadControllerView.Designer.cs">
+      <DependentUpon>LoadControllerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\PompControllerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\PompControllerView.Designer.cs">
+      <DependentUpon>PompControllerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\RotorControllerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\RotorControllerView.Designer.cs">
+      <DependentUpon>RotorControllerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\TransporterControllerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\TransporterControllerView.Designer.cs">
+      <DependentUpon>TransporterControllerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\UnloadControllerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controllers\UnloadControllerView.Designer.cs">
+      <DependentUpon>UnloadControllerView.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControlPanelForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +163,30 @@
     <Compile Include="Views\ViewStyler.cs" />
     <EmbeddedResource Include="AuthForm.resx">
       <DependentUpon>AuthForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\AdditionalMovesView.resx">
+      <DependentUpon>AdditionalMovesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\ArmControllerView.resx">
+      <DependentUpon>ArmControllerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\DemoExecutorView.resx">
+      <DependentUpon>DemoExecutorView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\LoadControllerView.resx">
+      <DependentUpon>LoadControllerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\PompControllerView.resx">
+      <DependentUpon>PompControllerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\RotorControllerView.resx">
+      <DependentUpon>RotorControllerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\TransporterControllerView.resx">
+      <DependentUpon>TransporterControllerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controllers\UnloadControllerView.resx">
+      <DependentUpon>UnloadControllerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelForm.resx">
       <DependentUpon>ControlPanelForm.cs</DependentUpon>

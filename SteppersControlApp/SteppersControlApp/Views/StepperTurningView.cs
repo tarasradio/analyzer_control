@@ -17,7 +17,6 @@ namespace SteppersControlApp.Views
 {
     public partial class StepperTurningView : UserControl
     {
-        SerialHelper _helper;
         private int _stepper = 0;
         bool isLoading = false;
 
@@ -36,11 +35,6 @@ namespace SteppersControlApp.Views
         {
             SaveInformation();
             SetStepper(stepper);
-        }
-
-        public void SetSerialHelper(SerialHelper helper)
-        {
-            this._helper = helper;
         }
 
         public void SaveInformation()
@@ -100,7 +94,7 @@ namespace SteppersControlApp.Views
         private void buttonStop_Click(object sender, EventArgs e)
         {
             StopCommand.StopType type = StopCommand.StopType.SOFT_STOP;
-            _helper.SendPacket(new StopCommand(_stepper, type).GetBytes());
+            Core.Serial.SendPacket(new StopCommand(_stepper, type).GetBytes());
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -122,24 +116,24 @@ namespace SteppersControlApp.Views
         private void move(Protocol.Direction direction, uint countSteps)
         {
             uint speed = (uint)editFullSpeed.Value;
-            _helper.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            _helper.SendPacket(new SetSpeedCommand(_stepper, speed).GetBytes());
-            _helper.SendPacket(new MoveCommand(_stepper, direction, countSteps).GetBytes());
+            Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            Core.Serial.SendPacket(new SetSpeedCommand(_stepper, speed).GetBytes());
+            Core.Serial.SendPacket(new MoveCommand(_stepper, direction, countSteps).GetBytes());
         }
 
         private void run(Protocol.Direction direction)
         {
             uint speed = (uint)editFullSpeed.Value;
-            _helper.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            _helper.SendPacket(new RunCommand(_stepper, direction, speed).GetBytes());
+            Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            Core.Serial.SendPacket(new RunCommand(_stepper, direction, speed).GetBytes());
         }
 
         private void goHome(Protocol.Direction direction)
         {
             uint speed = (uint)editFullSpeed.Value;
 
-            _helper.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            _helper.SendPacket(new HomeCommand(_stepper, direction, speed).GetBytes());
+            Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            Core.Serial.SendPacket(new HomeCommand(_stepper, direction, speed).GetBytes());
         }
 
         private void editNumberSteps_ValueChanged(object sender, EventArgs e)
