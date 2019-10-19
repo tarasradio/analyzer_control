@@ -8,12 +8,6 @@ static uint8_t bufferTail = 0;
 
 uint8_t packetBuffer[PACKET_SIZE];
 
-enum ReceiveState
-{
-    RECEIVING_HEADER,
-    RECEIVING_BODY
-};
-
 PacketManager::PacketManager(CommandExecutor2 & commandExecutor)
 {
     _commandExecutor = commandExecutor;
@@ -89,54 +83,6 @@ void PacketManager::findByteStuffingPacket()
             tryPacketBuild(position);
         }
         position++;
-    }
-}
-
-void PacketManager::FindPacket()
-{
-    uint8_t i = 0;
-
-    uint8_t state = RECEIVING_HEADER;
-    uint8_t currentHeaderByte = 0;
-    uint8_t currentEndByte = 0;
-    uint8_t currentPacketByte = 0;
-
-    while (i != bufferTail)
-    {
-        if(RECEIVING_HEADER == state)
-        {
-            if (buffer[i] == packetHeader[currentHeaderByte])
-                currentHeaderByte++;
-            else
-                currentHeaderByte = 0;
-
-            if (currentHeaderByte == packetHeaderLength)
-            {
-                state = RECEIVING_BODY;
-                currentEndByte = 0;
-                currentPacketByte = 0;
-            }
-        }
-        else if(RECEIVING_BODY == state)
-        {
-            packetBuffer[currentPacketByte++] = buffer[i];
-
-            if (buffer[i] == packetEnd[currentEndByte])
-                currentEndByte++;
-            else
-                currentEndByte = 0;
-
-            if (currentEndByte == packetEndLength)
-            {
-                currentHeaderByte = 0;
-                state = RECEIVING_HEADER;
-
-                uint8_t packetLength = currentPacketByte - packetEndLength;
-
-                _commandExecutor.ExecuteCommand(packetBuffer, packetLength);
-            }
-        }
-        i++;
     }
 }
 

@@ -34,6 +34,7 @@ private:
     void executeCncSetDeviceStateCommand(uint8_t *packet, uint32_t packetId, uint8_t state);
 
     bool checkRepeatCommand(uint32_t commandId, uint8_t commandType);
+    
 public:
     CommandExecutor2();
     void UpdateState();

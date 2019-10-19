@@ -1,6 +1,10 @@
 #include "command_executor2.hpp"
-
 #include "packet_manager.hpp"
+
+#include "protocol.hpp"
+#include "steppers.hpp"
+#include "sensors.hpp"
+#include "devices.hpp"
 
 #include "homing_controller.hpp"
 #include "moving_controller.hpp"
@@ -8,44 +12,55 @@
 
 #include "bar_scanner.hpp"
 
-#include "protocol.hpp"
-#include "steppers.hpp"
-#include "sensors.hpp"
-#include "devices.hpp"
+#include "commands/command.hpp"
+#include "commands/stepper_move_command.hpp"
+#include "commands/stepper_home_command.hpp"
+#include "commands/stepper_set_speed_command.hpp"
+#include "commands/stepper_run_command.hpp"
+
+HomingController _homingController;
+    RunningController _runningController;
+
+    BarScanner _barScanner;
+
+    enum StopType
+    {
+        STOP_SOFT = 0x00,
+        STOP_HARD,
+        HiZ_SOFT,
+        HiZ_HARD
+    };
+
+    enum CommandExecutionType
+    {
+        SIMPLE_COMMAND = 0x00,
+        WAITING_COMMAND
+    };
+
+    uint32_t lastCommandId = 0;
+    uint8_t lastCommandState = COMMAND_DONE;
+    uint8_t waitForCommandDone = 0;
 
 //#define DEBUG
 //#define SEND_STATE_PERMANENTLY
 
-enum StopType
+struct CommandItem 
 {
-    STOP_SOFT = 0x00,
-    STOP_HARD,
-    HiZ_SOFT,
-    HiZ_HARD
+    uint8_t commandCode;
+    Command command;
 };
 
-enum CommandExecutionType
+CommandItem commandsList[] = 
 {
-    SIMPLE_COMMAND = 0x00,
-    WAITING_COMMAND
+    { StepperCommands::CMD_MOVE, StepperMoveCommand() },
+    { StepperCommands::CMD_RUN, StepperRunCommand() },
+    { StepperCommands::CMD_HOME, StepperHomeCommand() },
+    { StepperCommands::CMD_SET_SPEED, StepperSetSpeedCommand() }
 };
-
-uint32_t lastCommandId = 0;
-uint8_t lastCommandState = COMMAND_DONE;
-uint8_t waitForCommandDone = 0;
-
-HomingController _homingController;
-MovingController _movingController;
-RunningController _runningController;
-
-BarScanner _barScanner;
 
 CommandExecutor2::CommandExecutor2()
 {
-    // _homingController = HomingController();
-    // _movingController = MovingController();
-    // _runningController = RunningController();
-    // _barScanner = BarScanner();
+    
 }
 
 void CommandExecutor2::UpdateState()
@@ -57,7 +72,7 @@ void CommandExecutor2::UpdateState()
     if (0 != waitForCommandDone) // Есть команды, ожидающие завершения
     {
         if (
-            (0 == _movingController.updateState()) &&
+            (0 == MovingController::updateState()) &&
             (0 == _homingController.updateState()) &&
             (0 == _runningController.updateState())  ) // Моторы завершили движение
         {
@@ -74,9 +89,27 @@ void CommandExecutor2::UpdateState()
 void CommandExecutor2::ExecuteCommand(uint8_t *packet, uint8_t packetLength)
 {
     uint32_t packetId = readLong(packet + 0);
-    byte commandType = packet[4];
+    uint8_t commandCode = packet[4];
 
-    switch (commandType)
+    int commandsCount = sizeof(commandsList) / sizeof(CommandItem);
+
+    int counter = 0;
+
+    for(int i = 0; i < commandsCount; i++)
+    {
+        if(commandsList[i].commandCode == commandCode)
+        {
+            commandsList[i].command.Execute(packet + 5, packetId);
+            continue;
+        }
+        counter++;
+    }
+    if(counter == 0)
+    {
+        PacketManager::printMessage("Unknown command!");
+    }
+
+    switch (commandCode)
     {
         case CMD_HOME:
         {
@@ -222,7 +255,7 @@ void CommandExecutor2::executeAbortCommand(uint8_t *packet, uint32_t packetId)
     waitForCommandDone = 0;
 
     _homingController.clearState();
-    _movingController.clearState();
+    MovingController::clearState();
     _runningController.clearState();
 
     for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
@@ -257,20 +290,18 @@ void CommandExecutor2::executeHomeCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
     
-    uint8_t stepper = packet[0];
-    uint8_t direction = packet[1];
-    uint32_t fullSpeed = readLong(packet + 2);
+    int8_t stepper = packet[0];
+    int32_t fullSpeed = readLong(packet + 1);
 
     if(!checkStepper(stepper)) return;
 
     _homingController.clearState();
-    _homingController.addStepperForHoming(stepper, direction, fullSpeed);
+    _homingController.addStepperForHoming(stepper, fullSpeed);
 
 #ifdef DEBUG
     {
         String message = "[Home] ";
         message += "stepper = " + String(stepper);
-        message += ", dir = " + String(direction);
         message += ", spd = " + String(fullSpeed);
 
         PacketManager::printMessage(message);
@@ -282,19 +313,17 @@ void CommandExecutor2::executeRunCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
-    uint8_t stepper = packet[0];
-    uint8_t direction = packet[1];
-    uint32_t fullSpeed = readLong(packet + 2);
+    int8_t stepper = packet[0];
+    int32_t fullSpeed = readLong(packet + 1);
 
     if(!checkStepper(stepper)) return;
 
-    Steppers::get(stepper).run(direction, fullSpeed);
+    Steppers::get(stepper).run(fullSpeed > 0 ? 1 : 0, fullSpeed);
 
 #ifdef DEBUG
     {
         String message = "[Run] ";
         message += "stepper = " + String(stepper);
-        message += ", dir = " + String(direction);
         message += ", speed = " + String(fullSpeed);
 
         PacketManager::printMessage(message);
@@ -306,19 +335,17 @@ void CommandExecutor2::executeMoveCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
-    uint8_t stepper = packet[0];
-    uint8_t direction = packet[1];
-    uint32_t steps = readLong(packet + 2);
+    int8_t stepper = packet[0];
+    int32_t steps = readLong(packet + 1);
 
     if(!checkStepper(stepper)) return;
 
-    _movingController.addStepperForMove(stepper, direction, steps);
+    MovingController::addStepperForMove(stepper, steps);
 
 #ifdef DEBUG
     {
         String message = "[Move] ";
         message += "stepper = " + String(stepper);
-        message += ", dir = " + String(direction);
         message += ", steps = " + String(steps);
 
         PacketManager::printMessage(message);
@@ -408,9 +435,9 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
-    uint8_t countOfSteppers = packet[0];
+    int8_t countOfSteppers = packet[0];
 
-    _movingController.clearState();
+    MovingController::clearState();
 
 #ifdef DEBUG
     {
@@ -422,19 +449,17 @@ void CommandExecutor2::executeCncMoveCommand(uint8_t *packet, uint32_t packetId)
 
     for (int i = 0; i < countOfSteppers; i++)
     {
-        uint8_t stepper = packet[i * 6 + 1];
-        uint8_t direction = packet[i * 6 + 2];
-        uint32_t steps = readLong(packet + i * 6 + 3);
+        int8_t stepper = packet[i * 5 + 1];
+        int32_t steps = readLong(packet + i * 5 + 2);
 
         if (checkStepper(stepper))
         {
-            _movingController.addStepperForMove(stepper, direction, steps);
+            MovingController::addStepperForMove(stepper, steps);
         }
 
 #ifdef DEBUG
         {
             String message = "[stepper = " + String(stepper);
-            message += ", dir = " + String(direction);
             message += ", steps = " + String(steps) + "] ";
 
             PacketManager::printMessage(message);
@@ -461,19 +486,17 @@ void CommandExecutor2::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
 
     for (int i = 0; i < countOfSteppers; i++)
     {
-        uint8_t stepper = packet[i * 6 + 1];
-        uint8_t direction = packet[i * 6 + 2];
-        uint32_t fullSpeed = readLong(packet + i * 6 + 3);
+        int8_t stepper = packet[i * 5 + 1];
+        int32_t fullSpeed = readLong(packet + i * 5 + 2);
 
         if (checkStepper(stepper))
         {
-            _homingController.addStepperForHoming(stepper, direction, fullSpeed);
+            _homingController.addStepperForHoming(stepper, fullSpeed);
         }
 
 #ifdef DEBUG
         {
             String message = "[stepper = " + String(stepper);
-            message += ", dir = " + String(direction);
             message += ", speed = " + String(fullSpeed) + "] ";
 
             PacketManager::printMessage(message);
@@ -500,19 +523,17 @@ void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint32_t packetId)
 
     for (int i = 0; i < countOfSteppers; i++)
     {
-        uint8_t stepper = packet[i * 6 + 1];
-        uint8_t direction = packet[i * 6 + 2];
-        uint32_t fullSpeed = readLong(packet + i * 6 + 3);
+        int8_t stepper = packet[i * 5 + 1];
+        int32_t fullSpeed = readLong(packet + i * 5 + 2);
 
         if (checkStepper(stepper))
         {
-            _runningController.addStepperForRun(stepper, direction, fullSpeed);
+            _runningController.addStepperForRun(stepper, fullSpeed);
         }
 
 #ifdef DEBUG
         {
             String message = "[stepper = " + String(stepper);
-            message += ", dir = " + String(direction);
             message += ", speed = " + String(fullSpeed) + "] ";
 
             PacketManager::printMessage(message);
@@ -520,9 +541,9 @@ void CommandExecutor2::executeCncRunCommand(uint8_t *packet, uint32_t packetId)
 #endif
     }
 
-    uint8_t sensorNumber = packet[countOfSteppers * 6 + 1];
-    uint16_t sensorValue = readInt(packet + countOfSteppers * 6 + 2);
-    uint8_t valueEdgeType = packet[countOfSteppers * 6 + 4];
+    uint8_t sensorNumber = packet[countOfSteppers * 5 + 1];
+    uint16_t sensorValue = readInt(packet + countOfSteppers * 5 + 2);
+    uint8_t valueEdgeType = packet[countOfSteppers * 5 + 4];
 
     _runningController.setRunParams(sensorNumber, sensorValue, valueEdgeType);
 }

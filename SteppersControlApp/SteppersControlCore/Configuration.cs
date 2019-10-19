@@ -6,18 +6,27 @@ using System.Threading.Tasks;
 
 using System.Xml;
 
+using System.Globalization;
+using System.Xml.Serialization;
+using System.IO;
+
 namespace SteppersControlCore
 {
     public class Device
     {
+        [XmlAttribute]
         public int Number { get; set; }
+        [XmlAttribute]
         public string Name { get; set; }
     }
 
     public class StepperParams
     {
+        [XmlAttribute]
         public bool Reverse { get; set; } = false;
+        [XmlAttribute]
         public uint NumberSteps { get; set; } = 100000;
+        [XmlAttribute]
         public uint FullSpeed { get; set; } = 1000;
     }
 
@@ -31,6 +40,8 @@ namespace SteppersControlCore
         public Dictionary<int, Device> Devices { get; set; }
         public Dictionary<int, Device> Sensors { get; set; }
 
+        public CultureInfo Culture { get; set; }
+
         public Configuration()
         {
             Steppers = new Dictionary<int, Device>();
@@ -38,6 +49,8 @@ namespace SteppersControlCore
 
             Devices = new Dictionary<int, Device>();
             Sensors = new Dictionary<int, Device>();
+
+            Culture = new CultureInfo("en-US");
         }
 
         public bool LoadFromFile(string filename)
@@ -48,11 +61,21 @@ namespace SteppersControlCore
             Devices.Clear();
             Sensors.Clear();
 
+            Culture = new CultureInfo("en-US");
+
             XmlDocument document = new XmlDocument();
 
             try
             {
                 document.Load(filename);
+
+                XmlNode LanguageNode =
+                    document.SelectSingleNode($"/{ROOTNAME}/Language");
+
+                if(LanguageNode != null)
+                {
+                    Culture = new CultureInfo(LanguageNode.InnerText);
+                }
 
                 XmlNodeList SteppersNode =
                     document.SelectNodes($"/{ROOTNAME}/Steppers/Stepper");
@@ -126,6 +149,10 @@ namespace SteppersControlCore
             XmlElement root = document.CreateElement(ROOTNAME);
             document.AppendChild(root);
             document.InsertBefore(xmlDeclaration, root);
+
+            XmlElement languageNode = document.CreateElement("Language");
+            languageNode.InnerText = Culture.Name;
+            root.AppendChild(languageNode);
 
             XmlElement steppersNode = document.CreateElement("Steppers");
 

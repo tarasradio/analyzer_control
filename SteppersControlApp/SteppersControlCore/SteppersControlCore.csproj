@@ -53,6 +53,7 @@
     <Compile Include="CommunicationProtocol\CncCommands\OnDeviceCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\RunCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\SetSpeedCncCommand.cs" />
+    <Compile Include="CommunicationProtocol\CncCommands\SteppersCncCommand.cs" />
     <Compile Include="CommunicationProtocol\IAbstractCommand.cs" />
     <Compile Include="CommunicationProtocol\IDeviceCommand.cs" />
     <Compile Include="CommunicationProtocol\IHostCommand.cs" />
@@ -62,7 +63,6 @@
     <Compile Include="CommunicationProtocol\Responses\CommandStateResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\SensorsValuesResponse.cs" />
     <Compile Include="CommunicationProtocol\SendPacket2.cs" />
-    <Compile Include="CommunicationProtocol\SendPacket.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\HomeCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\MoveCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\RunCommand.cs" />
@@ -91,6 +91,7 @@
     <Compile Include="Controllers\RotorController.cs" />
     <Compile Include="Controllers\TransporterController.cs" />
     <Compile Include="Utils\RegexHelper.cs" />
+    <Compile Include="Utils\XMLSerializeHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,21 +15,17 @@ namespace SteppersControlCore.MachineControl
 
     public class CncExecutor
     {
-        private static object _syncRoot = new object();
-
         public event CommandExecutedDelegate CommandExecuted;
+
+        private bool isExecute = false;
+        private static object _syncRoot = new object();
 
         private static List<IAbstractCommand> _commandsToSend = new List<IAbstractCommand>();
         private Thread _executionThread;
 
         private static uint _lastSuccesCommandId;
         private static Protocol.CommandStates _lastCommandState;
-        private static Mutex _mutex = new Mutex();
-
-        private static int countBadPackets = 0;
-
-        public bool isExecute = false;
-
+        
         public CncExecutor()
         {
 

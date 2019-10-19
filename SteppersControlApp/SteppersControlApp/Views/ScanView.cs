@@ -77,7 +77,7 @@ namespace SteppersControlApp.Views
         {
             tubesList.RowCount = 54;
 
-            for (int i = 0; i < Core._configuration.Sensors.Count; i++)
+            for (int i = 0; i < Core.Settings.Sensors.Count; i++)
             {
                 tubesList[0, i].Value = i + 1;
                 tubesList[1, i].Value = $"Пробирка № {i + 1}";

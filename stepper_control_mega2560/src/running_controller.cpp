@@ -9,6 +9,8 @@
 #define FILTER_VALUE 5
 //#define DEBUG
 
+#define EMULATOR
+
 enum EdgeTypes
 {
     RisingEdge,
@@ -29,15 +31,15 @@ RunningController::RunningController()
     
 }
 
-void RunningController::addStepperForRun(uint8_t stepper, uint8_t direction, uint32_t speed)
+void RunningController::addStepperForRun(int8_t stepper, int32_t speed)
 {
+    int8_t dir = speed > 0 ? 1 : 0;
     steppersForRun[countRunSteppers++] = stepper;
     Steppers::get(stepper).setMaxSpeed(speed);
-    Steppers::get(stepper).run(direction, speed);
-
+    Steppers::get(stepper).run(dir, speed);
 }
 
-void RunningController::setRunParams(uint8_t sensor, uint16_t sensorValue, uint8_t edgeType)
+void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_t edgeType)
 {
     waitSensorNumber = sensor;
     waitSensorValue = sensorValue;
@@ -76,6 +78,9 @@ void RunningController::setRunParams(uint8_t sensor, uint16_t sensorValue, uint8
 
 uint8_t RunningController::updateState()
 {
+#ifdef EMULATOR
+    return 0; // All steppers have been done run
+#endif
     if(0 != countRunSteppers)
     {
         uint16_t value = Sensors::getSensorValue(waitSensorNumber);

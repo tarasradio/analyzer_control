@@ -15,7 +15,6 @@ TaskManager::TaskManager()
 void TaskManager::TaskLoop()
 {
     _packetManager.ReadPacket();
-    //_packetManager.FindPacket();
     _packetManager.findByteStuffingPacket();
     _commandExecutor.UpdateState();
 }

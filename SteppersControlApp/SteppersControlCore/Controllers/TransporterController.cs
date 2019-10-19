@@ -12,6 +12,7 @@ using SteppersControlCore.CommunicationProtocol.StepperCommands;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.IO;
+using SteppersControlCore.Utils;
 
 namespace SteppersControlCore.Controllers
 {
@@ -43,7 +44,7 @@ namespace SteppersControlCore.Controllers
 
     public class TransporterController : Controller
     {
-        string filename = "TransporterControllerProps.xml";
+        string filename = "TransporterControllerProps";
         public TransporterControllerPropetries Props { get; set; }
 
         public TransporterController() : base()
@@ -53,27 +54,13 @@ namespace SteppersControlCore.Controllers
 
         public void WriteXml()
         {
-            XmlSerializer ser = new XmlSerializer(typeof(TransporterControllerPropetries));
-
-            TextWriter writer = new StreamWriter(filename);
-            ser.Serialize(writer, Props);
-            writer.Close();
+            XMLSerializeHelper<TransporterControllerPropetries>.WriteXml(Props, filename);
         }
 
         //Чтение насроек из файла
         public void ReadXml()
         {
-            if (File.Exists(filename))
-            {
-                XmlSerializer ser = new XmlSerializer(typeof(TransporterControllerPropetries));
-                TextReader reader = new StreamReader(filename);
-                Props = ser.Deserialize(reader) as TransporterControllerPropetries;
-                reader.Close();
-            }
-            else
-            {
-                //можно написать вывод сообщения если файла не существует
-            }
+            Props = XMLSerializeHelper<TransporterControllerPropetries>.ReadXML(filename);
         }
 
         public List<IAbstractCommand> PrepareBeforeScanning()

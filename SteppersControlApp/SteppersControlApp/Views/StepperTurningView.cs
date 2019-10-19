@@ -84,7 +84,7 @@ namespace SteppersControlApp.Views
 
         private void buttonRev_Click(object sender, EventArgs e)
         {
-            uint countSteps = (uint)editNumberSteps.Value;
+            int countSteps = (int)editNumberSteps.Value;
             if (setNumberSteps.Checked)
                 move(Protocol.Direction.REV, countSteps);
             else
@@ -106,34 +106,37 @@ namespace SteppersControlApp.Views
 
         private void buttonFwd_Click(object sender, EventArgs e)
         {
-            uint countSteps = (uint)editNumberSteps.Value;
+            int countSteps = (int)editNumberSteps.Value;
             if (setNumberSteps.Checked)
                 move(Protocol.Direction.FWD, countSteps);
             else
                 run(Protocol.Direction.FWD);
         }
 
-        private void move(Protocol.Direction direction, uint countSteps)
+        private void move(Protocol.Direction direction, int countSteps)
         {
-            uint speed = (uint)editFullSpeed.Value;
+            int speed = (int)editFullSpeed.Value;
             Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            Core.Serial.SendPacket(new SetSpeedCommand(_stepper, speed).GetBytes());
-            Core.Serial.SendPacket(new MoveCommand(_stepper, direction, countSteps).GetBytes());
+            Core.Serial.SendPacket(new SetSpeedCommand(_stepper, (uint)speed).GetBytes());
+            countSteps = direction == Protocol.Direction.FWD ? countSteps : -countSteps;
+            Core.Serial.SendPacket(new MoveCommand(_stepper, countSteps).GetBytes());
         }
 
         private void run(Protocol.Direction direction)
         {
-            uint speed = (uint)editFullSpeed.Value;
+            int speed = (int)editFullSpeed.Value;
             Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            Core.Serial.SendPacket(new RunCommand(_stepper, direction, speed).GetBytes());
+            speed = direction == Protocol.Direction.FWD ? speed : -speed;
+            Core.Serial.SendPacket(new RunCommand(_stepper, speed).GetBytes());
         }
 
         private void goHome(Protocol.Direction direction)
         {
-            uint speed = (uint)editFullSpeed.Value;
+            int speed = (int)editFullSpeed.Value;
 
             Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            Core.Serial.SendPacket(new HomeCommand(_stepper, direction, speed).GetBytes());
+            speed = direction == Protocol.Direction.FWD ? speed : -speed;
+            Core.Serial.SendPacket(new HomeCommand(_stepper, speed).GetBytes());
         }
 
         private void editNumberSteps_ValueChanged(object sender, EventArgs e)

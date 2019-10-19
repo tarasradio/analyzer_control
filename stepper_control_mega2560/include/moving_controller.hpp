@@ -3,15 +3,20 @@
 
 #include <Arduino.h>
 
+#include "packet_manager.hpp"
+
+#include "protocol.hpp"
+#include "steppers.hpp"
+
 class MovingController
 {
 private:
-    uint8_t getSteppersInMoving();
+    static uint8_t getSteppersInMoving();
 public:
     MovingController();
-    void addStepperForMove(uint8_t stepper, uint8_t direction, uint32_t steps);
-    uint8_t updateState();
-    void clearState();
+    static void addStepperForMove(int8_t stepper, int32_t steps);
+    static uint8_t updateState();
+    static void clearState();
 };
 
 #endif

@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.StepperCommands;
+using SteppersControlCore.Utils;
 
 namespace SteppersControlCore.Controllers
 {
@@ -77,7 +78,7 @@ namespace SteppersControlCore.Controllers
 
     public class LoadController : Controller
     {
-        const string filename = "LoadControllerProps.xml";
+        const string filename = "LoadControllerProps";
 
         public LoadControllerPropetries Props { get; set; }
 
@@ -90,27 +91,13 @@ namespace SteppersControlCore.Controllers
 
         public void WriteXml()
         {
-            XmlSerializer ser = new XmlSerializer(typeof(LoadControllerPropetries));
-
-            TextWriter writer = new StreamWriter(filename);
-            ser.Serialize(writer, Props);
-            writer.Close();
+            XMLSerializeHelper<LoadControllerPropetries>.WriteXml(Props, filename);
         }
 
         //Чтение насроек из файла
         public void ReadXml()
         {
-            if (File.Exists(filename))
-            {
-                XmlSerializer ser = new XmlSerializer(typeof(LoadControllerPropetries));
-                TextReader reader = new StreamReader(filename);
-                Props = ser.Deserialize(reader) as LoadControllerPropetries;
-                reader.Close();
-            }
-            else
-            {
-                //можно написать вывод сообщения если файла не существует
-            }
+            Props = XMLSerializeHelper<LoadControllerPropetries>.ReadXML(filename);
         }
 
         public List<IAbstractCommand> HomeLoad()

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuthForm));
             this.buttonServiceMode = new System.Windows.Forms.Button();
             this.buttonWorkMode = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -64,6 +65,7 @@
             this.ClientSize = new System.Drawing.Size(287, 126);
             this.Controls.Add(this.buttonWorkMode);
             this.Controls.Add(this.buttonServiceMode);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AuthForm";
             this.Text = "Авторизация";
             this.ResumeLayout(false);

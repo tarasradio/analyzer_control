@@ -6,6 +6,7 @@
 #include "steppers.hpp"
 
 //#define DEBUG
+#define EMULATOR
 
 enum HomingState
 {
@@ -30,6 +31,9 @@ HomingController::HomingController()
 
 uint8_t HomingController::getSteppersInHoming()
 {
+#ifdef EMULATOR
+    return 0; // All steppers have been done home
+#endif
     uint8_t steppersInHoming = 0;
 
     for (int i = 0; i < countHomeSteppers; i++)
@@ -61,17 +65,18 @@ uint8_t HomingController::getSteppersInHoming()
     return steppersInHoming;
 }
 
-void HomingController::addStepperForHoming(uint8_t stepper, uint8_t direction, uint32_t speed)
+void HomingController::addStepperForHoming(int8_t stepper, int32_t speed)
 {
+    int8_t dir = speed > 0 ? 1 : 0;
     homingSteppers[countHomeSteppers].stepper = stepper;
-    homingSteppers[countHomeSteppers].direction = direction;
+    homingSteppers[countHomeSteppers].direction = dir;
     homingSteppers[countHomeSteppers].speed = speed;
 
     uint8_t sw_status = Steppers::get(stepper).getStatus() & STATUS_SW_F;
     if (0 == sw_status)
     {
         homingSteppers[countHomeSteppers].state = WAIT_SW_PRESSED;
-        Steppers::get(stepper).goUntil(RESET_ABSPOS, direction, speed);
+        Steppers::get(stepper).goUntil(RESET_ABSPOS, dir, speed);
     }
     else
     {
@@ -79,7 +84,7 @@ void HomingController::addStepperForHoming(uint8_t stepper, uint8_t direction, u
 
         homingSteppers[countHomeSteppers].state = WAIT_SW_RELEASED;
 
-        uint8_t inverseDir = (direction == FWD) ? REV : FWD;
+        int8_t inverseDir = (dir == FWD) ? REV : FWD;
         Steppers::get(stepper).setMinSpeed(speed);
         Steppers::get(stepper).releaseSw(RESET_ABSPOS, inverseDir);
     }

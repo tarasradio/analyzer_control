@@ -29,7 +29,7 @@ namespace SteppersControlCore.Elements
     public class Stage
     {
         [DisplayName("Номер картриджа")]
-        public int CartridgeNumber { get; set; } = 0;
+        public int CartridgePosition { get; set; } = 0;
         [DisplayName("Номер ячейки в картридже")]
         public CartridgeCell Cell { get; set; } = CartridgeCell.WhiteCell;
         [DisplayName("Время выполнения (минут)")]
@@ -50,7 +50,13 @@ namespace SteppersControlCore.Elements
         [DisplayName("Список стадий")]
         public List<Stage> Stages { get; set; } = new List<Stage>();
         public int CurrentStage { get; set; } = 0;
+        /// <summary>
+        /// Время, оставшееся до завершения инкубации (минуты)
+        /// </summary>
         public int TimeToStageComplete { get; set; } = 0;
+        /// <summary>
+        /// Пробирка с данным штрихкодом найдена
+        /// </summary>
         public bool IsFind { get; set; } = false;
 
         public TubeInfo()

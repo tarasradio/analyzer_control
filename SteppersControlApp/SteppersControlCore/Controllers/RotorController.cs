@@ -10,6 +10,7 @@ using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.StepperCommands;
 using SteppersControlCore.Elements;
+using SteppersControlCore.Utils;
 
 namespace SteppersControlCore.Controllers
 {
@@ -90,7 +91,7 @@ namespace SteppersControlCore.Controllers
     {
         public RotorControllerPropetries Props { get; set; }
 
-        const string filename = "RotorControllerProps.xml";
+        const string filename = "RotorControllerProps";
 
         public RotorController() : base()
         {
@@ -99,27 +100,13 @@ namespace SteppersControlCore.Controllers
 
         public void WriteXml()
         {
-            XmlSerializer ser = new XmlSerializer(typeof(RotorControllerPropetries));
-
-            TextWriter writer = new StreamWriter(filename);
-            ser.Serialize(writer, Props);
-            writer.Close();
+            XMLSerializeHelper<RotorControllerPropetries>.WriteXml(Props, filename);
         }
 
         //Чтение насроек из файла
         public void ReadXml()
         {
-            if (File.Exists(filename))
-            {
-                XmlSerializer ser = new XmlSerializer(typeof(RotorControllerPropetries));
-                TextReader reader = new StreamReader(filename);
-                Props = ser.Deserialize(reader) as RotorControllerPropetries;
-                reader.Close();
-            }
-            else
-            {
-                //можно написать вывод сообщения если файла не существует
-            }
+            Props = XMLSerializeHelper<RotorControllerPropetries>.ReadXML(filename);
         }
 
         public List<IAbstractCommand> Home()

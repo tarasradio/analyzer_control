@@ -9,10 +9,10 @@ private:
 
 public:
     RunningController();
-    void addStepperForRun(uint8_t stepper, uint8_t direction, uint32_t speed);
-    void setRunParams(uint8_t sensor, uint16_t sensorValue, uint8_t edgeType);
-    uint8_t updateState();
-    void clearState();
+    static void addStepperForRun(int8_t stepper, int32_t speed);
+    static void setRunParams(int8_t sensor, uint16_t sensorValue, uint8_t edgeType);
+    static uint8_t updateState();
+    static void clearState();
 };
 
 #endif

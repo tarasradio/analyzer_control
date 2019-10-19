@@ -6,12 +6,12 @@
 class HomingController
 {
 private:
-    uint8_t getSteppersInHoming();
+    static uint8_t getSteppersInHoming();
 public:
     HomingController();
-    void addStepperForHoming(uint8_t stepper, uint8_t direction, uint32_t speed);
-    uint8_t updateState();
-    void clearState();
+    static void addStepperForHoming(int8_t stepper, int32_t speed);
+    static uint8_t updateState();
+    static void clearState();
 };
 
 #endif

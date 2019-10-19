@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlPanelForm));
             this.stepperTurningView0 = new SteppersControlApp.Views.StepperTurningView();
             this.stepperTurningView1 = new SteppersControlApp.Views.StepperTurningView();
             this.stepperTurningView2 = new SteppersControlApp.Views.StepperTurningView();
@@ -206,6 +207,7 @@
             this.Controls.Add(this.stepperTurningView2);
             this.Controls.Add(this.stepperTurningView1);
             this.Controls.Add(this.stepperTurningView0);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "ControlPanelForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

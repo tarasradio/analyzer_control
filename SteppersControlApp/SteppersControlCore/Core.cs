@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SteppersControlCore.CommunicationProtocol;
+using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.Controllers;
 using SteppersControlCore.MachineControl;
 using SteppersControlCore.SerialCommunication;
@@ -14,7 +15,7 @@ namespace SteppersControlCore
     public class Core
     {
         private static Logger _logger;
-        public static Configuration _configuration { get; private set; }
+        public static Configuration Settings { get; private set; }
 
         public static PackageReceiver PackReceiver { get; private set; }
         public static PackageHandler PackHandler { get; private set; }
@@ -35,9 +36,9 @@ namespace SteppersControlCore
         public Core(string configurationFilename)
         {
             _logger = new Logger();
-            _configuration = new Configuration();
+            Settings = new Configuration();
 
-            if(!_configuration.LoadFromFile(configurationFilename))
+            if(!Settings.LoadFromFile(configurationFilename))
             {
                 throw new System.IO.FileLoadException();
             }
@@ -89,19 +90,19 @@ namespace SteppersControlCore
 
         public static Configuration GetConfig()
         {
-            return _configuration;
+            return Settings;
         }
 
         private static ushort[] _sensorsValues = null;
 
         public static void InitSensorsValues()
         {
-            _sensorsValues = new ushort[_configuration.Sensors.Count];
+            _sensorsValues = new ushort[Settings.Sensors.Count];
         }
 
         public static void UpdateSensorsValues(ushort[] values)
         {
-            if (values.Length != _configuration.Sensors.Count)
+            if (values.Length != Settings.Sensors.Count)
                 return;
             _mutex.WaitOne();
 
@@ -142,6 +143,13 @@ namespace SteppersControlCore
             _mutex.ReleaseMutex();
 
             return barCode;
+        }
+
+        public static void AbortExecution()
+        {
+            Executor.AbortExecution();
+            CNCExecutor.AbortExecution();
+            Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }
     }
 }

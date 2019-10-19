@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Resources;
 
 using SteppersControlCore;
 using SteppersControlCore.MachineControl;
@@ -15,24 +16,31 @@ using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.SerialCommunication;
 using System.Diagnostics;
 using System.Threading;
+using System.Globalization;
+using SteppersControlApp.Properties;
 
 namespace SteppersControlApp
 {
     public partial class MainForm : Form
     {
         ControlPanelForm controlPanel = new ControlPanelForm();
-        
+
+        ResourceManager resourceManager;
+        CultureInfo culture = System.Threading.Thread.CurrentThread.CurrentCulture;
+
         private void UpdateState()
         {
             if (Core.Serial.IsConnected())
             {
-                buttonConnect.Text = "Отключиться";
+                buttonConnect.Text = resourceManager.GetString("disconnect_text", Core.Settings.Culture);
+                //buttonConnect.Text = "Отключиться";
                 connectionState.Text = "Подключен";
                 connectionState.ForeColor = Color.DarkGreen;
             }
             else
             {
-                buttonConnect.Text = "Подключиться";
+                resourceManager.GetString("connect_text", Core.Settings.Culture);
+                //buttonConnect.Text = "Подключиться";
                 connectionState.Text = "Не подключен";
                 connectionState.ForeColor = Color.Brown;
             }
@@ -41,6 +49,19 @@ namespace SteppersControlApp
         public MainForm()
         {
             InitializeComponent();
+            resourceManager = new ResourceManager("SteppersControlApp.Strings", typeof(Resources).Assembly);
+            culture = new CultureInfo("en-US");
+
+            UpdateCurrentLanguage();
+        }
+
+        private void UpdateCurrentLanguage()
+        {
+            buttonConnect.Text = resourceManager.GetString("connect_text", Core.Settings.Culture);
+            buttonUpdateList.Text = resourceManager.GetString("button_update_text", Core.Settings.Culture);
+            buttonShowControlPanel.Text = resourceManager.GetString("button_show_control_panel_text", Core.Settings.Culture);
+            buttonAbortExecution.Text = resourceManager.GetString("button_abort_execution_text", Core.Settings.Culture);
+            buttonStartDemo.Text = resourceManager.GetString("button_start_demo_text", Core.Settings.Culture);
         }
 
         private void InitializeAll()
@@ -63,7 +84,7 @@ namespace SteppersControlApp
         private void UpdateBarCode(string barCode)
         {
             Core.UpdateBarCode(barCode);
-            Logger.AddMessage($"Принят код :{barCode}");
+            //Logger.AddMessage($"Принят код :{barCode}");
         }
 
         private void BarCodeReceived(string message)
@@ -105,6 +126,7 @@ namespace SteppersControlApp
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
         {
             controlPanel = new ControlPanelForm();
+            controlPanel.StartPosition = FormStartPosition.CenterScreen;
             controlPanel.Show();
         }
 
@@ -117,7 +139,8 @@ namespace SteppersControlApp
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();
 
-                buttonConnect.Text = "Подключиться";
+                buttonConnect.Text = resourceManager.GetString("connect_text", culture);
+                //buttonConnect.Text = "Подключиться";
                 connectionState.Text = "Ожидание соединения";
 
                 rescanOpenPorts();
@@ -134,7 +157,8 @@ namespace SteppersControlApp
                     connectionState.Text = "Установленно соединение с " + portName;
                     Logger.AddMessage(
                         "Открытие подключения - подключение к " + portName + " открыто");
-                    buttonConnect.Text = "Отключение";
+                    buttonConnect.Text = resourceManager.GetString("disconnect_text", culture);
+                    //buttonConnect.Text = "Отключение";
 
                     steppersGridView.StartUpdate();
                     sensorsView.StartUpdate();
@@ -191,14 +215,14 @@ namespace SteppersControlApp
             if (isOpen == true)
             {
                 Logger.AddMessage(
-                    "Поиск портов - найдены открытые порты");
+                    resourceManager.GetString("ports_found", culture));
                 buttonConnect.Enabled = true;
                 portsListBox.SelectedIndex = 0;
             }
             else
             {
                 Logger.AddMessage(
-                    "Поиск портов - открытых портов не найдено");
+                    resourceManager.GetString("no_ports_found", culture));
                 buttonConnect.Enabled = false;
                 portsListBox.SelectedText = "";
             }
@@ -250,14 +274,28 @@ namespace SteppersControlApp
 
         private void abortExecutionButton_Click(object sender, EventArgs e)
         {
-            Core.Executor.AbortExecution();
-            Core.CNCExecutor.AbortExecution();
-            Core.Serial.SendPacket(new AbortExecutionCommand().GetBytes());
+            Core.AbortExecution();
         }
 
         private void buttonStartDemo_Click(object sender, EventArgs e)
         {
             Core.Demo.StartDemo();
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.F8)
+            {
+                Core.AbortExecution();
+            }
+            if(e.KeyCode == Keys.F5)
+            {
+                rescanOpenPorts();
+            }
+            if(e.KeyCode == Keys.F7)
+            {
+                Core.Demo.StartDemo();
+            }
         }
     }
 }

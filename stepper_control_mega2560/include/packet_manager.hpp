@@ -11,7 +11,6 @@ private:
 public:
     PacketManager(CommandExecutor2 & );
     void ReadPacket();
-    void FindPacket();
 
     void tryPacketBuild(uint8_t bufferPosition);
     void findByteStuffingPacket();

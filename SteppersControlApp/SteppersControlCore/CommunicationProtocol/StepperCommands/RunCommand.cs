@@ -9,13 +9,11 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
     public class RunCommand : AbstractCommand, IDeviceCommand
     {
         private byte _stepper;
-        private Protocol.Direction _direction;
-        private uint _speed;
+        private int _speed;
 
-        public RunCommand(int stepper, Protocol.Direction direction, uint speed) : base()
+        public RunCommand(int stepper, int speed) : base()
         {
             _stepper = (byte)stepper;
-            _direction = direction;
             _speed = speed;
         }
 
@@ -23,13 +21,12 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         {
             byte[] speedBytes = BitConverter.GetBytes(_speed);
 
-            SendPacket2 packet = new SendPacket2(7);
+            SendPacket2 packet = new SendPacket2(6);
             packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.RUN);
             packet.SetData(1, _stepper);
-            packet.SetData(2, (byte)_direction);
-            packet.SetData(3, speedBytes);
+            packet.SetData(2, speedBytes);
 
             return packet.GetBytes();
         }

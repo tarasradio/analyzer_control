@@ -12,6 +12,7 @@ using SteppersControlCore.Elements;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.IO;
+using SteppersControlCore.Utils;
 
 namespace SteppersControlCore.Controllers
 {
@@ -77,7 +78,7 @@ namespace SteppersControlCore.Controllers
 
     public class ArmController : Controller
     {
-        const string filename = "ArmControllerProps.xml";
+        const string filename = "ArmControllerProps";
         public ArmControllerPropetries Props { get; set; }
 
         public ArmController() : base()
@@ -87,27 +88,13 @@ namespace SteppersControlCore.Controllers
 
         public void WriteXml()
         {
-            XmlSerializer ser = new XmlSerializer(typeof(ArmControllerPropetries));
-
-            TextWriter writer = new StreamWriter(filename);
-            ser.Serialize(writer, Props);
-            writer.Close();
+            XMLSerializeHelper<ArmControllerPropetries>.WriteXml(Props, filename);
         }
 
         //Чтение насроек из файла
         public void ReadXml()
         {
-            if (File.Exists(filename))
-            {
-                XmlSerializer ser = new XmlSerializer(typeof(ArmControllerPropetries));
-                TextReader reader = new StreamReader(filename);
-                Props = ser.Deserialize(reader) as ArmControllerPropetries;
-                reader.Close();
-            }
-            else
-            {
-                //можно написать вывод сообщения если файла не существует
-            }
+            Props = XMLSerializeHelper<ArmControllerPropetries>.ReadXML(filename);
         }
 
         public List<IAbstractCommand> MoveOnTube()

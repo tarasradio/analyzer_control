@@ -41,7 +41,7 @@ namespace SteppersControlCore.SerialCommunication
                 
                 if (states != null)
                 {
-                    if (states?.Length != Core._configuration.Steppers.Count)
+                    if (states?.Length != Core.Settings.Steppers.Count)
                     {
                         Logger.AddMessage("Число двигателей в пакете не верное!");
                     }
@@ -55,7 +55,7 @@ namespace SteppersControlCore.SerialCommunication
                 
                 if (null != values)
                 {
-                    if (values?.Length != Core._configuration.Sensors.Count)
+                    if (values?.Length != Core.Settings.Sensors.Count)
                     {
                         Logger.AddMessage("Число датчиков в пакете не верное!");
                     }
