@@ -24,7 +24,7 @@ namespace SteppersControlCore.Controllers
         [Category("1. Двигатели")]
         [DisplayName("Двигатель толкателя")]
         public int PushStepper { get; set; } = 0;
-
+        
         [Category("2. Скорость")]
         [DisplayName("Скорость движения загрузки домой")]
         public int LoadStepperHomeSpeed { get; set; } = 50;
@@ -82,6 +82,10 @@ namespace SteppersControlCore.Controllers
 
         public LoadControllerPropetries Props { get; set; }
 
+        public int LoadStepperPosition { get; set; } = 0;
+        public int ShuttleStepperPosition { get; set; } = 0;
+        public int PushStepperPosition { get; set; } = 0;
+
         public int CurrentCell { get; private set; } = 0;
 
         public LoadController() : base()
@@ -110,9 +114,15 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.LoadStepper, -Props.LoadStepperHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
+            LoadStepperPosition = 0;
+
             return commands;
         }
 
+
+        // Добавлено отслеживание позиции
+        // Шаги для движения задаются абсолютным числом шагов от домашнего положения
+        // LoadStepperPosition - текущее положение
         public List<IAbstractCommand> TurnLoadToCell(int cell)
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
@@ -122,8 +132,10 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.LoadStepper, 30 } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.LoadStepper, Props.CellsSteps[cell] } };
+            steppers = new Dictionary<int, int>() { { Props.LoadStepper, Props.CellsSteps[cell] - LoadStepperPosition } };
             commands.Add( new MoveCncCommand(steppers) );
+
+            LoadStepperPosition = Props.CellsSteps[cell];
 
             return commands;
         }
