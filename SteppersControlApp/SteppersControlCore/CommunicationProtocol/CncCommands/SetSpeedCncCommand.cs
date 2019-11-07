@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
-    public class SetSpeedCncCommand : SteppersCncCommand
+    public class SetSpeedCncCommand : SteppersCncCommand, IDeviceCommand
     {
         public SetSpeedCncCommand(Dictionary<int, int> steppers) : base(steppers, Protocol.CncCommands.CNC_SET_SPEED)
         {

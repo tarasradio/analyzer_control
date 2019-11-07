@@ -135,11 +135,11 @@ namespace SteppersControlCore.MachineControl
             int commandNumber = 0;
             foreach (IAbstractCommand command in _commandsToSend)
             {
-                //Logger.AddMessage("Команда " + commandNumber + " запущена !");
+                Logger.AddMessage("Команда " + commandNumber + " запущена !");
 
                 executeCommand(command);
 
-                //Logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
+                Logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
                 
                 commandNumber++;
                 CommandExecuted?.Invoke(commandNumber);
@@ -175,7 +175,7 @@ namespace SteppersControlCore.MachineControl
             {
                 if(stopWatch.ElapsedMilliseconds >= 2000)
                 {
-                    //Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
+                    Logger.AddMessage("Слишком долгое ожидание ответа от устройства");
 
                     Core.Serial.SendPacket(command.GetBytes());
 

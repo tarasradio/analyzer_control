@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
-    public class AbortExecutionCommand : AbstractCommand, IDeviceCommand
+    public class AbortExecutionCommand : AbstractCommand, IDeviceCommand, IAbstractCommand
     {
         public AbortExecutionCommand() : base()
         {

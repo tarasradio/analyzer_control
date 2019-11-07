@@ -86,9 +86,14 @@ namespace SteppersControlCore
             CNCExecutor = new CncExecutor();
             Executor = new TaskExecutor();
 
-            PackHandler.CommandStateResponseReceived += CNCExecutor.ChangeSuccesCommandId;
+            PackHandler.CommandStateResponseReceived += PackHandler_CommandStateResponseReceived;
             
             Logger.AddMessage("Запись работы системы начата");
+        }
+
+        private void PackHandler_CommandStateResponseReceived(uint commandId, Protocol.CommandStates state)
+        {
+            CNCExecutor.ChangeSuccesCommandId(commandId, state);
         }
 
         private void PackHandler_SteppersStatesReceived(ushort[] states)

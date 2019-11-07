@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
-    public class MoveCncCommand : SteppersCncCommand
+    public class MoveCncCommand : SteppersCncCommand, IDeviceCommand
     {
         private Dictionary<int, int> _steps;
 

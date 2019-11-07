@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
-    public class HomeCncCommand : SteppersCncCommand
+    public class HomeCncCommand : SteppersCncCommand, IDeviceCommand
     {
         public HomeCncCommand(Dictionary<int, int> steppers) : base(steppers, Protocol.CncCommands.CNC_HOME)
         {
-            // TODO: убрать Direction
+
         }
 
         public new Protocol.CommandTypes GetType()
