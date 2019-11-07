@@ -22,39 +22,39 @@ namespace SteppersControlCore.Controllers
         [DisplayName("Двигатель малого плунжера")]
         public int SmallPistonStepper { get; set; } = 12;
 
-        [Category("2. Скорость")]
+        [Category("2.1 Скорость большого плунжера")]
         [DisplayName("Скорость движения большого плунжера домой")]
         public int BigPistonHomeSpeed { get; set; } = 950;
-        [Category("2. Скорость")]
+        [Category("2.1 Скорость большого плунжера")]
         [DisplayName("Скорость движения большого плунжера")]
         public int BigPistonSpeed { get; set; } = 50;
-        [Category("2. Скорость")]
+        [Category("2.1 Скорость большого плунжера")]
         [DisplayName("Скорость движения большого плунжера при промывке")]
         public int BigPistonWashingSpeed { get; set; } = 280;
 
-        [Category("2. Скорость")]
+        [Category("2.2 Скорость малого плунжера")]
         [DisplayName("Скорость движения малого плунжера домой")]
         public int SmallPistonHomeSpeed { get; set; } = 950;
-        [Category("2. Скорость")]
+        [Category("2.2 Скорость малого плунжера")]
         [DisplayName("Скорость движения малого плунжера")]
         public int SmallPistonSpeed { get; set; } = 200;
-        [Category("2. Скорость")]
+        [Category("2.2 Скорость малого плунжера")]
         [DisplayName("Скорость движения малого плунжера при промывке")]
         public int SmallPistonWashingSpeed { get; set; } = 280;
-        [Category("2. Скорость")]
+        [Category("2.2 Скорость малого плунжера")]
         [DisplayName("Скорость движения малого плунжера при заборе")]
         public int SmallPistonSuctionSpeed { get; set; } = 200;
 
-        [Category("3. Шаги")]
+        [Category("3.1 Шаги малого плунжера")]
         [DisplayName("Шаги малого плунжера при заборе")]
-        public int SmallPistonSuctionSteps { get; set; } = 100000;
+        public int SmallPistonSuctionSteps { get; set; } = -200000;
 
-        [Category("3. Шаги")]
+        [Category("3.2 Шаги большого плунжера")]
         [DisplayName("Шаги большого плунжера при промывке")]
-        public int BigPistonWashingSteps { get; set; } = 700000;
-        [Category("3. Шаги")]
+        public int BigPistonWashingSteps { get; set; } = -700000;
+        [Category("3.1 Шаги малого плунжера")]
         [DisplayName("Шаги малого плунжера при промывке")]
-        public int SmallPistonWashingSteps { get; set; } = 700000;
+        public int SmallPistonWashingSteps { get; set; } = -700000;
         
 
         public PompControllerPropetries()
@@ -63,11 +63,16 @@ namespace SteppersControlCore.Controllers
         }
     }
 
-    public class PompController : Controller
+    public class PompController : ControllerBase
     {
         const string filename = "PompControllerProps";
 
         public PompControllerPropetries Props { get; set; }
+
+        //TODO: а нужно ли здесь отслеживание позиции???
+
+        public int BigPistonStepperPosition { get; set; } = 0;
+        public int SmallPistonStepperPosition { get; set; } = 0;
 
         public PompController() : base()
         {
@@ -83,6 +88,15 @@ namespace SteppersControlCore.Controllers
         public void ReadXml()
         {
             Props = XMLSerializeHelper<PompControllerPropetries>.ReadXML(filename);
+        }
+
+        public List<IAbstractCommand> CloseValves()
+        {
+            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+
+            commands.Add(new OnDeviceCncCommand(new List<int>() { 0 ,1 }));
+
+            return commands;
         }
 
         public List<IAbstractCommand> Home()
@@ -105,6 +119,9 @@ namespace SteppersControlCore.Controllers
             };
             commands.Add(new HomeCncCommand(steppers));
 
+            BigPistonStepperPosition = 0;
+            SmallPistonStepperPosition = 0;
+
             return commands;
         }
 
@@ -121,11 +138,13 @@ namespace SteppersControlCore.Controllers
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Props.SmallPistonStepper, -Props.SmallPistonSuctionSteps }
+                { Props.SmallPistonStepper, Props.SmallPistonSuctionSteps - SmallPistonStepperPosition}
             };
             commands.Add( new MoveCncCommand(steppers) );
             
             commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
+
+            SmallPistonStepperPosition = Props.SmallPistonSuctionSteps;
 
             return commands;
         }
@@ -148,6 +167,8 @@ namespace SteppersControlCore.Controllers
             commands.Add( new HomeCncCommand(steppers) );
             
             commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
+
+            SmallPistonStepperPosition = 0;
 
             return commands;
         }
@@ -183,11 +204,14 @@ namespace SteppersControlCore.Controllers
                 commands.Add( new SetSpeedCncCommand(steppers) );
 
                 steppers = new Dictionary<int, int>() {
-                    { Props.BigPistonStepper, -Props.BigPistonWashingSteps },
-                    { Props.SmallPistonStepper, -Props.SmallPistonWashingSteps }
+                    { Props.BigPistonStepper, Props.BigPistonWashingSteps },
+                    { Props.SmallPistonStepper, Props.SmallPistonWashingSteps }
                 };
                 commands.Add( new MoveCncCommand(steppers) );
             }
+
+            SmallPistonStepperPosition = Props.BigPistonWashingSteps;
+            BigPistonStepperPosition = Props.SmallPistonWashingSteps;
 
             return commands;
         }

@@ -52,11 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthForm.cs">
+    <Compile Include="StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AuthForm.Designer.cs">
-      <DependentUpon>AuthForm.cs</DependentUpon>
+    <Compile Include="StartForm.Designer.cs">
+      <DependentUpon>StartForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AdditionalMovesView.cs">
       <SubType>UserControl</SubType>
@@ -99,12 +99,6 @@
     </Compile>
     <Compile Include="Controllers\TransporterControllerView.Designer.cs">
       <DependentUpon>TransporterControllerView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controllers\UnloadControllerView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controllers\UnloadControllerView.Designer.cs">
-      <DependentUpon>UnloadControllerView.cs</DependentUpon>
     </Compile>
     <Compile Include="ControlPanelForm.cs">
       <SubType>Form</SubType>
@@ -174,8 +168,8 @@
       <DependentUpon>StepperTurningView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewStyler.cs" />
-    <EmbeddedResource Include="AuthForm.resx">
-      <DependentUpon>AuthForm.cs</DependentUpon>
+    <EmbeddedResource Include="StartForm.resx">
+      <DependentUpon>StartForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controllers\AdditionalMovesView.resx">
       <DependentUpon>AdditionalMovesView.cs</DependentUpon>
@@ -197,9 +191,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controllers\TransporterControllerView.resx">
       <DependentUpon>TransporterControllerView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\UnloadControllerView.resx">
-      <DependentUpon>UnloadControllerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControlPanelForm.resx">
       <DependentUpon>ControlPanelForm.cs</DependentUpon>

@@ -11,7 +11,6 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
     public class MoveCommand : AbstractCommand, IDeviceCommand
     {
         private byte _stepper;
-        private Protocol.Direction _direction;
         private int _countSteps;
 
         public MoveCommand(int stepper, int countSteps) : base()
@@ -24,7 +23,7 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
         {
             byte[] stepsBytes = BitConverter.GetBytes(_countSteps);
 
-            SendPacket2 packet = new SendPacket2(6);
+            SendPacket packet = new SendPacket(6);
             packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.MOVE);

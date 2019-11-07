@@ -25,16 +25,16 @@ namespace SteppersControlCore.Controllers
         [DisplayName("Двигатель движения пробирок")]
         public int TransporterStepper { get; set; } = 6;
 
-        [Category("2. Шаги")]
-        [DisplayName("Шагов для сдвига на одну пробирку")]
-        public int StepsOneTube { get; set; } = 6400;
-        [Category("2. Шаги")]
-        [DisplayName("Шагов для вращения пробирки")]
-        public int StepsToTurnTube { get; set; } = 10000;
-
-        [Category("3. Скорость")]
+        [Category("2. Скорость")]
         [DisplayName("Скорость вращения пробирки")]
         public int SpeedToTurnTube { get; set; } = 30;
+
+        [Category("3. Шаги")]
+        [DisplayName("Шагов для сдвига на одну пробирку")]
+        public int StepsOneTube { get; set; } = 6400;
+        [Category("3. Шаги")]
+        [DisplayName("Шагов для вращения пробирки")]
+        public int StepsToTurnTube { get; set; } = 10000;
 
         public TransporterControllerPropetries()
         {
@@ -42,10 +42,13 @@ namespace SteppersControlCore.Controllers
         }
     }
 
-    public class TransporterController : Controller
+    //TODO: а тут видимо вообще нахер не надо отслеживание
+    public class TransporterController : ControllerBase
     {
         string filename = "TransporterControllerProps";
         public TransporterControllerPropetries Props { get; set; }
+
+        public int TransporterStepperPosition { get; set; } = 0;
 
         public TransporterController() : base()
         {

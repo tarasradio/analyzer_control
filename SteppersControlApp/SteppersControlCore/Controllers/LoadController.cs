@@ -16,7 +16,7 @@ namespace SteppersControlCore.Controllers
     public class LoadControllerPropetries
     {
         [Category("1. Двигатели")]
-        [DisplayName("Двигатель загрузки")]
+        [DisplayName("Двигатель поворота загрузки")]
         public int LoadStepper { get; set; } = 10;
         [Category("1. Двигатели")]
         [DisplayName("Двигатель челнока")]
@@ -25,28 +25,28 @@ namespace SteppersControlCore.Controllers
         [DisplayName("Двигатель толкателя")]
         public int PushStepper { get; set; } = 0;
         
-        [Category("2. Скорость")]
+        [Category("2.1 Скорость двигателя поворота загрузки")]
         [DisplayName("Скорость движения загрузки домой")]
         public int LoadStepperHomeSpeed { get; set; } = 50;
-        [Category("2. Скорость")]
+        [Category("2.1 Скорость двигателя поворота загрузки")]
         [DisplayName("Скорость движения загрузки")]
         public int LoadStepperSpeed { get; set; } = 50;
 
-        [Category("2. Скорость")]
+        [Category("2.2 Скорость двигателя челнока")]
         [DisplayName("Скорость движения челнока домой")]
         public int ShuttleStepperHomeSpeed { get; set; } = 500;
-        [Category("2. Скорость")]
+        [Category("2.2 Скорость двигателя челнока")]
         [DisplayName("Скорость движения челнока")]
         public int ShuttleStepperSpeed { get; set; } = 200;
 
-        [Category("2. Скорость")]
+        [Category("2.3 Скорость двигателя толкателя")]
         [DisplayName("Скорость движения толкателя домой")]
         public int PushStepperHomeSpeed { get; set; } = 500;
-        [Category("2. Скорость")]
+        [Category("2.3 Скорость двигателя толкателя")]
         [DisplayName("Скорость движения толкателя")]
         public int PushStepperSpeed { get; set; } = 200;
 
-        [Category("3. Шаги")]
+        [Category("3.1 Шаги двигателя поворота загрузки")]
         [DisplayName("Шаги до ячеек с кассетами")]
         public int[] CellsSteps { get; set; } =
         {
@@ -62,13 +62,17 @@ namespace SteppersControlCore.Controllers
             28500
         };
 
-        [Category("3. Шаги")]
-        [DisplayName("Шаги отъезда челнока от дома")]
-        public int StepsShuttleToStart { get; set; } = 20000;
+        [Category("3.1 Шаги двигателя поворота загрузки")]
+        [DisplayName("Шаги до разгрузки")]
+        public int StepsToUnload { get; set; } = 0;
 
-        [Category("3. Шаги")]
+        [Category("3.2 Шаги двигателя челнока")]
+        [DisplayName("Шаги отъезда челнока от дома")]
+        public int StepsShuttleToStart { get; set; } = -20000;
+
+        [Category("3.2 Шаги двигателя челнока")]
         [DisplayName("Шаги движения челнока к кассете")]
-        public int StepsShuttleToCassette { get; set; } = 2840000;
+        public int StepsShuttleToCassette { get; set; } = -2840000;
 
         public LoadControllerPropetries()
         {
@@ -76,7 +80,7 @@ namespace SteppersControlCore.Controllers
         }
     }
 
-    public class LoadController : Controller
+    public class LoadController : ControllerBase
     {
         const string filename = "LoadControllerProps";
 
@@ -111,7 +115,7 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.LoadStepper, Props.LoadStepperHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.LoadStepper, -Props.LoadStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Props.LoadStepper, Props.LoadStepperHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
             LoadStepperPosition = 0;
@@ -120,19 +124,26 @@ namespace SteppersControlCore.Controllers
         }
 
 
-        // Добавлено отслеживание позиции
-        // Шаги для движения задаются абсолютным числом шагов от домашнего положения
-        // LoadStepperPosition - текущее положение
+        // Calculation of necessary steps using the target and current position (in steps)
+        // The target position is determined by the absolute number of steps from the starting position (0)
+        // General rule: needed steps = taget_position - current_position
+        // Example 1: position = 3000; target position = 2000; necessary steps = 2000 - 3000 = -1000
+        // Example 2: position = 2000; target position = 3000; necessary steps = 3000 - 2000 = 1000
+        // Example 3: position = -3000; target position = -2000; necessary steps = -2000 - (-3000) = 1000
+        // Example 4: position = -2000; target position = -3000; necessary steps = -3000 - (-2000) = -1000
+
         public List<IAbstractCommand> TurnLoadToCell(int cell)
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
             CurrentCell = cell;
 
-            steppers = new Dictionary<int, int>() { { Props.LoadStepper, 30 } };
+            steppers = new Dictionary<int, int>() {
+                { Props.LoadStepper, 30 } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.LoadStepper, Props.CellsSteps[cell] - LoadStepperPosition } };
+            steppers = new Dictionary<int, int>() {
+                { Props.LoadStepper, Props.CellsSteps[cell] - LoadStepperPosition } };
             commands.Add( new MoveCncCommand(steppers) );
 
             LoadStepperPosition = Props.CellsSteps[cell];
@@ -150,8 +161,10 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.ShuttleStepperHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, -Props.StepsShuttleToStart } };
+            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.StepsShuttleToStart } };
             commands.Add( new MoveCncCommand(steppers) );
+
+            ShuttleStepperPosition = Props.StepsShuttleToStart;
 
             return commands;
         }
@@ -163,13 +176,7 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.ShuttleStepperSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, -1000000 } };
-            commands.Add( new MoveCncCommand(steppers) );
-
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, -1000000 } };
-            commands.Add( new MoveCncCommand(steppers) );
-
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, -900000 } };
+            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.StepsShuttleToCassette } };
             commands.Add( new MoveCncCommand(steppers) );
 
             return commands;

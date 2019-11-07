@@ -9,6 +9,7 @@ using System.Xml;
 using System.Globalization;
 using System.Xml.Serialization;
 using System.IO;
+using SteppersControlCore.Utils;
 
 namespace SteppersControlCore
 {
@@ -20,7 +21,7 @@ namespace SteppersControlCore
         public string Name { get; set; }
     }
 
-    public class StepperParams
+    public class Stepper : Device
     {
         [XmlAttribute]
         public bool Reverse { get; set; } = false;
@@ -28,35 +29,29 @@ namespace SteppersControlCore
         public uint NumberSteps { get; set; } = 100000;
         [XmlAttribute]
         public uint FullSpeed { get; set; } = 1000;
+
+        public ushort Status { get; set; } = 0;
     }
 
     public class Configuration
     {
         const string ROOTNAME = "SteppersTool";
+        
+        public IList<Stepper> Steppers { get; set; } = new List<Stepper>();
 
-        public Dictionary<int, Device> Steppers { get; set; }
-        public Dictionary<int, StepperParams> SteppersParams { get; set; }
+        public IList<Device> Devices { get; set; } = new List<Device>();
+        public IList<Device> Sensors { get; set; } = new List<Device>();
 
-        public Dictionary<int, Device> Devices { get; set; }
-        public Dictionary<int, Device> Sensors { get; set; }
-
-        public CultureInfo Culture { get; set; }
+        public CultureInfo Culture { get; set; } = new CultureInfo("en-US");
 
         public Configuration()
         {
-            Steppers = new Dictionary<int, Device>();
-            SteppersParams = new Dictionary<int, StepperParams>();
 
-            Devices = new Dictionary<int, Device>();
-            Sensors = new Dictionary<int, Device>();
-
-            Culture = new CultureInfo("en-US");
         }
-
+        
         public bool LoadFromFile(string filename)
         {
             Steppers.Clear();
-            SteppersParams.Clear();
 
             Devices.Clear();
             Sensors.Clear();
@@ -82,22 +77,19 @@ namespace SteppersControlCore
 
                 foreach (XmlNode StepperNode in SteppersNode)
                 {
-                    Device item = new Device();
+                    Stepper item = new Stepper();
                     item.Number = int.Parse(StepperNode.SelectSingleNode("Number").InnerText);
 
                     if (item.Number < 0)
                         throw new FormatException("Номер двигателя не может быть меньше 0.");
 
                     item.Name = StepperNode.SelectSingleNode("Name").InnerText;
-                    Steppers.Add(item.Number, item);
 
-                    StepperParams stepperParams = new StepperParams();
+                    item.Reverse = bool.Parse(StepperNode.SelectSingleNode("Reverse").InnerText);
+                    item.FullSpeed = uint.Parse(StepperNode.SelectSingleNode("FullSpeed").InnerText);
+                    item.NumberSteps = uint.Parse(StepperNode.SelectSingleNode("NumberSteps").InnerText);
 
-                    stepperParams.Reverse = bool.Parse(StepperNode.SelectSingleNode("Reverse").InnerText);
-                    stepperParams.FullSpeed = uint.Parse(StepperNode.SelectSingleNode("FullSpeed").InnerText);
-                    stepperParams.NumberSteps = uint.Parse(StepperNode.SelectSingleNode("NumberSteps").InnerText);
-
-                    SteppersParams.Add(item.Number, stepperParams);
+                    Steppers.Add(item);
                 }
 
                 XmlNodeList DevicesNode =
@@ -114,7 +106,7 @@ namespace SteppersControlCore
 
                     item.Name = DeviceNode.SelectSingleNode("Name").InnerText;
 
-                    Devices.Add(item.Number, item);
+                    Devices.Add(item);
                 }
 
                 XmlNodeList sensorsNode =
@@ -131,7 +123,7 @@ namespace SteppersControlCore
 
                     item.Name = sensorNode.SelectSingleNode("Name").InnerText;
 
-                    Sensors.Add(item.Number, item);
+                    Sensors.Add(item);
                 }
             }
             catch { return false; }
@@ -156,28 +148,28 @@ namespace SteppersControlCore
 
             XmlElement steppersNode = document.CreateElement("Steppers");
 
-            foreach (KeyValuePair<int, Device> stepper in Steppers)
+            foreach (Stepper stepper in Steppers)
             {
                 XmlElement stepperNode = document.CreateElement("Stepper");
 
                 XmlElement number = document.CreateElement("Number");
-                number.InnerText = stepper.Value.Number.ToString();
+                number.InnerText = stepper.Number.ToString();
                 stepperNode.AppendChild(number);
 
                 XmlElement name = document.CreateElement("Name");
-                name.InnerText = stepper.Value.Name;
+                name.InnerText = stepper.Name;
                 stepperNode.AppendChild(name);
 
                 XmlElement reverse = document.CreateElement("Reverse");
-                reverse.InnerText = SteppersParams[stepper.Value.Number].Reverse.ToString();
+                reverse.InnerText = stepper.Reverse.ToString();
                 stepperNode.AppendChild(reverse);
 
                 XmlElement fullSpeed = document.CreateElement("FullSpeed");
-                fullSpeed.InnerText = SteppersParams[stepper.Value.Number].FullSpeed.ToString();
+                fullSpeed.InnerText = stepper.FullSpeed.ToString();
                 stepperNode.AppendChild(fullSpeed);
 
                 XmlElement numberSteps = document.CreateElement("NumberSteps");
-                numberSteps.InnerText = SteppersParams[stepper.Value.Number].NumberSteps.ToString();
+                numberSteps.InnerText = stepper.NumberSteps.ToString();
                 stepperNode.AppendChild(numberSteps);
 
                 steppersNode.AppendChild(stepperNode);
@@ -187,16 +179,16 @@ namespace SteppersControlCore
 
             XmlElement devicesNode = document.CreateElement("Devices");
 
-            foreach (KeyValuePair<int, Device> device in Devices)
+            foreach (Device device in Devices)
             {
                 XmlElement deviceNode = document.CreateElement("Device");
 
                 XmlElement number = document.CreateElement("Number");
-                number.InnerText = device.Value.Number.ToString();
+                number.InnerText = device.Number.ToString();
                 deviceNode.AppendChild(number);
 
                 XmlElement name = document.CreateElement("Name");
-                name.InnerText = device.Value.Name;
+                name.InnerText = device.Name;
                 deviceNode.AppendChild(name);
 
                 devicesNode.AppendChild(deviceNode);
@@ -206,16 +198,16 @@ namespace SteppersControlCore
 
             XmlElement sensorsNode = document.CreateElement("Sensors");
 
-            foreach (KeyValuePair<int, Device> sensor in Sensors)
+            foreach (Device sensor in Sensors)
             {
                 XmlElement sensorNode = document.CreateElement("Sensor");
 
                 XmlElement number = document.CreateElement("Number");
-                number.InnerText = sensor.Value.Number.ToString();
+                number.InnerText = sensor.Number.ToString();
                 sensorNode.AppendChild(number);
 
                 XmlElement name = document.CreateElement("Name");
-                name.InnerText = sensor.Value.Name;
+                name.InnerText = sensor.Name;
                 sensorNode.AppendChild(name);
 
                 sensorsNode.AppendChild(sensorNode);

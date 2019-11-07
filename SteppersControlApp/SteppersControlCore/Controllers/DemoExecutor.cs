@@ -93,6 +93,9 @@ namespace SteppersControlCore.Controllers
             initTask();
             washingNeedleTask();
 
+            //Закрываем клапана
+            WaitExecution(Core.Pomp.CloseValves());
+
             Logger.AddMessage($"Prepare before scanning task [Start]");
             WaitExecution(Core.Arm.Home());
             WaitExecution(Core.Transporter.PrepareBeforeScanning());
@@ -240,6 +243,8 @@ namespace SteppersControlCore.Controllers
             bool result = false;
 
             Logger.AddMessage($"Scan tube task [Start]");
+            //Закрываем клапана
+            WaitExecution(Core.Pomp.CloseValves());
             WaitExecution(Core.Transporter.Shift(false));
 
             while (numberRepeat < countRepeats)

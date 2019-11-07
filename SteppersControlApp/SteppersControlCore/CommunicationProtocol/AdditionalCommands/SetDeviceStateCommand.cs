@@ -25,7 +25,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 
         public byte[] GetBytes()
         {
-            SendPacket2 packet = new SendPacket2(3);
+            SendPacket packet = new SendPacket(3);
             packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)Protocol.AdditionalCommands.SET_DEVICE_STATE);

@@ -142,8 +142,7 @@ namespace SteppersControlCore.MachineControl
                 //Logger.AddMessage("Команда " + commandNumber + " выполнена успешно !");
                 
                 commandNumber++;
-
-                CommandExecuted(commandNumber);
+                CommandExecuted?.Invoke(commandNumber);
             }
 
             isExecute = false;

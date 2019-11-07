@@ -8,9 +8,16 @@ static uint8_t bufferTail = 0;
 
 uint8_t packetBuffer[PACKET_SIZE];
 
-PacketManager::PacketManager(CommandExecutor2 & commandExecutor)
+const uint8_t EscSymbol = 0x7D;
+const uint8_t FlagSymbol = 0xDD;
+
+static bool escapeFlag = false;
+
+static uint8_t packetTail = 0;
+
+PacketManager::PacketManager(IPacketListener * listener)
 {
-    _commandExecutor = commandExecutor;
+    _listener = listener;
 }
 
 void PacketManager::ReadPacket()
@@ -27,12 +34,28 @@ void PacketManager::ReadPacket()
     }
 }
 
-const uint8_t EscSymbol = 0x7D;
-const uint8_t FlagSymbol = 0xDD;
+void PacketManager::WritePacketData(uint8_t byte)
+{
+    if( (byte == FlagSymbol) || 
+    (byte == EscSymbol) )
+    {
+        Serial.write(EscSymbol);
+    }
+    Serial.write(byte);
+}
 
-static bool escapeFlag = false;
+void PacketManager::WritePacketData(uint8_t const * bytes, uint8_t bytesNumber)
+{
+    for(uint8_t i = 0; i < bytesNumber; i++)
+    {
+        WritePacketData(bytes[i]);
+    }
+}
 
-static uint8_t packetTail = 0;
+void PacketManager::WritePacketFlag()
+{
+    Serial.write(FlagSymbol);
+}
 
 void PacketManager::tryPacketBuild(uint8_t bufferPosition)
 {
@@ -40,10 +63,6 @@ void PacketManager::tryPacketBuild(uint8_t bufferPosition)
 
     if(packetTail == PACKET_SIZE)
     {
-#ifdef DEBUG
-        String message = "Packet size overflow";
-        printMessage(message);
-#endif
         packetTail = 0;
     }
     escapeFlag = false;
@@ -63,7 +82,7 @@ void PacketManager::findByteStuffingPacket()
             }
             else
             {
-                _commandExecutor.ExecuteCommand(packetBuffer, packetTail-1);
+                _listener->listenPacket(packetBuffer, packetTail-1);
                 packetTail = 0;
             }
         }
@@ -84,20 +103,4 @@ void PacketManager::findByteStuffingPacket()
         }
         position++;
     }
-}
-
-void PacketManager::printMessage(const String & messageText)
-{
-    Serial.write(packetHeader, packetHeaderLength);
-    Serial.write(TEXT_MESSAGE);
-    Serial.println(messageText);
-    Serial.write(packetEnd, packetEndLength);
-}
-
-void PacketManager::printBarCode(const String & barCode)
-{
-    Serial.write(packetHeader, packetHeaderLength);
-    Serial.write(BAR_CODE_MESSAGE);
-    Serial.println(barCode);
-    Serial.write(packetEnd, packetEndLength);
 }

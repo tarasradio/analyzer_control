@@ -21,52 +21,57 @@ namespace SteppersControlCore.Controllers
         [Category("1. Двигатели")]
         [DisplayName("Двигатель подъема")]
         public int LiftStepper { get; set; } = 17;
+        
         [Category("1. Двигатели")]
+        [DisplayName("Двигатель поворота")]
+        public int TurnStepper { get; set; } = 8;
+        
+
+        [Category("2. Скорость")]
         [DisplayName("Скорость подъема / опускания")]
         public int LiftStepperSpeed { get; set; } = 500;
-        [Category("1. Двигатели")]
-        [DisplayName("Двигатель поврота")]
-        public int TurnStepper { get; set; } = 8;
-        [Category("1. Двигатели")]
+        [Category("2. Скорость")]
         [DisplayName("Скорость поворота")]
         public int TurnStepperSpeed { get; set; } = 50;
 
-        [Category("2. Шаги")]
+        [Category("3.1 Шаги двигателя поворота")]
         [DisplayName("Шагов до пробирки")]
         public int StepsToTube { get; set; } = 15500;
-        [Category("2. Шаги")]
-        [DisplayName("Шагов после касания жидкости в пробирке")]
-        public int StepsToTubeAfterTouch { get; set; } = 500;
-        [Category("2. Шаги")]
+        [Category("3.1 Шаги двигателя поворота")]
         [DisplayName("Шагов до промывки")]
         public int StepsTurnToWashing { get; set; } = 55900;
-        [Category("2. Шаги")]
-        [DisplayName("Шагов опускания до промывки")]
-        public int StepsDownToWashing { get; set; } = 5500;
+        
 
-        [Category("2. Шаги")]
+        [Category("3.1 Шаги двигателя поворота")]
         [DisplayName("Шагов до белой ячейки")]
         public int StepsToMixCell { get; set; } = 46600; // уточнить
-        [Category("2. Шаги")]
+        [Category("3.1 Шаги двигателя поворота")]
         [DisplayName("Шагов до 1-й ячейки")]
         public int StepsToFirstCell { get; set; } = 47000; // уточнить
-        [Category("2. Шаги")]
+        [Category("3.1 Шаги двигателя поворота")]
         [DisplayName("Шагов до 2-й ячейки")]
         public int StepsToSecondCell { get; set; } = 48000; // уточнить
-        [Category("2. Шаги")]
+        [Category("3.1 Шаги двигателя поворота")]
         [DisplayName("Шагов до 3-й ячейки")]
         public int StepsToThirdCell { get; set; } = 48900; // уточнить
 
-        [Category("2. Шаги")]
+        [Category("3.2 Шаги двигателя подъема / опускания")]
+        [DisplayName("Шагов после касания жидкости в пробирке")]
+        public int StepsToTubeAfterTouch { get; set; } = 500;
+        [Category("3.2 Шаги двигателя подъема / опускания")]
+        [DisplayName("Шагов опускания до промывки")]
+        public int StepsDownToWashing { get; set; } = 5500;
+
+        [Category("3.2 Шаги двигателя подъема / опускания")]
         [DisplayName("Шагов для опускания до 1-3-й ячеек")]
         public int StepsDownToCell { get; set; } = 297000;
-        [Category("2. Шаги")]
+        [Category("3.2 Шаги двигателя подъема / опускания")]
         [DisplayName("Шагов для опускания до белой ячейки")]
         public int StepsDownToMixCell { get; set; } = 272000;
-        [Category("2. Шаги")]
+        [Category("3.2 Шаги двигателя подъема / опускания")]
         [DisplayName("Шагов для опускания до белой ячейки (при заборе)")]
         public int StepsDownToMixCellOnSuction { get; set; } = 272000;
-        [Category("2. Шаги")]
+        [Category("3.2 Шаги двигателя подъема / опускания")]
         [DisplayName("Шагов не доходя до картриджа")]
         public int StepsOnBroke { get; set; } = 70000;
 
@@ -76,10 +81,13 @@ namespace SteppersControlCore.Controllers
         }
     }
 
-    public class ArmController : Controller
+    public class ArmController : ControllerBase
     {
         const string filename = "ArmControllerProps";
         public ArmControllerPropetries Props { get; set; }
+
+        public int LiftStepperPosition { get; set; } = 0;
+        public int TurnStepperPosition { get; set; } = 0;
 
         public ArmController() : base()
         {
@@ -104,7 +112,7 @@ namespace SteppersControlCore.Controllers
             // Поворот иглы до пробирки
             commands.Add(new SetSpeedCommand(Props.TurnStepper, (uint)Props.TurnStepperSpeed));
 
-            steppers = new Dictionary<int, int>() { { Props.TurnStepper, -Props.StepsToTube } };
+            steppers = new Dictionary<int, int>() { { Props.TurnStepper, Props.StepsToTube - TurnStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
             // Опускание иглы до жидкости в пробирке
@@ -116,6 +124,9 @@ namespace SteppersControlCore.Controllers
             // Дополнительное опускание иглы в жидкости
             steppers = new Dictionary<int, int>() { { Props.LiftStepper, Props.StepsToTubeAfterTouch } };
             commands.Add(new MoveCncCommand(steppers));
+
+            TurnStepperPosition = Props.StepsToTube;
+            LiftStepperPosition = -1; // ибо неизвестн, где он будет после касания жидкости в пробирке
 
             return commands;
         }
@@ -136,6 +147,9 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.TurnStepper, 100 } };
             commands.Add(new HomeCncCommand(steppers));
 
+            LiftStepperPosition = 0;
+            TurnStepperPosition = 0;
+
             return commands;
         }
 
@@ -146,14 +160,17 @@ namespace SteppersControlCore.Controllers
             // Поворот иглы до промывки
             commands.Add(new SetSpeedCommand(Props.TurnStepper, 50));
 
-            steppers = new Dictionary<int, int>() { { Props.TurnStepper, -Props.StepsTurnToWashing } };
+            steppers = new Dictionary<int, int>() { { Props.TurnStepper, Props.StepsTurnToWashing - TurnStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
             // Опускание иглы до промывки
             commands.Add(new SetSpeedCommand(Props.LiftStepper, 500));
 
-            steppers = new Dictionary<int, int>() { { Props.LiftStepper, Props.StepsDownToWashing } };
+            steppers = new Dictionary<int, int>() { { Props.LiftStepper, Props.StepsDownToWashing - LiftStepperPosition } };
             commands.Add(new MoveCncCommand(steppers));
+
+            TurnStepperPosition = Props.StepsTurnToWashing;
+            LiftStepperPosition = Props.StepsDownToWashing;
 
             return commands;
         }
@@ -169,6 +186,8 @@ namespace SteppersControlCore.Controllers
             THirdCell
         }
 
+
+        //TODO: выяснить, используем относительное количество шагов или нет!!!
         public List<IAbstractCommand> BrokeCartridge()
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
@@ -179,9 +198,12 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.LiftStepper, Props.StepsOnBroke } };
             commands.Add(new MoveCncCommand(steppers));
 
+            //LiftStepperPosition = Props.StepsOnBroke;
+
             return commands;
         }
 
+        //TODO: Доделать, ибо говно, убрать from position
         public List<IAbstractCommand> MoveToCartridge(FromPosition fromPosition, CartridgeCell cell)
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
@@ -191,40 +213,24 @@ namespace SteppersControlCore.Controllers
 
             bool fromCartridge = false;
 
-            if(fromPosition == FromPosition.Home)
-            {
-                turnSteps = 0;
-            }
-            else if(fromPosition == FromPosition.Tube)
-            {
-                turnSteps = Props.StepsToTube;
-            }
-            else if(fromPosition == FromPosition.Washing)
-            {
-                turnSteps = Props.StepsTurnToWashing;
-            }
-            else if(fromPosition == FromPosition.WhiteCell)
+            if(fromPosition == FromPosition.WhiteCell)
             {
                 fromCartridge = true;
-                turnSteps = Props.StepsToMixCell;
                 upSteps = Props.StepsDownToMixCell;
             }
             else if(fromPosition == FromPosition.FirstCell)
             {
                 fromCartridge = true;
-                turnSteps = Props.StepsToFirstCell;
                 upSteps = Props.StepsDownToCell;
             }
             else if (fromPosition == FromPosition.SecondCell)
             {
                 fromCartridge = true;
-                turnSteps = Props.StepsToSecondCell;
                 upSteps = Props.StepsDownToCell;
             }
             else if (fromPosition == FromPosition.THirdCell)
             {
                 fromCartridge = true;
-                turnSteps = Props.StepsToThirdCell;
                 upSteps = Props.StepsDownToCell;
             }
 
@@ -232,20 +238,25 @@ namespace SteppersControlCore.Controllers
 
             if(cell == CartridgeCell.WhiteCell)
             {
-                turnSteps = Props.StepsToMixCell - turnSteps;
+                turnSteps = Props.StepsToMixCell - TurnStepperPosition;
+                TurnStepperPosition = Props.StepsToMixCell;
+
                 downSteps = Props.StepsDownToMixCell;
             }
             else if(cell == CartridgeCell.FirstCell)
             {
-                turnSteps = Props.StepsToFirstCell - turnSteps;
+                turnSteps = Props.StepsToFirstCell - TurnStepperPosition;
+                TurnStepperPosition = Props.StepsToFirstCell;
             }
             else if(cell == CartridgeCell.SecondCell)
             {
-                turnSteps = Props.StepsToSecondCell - turnSteps;
+                turnSteps = Props.StepsToSecondCell - TurnStepperPosition;
+                TurnStepperPosition = Props.StepsToSecondCell;
             }
             else if(cell == CartridgeCell.ThirdCell)
             {
-                turnSteps = Props.StepsToThirdCell - turnSteps;
+                turnSteps = Props.StepsToThirdCell - TurnStepperPosition;
+                TurnStepperPosition = Props.StepsToThirdCell;
             }
 
             if(fromCartridge)
@@ -270,7 +281,7 @@ namespace SteppersControlCore.Controllers
             // Поворот иглы до картриджа
             commands.Add(new SetSpeedCommand(Props.TurnStepper, 50));
 
-            steppers = new Dictionary<int, int>() { { Props.TurnStepper, -turnSteps } };
+            steppers = new Dictionary<int, int>() { { Props.TurnStepper, turnSteps } };
             commands.Add(new MoveCncCommand(steppers));
 
             if(!fromCartridge)

@@ -3,12 +3,6 @@
 
 #include <Arduino.h>
 
-static const uint8_t packetHeader[] = {0x55, 0x55};
-static const uint8_t packetHeaderLength = 2;
-
-static const uint8_t packetEnd[] = {0xAA, 0xAA};
-static const uint8_t packetEndLength = 2;
-
 enum CommandStates
 {
   COMMAND_OK,
@@ -18,16 +12,17 @@ enum CommandStates
 
 enum Responses
 {
-  STEPPERS_STATES = 0x10,
-  SENSORS_VALUES,
-  COMMAND_STATE,
+  FIRMWARE_VERSION = 0x0F,
+  STEPPERS_STATES_MESSAGE = 0x10,
+  SENSORS_VALUES_MESSAGE,
+  COMMAND_STATE_MESSAGE,
   TEXT_MESSAGE,
   BAR_CODE_MESSAGE
 };
 
 enum StepperCommands
 {
-  CMD_HOME = 0x09,
+  CMD_HOME = 0x0F,
   CMD_RUN = 0x10,
   CMD_MOVE = 0x11,
   CMD_STOP = 0x12,
@@ -39,18 +34,30 @@ enum AdditionalCommands
 	CMD_SET_DEVICE_STATE = 0x14,
 	CMD_ABORT,
   CMD_WAIT_TIME,
-  CMD_BAR_START
+  CMD_BAR_START,
+  CMD_GET_FIRMWARE_VERSION
 };
 
 enum CncCommands
 {
-	CNC_MOVE = 0x18,
+	CNC_MOVE = 0x19,
 	CNC_SET_SPEED,
 	CNC_STOP,
 	CNC_HOME,
 	CNC_ON_DEVICE,
 	CNC_OFF_DEVICE,
   CNC_RUN
+};
+
+class Protocol
+{
+public:
+    static void SendFirmwareVersion(const char* version);
+    static void SendMessage(const char* message);
+    static void SendBarCode(const char* barCode);
+    static void SendSteppersStates(const uint16_t *steppersStates, uint8_t steppersCount);
+    static void SendSensorsValues(const uint16_t *sensorsValues, uint8_t sensorsCount);
+    static void SendCommandState(const uint32_t* commandId, uint8_t commandState);
 };
 
 #endif

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <SteppersTool>
+  <Language>en-US</Language>
   <Steppers>
     <Stepper>
       <Number>0</Number>
@@ -74,7 +75,7 @@
     <Stepper>
       <Number>10</Number>
       <Name>Движение загрузки (поворот)</Name>
-      <Reverse>False</Reverse>
+      <Reverse>True</Reverse>
       <FullSpeed>100</FullSpeed>
       <NumberSteps>10000</NumberSteps>
     </Stepper>
@@ -108,7 +109,7 @@
     </Stepper>
     <Stepper>
       <Number>15</Number>
-      <Name>Загрузка</Name>
+      <Name>Челнок загрузки</Name>
       <Reverse>False</Reverse>
       <FullSpeed>100</FullSpeed>
       <NumberSteps>10000</NumberSteps>

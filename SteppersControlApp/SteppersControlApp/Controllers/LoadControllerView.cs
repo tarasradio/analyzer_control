@@ -68,5 +68,10 @@ namespace SteppersControlApp.Controllers
         {
 
         }
+
+        private void buttonMoveShuttleToUnload_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

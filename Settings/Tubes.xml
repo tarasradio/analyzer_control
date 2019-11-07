@@ -5,13 +5,23 @@
     <BarCode>RedMary4590</BarCode>
     <Stages>
       <Stage>
-        <CartridgeNumber>0</CartridgeNumber>
+        <CartridgePosition>0</CartridgePosition>
         <Cell>FirstCell</Cell>
         <TimeToPerform>5</TimeToPerform>
       </Stage>
+      <Stage>
+        <CartridgePosition>0</CartridgePosition>
+        <Cell>FirstCell</Cell>
+        <TimeToPerform>45</TimeToPerform>
+      </Stage>
+      <Stage>
+        <CartridgePosition>5</CartridgePosition>
+        <Cell>SecondCell</Cell>
+        <TimeToPerform>7</TimeToPerform>
+      </Stage>
     </Stages>
-    <CurrentStage>0</CurrentStage>
-    <TimeToStageComplete>5</TimeToStageComplete>
-    <IsFind>false</IsFind>
+    <CurrentStage>1</CurrentStage>
+    <TimeToStageComplete>0</TimeToStageComplete>
+    <IsFind>true</IsFind>
   </TubeInfo>
 </ArrayOfTubeInfo>

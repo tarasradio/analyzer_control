@@ -74,15 +74,15 @@ namespace SteppersControlApp.Views
 
         private void fillGrid()
         {
-            if (Core.GetConfig() == null)
+            if (Core.Settings == null)
                 return;
 
-            devicesList2.RowCount = Core.GetConfig().Devices.Count;
+            devicesList2.RowCount = Core.Settings.Devices.Count;
 
-            for (int i = 0; i < Core.GetConfig().Devices.Count; i++)
+            for (int i = 0; i < Core.Settings.Devices.Count; i++)
             {
-                devicesList2[0, i].Value = Core.GetConfig().Devices[i].Number;
-                devicesList2[1, i].Value = Core.GetConfig().Devices[i].Name;
+                devicesList2[0, i].Value = Core.Settings.Devices[i].Number;
+                devicesList2[1, i].Value = Core.Settings.Devices[i].Name;
                 devicesList2[2, i].Value = "Включить";
             }
         }

@@ -8,40 +8,40 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
-using SteppersControlCore.CommunicationProtocol.StepperCommands;
-using SteppersControlCore.SerialCommunication;
+using SteppersControlCore;
 
 namespace SteppersControlApp
 {
     public partial class ControlPanelForm : Form
     {
-        public ControlPanelForm()
+        IList<Stepper> _stepperParams;
+        public ControlPanelForm(IList<Stepper> stepperParams)
         {
+            _stepperParams = stepperParams;
             InitializeComponent();
             initDriveControls();
         }
 
         private void initDriveControls()
         {
-            stepperTurningView0.SetStepper(0);
-            stepperTurningView1.SetStepper(1);
-            stepperTurningView2.SetStepper(2);
-            stepperTurningView3.SetStepper(3);
-            stepperTurningView4.SetStepper(4);
-            stepperTurningView5.SetStepper(5);
-            stepperTurningView6.SetStepper(6);
-            stepperTurningView7.SetStepper(7);
-            stepperTurningView8.SetStepper(8);
-            stepperTurningView9.SetStepper(9);
-            stepperTurningView10.SetStepper(10);
-            stepperTurningView11.SetStepper(11);
-            stepperTurningView12.SetStepper(12);
-            stepperTurningView13.SetStepper(13);
-            stepperTurningView14.SetStepper(14);
-            stepperTurningView15.SetStepper(15);
-            stepperTurningView16.SetStepper(16);
-            stepperTurningView17.SetStepper(17);
+            stepperTurningView0.SetStepperParams(_stepperParams[0]);
+            stepperTurningView1.SetStepperParams(_stepperParams[1]);
+            stepperTurningView2.SetStepperParams(_stepperParams[2]);
+            stepperTurningView3.SetStepperParams(_stepperParams[3]);
+            stepperTurningView4.SetStepperParams(_stepperParams[4]);
+            stepperTurningView5.SetStepperParams(_stepperParams[5]);
+            stepperTurningView6.SetStepperParams(_stepperParams[6]);
+            stepperTurningView7.SetStepperParams(_stepperParams[7]);
+            stepperTurningView8.SetStepperParams(_stepperParams[8]);
+            stepperTurningView9.SetStepperParams(_stepperParams[9]);
+            stepperTurningView10.SetStepperParams(_stepperParams[10]);
+            stepperTurningView11.SetStepperParams(_stepperParams[11]);
+            stepperTurningView12.SetStepperParams(_stepperParams[12]);
+            stepperTurningView13.SetStepperParams(_stepperParams[13]);
+            stepperTurningView14.SetStepperParams(_stepperParams[14]);
+            stepperTurningView15.SetStepperParams(_stepperParams[15]);
+            stepperTurningView16.SetStepperParams(_stepperParams[16]);
+            stepperTurningView17.SetStepperParams(_stepperParams[17]);
         }
     }
 }

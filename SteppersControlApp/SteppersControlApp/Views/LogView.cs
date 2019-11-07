@@ -10,6 +10,8 @@ using System.Windows.Forms;
 
 using SteppersControlApp.Utils;
 
+using SteppersControlCore;
+
 namespace SteppersControlApp.Views
 {
     public partial class LogView : UserControl
@@ -17,6 +19,15 @@ namespace SteppersControlApp.Views
         public LogView()
         {
             InitializeComponent();
+            Logger.OnNewMessageAdded += Logger_OnNewMessageAdded;
+        }
+
+        private void Logger_OnNewMessageAdded(string message)
+        {
+            BeginInvoke((Action)( () =>
+            {
+                AddMessage(message);
+            }) );
         }
 
         public void AddMessage(string message)

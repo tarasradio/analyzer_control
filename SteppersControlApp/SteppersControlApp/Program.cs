@@ -22,7 +22,7 @@ namespace SteppersControlApp
             {
                 Core core = new Core("config.xml");
 
-                AuthForm authForm = new AuthForm();
+                StartForm authForm = new StartForm();
                 MainForm mainForm = new MainForm();
 
                 authForm.StartPosition = FormStartPosition.CenterScreen;
@@ -35,7 +35,7 @@ namespace SteppersControlApp
                     Application.Run(mainForm);
                 }
 
-                core.SaveSettings();
+                core.SaveConfiguration();
             }
             catch(System.IO.FileLoadException)
             {

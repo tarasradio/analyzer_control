@@ -37,6 +37,7 @@
             this.buttonMoveShuttleToCassette = new System.Windows.Forms.Button();
             this.buttonHomePusher = new System.Windows.Forms.Button();
             this.buttonPushCartridge = new System.Windows.Forms.Button();
+            this.buttonMoveShuttleToUnload = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,7 +61,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(147, 3);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(516, 356);
+            this.propertyGrid.Size = new System.Drawing.Size(516, 426);
             this.propertyGrid.TabIndex = 10;
             // 
             // buttonShuttleHome
@@ -141,7 +142,7 @@
             // 
             this.buttonPushCartridge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonPushCartridge.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPushCartridge.Location = new System.Drawing.Point(3, 287);
+            this.buttonPushCartridge.Location = new System.Drawing.Point(3, 345);
             this.buttonPushCartridge.Name = "buttonPushCartridge";
             this.buttonPushCartridge.Size = new System.Drawing.Size(138, 52);
             this.buttonPushCartridge.TabIndex = 20;
@@ -149,10 +150,23 @@
             this.buttonPushCartridge.UseVisualStyleBackColor = true;
             this.buttonPushCartridge.Click += new System.EventHandler(this.buttonPushCartridge_Click);
             // 
+            // buttonMoveShuttleToUnload
+            // 
+            this.buttonMoveShuttleToUnload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonMoveShuttleToUnload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonMoveShuttleToUnload.Location = new System.Drawing.Point(3, 287);
+            this.buttonMoveShuttleToUnload.Name = "buttonMoveShuttleToUnload";
+            this.buttonMoveShuttleToUnload.Size = new System.Drawing.Size(138, 52);
+            this.buttonMoveShuttleToUnload.TabIndex = 23;
+            this.buttonMoveShuttleToUnload.Text = "Вести челнок к выгрузке";
+            this.buttonMoveShuttleToUnload.UseVisualStyleBackColor = true;
+            this.buttonMoveShuttleToUnload.Click += new System.EventHandler(this.buttonMoveShuttleToUnload_Click);
+            // 
             // LoadControllerView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonMoveShuttleToUnload);
             this.Controls.Add(this.buttonPushCartridge);
             this.Controls.Add(this.buttonHomePusher);
             this.Controls.Add(this.buttonMoveShuttleToCassette);
@@ -163,7 +177,7 @@
             this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.buttonLoadHome);
             this.Name = "LoadControllerView";
-            this.Size = new System.Drawing.Size(666, 362);
+            this.Size = new System.Drawing.Size(666, 432);
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -181,5 +195,6 @@
         private System.Windows.Forms.Button buttonMoveShuttleToCassette;
         private System.Windows.Forms.Button buttonHomePusher;
         private System.Windows.Forms.Button buttonPushCartridge;
+        private System.Windows.Forms.Button buttonMoveShuttleToUnload;
     }
 }

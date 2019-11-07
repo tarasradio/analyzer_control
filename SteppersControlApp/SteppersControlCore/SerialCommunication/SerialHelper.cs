@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 using System.IO.Ports;
 
+using SteppersControlCore.Interfaces;
+
 namespace SteppersControlCore.SerialCommunication
 {
-    public class SerialHelper
+    public class SerialHelper : ISerialHelper
     {
         PackageReceiver _packageReceiver;
 
@@ -23,7 +25,7 @@ namespace SteppersControlCore.SerialCommunication
 
         public bool OpenConnection(string portName, int baudrate)
         {
-            bool isOK = false;
+            bool success = false;
 
             _serialPort = new SerialPort(portName);
             _serialPort.BaudRate = baudrate;
@@ -47,10 +49,10 @@ namespace SteppersControlCore.SerialCommunication
 
             if (_serialPort.IsOpen)
             {
-                isOK = true;
+                success = true;
             }
 
-            return isOK;
+            return success;
         }
 
         public void Disconnect()
@@ -79,7 +81,8 @@ namespace SteppersControlCore.SerialCommunication
         {
             byte[] buffer = new byte[_serialPort.BytesToRead];
             _serialPort.Read(buffer, 0, buffer.Length);
-            _packageReceiver.HandleData(buffer);
+            _packageReceiver.FindPacket(buffer);
+            //_packageReceiver.HandleData(buffer);
         }
 
         public void SendPacket(byte[] packet)
@@ -89,7 +92,7 @@ namespace SteppersControlCore.SerialCommunication
             SendBytes(wrappedPacket);
         }
 
-        public void SendBytes(byte[] bytes)
+        private void SendBytes(byte[] bytes)
         {
             try
             {
@@ -101,30 +104,9 @@ namespace SteppersControlCore.SerialCommunication
             }
         }
 
-        public static string[] GetPortsList()
+        public string[] GetAvailablePorts()
         {
             return SerialPort.GetPortNames();
-        }
-
-        public bool GetOpenPorts(ref List<string> ports)
-        {
-            List<string> Ports = new List<string>();
-            bool available = false;
-
-            foreach (string str in SerialPort.GetPortNames())
-            {
-                try
-                {
-                    ports.Add(str);
-                    available = true;
-                }
-                catch (Exception)
-                {
-                    Logger.AddMessage("Ошибка при сканировании!");
-                }
-            }
-
-            return available;
         }
     }
 }

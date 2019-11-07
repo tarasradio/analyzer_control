@@ -10,8 +10,7 @@ namespace SteppersControlCore.CommunicationProtocol.Responses
     {
         public BarCodeResponse(byte[] buffer) : base (buffer)
         {
-            _buffer = new byte[buffer.Length - 1];
-            Array.Copy(buffer, 1, _buffer, 0, _buffer.Length - 1);
+
         }
 
         public String GetDebugMessage()

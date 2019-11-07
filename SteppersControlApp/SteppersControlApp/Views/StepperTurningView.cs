@@ -17,7 +17,7 @@ namespace SteppersControlApp.Views
 {
     public partial class StepperTurningView : UserControl
     {
-        private int _stepper = 0;
+        private Stepper _stepperParams = null;
         bool isLoading = false;
 
         public StepperTurningView()
@@ -25,38 +25,38 @@ namespace SteppersControlApp.Views
             InitializeComponent();
         }
 
-        public void SetStepper(int stepper)
+        public void SetStepperParams(Stepper stepperParams)
         {
-            _stepper = stepper;
+            _stepperParams = stepperParams;
             UpdateInformation();
         }
 
-        public void ChangeStepper(int stepper)
+        public void ChangeStepperParams(Stepper stepperParams)
         {
             SaveInformation();
-            SetStepper(stepper);
+            SetStepperParams(stepperParams);
         }
 
         public void SaveInformation()
         {
             if (isLoading)
                 return;
-            if (Core.GetConfig() == null)
+            if (Core.Settings == null)
                 return;
 
-            Core.GetConfig().SteppersParams[_stepper].Reverse = checkReverse.Checked;
-            Core.GetConfig().Steppers[_stepper].Name = editStepperName.Text;
-            Core.GetConfig().SteppersParams[_stepper].NumberSteps = (uint)editNumberSteps.Value;
-            Core.GetConfig().SteppersParams[_stepper].FullSpeed = (uint)editFullSpeed.Value;
+            _stepperParams.Reverse = checkReverse.Checked;
+            _stepperParams.Name = editStepperName.Text;
+            _stepperParams.NumberSteps = (uint)editNumberSteps.Value;
+            _stepperParams.FullSpeed = (uint)editFullSpeed.Value;
         }
         
         public void UpdateInformation()
         {
             isLoading = true;
-            if (Core.GetConfig() == null)
+            if (Core.Settings == null)
                 return;
 
-            bool isReverse = Core.GetConfig().SteppersParams[_stepper].Reverse;
+            bool isReverse = _stepperParams.Reverse;
             checkReverse.Checked = isReverse;
 
             if(isReverse)
@@ -70,9 +70,9 @@ namespace SteppersControlApp.Views
                 buttonRev.BackColor = Color.White;
             }
 
-            editStepperName.Text = Core.GetConfig().Steppers[_stepper].Name;
-            editNumberSteps.Value = Core.GetConfig().SteppersParams[_stepper].NumberSteps;
-            editFullSpeed.Value = Core.GetConfig().SteppersParams[_stepper].FullSpeed;
+            editStepperName.Text = _stepperParams.Name;
+            editNumberSteps.Value = _stepperParams.NumberSteps;
+            editFullSpeed.Value = _stepperParams.FullSpeed;
             isLoading = false;
         }
 
@@ -94,12 +94,12 @@ namespace SteppersControlApp.Views
         private void buttonStop_Click(object sender, EventArgs e)
         {
             StopCommand.StopType type = StopCommand.StopType.SOFT_STOP;
-            Core.Serial.SendPacket(new StopCommand(_stepper, type).GetBytes());
+            Core.Serial.SendPacket(new StopCommand(_stepperParams.Number, type).GetBytes());
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            bool isReverse = Core.GetConfig().SteppersParams[_stepper].Reverse;
+            bool isReverse = _stepperParams.Reverse;
             Protocol.Direction direction = isReverse ? Protocol.Direction.REV : Protocol.Direction.FWD;
             goHome(direction);
         }
@@ -116,27 +116,29 @@ namespace SteppersControlApp.Views
         private void move(Protocol.Direction direction, int countSteps)
         {
             int speed = (int)editFullSpeed.Value;
-            Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            Core.Serial.SendPacket(new SetSpeedCommand(_stepper, (uint)speed).GetBytes());
+            int stepper = _stepperParams.Number;
+            Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            Core.Serial.SendPacket(new SetSpeedCommand(stepper, (uint)speed).GetBytes());
             countSteps = direction == Protocol.Direction.FWD ? countSteps : -countSteps;
-            Core.Serial.SendPacket(new MoveCommand(_stepper, countSteps).GetBytes());
+            Core.Serial.SendPacket(new MoveCommand(stepper, countSteps).GetBytes());
         }
 
         private void run(Protocol.Direction direction)
         {
             int speed = (int)editFullSpeed.Value;
-            Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            int stepper = _stepperParams.Number;
+            Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
             speed = direction == Protocol.Direction.FWD ? speed : -speed;
-            Core.Serial.SendPacket(new RunCommand(_stepper, speed).GetBytes());
+            Core.Serial.SendPacket(new RunCommand(stepper, speed).GetBytes());
         }
 
         private void goHome(Protocol.Direction direction)
         {
             int speed = (int)editFullSpeed.Value;
-
-            Core.Serial.SendPacket(new StopCommand(_stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            int stepper = _stepperParams.Number;
+            Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
             speed = direction == Protocol.Direction.FWD ? speed : -speed;
-            Core.Serial.SendPacket(new HomeCommand(_stepper, speed).GetBytes());
+            Core.Serial.SendPacket(new HomeCommand(stepper, speed).GetBytes());
         }
 
         private void editNumberSteps_ValueChanged(object sender, EventArgs e)

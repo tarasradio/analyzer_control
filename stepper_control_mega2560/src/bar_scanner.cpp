@@ -1,6 +1,6 @@
 #include "bar_scanner.hpp"
 
-#include "packet_manager.hpp"
+#include "protocol.hpp"
 
 #define EMULATOR
 
@@ -21,7 +21,8 @@ void BarScanner::updateState()
     //PacketManager::printMessage(message);
     if(number == 0)
     {
-        PacketManager::printBarCode("RedMary4590");
+        char* message = "RedMary4590";
+        Protocol::SendBarCode(message);
     }
         
     return;
@@ -36,9 +37,9 @@ void BarScanner::updateState()
 
             barBuffer[currentBarByte] = '\0';
             String message = "[Bar read] code = " + String((char*)barBuffer);
-            PacketManager::printMessage(message);
+            Protocol::SendMessage(message.c_str());
 
-            PacketManager::printBarCode(String((char*)barBuffer));
+            Protocol::SendBarCode(String((char*)barBuffer).c_str());
 
             currentBarByte = 0;
         }
@@ -48,7 +49,8 @@ void BarScanner::updateState()
             if(currentBarByte >= 64)
             {
                 // слишком длинное сообщение
-                PacketManager::printMessage("[Bar read] overflow");
+                String message = "[Bar read] overflow";
+                Protocol::SendMessage(message.c_str());
                 currentBarByte = 0;
             }
         }

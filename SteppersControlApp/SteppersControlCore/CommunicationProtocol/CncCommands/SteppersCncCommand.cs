@@ -20,7 +20,7 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
 
         public byte[] GetBytes()
         {
-            SendPacket2 packet = new SendPacket2(_steppers.Count * BytesPerStepper + 2);
+            SendPacket packet = new SendPacket(_steppers.Count * BytesPerStepper + 2);
             packet.SetPacketId(_commandId);
 
             packet.SetData(0, (byte)_commandCode);

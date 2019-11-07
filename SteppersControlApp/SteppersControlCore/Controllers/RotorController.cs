@@ -87,9 +87,11 @@ namespace SteppersControlCore.Controllers
         }
     }
 
-    public class RotorController : Controller
+    public class RotorController : ControllerBase
     {
         public RotorControllerPropetries Props { get; set; }
+
+        public int RotorStepperPosition { get; set; } = 0;
 
         const string filename = "RotorControllerProps";
 
@@ -119,6 +121,8 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.RotorStepper, -Props.RotorHomeSpeed } };
             commands.Add(new HomeCncCommand(steppers));
 
+            RotorStepperPosition = 0;
+
             return commands;
         }
 
@@ -129,8 +133,10 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToWashBuffer } };
+            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToWashBuffer - RotorStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
+
+            RotorStepperPosition = Props.StepsToWashBuffer;
 
             return commands;
         }
@@ -142,8 +148,10 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToUnload } };
+            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToUnload - RotorStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
+
+            RotorStepperPosition = Props.StepsToUnload;
 
             return commands;
         }
@@ -155,8 +163,10 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToLoad[position] } };
+            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToLoad[position] - RotorStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
+
+            RotorStepperPosition = Props.StepsToLoad[position];
 
             return commands;
         }
@@ -196,8 +206,10 @@ namespace SteppersControlCore.Controllers
                     Props.StepsToNeedleLeft3 : Props.StepsToNeedleRight3;
             }
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, turnSteps } };
+            steppers = new Dictionary<int, int>() { { Props.RotorStepper, turnSteps - RotorStepperPosition } };
             commands.Add(new MoveCncCommand(steppers));
+
+            RotorStepperPosition = turnSteps;
 
             return commands;
         }

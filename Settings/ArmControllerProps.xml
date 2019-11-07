@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArmControllerPropetries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LiftStepper>17</LiftStepper>
-  <LiftStepperSpeed>200</LiftStepperSpeed>
   <TurnStepper>8</TurnStepper>
+  <LiftStepperSpeed>200</LiftStepperSpeed>
   <TurnStepperSpeed>50</TurnStepperSpeed>
-  <StepsToTube>9500</StepsToTube>
+  <StepsToTube>-9500</StepsToTube>
+  <StepsTurnToWashing>-50400</StepsTurnToWashing>
+  <StepsToMixCell>-39000</StepsToMixCell>
+  <StepsToFirstCell>-40200</StepsToFirstCell>
+  <StepsToSecondCell>-41100</StepsToSecondCell>
+  <StepsToThirdCell>-42050</StepsToThirdCell>
   <StepsToTubeAfterTouch>500</StepsToTubeAfterTouch>
-  <StepsTurnToWashing>50400</StepsTurnToWashing>
   <StepsDownToWashing>40500</StepsDownToWashing>
-  <StepsToMixCell>39000</StepsToMixCell>
-  <StepsToFirstCell>40200</StepsToFirstCell>
-  <StepsToSecondCell>41100</StepsToSecondCell>
-  <StepsToThirdCell>42050</StepsToThirdCell>
   <StepsDownToCell>290000</StepsDownToCell>
   <StepsDownToMixCell>285000</StepsDownToMixCell>
   <StepsDownToMixCellOnSuction>290000</StepsDownToMixCellOnSuction>

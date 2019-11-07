@@ -25,7 +25,7 @@ namespace SteppersControlApp.Views
 
         Timer updateTimer = new Timer();
 
-        private System.Threading.Mutex mutex;
+        private static object _syncRoot = new object();
 
         bool gridFilled = false;
 
@@ -34,11 +34,8 @@ namespace SteppersControlApp.Views
             InitializeComponent();
             drawGrid();
 
-            mutex = new System.Threading.Mutex();
-
             updateTimer.Interval = 100;
             updateTimer.Tick += UpdateTimer_Tick;
-            //updateTimer.Start();
         }
 
         public void StartUpdate()
@@ -79,15 +76,15 @@ namespace SteppersControlApp.Views
 
         private void fillGrid()
         {
-            if (Core.GetConfig() == null)
+            if (Core.Settings == null)
                 return;
 
-            steppersGrid.RowCount = Core.GetConfig().Steppers.Count;
+            steppersGrid.RowCount = Core.Settings.Steppers.Count;
 
-            for(int i = 0; i < Core.GetConfig().Steppers.Count; i++)
+            for(int i = 0; i < Core.Settings.Steppers.Count; i++)
             {
-                steppersGrid[0, i].Value = Core.GetConfig().Steppers[i].Number;
-                steppersGrid[1, i].Value = Core.GetConfig().Steppers[i].Name;
+                steppersGrid[0, i].Value = Core.Settings.Steppers[i].Number;
+                steppersGrid[1, i].Value = Core.Settings.Steppers[i].Name;
             }
 
             gridFilled = true;
@@ -97,30 +94,23 @@ namespace SteppersControlApp.Views
         {
             fillGrid();
         }
-        
-        private ushort[] _states = new ushort[18];
 
         public void ShowStates()
         {
-            mutex.WaitOne();
-
-            ushort[] localStates = new ushort[18];
-            Array.Copy(_states, localStates, _states.Length);
-
-            mutex.ReleaseMutex();
+            ushort[] states = Core.GetSteppersStates();
 
             for (int i = 0; i < 18; i++)
             {
                 string stateStr = "Остановлен";
-                if ((localStates[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.ACCELERATION)
+                if ((states[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.ACCELERATION)
                     stateStr = "Ускорение";
-                if ((localStates[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.DECELERATION)
+                if ((states[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.DECELERATION)
                     stateStr = "Замедление";
-                if ((localStates[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.CONSTANT_SPEED)
+                if ((states[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.CONSTANT_SPEED)
                     stateStr = "В движении";
                 steppersGrid[2, i].Value = stateStr;
 
-                if ((localStates[i] & (ushort)DriverState.STATUS_SW_F) != 0)
+                if ((states[i] & (ushort)DriverState.STATUS_SW_F) != 0)
                 {
                     steppersGrid[3, i].Value = "Нажат";
                     steppersGrid[3, i].Style.BackColor = Color.Red;
@@ -131,17 +121,6 @@ namespace SteppersControlApp.Views
                     steppersGrid[3, i].Style.BackColor = Color.GreenYellow;
                 }
             }
-        }
-
-        public void UpdateSteppersStatus(ushort[] states)
-        {
-            if (states.Length != 18)
-                return;
-            mutex.WaitOne();
-
-            Array.Copy(states, _states, states.Length);
-
-            mutex.ReleaseMutex();
         }
         
         private void steppersGrid_SelectionChanged(object sender, EventArgs e)

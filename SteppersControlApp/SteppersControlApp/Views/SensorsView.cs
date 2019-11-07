@@ -18,7 +18,7 @@ namespace SteppersControlApp.Views
         
         Timer _updateTimer = new Timer();
 
-        private System.Threading.Mutex _mutex;
+        private static object _syncRoot = new object();
 
         private ushort[] _values = null;
 
@@ -28,47 +28,23 @@ namespace SteppersControlApp.Views
 
             drawGrid();
 
-            _mutex = new System.Threading.Mutex();
-
             _updateTimer.Interval = 100;
             _updateTimer.Tick += updateValues;
         }
         
         private void updateValues(object sender, EventArgs e)
         {
-            if (_values == null)
-                return;
-            _mutex.WaitOne();
-            
-            ushort[] localValues = new ushort[Core.GetConfig().Sensors.Count];
-            Array.Copy(_values, localValues, _values.Length);
-
-            _mutex.ReleaseMutex();
-            
-            for (int i = 0; i < Core.GetConfig().Sensors.Count; i++)
+            ushort[] newValues = Core.GetSensorsValues();
+            lock(_syncRoot)
             {
-                if(i == 15)
+                for (int i = 0; i < Core.Settings.Sensors.Count; i++)
                 {
-                    sensorsList[2, i].Value = (double)localValues[i] * 0.00488281;
+                    if(i == 15)
+                        sensorsList[2, i].Value = (double)newValues[i] * 0.00488281;
+                    else
+                        sensorsList[2, i].Value = newValues[i];
                 }
-                else
-                {
-                    sensorsList[2, i].Value = localValues[i];
-                }
-                
             }
-        }
-
-        public void UpdateSensorsValues(ushort[] values)
-        {
-            if (values.Length != Core.GetConfig().Sensors.Count)
-                return;
-            _mutex.WaitOne();
-
-            _values = new ushort[Core.GetConfig().Sensors.Count];
-            Array.Copy(values, _values, values.Length);
-
-            _mutex.ReleaseMutex();
         }
 
         public void StartUpdate()
@@ -108,15 +84,15 @@ namespace SteppersControlApp.Views
 
         private void fillGrid()
         {
-            if (Core.GetConfig() == null)
+            if (Core.Settings == null)
                 return;
 
-            sensorsList.RowCount = Core.GetConfig().Sensors.Count;
+            sensorsList.RowCount = Core.Settings.Sensors.Count;
 
-            for (int i = 0; i < Core.GetConfig().Sensors.Count; i++)
+            for (int i = 0; i < Core.Settings.Sensors.Count; i++)
             {
-                sensorsList[0, i].Value = Core.GetConfig().Sensors[i].Number;
-                sensorsList[1, i].Value = Core.GetConfig().Sensors[i].Name;
+                sensorsList[0, i].Value = Core.Settings.Sensors[i].Number;
+                sensorsList[1, i].Value = Core.Settings.Sensors[i].Name;
                 sensorsList[2, i].Value = "Не задано";
             }
         }
