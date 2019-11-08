@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PompControllerPropetries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<PompControllerProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <BigPistonStepper>11</BigPistonStepper>
   <SmallPistonStepper>12</SmallPistonStepper>
   <BigPistonHomeSpeed>600</BigPistonHomeSpeed>
@@ -12,4 +12,4 @@
   <SmallPistonSuctionSteps>200000</SmallPistonSuctionSteps>
   <BigPistonWashingSteps>700000</BigPistonWashingSteps>
   <SmallPistonWashingSteps>700000</SmallPistonWashingSteps>
-</PompControllerPropetries>
+</PompControllerProperties>

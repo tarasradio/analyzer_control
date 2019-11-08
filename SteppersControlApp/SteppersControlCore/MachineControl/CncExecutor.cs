@@ -83,11 +83,12 @@ namespace SteppersControlCore.MachineControl
 
             if (_executionThread != null && _executionThread.IsAlive)
                 _executionThread.Abort();
+
             _executionThread = new Thread(commandsExecution);
             _executionThread.Priority = ThreadPriority.Lowest;
             _executionThread.Start();
+
             isExecute = true;
-            //Logger.AddMessage("Запущено выполнение задания");
 
             while (isExecute)
             {
@@ -107,8 +108,6 @@ namespace SteppersControlCore.MachineControl
             _executionThread.Start();
 
             isExecute = true;
-
-            //Logger.AddMessage("Запущено выполнение программы.");
         }
 
         public void AbortExecution()
@@ -119,19 +118,10 @@ namespace SteppersControlCore.MachineControl
             Logger.AddMessage("Выполнение программы было прерванно.");
         }
         
-        enum ExecutionStages
-        {
-            WAIT_OK,
-            WAIT_COMPLETE
-        }
-
-        static ExecutionStages stage = 0;
-
         Stopwatch stopWatch = new Stopwatch();
         
         private void commandsExecution()
         {
-            stage = 0;
             int commandNumber = 0;
             foreach (IAbstractCommand command in _commandsToSend)
             {
@@ -146,9 +136,6 @@ namespace SteppersControlCore.MachineControl
             }
 
             isExecute = false;
-            //Logger.AddMessage("Все команды выполнены успешно !");
-            //Logger.AddMessage($"Пакетов с ошибками {countBadPackets}!");
-            //Logger.AddMessage("Выполнение программы завершено.");
         }
         
         private void executeCommand(IAbstractCommand command)
@@ -184,27 +171,16 @@ namespace SteppersControlCore.MachineControl
 
                 if (Protocol.CommandTypes.SIMPLE_COMMAND == command.GetType())
                 {
-                    if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
+                    if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_RECEIVED)
                     {
                         break;
                     }
                 }
                 else if(Protocol.CommandTypes.WAITING_COMMAND == command.GetType())
                 {
-                    if(ExecutionStages.WAIT_OK == stage)
+                    if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_EXECUTED)
                     {
-                        if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_OK)
-                        {
-                            stage = ExecutionStages.WAIT_COMPLETE;
-                        }
-                    }
-                    else if(ExecutionStages.WAIT_COMPLETE == stage)
-                    {
-                        if (getSuccesCommandId() == command.GetId() && getSuccesCommandState() == Protocol.CommandStates.COMMAND_DONE)
-                        {
-                            stage = ExecutionStages.WAIT_OK;
-                            break;
-                        }
+                        break; 
                     }
                 }
             }

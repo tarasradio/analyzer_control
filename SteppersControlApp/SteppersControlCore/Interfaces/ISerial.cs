@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace SteppersControlCore.Interfaces
 {
-    public interface ISerialHelper
+    public interface ISerial
     {
+        bool Open(string portName, int baudrate);
+        void Close();
+        bool IsOpen();
+        void SendPacket(byte[] packet);
         string[] GetAvailablePorts();
-        bool OpenConnection(string portName, int baudrate);
     }
 }

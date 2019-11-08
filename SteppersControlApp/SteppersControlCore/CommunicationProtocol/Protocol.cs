@@ -19,9 +19,9 @@ namespace SteppersControlCore.CommunicationProtocol
 
         public enum CommandStates
         {
-            COMMAND_OK,
+            COMMAND_RECEIVED,
             COMMAND_BAD_FORMAT,
-            COMMAND_DONE
+            COMMAND_EXECUTED
         }
 
         public enum ResponsesTypes

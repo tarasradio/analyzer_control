@@ -132,7 +132,7 @@ namespace SteppersControlApp.Views
                 executionProgressLabel.Text = $"Выполнено команд: {0} из {_program.Commands.Count}";
                 executionProgressBar.Value = 0;
 
-                Core.CNCExecutor.StartExecution(_program.Commands);
+                Core.CncExecutor.StartExecution(_program.Commands);
             }
         }
 
@@ -164,7 +164,7 @@ namespace SteppersControlApp.Views
         private void buttonAbortExecution_Click(object sender, EventArgs e)
         {
             Core.Executor.AbortExecution();
-            Core.CNCExecutor.AbortExecution();
+            Core.CncExecutor.AbortExecution();
             Core.Serial.SendPacket(new AbortExecutionCommand().GetBytes());
             executionStatusLabel.Text = "Выполнение программы было прерванно";
         }

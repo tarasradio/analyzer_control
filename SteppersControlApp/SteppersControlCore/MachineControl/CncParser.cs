@@ -13,6 +13,16 @@ using SteppersControlCore.Utils;
 
 namespace SteppersControlCore.MachineControl
 {
+    public class CncProgram
+    {
+        public List<IAbstractCommand> Commands { get; set; }
+
+        public CncProgram()
+        {
+            Commands = new List<IAbstractCommand>();
+        }
+    }
+
     public class CncParser
     {
         readonly Regex cncCommandPattern = new Regex(@"(MOVE|SPEED|STOP|HOME|ON|OFF|WAITR|WAITF|DELAY|RUN)(\s+\w+(-)?\d+)+", RegexOptions.IgnoreCase);

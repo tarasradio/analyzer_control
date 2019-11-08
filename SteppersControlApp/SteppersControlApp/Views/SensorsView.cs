@@ -20,8 +20,6 @@ namespace SteppersControlApp.Views
 
         private static object _syncRoot = new object();
 
-        private ushort[] _values = null;
-
         public SensorsView()
         {
             InitializeComponent();

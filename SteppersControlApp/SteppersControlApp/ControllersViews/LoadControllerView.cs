@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SteppersControlCore;
 
-namespace SteppersControlApp.Controllers
+namespace SteppersControlApp.ControllersViews
 {
     public partial class LoadControllerView : UserControl
     {
@@ -17,7 +17,7 @@ namespace SteppersControlApp.Controllers
         {
             InitializeComponent();
             if (Core.Loader != null)
-                propertyGrid.SelectedObject = Core.Loader.Props;
+                propertyGrid.SelectedObject = Core.Loader.Properties;
         }
 
         private void buttonShuttleHome_Click(object sender, EventArgs e)
@@ -25,7 +25,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Loader.HomeShuttle());
+                    Core.CncExecutor.ExecuteTask(Core.Loader.HomeShuttle());
                 });
         }
 
@@ -34,7 +34,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Loader.HomeLoad());
+                    Core.CncExecutor.ExecuteTask(Core.Loader.HomeLoad());
                 });
         }
 
@@ -45,8 +45,8 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Loader.HomeLoad());
-                    Core.CNCExecutor.ExecuteTask(Core.Loader.TurnLoadToCell(cell));
+                    Core.CncExecutor.ExecuteTask(Core.Loader.HomeLoad());
+                    Core.CncExecutor.ExecuteTask(Core.Loader.TurnLoadToCell(cell));
                 });
         }
 
@@ -55,7 +55,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Loader.MoveShuttleToCassette());
+                    Core.CncExecutor.ExecuteTask(Core.Loader.MoveShuttleToCassette());
                 });
         }
 

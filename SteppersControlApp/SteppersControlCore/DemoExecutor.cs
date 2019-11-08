@@ -1,17 +1,14 @@
 ﻿using SteppersControlCore.CommunicationProtocol;
+using SteppersControlCore.Controllers;
 using SteppersControlCore.Elements;
 using SteppersControlCore.Utils;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Timers;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 
-namespace SteppersControlCore.Controllers
+namespace SteppersControlCore
 {
     public class DemoExecutor
     {
@@ -399,7 +396,7 @@ namespace SteppersControlCore.Controllers
 
         private void WaitExecution(List<IAbstractCommand> task)
         {
-            Core.CNCExecutor.ExecuteTask(task);
+            Core.CncExecutor.ExecuteTask(task);
         }
     }
 }

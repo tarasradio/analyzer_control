@@ -1,4 +1,4 @@
-﻿namespace SteppersControlApp.Controllers
+﻿namespace SteppersControlApp.ControllersViews
 {
     partial class DemoExecutorView
     {

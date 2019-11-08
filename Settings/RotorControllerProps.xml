@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RotorControllerPropetries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<RotorControllerProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <RotorStepper>7</RotorStepper>
   <RotorHomeSpeed>100</RotorHomeSpeed>
   <RotorSpeed>50</RotorSpeed>
@@ -25,4 +25,4 @@
   <StepsToNeedleRight2>9300</StepsToNeedleRight2>
   <StepsToNeedleLeft3>8500</StepsToNeedleLeft3>
   <StepsToNeedleRight3>8730</StepsToNeedleRight3>
-</RotorControllerPropetries>
+</RotorControllerProperties>

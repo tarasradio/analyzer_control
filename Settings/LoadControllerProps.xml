@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LoadControllerPropetries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<LoadControllerProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LoadStepper>10</LoadStepper>
   <ShuttleStepper>15</ShuttleStepper>
   <PushStepper>1</PushStepper>
@@ -24,4 +24,4 @@
   <StepsToUnload>-40000</StepsToUnload>
   <StepsShuttleToStart>-20000</StepsShuttleToStart>
   <StepsShuttleToCassette>-710000</StepsShuttleToCassette>
-</LoadControllerPropetries>
+</LoadControllerProperties>

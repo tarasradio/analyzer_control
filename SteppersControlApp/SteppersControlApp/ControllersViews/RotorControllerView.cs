@@ -11,7 +11,7 @@ using SteppersControlCore;
 using SteppersControlCore.Controllers;
 using SteppersControlCore.Elements;
 
-namespace SteppersControlApp.Controllers
+namespace SteppersControlApp.ControllersViews
 {
     public partial class RotorControllerView : UserControl
     {
@@ -19,7 +19,7 @@ namespace SteppersControlApp.Controllers
         {
             InitializeComponent();
             if (Core.Rotor != null)
-                propertyGrid.SelectedObject = Core.Rotor.Props;
+                propertyGrid.SelectedObject = Core.Rotor.Properties;
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -27,7 +27,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
                 });
         }
 
@@ -56,8 +56,8 @@ namespace SteppersControlApp.Controllers
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.MoveToLoad(cellNumber, loadPosition));
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveToLoad(cellNumber, loadPosition));
                 });
             }
             else if(selectNeedleLeftPlace.Checked)
@@ -65,8 +65,8 @@ namespace SteppersControlApp.Controllers
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
                         RotorController.CellPosition.CellLeft));
                 });
             }
@@ -75,8 +75,8 @@ namespace SteppersControlApp.Controllers
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
                         RotorController.CellPosition.CellRight));
                 });
             }
@@ -85,8 +85,8 @@ namespace SteppersControlApp.Controllers
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.MoveToWashBuffer());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveToWashBuffer());
                 });
             }
             else if(selectUnloadPlace.Checked)
@@ -94,8 +94,8 @@ namespace SteppersControlApp.Controllers
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.MoveToUnload());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveToUnload());
                 });
             }
         }

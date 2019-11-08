@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SteppersControlCore;
 
-namespace SteppersControlApp.Controllers
+namespace SteppersControlApp.ControllersViews
 {
     public partial class TransporterControllerView : UserControl
     {
@@ -17,7 +17,7 @@ namespace SteppersControlApp.Controllers
         {
             InitializeComponent();
             if(Core.Transporter != null)
-                propertyGrid.SelectedObject = Core.Transporter.Props;
+                propertyGrid.SelectedObject = Core.Transporter.Properties;
         }
 
         private void buttonPrepare_Click(object sender, EventArgs e)
@@ -25,7 +25,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Transporter.PrepareBeforeScanning());
+                    Core.CncExecutor.ExecuteTask(Core.Transporter.PrepareBeforeScanning());
                 });
         }
 
@@ -34,7 +34,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Transporter.TurnAndScanTube());
+                    Core.CncExecutor.ExecuteTask(Core.Transporter.TurnAndScanTube());
                 });
         }
     }

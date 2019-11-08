@@ -17,10 +17,10 @@ namespace SteppersControlCore
         private static string FirmwareVersion = "07.11.2019";
         public static Configuration Settings { get; private set; }
 
-        public static PackageReceiver PackReceiver { get; private set; }
-        public static PackageHandler PackHandler { get; private set; }
+        public static PacketFinder PackFinder { get; private set; } = new PacketFinder();
+        public static PackageHandler PackHandler { get; private set; } = new PackageHandler();
         public static SerialHelper Serial { get; private set; }
-        public static CncExecutor CNCExecutor { get; private set; }
+        public static CncExecutor CncExecutor { get; private set; }
         public static TaskExecutor Executor { get; private set; }
 
         public static ArmController Arm { get; private set; }
@@ -68,22 +68,19 @@ namespace SteppersControlCore
 
             Demo = new DemoExecutor();
             Demo.ReadXml();
-            
-            PackReceiver = new PackageReceiver(Protocol.PacketHeader, Protocol.PacketEnd);
-            PackHandler = new PackageHandler();
 
-            PackReceiver.PackageReceived += PackHandler.ProcessPacket;
+            PackFinder.PacketReceived += PackHandler.ProcessPacket;
 
-            Serial = new SerialHelper(PackReceiver);
+            Serial = new SerialHelper(PackFinder);
 
-            PackHandler.BarCodeReceived += PackHandler_BarCodeReceived;
+            PackHandler.BarCodeAReceived += PackHandler_BarCodeReceived;
             PackHandler.FirmwareVersionReceived += PackHandler_FirmwareVersionReceived;
             PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived;
             PackHandler.SteppersStatesReceived += PackHandler_SteppersStatesReceived;
 
             PackHandler.MessageReceived += Logger.AddMessage;
 
-            CNCExecutor = new CncExecutor();
+            CncExecutor = new CncExecutor();
             Executor = new TaskExecutor();
 
             PackHandler.CommandStateResponseReceived += PackHandler_CommandStateResponseReceived;
@@ -93,7 +90,7 @@ namespace SteppersControlCore
 
         private void PackHandler_CommandStateResponseReceived(uint commandId, Protocol.CommandStates state)
         {
-            CNCExecutor.ChangeSuccesCommandId(commandId, state);
+            CncExecutor.ChangeSuccesCommandId(commandId, state);
         }
 
         private void PackHandler_SteppersStatesReceived(ushort[] states)
@@ -235,7 +232,7 @@ namespace SteppersControlCore
         public static void AbortExecution()
         {
             Executor.AbortExecution();
-            CNCExecutor.AbortExecution();
+            CncExecutor.AbortExecution();
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }
     }

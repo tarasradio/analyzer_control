@@ -1,8 +1,7 @@
+#include "system.hpp"
 #include "bar_scanner.hpp"
 
 #include "protocol.hpp"
-
-#define EMULATOR
 
 byte barBuffer[64];
 uint8_t currentBarByte = 0;
@@ -17,16 +16,14 @@ volatile int number = 0;
 void BarScanner::updateState()
 {
 #ifdef EMULATOR
-    //String message = "[Bar read] code = " + String("RedMary");
-    //PacketManager::printMessage(message);
     if(number == 0)
     {
-        char* message = "RedMary4590";
-        Protocol::SendBarCode(message);
+        String message = "RedMary4590";
+        Protocol::SendBarCode(message.c_str());
     }
-        
     return;
 #endif
+
     currentBarByte = 0;
     while(Serial1.available() > 0)
     {

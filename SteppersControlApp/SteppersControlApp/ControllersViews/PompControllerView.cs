@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SteppersControlCore;
 
-namespace SteppersControlApp.Controllers
+namespace SteppersControlApp.ControllersViews
 {
     public partial class PompControllerView : UserControl
     {
@@ -17,7 +17,7 @@ namespace SteppersControlApp.Controllers
         {
             InitializeComponent();
             if (Core.Pomp != null)
-                propertyGrid.SelectedObject = Core.Pomp.Props;
+                propertyGrid.SelectedObject = Core.Pomp.Properties;
         }
 
         private void buttonNeedleWashing_Click(object sender, EventArgs e)
@@ -27,7 +27,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Pomp.Washing(cycles));
+                    Core.CncExecutor.ExecuteTask(Core.Pomp.Washing(cycles));
                 });
         }
 
@@ -36,7 +36,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Pomp.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Pomp.Home());
                 });
         }
 
@@ -47,7 +47,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Pomp.Suction(value));
+                    Core.CncExecutor.ExecuteTask(Core.Pomp.Suction(value));
                 });
         }
 
@@ -58,7 +58,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Pomp.Unsuction(value));
+                    Core.CncExecutor.ExecuteTask(Core.Pomp.Unsuction(value));
                 });
         }
     }

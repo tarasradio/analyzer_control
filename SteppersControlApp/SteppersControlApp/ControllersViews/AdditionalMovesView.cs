@@ -11,7 +11,7 @@ using SteppersControlCore;
 using SteppersControlCore.Controllers;
 using SteppersControlCore.Elements;
 
-namespace SteppersControlApp.Controllers
+namespace SteppersControlApp.ControllersViews
 {
     public partial class AdditionalMovesView : UserControl
     {
@@ -25,8 +25,8 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
                 });
         }
 
@@ -52,10 +52,10 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(
+                    Core.CncExecutor.ExecuteTask(
                         Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
                         RotorController.CellPosition.CenterCell) );
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.MoveToCartridge(ArmController.FromPosition.Home, cell));
+                    Core.CncExecutor.ExecuteTask(Core.Arm.MoveToCartridge(ArmController.FromPosition.Home, cell));
                 });
         }
     }

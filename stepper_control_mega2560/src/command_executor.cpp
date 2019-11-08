@@ -1,3 +1,4 @@
+#include "system.hpp"
 #include "command_executor.hpp"
 
 #include "protocol.hpp"
@@ -6,7 +7,7 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 
-//#define DEBUG
+#define DEBUG
 
 enum StopType
 {
@@ -53,13 +54,9 @@ void CommandExecutor::UpdateState()
         {
             lastCommandState = COMMAND_DONE;
             waitForCommandDone = 0;
-
             Protocol::SendCommandState(&lastCommandId, lastCommandState);
         }
     }
-#ifdef SEND_STATE_PERMANENTLY
-    printCommandStateResponse(lastCommandId, lastCommandState);
-#endif
 }
 
 void CommandExecutor::listenPacket(uint8_t *packet, uint8_t packetLength)
@@ -183,7 +180,7 @@ bool CommandExecutor::checkRepeatCommand(uint32_t commandId, uint8_t commandType
 {
 #ifdef DEBUG
     {
-        String message = "[cmd id = " + String(commandId);
+        String message = "[cmd id = " + String(commandId) + "]";
         Protocol::SendMessage(message.c_str());
     }
 #endif
@@ -194,7 +191,7 @@ bool CommandExecutor::checkRepeatCommand(uint32_t commandId, uint8_t commandType
         isRepeat = true;
 #ifdef DEBUG
         {
-            String message = ", repeat command]";
+            String message = "[repeat cmd]";
             Protocol::SendMessage(message.c_str());
         }
 #endif
@@ -209,16 +206,14 @@ bool CommandExecutor::checkRepeatCommand(uint32_t commandId, uint8_t commandType
             waitForCommandDone = 1;
         }
     }
-    Protocol::SendCommandState(&commandId, lastCommandState);
+    Protocol::SendCommandState(&lastCommandId, lastCommandState);
 
     return isRepeat;
 }
 
 void CommandExecutor::executeGetFirmwareVersionCommand(uint8_t *packet, uint32_t packetId)
 {
-    String version = "07.11.2019";
-    Protocol::SendMessage(version.c_str());
-    Protocol::SendFirmwareVersion(version.c_str());
+    Protocol::SendFirmwareVersion(VERSION);
 }
 
 void CommandExecutor::executeAbortCommand(uint8_t *packet, uint32_t packetId)
@@ -594,11 +589,8 @@ void CommandExecutor::sendSteppersStates()
 {
     uint16_t steppersStates[STEPPERS_COUNT];
 
-    //for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
-    //    steppersStates[i] =  Steppers::get(i).getStatus();
-
     for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
-        steppersStates[i] =  0;
+        steppersStates[i] =  Steppers::get(i).getStatus();
 
     Protocol::SendSteppersStates(steppersStates, STEPPERS_COUNT);
 }

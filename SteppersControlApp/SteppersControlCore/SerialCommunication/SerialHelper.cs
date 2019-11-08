@@ -10,23 +10,20 @@ using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.SerialCommunication
 {
-    public class SerialHelper : ISerialHelper
+    public class SerialHelper : ISerial
     {
-        PackageReceiver _packageReceiver;
+        PacketFinder _packageReceiver = null;
+        SerialPort _serialPort = null;
 
-        SerialPort _serialPort;
-
-        public SerialHelper(PackageReceiver packageReceiver)
+        public SerialHelper(PacketFinder packageReceiver)
         {
             _packageReceiver = packageReceiver;
             _serialPort = new SerialPort();
             _serialPort.DataReceived += Port_DataReceived;
         }
 
-        public bool OpenConnection(string portName, int baudrate)
+        public bool Open(string portName, int baudrate)
         {
-            bool success = false;
-
             _serialPort = new SerialPort(portName);
             _serialPort.BaudRate = baudrate;
             _serialPort.DataBits = 8;
@@ -46,16 +43,10 @@ namespace SteppersControlCore.SerialCommunication
                 Logger.AddMessage($"Ошибка при открытии порта {portName}");
             }
 
-
-            if (_serialPort.IsOpen)
-            {
-                success = true;
-            }
-
-            return success;
+            return _serialPort.IsOpen;
         }
 
-        public void Disconnect()
+        public void Close()
         {
             try
             {
@@ -67,12 +58,7 @@ namespace SteppersControlCore.SerialCommunication
             }
         }
 
-        public void CloseConnection()
-        {
-            _serialPort.Close();
-        }
-
-        public bool IsConnected()
+        public bool IsOpen()
         {
             return _serialPort.IsOpen;
         }
@@ -81,8 +67,8 @@ namespace SteppersControlCore.SerialCommunication
         {
             byte[] buffer = new byte[_serialPort.BytesToRead];
             _serialPort.Read(buffer, 0, buffer.Length);
+
             _packageReceiver.FindPacket(buffer);
-            //_packageReceiver.HandleData(buffer);
         }
 
         public void SendPacket(byte[] packet)

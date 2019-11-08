@@ -1,90 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+
 using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
-using SteppersControlCore.CommunicationProtocol.StepperCommands;
 using SteppersControlCore.Utils;
+
+using SteppersControlCore.ControllersProperties;
 
 namespace SteppersControlCore.Controllers
 {
-    public class LoadControllerPropetries
-    {
-        [Category("1. Двигатели")]
-        [DisplayName("Двигатель поворота загрузки")]
-        public int LoadStepper { get; set; } = 10;
-        [Category("1. Двигатели")]
-        [DisplayName("Двигатель челнока")]
-        public int ShuttleStepper { get; set; } = 15;
-        [Category("1. Двигатели")]
-        [DisplayName("Двигатель толкателя")]
-        public int PushStepper { get; set; } = 0;
-        
-        [Category("2.1 Скорость двигателя поворота загрузки")]
-        [DisplayName("Скорость движения загрузки домой")]
-        public int LoadStepperHomeSpeed { get; set; } = 50;
-        [Category("2.1 Скорость двигателя поворота загрузки")]
-        [DisplayName("Скорость движения загрузки")]
-        public int LoadStepperSpeed { get; set; } = 50;
-
-        [Category("2.2 Скорость двигателя челнока")]
-        [DisplayName("Скорость движения челнока домой")]
-        public int ShuttleStepperHomeSpeed { get; set; } = 500;
-        [Category("2.2 Скорость двигателя челнока")]
-        [DisplayName("Скорость движения челнока")]
-        public int ShuttleStepperSpeed { get; set; } = 200;
-
-        [Category("2.3 Скорость двигателя толкателя")]
-        [DisplayName("Скорость движения толкателя домой")]
-        public int PushStepperHomeSpeed { get; set; } = 500;
-        [Category("2.3 Скорость двигателя толкателя")]
-        [DisplayName("Скорость движения толкателя")]
-        public int PushStepperSpeed { get; set; } = 200;
-
-        [Category("3.1 Шаги двигателя поворота загрузки")]
-        [DisplayName("Шаги до ячеек с кассетами")]
-        public int[] CellsSteps { get; set; } =
-        {
-            800,
-            4000,
-            6800,
-            10000,
-            13200,
-            16000,
-            19300,
-            22300,
-            25300,
-            28500
-        };
-
-        [Category("3.1 Шаги двигателя поворота загрузки")]
-        [DisplayName("Шаги до разгрузки")]
-        public int StepsToUnload { get; set; } = 0;
-
-        [Category("3.2 Шаги двигателя челнока")]
-        [DisplayName("Шаги отъезда челнока от дома")]
-        public int StepsShuttleToStart { get; set; } = -20000;
-
-        [Category("3.2 Шаги двигателя челнока")]
-        [DisplayName("Шаги движения челнока к кассете")]
-        public int StepsShuttleToCassette { get; set; } = -2840000;
-
-        public LoadControllerPropetries()
-        {
-
-        }
-    }
-
     public class LoadController : ControllerBase
     {
         const string filename = "LoadControllerProps";
 
-        public LoadControllerPropetries Props { get; set; }
+        public LoadControllerProperties Properties { get; set; }
 
         public int LoadStepperPosition { get; set; } = 0;
         public int ShuttleStepperPosition { get; set; } = 0;
@@ -94,28 +22,28 @@ namespace SteppersControlCore.Controllers
 
         public LoadController() : base()
         {
-            Props = new LoadControllerPropetries();
+            Properties = new LoadControllerProperties();
         }
 
         public void WriteXml()
         {
-            XMLSerializeHelper<LoadControllerPropetries>.WriteXml(Props, filename);
+            XMLSerializeHelper<LoadControllerProperties>.WriteXml(Properties, filename);
         }
 
         //Чтение насроек из файла
         public void ReadXml()
         {
-            Props = XMLSerializeHelper<LoadControllerPropetries>.ReadXML(filename);
+            Properties = XMLSerializeHelper<LoadControllerProperties>.ReadXML(filename);
         }
 
         public List<IAbstractCommand> HomeLoad()
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
-            steppers = new Dictionary<int, int>() { { Props.LoadStepper, Props.LoadStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.LoadStepper, Properties.LoadStepperHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.LoadStepper, Props.LoadStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.LoadStepper, Properties.LoadStepperHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
             LoadStepperPosition = 0;
@@ -139,14 +67,14 @@ namespace SteppersControlCore.Controllers
             CurrentCell = cell;
 
             steppers = new Dictionary<int, int>() {
-                { Props.LoadStepper, 30 } };
+                { Properties.LoadStepper, 30 } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Props.LoadStepper, Props.CellsSteps[cell] - LoadStepperPosition } };
+                { Properties.LoadStepper, Properties.CellsSteps[cell] - LoadStepperPosition } };
             commands.Add( new MoveCncCommand(steppers) );
 
-            LoadStepperPosition = Props.CellsSteps[cell];
+            LoadStepperPosition = Properties.CellsSteps[cell];
 
             return commands;
         }
@@ -155,16 +83,16 @@ namespace SteppersControlCore.Controllers
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.ShuttleStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.ShuttleStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.StepsShuttleToStart } };
+            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.StepsShuttleToStart } };
             commands.Add( new MoveCncCommand(steppers) );
 
-            ShuttleStepperPosition = Props.StepsShuttleToStart;
+            ShuttleStepperPosition = Properties.StepsShuttleToStart;
 
             return commands;
         }
@@ -173,10 +101,10 @@ namespace SteppersControlCore.Controllers
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.ShuttleStepperSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Props.ShuttleStepper, Props.StepsShuttleToCassette } };
+            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.StepsShuttleToCassette } };
             commands.Add( new MoveCncCommand(steppers) );
 
             return commands;

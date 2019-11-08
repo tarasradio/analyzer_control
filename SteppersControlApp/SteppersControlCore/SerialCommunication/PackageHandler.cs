@@ -18,7 +18,8 @@ namespace SteppersControlCore.SerialCommunication
         public event DeviseStatesReceivedDelegate SteppersStatesReceived;
         public event DeviseStatesReceivedDelegate SensorsValuesReceived;
         public event MessageReceivedDelegate MessageReceived;
-        public event MessageReceivedDelegate BarCodeReceived;
+        public event MessageReceivedDelegate BarCodeAReceived;
+        public event MessageReceivedDelegate BarCodeBReceived;
         public event MessageReceivedDelegate FirmwareVersionReceived;
         public event CommandStateResponseReceivedDelegate CommandStateResponseReceived;
         
@@ -79,7 +80,7 @@ namespace SteppersControlCore.SerialCommunication
             else if ((byte)Protocol.ResponsesTypes.BAR_CODE == packetType)
             {
                 string message = new BarCodeResponse(packet).GetDebugMessage();
-                BarCodeReceived(message);
+                BarCodeAReceived(message);
             }
             else if ((byte)Protocol.ResponsesTypes.FIRMWARE_VERSION == packetType)
             {

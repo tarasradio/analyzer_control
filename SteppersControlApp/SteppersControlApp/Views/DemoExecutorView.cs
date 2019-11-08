@@ -11,7 +11,7 @@ using SteppersControlCore;
 using SteppersControlCore.Elements;
 using SteppersControlApp.Views;
 
-namespace SteppersControlApp.Controllers
+namespace SteppersControlApp.ControllersViews
 {
     public partial class DemoExecutorView : UserControl
     {

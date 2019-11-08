@@ -1,4 +1,4 @@
-﻿namespace SteppersControlApp
+﻿namespace SteppersControlApp.Forms
 {
     partial class MainForm
     {
@@ -54,19 +54,19 @@
             this.tabPageCNC = new System.Windows.Forms.TabPage();
             this.cncView = new SteppersControlApp.Views.CNCView();
             this.armTabPage = new System.Windows.Forms.TabPage();
-            this.armControllerView = new SteppersControlApp.Controllers.ArmControllerView();
+            this.armControllerView = new SteppersControlApp.ControllersViews.ArmControllerView();
             this.tranporterTabPage = new System.Windows.Forms.TabPage();
-            this.transporterControllerView = new SteppersControlApp.Controllers.TransporterControllerView();
+            this.transporterControllerView = new SteppersControlApp.ControllersViews.TransporterControllerView();
             this.rotorTabPage = new System.Windows.Forms.TabPage();
-            this.rotorControllerView = new SteppersControlApp.Controllers.RotorControllerView();
+            this.rotorControllerView = new SteppersControlApp.ControllersViews.RotorControllerView();
             this.loadTabPage = new System.Windows.Forms.TabPage();
-            this.loadControllerView = new SteppersControlApp.Controllers.LoadControllerView();
+            this.loadControllerView = new SteppersControlApp.ControllersViews.LoadControllerView();
             this.pompTabPage = new System.Windows.Forms.TabPage();
-            this.pompControllerView = new SteppersControlApp.Controllers.PompControllerView();
+            this.pompControllerView = new SteppersControlApp.ControllersViews.PompControllerView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.additionalMovesView = new SteppersControlApp.Controllers.AdditionalMovesView();
+            this.additionalMovesView = new SteppersControlApp.ControllersViews.AdditionalMovesView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.demoExecutorView = new SteppersControlApp.Controllers.DemoExecutorView();
+            this.demoExecutorView = new SteppersControlApp.ControllersViews.DemoExecutorView();
             this.logView = new SteppersControlApp.Views.LogView();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
@@ -594,17 +594,17 @@
         private System.Windows.Forms.TabPage tranporterTabPage;
         private System.Windows.Forms.TabPage loadTabPage;
         private System.Windows.Forms.TabPage pompTabPage;
-        private Controllers.ArmControllerView armControllerView;
+        private ControllersViews.ArmControllerView armControllerView;
         private System.Windows.Forms.ToolStripButton buttonAbortExecution;
-        private Controllers.TransporterControllerView transporterControllerView;
-        private Controllers.RotorControllerView rotorControllerView;
-        private Controllers.LoadControllerView loadControllerView;
-        private Controllers.PompControllerView pompControllerView;
+        private ControllersViews.TransporterControllerView transporterControllerView;
+        private ControllersViews.RotorControllerView rotorControllerView;
+        private ControllersViews.LoadControllerView loadControllerView;
+        private ControllersViews.PompControllerView pompControllerView;
         private System.Windows.Forms.TabPage tabPage1;
-        private Controllers.AdditionalMovesView additionalMovesView;
+        private ControllersViews.AdditionalMovesView additionalMovesView;
         private System.Windows.Forms.ToolStripButton buttonStartDemo;
         private System.Windows.Forms.TabPage tabPage2;
-        private Controllers.DemoExecutorView demoExecutorView;
+        private ControllersViews.DemoExecutorView demoExecutorView;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }

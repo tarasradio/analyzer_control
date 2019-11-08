@@ -52,64 +52,64 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StartForm.cs">
+    <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StartForm.Designer.cs">
+    <Compile Include="Forms\StartForm.Designer.cs">
       <DependentUpon>StartForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\AdditionalMovesView.cs">
+    <Compile Include="ControllersViews\AdditionalMovesView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controllers\AdditionalMovesView.Designer.cs">
+    <Compile Include="ControllersViews\AdditionalMovesView.Designer.cs">
       <DependentUpon>AdditionalMovesView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\ArmControllerView.cs">
+    <Compile Include="ControllersViews\ArmControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controllers\ArmControllerView.Designer.cs">
+    <Compile Include="ControllersViews\ArmControllerView.Designer.cs">
       <DependentUpon>ArmControllerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\DemoExecutorView.cs">
+    <Compile Include="Views\DemoExecutorView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controllers\DemoExecutorView.Designer.cs">
+    <Compile Include="Views\DemoExecutorView.Designer.cs">
       <DependentUpon>DemoExecutorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\LoadControllerView.cs">
+    <Compile Include="ControllersViews\LoadControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controllers\LoadControllerView.Designer.cs">
+    <Compile Include="ControllersViews\LoadControllerView.Designer.cs">
       <DependentUpon>LoadControllerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\PompControllerView.cs">
+    <Compile Include="ControllersViews\PompControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controllers\PompControllerView.Designer.cs">
+    <Compile Include="ControllersViews\PompControllerView.Designer.cs">
       <DependentUpon>PompControllerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\RotorControllerView.cs">
+    <Compile Include="ControllersViews\RotorControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controllers\RotorControllerView.Designer.cs">
+    <Compile Include="ControllersViews\RotorControllerView.Designer.cs">
       <DependentUpon>RotorControllerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\TransporterControllerView.cs">
+    <Compile Include="ControllersViews\TransporterControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controllers\TransporterControllerView.Designer.cs">
+    <Compile Include="ControllersViews\TransporterControllerView.Designer.cs">
       <DependentUpon>TransporterControllerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControlPanelForm.cs">
+    <Compile Include="Forms\ControlPanelForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ControlPanelForm.Designer.cs">
+    <Compile Include="Forms\ControlPanelForm.Designer.cs">
       <DependentUpon>ControlPanelForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -143,12 +143,6 @@
     <Compile Include="Views\LogView.Designer.cs">
       <DependentUpon>LogView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\ScanView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\ScanView.Designer.cs">
-      <DependentUpon>ScanView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Views\SensorsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -168,34 +162,34 @@
       <DependentUpon>StepperTurningView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewStyler.cs" />
-    <EmbeddedResource Include="StartForm.resx">
+    <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\AdditionalMovesView.resx">
+    <EmbeddedResource Include="ControllersViews\AdditionalMovesView.resx">
       <DependentUpon>AdditionalMovesView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\ArmControllerView.resx">
+    <EmbeddedResource Include="ControllersViews\ArmControllerView.resx">
       <DependentUpon>ArmControllerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\DemoExecutorView.resx">
+    <EmbeddedResource Include="Views\DemoExecutorView.resx">
       <DependentUpon>DemoExecutorView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\LoadControllerView.resx">
+    <EmbeddedResource Include="ControllersViews\LoadControllerView.resx">
       <DependentUpon>LoadControllerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\PompControllerView.resx">
+    <EmbeddedResource Include="ControllersViews\PompControllerView.resx">
       <DependentUpon>PompControllerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\RotorControllerView.resx">
+    <EmbeddedResource Include="ControllersViews\RotorControllerView.resx">
       <DependentUpon>RotorControllerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controllers\TransporterControllerView.resx">
+    <EmbeddedResource Include="ControllersViews\TransporterControllerView.resx">
       <DependentUpon>TransporterControllerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ControlPanelForm.resx">
+    <EmbeddedResource Include="Forms\ControlPanelForm.resx">
       <DependentUpon>ControlPanelForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -223,9 +217,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\LogView.resx">
       <DependentUpon>LogView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\ScanView.resx">
-      <DependentUpon>ScanView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SensorsView.resx">
       <DependentUpon>SensorsView.cs</DependentUpon>
@@ -263,8 +254,6 @@
   <ItemGroup>
     <Content Include="gear.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\Demo\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

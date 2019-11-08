@@ -12,84 +12,13 @@ using SteppersControlCore.CommunicationProtocol.StepperCommands;
 using SteppersControlCore.Elements;
 using SteppersControlCore.Utils;
 
+using SteppersControlCore.ControllersProperties;
+
 namespace SteppersControlCore.Controllers
 {
-    public class RotorControllerPropetries
-    {
-        [Category("1. Двигатели")]
-        [DisplayName("Двигатель ротора")]
-        public int RotorStepper { get; set; } = 7;
-
-        [Category("2. Скорость")]
-        [DisplayName("Скорость ротора при движении домой")]
-        public int RotorHomeSpeed { get; set; } = 100;
-
-        [Category("2. Скорость")]
-        [DisplayName("Скорость ротора при движении")]
-        public int RotorSpeed { get; set; } = 50;
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов на одну ячейку")]
-        public int StepsPerCell { get; set; } = 3400;
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до загрузки (картриджа)")]
-        public int[] StepsToLoad { get; set; } =
-        {
-            20000,
-            20000,
-            20000,
-            20000,
-            20000,
-            20000,
-            20000,
-            20000,
-            20000,
-            20000
-        };
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до выгрузки")]
-        public int StepsToUnload { get; set; } = 1000;
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до wash-буфера")]
-        public int StepsToWashBuffer { get; set; } = 1000;
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до иглы белой ячейки (центр)")]
-        public int StepsToNeedleWhiteCenter { get; set; } = 10900;
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до иглы 1-й ячейки (лево)")]
-        public int StepsToNeedleLeft1 { get; set; } = 9750;
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до иглы 1-й ячейки (право)")]
-        public int StepsToNeedleRight1 { get; set; } = 10700;
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до иглы 2-й ячейки (лево)")]
-        public int StepsToNeedleLeft2 { get; set; } = 9200;
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до иглы 2-й ячейки (право)")]
-        public int StepsToNeedleRight2 { get; set; } = 9650;
-
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до иглы 3-й ячейки (лево)")]
-        public int StepsToNeedleLeft3 { get; set; } = 8630;
-        [Category("3. Шаги")]
-        [DisplayName("Шагов до иглы 3-й ячейки (право)")]
-        public int StepsToNeedleRight3 { get; set; } = 9200;
-        
-        public RotorControllerPropetries()
-        {
-
-        }
-    }
-
     public class RotorController : ControllerBase
     {
-        public RotorControllerPropetries Props { get; set; }
+        public RotorControllerProperties Properties { get; set; }
 
         public int RotorStepperPosition { get; set; } = 0;
 
@@ -97,28 +26,28 @@ namespace SteppersControlCore.Controllers
 
         public RotorController() : base()
         {
-            Props = new RotorControllerPropetries();
+            Properties = new RotorControllerProperties();
         }
 
         public void WriteXml()
         {
-            XMLSerializeHelper<RotorControllerPropetries>.WriteXml(Props, filename);
+            XMLSerializeHelper<RotorControllerProperties>.WriteXml(Properties, filename);
         }
 
         //Чтение насроек из файла
         public void ReadXml()
         {
-            Props = XMLSerializeHelper<RotorControllerPropetries>.ReadXML(filename);
+            Properties = XMLSerializeHelper<RotorControllerProperties>.ReadXML(filename);
         }
 
         public List<IAbstractCommand> Home()
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.RotorHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorHomeSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, -Props.RotorHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, -Properties.RotorHomeSpeed } };
             commands.Add(new HomeCncCommand(steppers));
 
             RotorStepperPosition = 0;
@@ -130,13 +59,13 @@ namespace SteppersControlCore.Controllers
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.RotorSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToWashBuffer - RotorStepperPosition} };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.StepsToWashBuffer - RotorStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
-            RotorStepperPosition = Props.StepsToWashBuffer;
+            RotorStepperPosition = Properties.StepsToWashBuffer;
 
             return commands;
         }
@@ -145,13 +74,13 @@ namespace SteppersControlCore.Controllers
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.RotorSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToUnload - RotorStepperPosition} };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.StepsToUnload - RotorStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
-            RotorStepperPosition = Props.StepsToUnload;
+            RotorStepperPosition = Properties.StepsToUnload;
 
             return commands;
         }
@@ -160,13 +89,13 @@ namespace SteppersControlCore.Controllers
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.RotorSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, Props.StepsToLoad[position] - RotorStepperPosition} };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.StepsToLoad[position] - RotorStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
-            RotorStepperPosition = Props.StepsToLoad[position];
+            RotorStepperPosition = Properties.StepsToLoad[position];
 
             return commands;
         }
@@ -182,31 +111,31 @@ namespace SteppersControlCore.Controllers
         {
             List<IAbstractCommand> commands = new List<IAbstractCommand>();
             
-            commands.Add(new SetSpeedCommand(Props.RotorStepper, (uint)Props.RotorSpeed));
+            commands.Add(new SetSpeedCommand(Properties.RotorStepper, (uint)Properties.RotorSpeed));
 
             int turnSteps = 0;
 
             if (cell == CartridgeCell.WhiteCell)
             {
-                turnSteps = Props.StepsToNeedleWhiteCenter;
+                turnSteps = Properties.StepsToNeedleWhiteCenter;
             }
             else if (cell == CartridgeCell.FirstCell)
             {
                 turnSteps = (position == CellPosition.CellLeft) ?
-                    Props.StepsToNeedleLeft1 : Props.StepsToNeedleRight1;
+                    Properties.StepsToNeedleLeft1 : Properties.StepsToNeedleRight1;
             }
             else if (cell == CartridgeCell.SecondCell)
             {
                 turnSteps = (position == CellPosition.CellLeft) ?
-                    Props.StepsToNeedleLeft2 : Props.StepsToNeedleRight2;
+                    Properties.StepsToNeedleLeft2 : Properties.StepsToNeedleRight2;
             }
             else if (cell == CartridgeCell.ThirdCell)
             {
                 turnSteps = (position == CellPosition.CellLeft) ?
-                    Props.StepsToNeedleLeft3 : Props.StepsToNeedleRight3;
+                    Properties.StepsToNeedleLeft3 : Properties.StepsToNeedleRight3;
             }
 
-            steppers = new Dictionary<int, int>() { { Props.RotorStepper, turnSteps - RotorStepperPosition } };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, turnSteps - RotorStepperPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
             RotorStepperPosition = turnSteps;

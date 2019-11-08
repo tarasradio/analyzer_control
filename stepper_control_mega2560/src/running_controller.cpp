@@ -1,3 +1,4 @@
+#include "system.hpp"
 #include "running_controller.hpp"
 
 #include "packet_manager.hpp"
@@ -7,9 +8,6 @@
 #include "sensors.hpp"
 
 #define FILTER_VALUE 5
-//#define DEBUG
-
-#define EMULATOR
 
 enum EdgeTypes
 {
@@ -35,8 +33,8 @@ void RunningController::addStepperForRun(int8_t stepper, int32_t speed)
 {
     int8_t dir = speed > 0 ? 1 : 0;
     steppersForRun[countRunSteppers++] = stepper;
-    Steppers::get(stepper).setMaxSpeed(speed);
-    Steppers::get(stepper).run(dir, speed);
+    Steppers::get(stepper).setMaxSpeed(abs(speed));
+    Steppers::get(stepper).run(dir, abs(speed));
 }
 
 void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_t edgeType)
@@ -51,7 +49,7 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
         message += ", value = " + String(sensorValue);
         message += ", edgeType = ";
 
-        PacketManager::printMessage(message);
+        Protocol::SendMessage(message.c_str());
     }
 #endif
 
@@ -60,7 +58,7 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
 #ifdef DEBUG
         {
             String message = "rising]";
-            PacketManager::printMessage(message);
+            Protocol::SendMessage(message.c_str());
         }
 #endif
     }
@@ -69,7 +67,7 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
 #ifdef DEBUG
         {
             String message = "falling]";
-            PacketManager::printMessage(message);
+            Protocol::SendMessage(message.c_str());
         }
 #endif
     }
@@ -78,9 +76,10 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
 
 uint8_t RunningController::updateState()
 {
-#ifdef EMULATOR
-    return 0; // All steppers have been done run
-#endif
+    #ifdef EMULATOR
+        return 0;
+    #endif
+    
     if(0 != countRunSteppers)
     {
         uint16_t value = Sensors::getSensorValue(waitSensorNumber);
@@ -92,7 +91,7 @@ uint8_t RunningController::updateState()
             message += String(value);
             message += ", Filter num = ";
             message += String(acceptedNeedValueCount);
-            PacketManager::printMessage(message);
+            Protocol::SendMessage(message.c_str());
         }
 #endif
             if (RisingEdge == valueEdgeType)

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using SteppersControlCore;
 
-namespace SteppersControlApp
+namespace SteppersControlApp.Forms
 {
     public partial class ControlPanelForm : Form
     {

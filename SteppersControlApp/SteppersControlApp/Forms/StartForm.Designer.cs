@@ -1,4 +1,4 @@
-﻿namespace SteppersControlApp
+﻿namespace SteppersControlApp.Forms
 {
     partial class StartForm
     {

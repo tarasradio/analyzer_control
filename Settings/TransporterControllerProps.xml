@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TransporterControllerPropetries xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<TransporterControllerProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <TurnTubeStepper>5</TurnTubeStepper>
   <TransporterStepper>6</TransporterStepper>
   <SpeedToTurnTube>30</SpeedToTurnTube>
   <StepsOneTube>6400</StepsOneTube>
   <StepsToTurnTube>10000</StepsToTurnTube>
-</TransporterControllerPropetries>
+</TransporterControllerProperties>

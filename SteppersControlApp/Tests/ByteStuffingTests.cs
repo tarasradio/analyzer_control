@@ -17,7 +17,7 @@ namespace Tests
             Array.Copy(bytes, 0, packet, 1, bytes.Length);
             packet[0] = 0x13;
             byte[] wrap = ByteStuffing.WrapPacket(packet);
-            Core.PackReceiver.FindPacket(wrap);
+            Core.PackFinder.FindPacket(wrap);
 
             packet = new byte[6];
 
@@ -29,7 +29,7 @@ namespace Tests
             Array.Copy(bytes, 0, packet, 2, bytes.Length);
 
             wrap = ByteStuffing.WrapPacket(packet);
-            Core.PackReceiver.FindPacket(wrap);
+            Core.PackFinder.FindPacket(wrap);
         }
     }
 }

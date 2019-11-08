@@ -8,13 +8,5 @@ using SteppersControlCore.CommunicationProtocol;
 
 namespace SteppersControlCore.MachineControl
 {
-    public class CncProgram
-    {
-        public List<IAbstractCommand> Commands { get; set; }
-
-        public CncProgram()
-        {
-            Commands = new List<IAbstractCommand>();
-        }
-    }
+    
 }

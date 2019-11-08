@@ -57,7 +57,7 @@ public:
     static void SendBarCode(const char* barCode);
     static void SendSteppersStates(const uint16_t *steppersStates, uint8_t steppersCount);
     static void SendSensorsValues(const uint16_t *sensorsValues, uint8_t sensorsCount);
-    static void SendCommandState(const uint32_t* commandId, uint8_t commandState);
+    static void SendCommandState(const uint32_t *commandId, uint8_t commandState);
 };
 
 #endif

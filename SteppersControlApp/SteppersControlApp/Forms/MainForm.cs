@@ -19,7 +19,7 @@ using System.Threading;
 using System.Globalization;
 using SteppersControlApp.Properties;
 
-namespace SteppersControlApp
+namespace SteppersControlApp.Forms
 {
     public partial class MainForm : Form
     {
@@ -30,7 +30,7 @@ namespace SteppersControlApp
 
         private void UpdateState()
         {
-            if (Core.Serial.IsConnected())
+            if (Core.Serial.IsOpen())
             {
                 buttonConnect.Text = resourceManager.GetString("disconnect_text", Core.Settings.Culture);
                 //buttonConnect.Text = "Отключиться";
@@ -80,9 +80,9 @@ namespace SteppersControlApp
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            if (Core.Serial.IsConnected())
+            if (Core.Serial.IsOpen())
             {
-                Core.Serial.Disconnect();
+                Core.Serial.Close();
 
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();
@@ -98,7 +98,7 @@ namespace SteppersControlApp
                 string portName = portsList.SelectedItem.ToString();
                 int baudrate = int.Parse(editBaudrate.SelectedItem.ToString());
 
-                bool isOK = Core.Serial.OpenConnection(portName, baudrate);
+                bool isOK = Core.Serial.Open(portName, baudrate);
 
                 if (isOK)
                 {
@@ -185,9 +185,9 @@ namespace SteppersControlApp
 
             demoExecutorView.StopUpdate();
 
-            if (Core.Serial.IsConnected())
+            if (Core.Serial.IsOpen())
             {
-                Core.Serial.Disconnect();
+                Core.Serial.Close();
 
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();

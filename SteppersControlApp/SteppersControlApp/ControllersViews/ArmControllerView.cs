@@ -5,7 +5,7 @@ using SteppersControlCore;
 using SteppersControlCore.Controllers;
 using SteppersControlCore.Elements;
 
-namespace SteppersControlApp.Controllers
+namespace SteppersControlApp.ControllersViews
 {
     public partial class ArmControllerView : UserControl
     {
@@ -13,7 +13,7 @@ namespace SteppersControlApp.Controllers
         {
             InitializeComponent();
             if(Core.Arm != null)
-                propertyGrid.SelectedObject = Core.Arm.Props;
+                propertyGrid.SelectedObject = Core.Arm.Properties;
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -21,7 +21,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.Home());
                 });
         }
 
@@ -30,8 +30,8 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.MoveOnTube());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.MoveOnTube());
                 });
         }
 
@@ -40,8 +40,8 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.MoveOnWashing());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.MoveOnWashing());
                 });
         }
 
@@ -67,8 +67,8 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.Home());
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.MoveToCartridge(fromPosition, cell));
+                    Core.CncExecutor.ExecuteTask(Core.Arm.Home());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.MoveToCartridge(fromPosition, cell));
                 });
         }
 
@@ -77,7 +77,7 @@ namespace SteppersControlApp.Controllers
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CNCExecutor.ExecuteTask(Core.Arm.BrokeCartridge());
+                    Core.CncExecutor.ExecuteTask(Core.Arm.BrokeCartridge());
                 });
         }
     }

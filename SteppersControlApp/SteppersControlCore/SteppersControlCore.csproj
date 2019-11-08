@@ -71,9 +71,15 @@
     <Compile Include="CommunicationProtocol\StepperCommands\SetSpeedCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\StopCommand.cs" />
     <Compile Include="Configuration.cs" />
-    <Compile Include="Controllers\DemoExecutor.cs" />
+    <Compile Include="ControllersProperties\ArmControllerProperties.cs" />
+    <Compile Include="ControllersProperties\LoadControllerProperties.cs" />
+    <Compile Include="ControllersProperties\PompControllerProperties.cs" />
+    <Compile Include="ControllersProperties\RotorControllerProperties.cs" />
+    <Compile Include="ControllersProperties\TransporterControllerProperties.cs" />
+    <Compile Include="DemoExecutor.cs" />
     <Compile Include="Elements\Elements.cs" />
-    <Compile Include="Interfaces\ISerialHelper.cs" />
+    <Compile Include="Interfaces\IPacketFinder.cs" />
+    <Compile Include="Interfaces\ISerial.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="CommunicationProtocol\Protocol.cs" />
     <Compile Include="CommunicationProtocol\Responses\SteppersStatesResponse.cs" />
@@ -83,7 +89,7 @@
     <Compile Include="MachineControl\TaskExecutor.cs" />
     <Compile Include="SerialCommunication\ByteStuffing.cs" />
     <Compile Include="SerialCommunication\PackageHandler.cs" />
-    <Compile Include="SerialCommunication\PackageReceiver.cs" />
+    <Compile Include="SerialCommunication\PacketFinder.cs" />
     <Compile Include="SerialCommunication\SerialHelper.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
