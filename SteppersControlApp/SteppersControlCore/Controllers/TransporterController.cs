@@ -31,15 +31,20 @@ namespace SteppersControlCore.Controllers
             Properties = new TransporterControllerProperties();
         }
 
-        public void WriteXml()
+        public void WriteXml(string path)
         {
-            XMLSerializeHelper<TransporterControllerProperties>.WriteXml(Properties, filename);
+            XMLSerializeHelper<TransporterControllerProperties>.WriteXml(Properties, 
+                Path.Combine(path, filename));
         }
 
         //Чтение насроек из файла
-        public void ReadXml()
+        public void ReadXml(string path)
         {
-            Properties = XMLSerializeHelper<TransporterControllerProperties>.ReadXML(filename);
+            Properties = XMLSerializeHelper<TransporterControllerProperties>.ReadXML(
+                Path.Combine(path, filename));
+
+            if (Properties == null)
+                Properties = new TransporterControllerProperties();
         }
 
         public List<IAbstractCommand> PrepareBeforeScanning()

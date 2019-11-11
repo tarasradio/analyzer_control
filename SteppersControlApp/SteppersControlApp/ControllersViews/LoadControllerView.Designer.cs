@@ -35,9 +35,6 @@
             this.editCellNumber = new System.Windows.Forms.NumericUpDown();
             this.buttonMoveLoad = new System.Windows.Forms.Button();
             this.buttonMoveShuttleToCassette = new System.Windows.Forms.Button();
-            this.buttonHomePusher = new System.Windows.Forms.Button();
-            this.buttonPushCartridge = new System.Windows.Forms.Button();
-            this.buttonMoveShuttleToUnload = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,9 +68,9 @@
             this.buttonShuttleHome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonShuttleHome.Location = new System.Drawing.Point(3, 36);
             this.buttonShuttleHome.Name = "buttonShuttleHome";
-            this.buttonShuttleHome.Size = new System.Drawing.Size(138, 52);
+            this.buttonShuttleHome.Size = new System.Drawing.Size(138, 27);
             this.buttonShuttleHome.TabIndex = 11;
-            this.buttonShuttleHome.Text = "HOME Челнок (Загрузить)";
+            this.buttonShuttleHome.Text = "HOME Крюк";
             this.buttonShuttleHome.UseVisualStyleBackColor = false;
             this.buttonShuttleHome.Click += new System.EventHandler(this.buttonShuttleHome_Click);
             // 
@@ -81,16 +78,16 @@
             // 
             this.labelNumberCell.AutoSize = true;
             this.labelNumberCell.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNumberCell.Location = new System.Drawing.Point(3, 182);
+            this.labelNumberCell.Location = new System.Drawing.Point(3, 124);
             this.labelNumberCell.Name = "labelNumberCell";
-            this.labelNumberCell.Size = new System.Drawing.Size(103, 16);
+            this.labelNumberCell.Size = new System.Drawing.Size(68, 16);
             this.labelNumberCell.TabIndex = 17;
-            this.labelNumberCell.Text = "Номер ячейки:";
+            this.labelNumberCell.Text = "К ячейке:";
             // 
             // editCellNumber
             // 
             this.editCellNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editCellNumber.Location = new System.Drawing.Point(3, 201);
+            this.editCellNumber.Location = new System.Drawing.Point(3, 143);
             this.editCellNumber.Maximum = new decimal(new int[] {
             9,
             0,
@@ -105,7 +102,7 @@
             // 
             this.buttonMoveLoad.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonMoveLoad.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonMoveLoad.Location = new System.Drawing.Point(3, 127);
+            this.buttonMoveLoad.Location = new System.Drawing.Point(3, 69);
             this.buttonMoveLoad.Name = "buttonMoveLoad";
             this.buttonMoveLoad.Size = new System.Drawing.Size(138, 52);
             this.buttonMoveLoad.TabIndex = 15;
@@ -117,58 +114,18 @@
             // 
             this.buttonMoveShuttleToCassette.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonMoveShuttleToCassette.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonMoveShuttleToCassette.Location = new System.Drawing.Point(3, 229);
+            this.buttonMoveShuttleToCassette.Location = new System.Drawing.Point(3, 171);
             this.buttonMoveShuttleToCassette.Name = "buttonMoveShuttleToCassette";
             this.buttonMoveShuttleToCassette.Size = new System.Drawing.Size(138, 52);
             this.buttonMoveShuttleToCassette.TabIndex = 18;
-            this.buttonMoveShuttleToCassette.Text = "Переместить челнок к кассете";
+            this.buttonMoveShuttleToCassette.Text = "Переместить крюк к кассете";
             this.buttonMoveShuttleToCassette.UseVisualStyleBackColor = true;
             this.buttonMoveShuttleToCassette.Click += new System.EventHandler(this.buttonMoveShuttleToCassette_Click);
-            // 
-            // buttonHomePusher
-            // 
-            this.buttonHomePusher.BackColor = System.Drawing.Color.GreenYellow;
-            this.buttonHomePusher.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonHomePusher.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonHomePusher.Location = new System.Drawing.Point(3, 94);
-            this.buttonHomePusher.Name = "buttonHomePusher";
-            this.buttonHomePusher.Size = new System.Drawing.Size(138, 27);
-            this.buttonHomePusher.TabIndex = 19;
-            this.buttonHomePusher.Text = "HOME Толкатель";
-            this.buttonHomePusher.UseVisualStyleBackColor = false;
-            this.buttonHomePusher.Click += new System.EventHandler(this.buttonHomePusher_Click);
-            // 
-            // buttonPushCartridge
-            // 
-            this.buttonPushCartridge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPushCartridge.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonPushCartridge.Location = new System.Drawing.Point(3, 345);
-            this.buttonPushCartridge.Name = "buttonPushCartridge";
-            this.buttonPushCartridge.Size = new System.Drawing.Size(138, 52);
-            this.buttonPushCartridge.TabIndex = 20;
-            this.buttonPushCartridge.Text = "Вытолкнуть картридж";
-            this.buttonPushCartridge.UseVisualStyleBackColor = true;
-            this.buttonPushCartridge.Click += new System.EventHandler(this.buttonPushCartridge_Click);
-            // 
-            // buttonMoveShuttleToUnload
-            // 
-            this.buttonMoveShuttleToUnload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMoveShuttleToUnload.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonMoveShuttleToUnload.Location = new System.Drawing.Point(3, 287);
-            this.buttonMoveShuttleToUnload.Name = "buttonMoveShuttleToUnload";
-            this.buttonMoveShuttleToUnload.Size = new System.Drawing.Size(138, 52);
-            this.buttonMoveShuttleToUnload.TabIndex = 23;
-            this.buttonMoveShuttleToUnload.Text = "Вести челнок к выгрузке";
-            this.buttonMoveShuttleToUnload.UseVisualStyleBackColor = true;
-            this.buttonMoveShuttleToUnload.Click += new System.EventHandler(this.buttonMoveShuttleToUnload_Click);
             // 
             // LoadControllerView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.buttonMoveShuttleToUnload);
-            this.Controls.Add(this.buttonPushCartridge);
-            this.Controls.Add(this.buttonHomePusher);
             this.Controls.Add(this.buttonMoveShuttleToCassette);
             this.Controls.Add(this.labelNumberCell);
             this.Controls.Add(this.editCellNumber);
@@ -193,8 +150,5 @@
         private System.Windows.Forms.NumericUpDown editCellNumber;
         private System.Windows.Forms.Button buttonMoveLoad;
         private System.Windows.Forms.Button buttonMoveShuttleToCassette;
-        private System.Windows.Forms.Button buttonHomePusher;
-        private System.Windows.Forms.Button buttonPushCartridge;
-        private System.Windows.Forms.Button buttonMoveShuttleToUnload;
     }
 }

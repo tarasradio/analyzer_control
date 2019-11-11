@@ -22,7 +22,7 @@ namespace SteppersControlApp
 
             try
             {
-                Core core = new Core("config.xml");
+                Core core = new Core("settings/config.xml");
 
                 StartForm authForm = new StartForm();
                 MainForm mainForm = new MainForm();

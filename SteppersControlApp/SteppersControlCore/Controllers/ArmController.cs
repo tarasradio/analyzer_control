@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SteppersControlCore.CommunicationProtocol;
+﻿using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.StepperCommands;
-using SteppersControlCore.Elements;
-
 using SteppersControlCore.ControllersProperties;
-
-using System.ComponentModel;
-using System.Xml.Serialization;
-using System.IO;
+using SteppersControlCore.Elements;
 using SteppersControlCore.Utils;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SteppersControlCore.Controllers
 {
@@ -31,15 +22,19 @@ namespace SteppersControlCore.Controllers
             Properties = new ArmControllerProperties();
         }
 
-        public void WriteXml()
+        public void WriteXml(string path)
         {
-            XMLSerializeHelper<ArmControllerProperties>.WriteXml(Properties, filename);
+            XMLSerializeHelper<ArmControllerProperties>.WriteXml(Properties, 
+                Path.Combine(path, filename));
         }
 
         //Чтение насроек из файла
-        public void ReadXml()
+        public void ReadXml(string path)
         {
-            Properties = XMLSerializeHelper<ArmControllerProperties>.ReadXML(filename);
+            Properties = XMLSerializeHelper<ArmControllerProperties>.ReadXML(
+                Path.Combine(path, filename));
+            if (Properties == null)
+                Properties = new ArmControllerProperties();
         }
 
         public List<IAbstractCommand> MoveOnTube()

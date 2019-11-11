@@ -58,20 +58,5 @@ namespace SteppersControlApp.ControllersViews
                     Core.CncExecutor.ExecuteTask(Core.Loader.MoveShuttleToCassette());
                 });
         }
-
-        private void buttonPushCartridge_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonHomePusher_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonMoveShuttleToUnload_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

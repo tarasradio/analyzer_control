@@ -50,10 +50,5 @@ namespace SteppersControlCore.MachineControl
                 _executionThread.Start();
             }
         }
-
-        private void WaitExecution(List<IAbstractCommand> task)
-        {
-            Core.CncExecutor.ExecuteTask(task);
-        }
     }
 }

@@ -4,15 +4,27 @@ using SteppersControlCore.Elements;
 using SteppersControlCore.Utils;
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 
 namespace SteppersControlCore
 {
-    public class DemoExecutor
+    [Serializable]
+    public class DemoControllerProperties
     {
-        public List<TubeInfo> Tubes { get; set; }
+        public List<TubeInfo> Tubes { get; set; } = new List<TubeInfo>();
+
+        public DemoControllerProperties()
+        {
+
+        }
+    }
+
+    public class DemoController
+    {
+        public DemoControllerProperties Properties;
 
         private const string filename = "Tubes";
 
@@ -25,13 +37,29 @@ namespace SteppersControlCore
 
         private static object _syncRoot = new object();
 
-        public DemoExecutor()
+        public DemoController()
         {
-            Tubes = new List<TubeInfo>();
+            Properties = new DemoControllerProperties();
+
             cells = new TubeCell[numberTubeCells];
 
             timer.Interval = 1000;
             timer.Elapsed += Timer_Elapsed;
+        }
+
+        public void WriteXml(string path)
+        {
+            XMLSerializeHelper<DemoControllerProperties>.WriteXml(Properties, 
+                Path.Combine(path, filename));
+        }
+
+        public void ReadXml(string path)
+        {
+            Properties = XMLSerializeHelper<DemoControllerProperties>.ReadXML(
+                Path.Combine(path, filename));
+
+            if (Properties == null)
+                Properties = new DemoControllerProperties();
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -42,7 +70,7 @@ namespace SteppersControlCore
                 Logger.AddMessage("Прошла минута");
                 
                 // уменьшаем оставшееся время инкубации
-                foreach (TubeInfo tube in Tubes)
+                foreach (TubeInfo tube in Properties.Tubes)
                 {
                     lock (_syncRoot)
                     {
@@ -52,17 +80,7 @@ namespace SteppersControlCore
                 }
             }
         }
-
-        public void WriteXml()
-        {
-            XMLSerializeHelper<List<TubeInfo>>.WriteXml(Tubes, filename);
-        }
         
-        public void ReadXml()
-        {
-            Tubes = XMLSerializeHelper<List<TubeInfo>>.ReadXML(filename);
-        }
-
         public void StartDemo()
         {
             timer.Start();
@@ -77,7 +95,7 @@ namespace SteppersControlCore
 
         private void DemoTask()
         {
-            foreach (TubeInfo tube in Tubes)
+            foreach (TubeInfo tube in Properties.Tubes)
             {
                 lock(_syncRoot)
                 {
@@ -149,7 +167,7 @@ namespace SteppersControlCore
         /// </summary>
         private void performTasks()
         {
-            foreach (TubeInfo tube in Tubes)
+            foreach (TubeInfo tube in Properties.Tubes)
             {
                 if (tube.IsFind && tube.TimeToStageComplete == 0)
                 {
@@ -180,7 +198,7 @@ namespace SteppersControlCore
         /// <returns>Пробирка со штрихкодом или null</returns>
         private TubeInfo findBarCode(string barCode)
         {
-            foreach (TubeInfo tube in Tubes)
+            foreach (TubeInfo tube in Properties.Tubes)
             {
                 if (barCode.Contains(tube.BarCode))
                     return tube;
@@ -194,7 +212,7 @@ namespace SteppersControlCore
         /// <returns>Наличие невыполненных задач</returns>
         private bool haveTasks()
         {
-            foreach(TubeInfo tube in Tubes)
+            foreach(TubeInfo tube in Properties.Tubes)
             {
                 if (tube.CurrentStage <= tube.Stages.Count)
                     return true;

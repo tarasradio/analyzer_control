@@ -54,16 +54,16 @@ namespace SteppersControlApp.ControllersViews
 
         private void buttonAddTube_Click(object sender, EventArgs e)
         {
-            Core.Demo.Tubes.Add(new TubeInfo());
+            Core.Demo.Properties.Tubes.Add(new TubeInfo());
 
             buttonRemoveTube.Enabled = true;
         }
 
         private void buttonRemoveTube_Click(object sender, EventArgs e)
         {
-            Core.Demo.Tubes.Remove(selectedTube);
+            Core.Demo.Properties.Tubes.Remove(selectedTube);
 
-            if (Core.Demo.Tubes.Count == 0)
+            if (Core.Demo.Properties.Tubes.Count == 0)
             {
                 buttonRemoveTube.Enabled = false;
                 selectedTube = null;
@@ -72,9 +72,9 @@ namespace SteppersControlApp.ControllersViews
 
         private void tubesList_SelectionChanged(object sender, EventArgs e)
         {
-            if (Core.Demo.Tubes.Count == 0)
+            if (Core.Demo.Properties.Tubes.Count == 0)
                 return;
-            selectedTube = Core.Demo.Tubes[tubesList.CurrentRow.Index];
+            selectedTube = Core.Demo.Properties.Tubes[tubesList.CurrentRow.Index];
             propertyGrid.SelectedObject = selectedTube;
 
             buttonRemoveTube.Enabled = true;
@@ -84,22 +84,24 @@ namespace SteppersControlApp.ControllersViews
 
         private void updateTubesGrid()
         {
-            tubesList.RowCount = Core.Demo.Tubes.Count;
+            if (Core.Demo.Properties.Tubes == null)
+                return;
+            tubesList.RowCount = Core.Demo.Properties.Tubes.Count;
 
-            for (int i = 0; i < Core.Demo.Tubes.Count; i++)
+            for (int i = 0; i < Core.Demo.Properties.Tubes.Count; i++)
             {
                 tubesList[0, i].Value = i + 1;
-                tubesList[1, i].Value = $"{Core.Demo.Tubes[i].BarCode}";
+                tubesList[1, i].Value = $"{Core.Demo.Properties.Tubes[i].BarCode}";
 
                 String state = "Не найдена";
 
-                if(Core.Demo.Tubes[i].IsFind)
+                if(Core.Demo.Properties.Tubes[i].IsFind)
                 {
-                    state = $"{Core.Demo.Tubes[i].CurrentStage} из {Core.Demo.Tubes[i].Stages.Count}";
+                    state = $"{Core.Demo.Properties.Tubes[i].CurrentStage} из {Core.Demo.Properties.Tubes[i].Stages.Count}";
                 }
 
                 tubesList[2, i].Value = state;
-                tubesList[3, i].Value = Core.Demo.Tubes[i].TimeToStageComplete + " мин.";
+                tubesList[3, i].Value = Core.Demo.Properties.Tubes[i].TimeToStageComplete + " мин.";
             }
         }
 

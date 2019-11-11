@@ -39,6 +39,8 @@
             this.buttonHome = new System.Windows.Forms.Button();
             this.checkReverse = new System.Windows.Forms.CheckBox();
             this.editStepperName = new System.Windows.Forms.TextBox();
+            this.switchStateText = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.editNumberSteps)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.editFullSpeed)).BeginInit();
             this.SuspendLayout();
@@ -186,10 +188,32 @@
             this.editStepperName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.editStepperName.TextChanged += new System.EventHandler(this.editStepperName_TextChanged);
             // 
+            // switchStateText
+            // 
+            this.switchStateText.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.switchStateText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.switchStateText.Location = new System.Drawing.Point(68, 149);
+            this.switchStateText.Name = "switchStateText";
+            this.switchStateText.Size = new System.Drawing.Size(129, 23);
+            this.switchStateText.TabIndex = 52;
+            this.switchStateText.Text = "Состояние";
+            this.switchStateText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 154);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.TabIndex = 53;
+            this.label3.Text = "Концевик:";
+            // 
             // StepperTurningView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.switchStateText);
             this.Controls.Add(this.editStepperName);
             this.Controls.Add(this.checkReverse);
             this.Controls.Add(this.buttonHome);
@@ -201,7 +225,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.editFullSpeed);
             this.Name = "StepperTurningView";
-            this.Size = new System.Drawing.Size(202, 145);
+            this.Size = new System.Drawing.Size(202, 178);
             ((System.ComponentModel.ISupportInitialize)(this.editNumberSteps)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.editFullSpeed)).EndInit();
             this.ResumeLayout(false);
@@ -221,5 +245,7 @@
         private System.Windows.Forms.Button buttonHome;
         private System.Windows.Forms.CheckBox checkReverse;
         private System.Windows.Forms.TextBox editStepperName;
+        private System.Windows.Forms.Label switchStateText;
+        private System.Windows.Forms.Label label3;
     }
 }

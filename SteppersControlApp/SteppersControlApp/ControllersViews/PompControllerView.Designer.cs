@@ -46,9 +46,9 @@
             this.buttonHome.BackColor = System.Drawing.Color.GreenYellow;
             this.buttonHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonHome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonHome.Location = new System.Drawing.Point(3, 3);
+            this.buttonHome.Location = new System.Drawing.Point(3, 6);
             this.buttonHome.Name = "buttonHome";
-            this.buttonHome.Size = new System.Drawing.Size(145, 52);
+            this.buttonHome.Size = new System.Drawing.Size(145, 29);
             this.buttonHome.TabIndex = 1;
             this.buttonHome.Text = "HOME";
             this.buttonHome.UseVisualStyleBackColor = false;
@@ -59,7 +59,7 @@
             this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid.Location = new System.Drawing.Point(154, 3);
+            this.propertyGrid.Location = new System.Drawing.Point(154, 6);
             this.propertyGrid.Name = "propertyGrid";
             this.propertyGrid.Size = new System.Drawing.Size(506, 293);
             this.propertyGrid.TabIndex = 10;
@@ -69,7 +69,7 @@
             this.buttonNeedleWashing.BackColor = System.Drawing.SystemColors.Control;
             this.buttonNeedleWashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonNeedleWashing.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonNeedleWashing.Location = new System.Drawing.Point(3, 61);
+            this.buttonNeedleWashing.Location = new System.Drawing.Point(3, 41);
             this.buttonNeedleWashing.Name = "buttonNeedleWashing";
             this.buttonNeedleWashing.Size = new System.Drawing.Size(145, 29);
             this.buttonNeedleWashing.TabIndex = 11;
@@ -81,7 +81,7 @@
             // 
             this.labelNumberCycles.AutoSize = true;
             this.labelNumberCycles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNumberCycles.Location = new System.Drawing.Point(3, 93);
+            this.labelNumberCycles.Location = new System.Drawing.Point(3, 73);
             this.labelNumberCycles.Name = "labelNumberCycles";
             this.labelNumberCycles.Size = new System.Drawing.Size(59, 16);
             this.labelNumberCycles.TabIndex = 19;
@@ -90,7 +90,7 @@
             // editNumberCycles
             // 
             this.editNumberCycles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editNumberCycles.Location = new System.Drawing.Point(3, 112);
+            this.editNumberCycles.Location = new System.Drawing.Point(3, 92);
             this.editNumberCycles.Name = "editNumberCycles";
             this.editNumberCycles.Size = new System.Drawing.Size(145, 22);
             this.editNumberCycles.TabIndex = 18;
@@ -101,7 +101,7 @@
             this.buttonSuction.BackColor = System.Drawing.SystemColors.Control;
             this.buttonSuction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSuction.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonSuction.Location = new System.Drawing.Point(3, 140);
+            this.buttonSuction.Location = new System.Drawing.Point(3, 120);
             this.buttonSuction.Name = "buttonSuction";
             this.buttonSuction.Size = new System.Drawing.Size(145, 29);
             this.buttonSuction.TabIndex = 20;
@@ -113,7 +113,7 @@
             // 
             this.labelSuctionValue.AutoSize = true;
             this.labelSuctionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelSuctionValue.Location = new System.Drawing.Point(3, 172);
+            this.labelSuctionValue.Location = new System.Drawing.Point(3, 152);
             this.labelSuctionValue.Name = "labelSuctionValue";
             this.labelSuctionValue.Size = new System.Drawing.Size(130, 16);
             this.labelSuctionValue.TabIndex = 22;
@@ -122,7 +122,7 @@
             // editSuctionValue
             // 
             this.editSuctionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editSuctionValue.Location = new System.Drawing.Point(3, 191);
+            this.editSuctionValue.Location = new System.Drawing.Point(3, 171);
             this.editSuctionValue.Name = "editSuctionValue";
             this.editSuctionValue.Size = new System.Drawing.Size(145, 22);
             this.editSuctionValue.TabIndex = 21;
@@ -133,7 +133,7 @@
             this.buttonUnsuction.BackColor = System.Drawing.SystemColors.Control;
             this.buttonUnsuction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonUnsuction.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonUnsuction.Location = new System.Drawing.Point(3, 219);
+            this.buttonUnsuction.Location = new System.Drawing.Point(3, 199);
             this.buttonUnsuction.Name = "buttonUnsuction";
             this.buttonUnsuction.Size = new System.Drawing.Size(145, 29);
             this.buttonUnsuction.TabIndex = 23;

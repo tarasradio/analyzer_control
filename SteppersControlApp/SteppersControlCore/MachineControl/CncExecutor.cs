@@ -22,6 +22,7 @@ namespace SteppersControlCore.MachineControl
 
         private static List<IAbstractCommand> _commandsToSend = new List<IAbstractCommand>();
         private Thread _executionThread;
+        private Thread _taskThread;
 
         private static uint _lastSuccesCommandId;
         private static Protocol.CommandStates _lastCommandState;

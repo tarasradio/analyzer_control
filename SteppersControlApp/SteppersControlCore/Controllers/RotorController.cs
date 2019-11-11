@@ -29,15 +29,20 @@ namespace SteppersControlCore.Controllers
             Properties = new RotorControllerProperties();
         }
 
-        public void WriteXml()
+        public void WriteXml(string path)
         {
-            XMLSerializeHelper<RotorControllerProperties>.WriteXml(Properties, filename);
+            XMLSerializeHelper<RotorControllerProperties>.WriteXml(Properties, 
+                Path.Combine(path, filename));
         }
 
         //Чтение насроек из файла
-        public void ReadXml()
+        public void ReadXml(string path)
         {
-            Properties = XMLSerializeHelper<RotorControllerProperties>.ReadXML(filename);
+            Properties = XMLSerializeHelper<RotorControllerProperties>.ReadXML(
+                Path.Combine(path, filename));
+
+            if (Properties == null)
+                Properties = new RotorControllerProperties();
         }
 
         public List<IAbstractCommand> Home()

@@ -29,7 +29,7 @@ namespace SteppersControlCore
         public uint NumberSteps { get; set; } = 100000;
         [XmlAttribute]
         public uint FullSpeed { get; set; } = 1000;
-
+        [XmlIgnore]
         public ushort Status { get; set; } = 0;
     }
 

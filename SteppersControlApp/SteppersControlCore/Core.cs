@@ -29,7 +29,7 @@ namespace SteppersControlCore
         public static LoadController Loader { get; private set; }
         public static PompController Pomp { get; private set; }
 
-        public static DemoExecutor Demo { get; private set; }
+        public static DemoController Demo { get; private set; }
 
         private static object _syncRoot = new object();
 
@@ -38,6 +38,7 @@ namespace SteppersControlCore
 
         private static string _lastBarCode = null;
         private static string _lastFirmwareVersionResponse = null;
+        private static string path = null;
 
         public Core(string configurationFilename)
         {
@@ -51,23 +52,25 @@ namespace SteppersControlCore
             _sensorsValues = new ushort[Settings.Sensors.Count];
             _steppersStates = new ushort[Settings.Steppers.Count];
 
+            path = System.IO.Path.GetDirectoryName(configurationFilename);
+            
             Arm = new ArmController();
-            Arm.ReadXml();
+            Arm.ReadXml(path);
 
             Transporter = new TransporterController();
-            Transporter.ReadXml();
+            Transporter.ReadXml(path);
 
             Loader = new LoadController();
-            Loader.ReadXml();
+            Loader.ReadXml(path);
 
             Rotor = new RotorController();
-            Rotor.ReadXml();
+            Rotor.ReadXml(path);
 
             Pomp = new PompController();
-            Pomp.ReadXml();
+            Pomp.ReadXml(path);
 
-            Demo = new DemoExecutor();
-            Demo.ReadXml();
+            Demo = new DemoController();
+            Demo.ReadXml(path);
 
             PackFinder.PacketReceived += PackHandler.ProcessPacket;
 
@@ -128,12 +131,12 @@ namespace SteppersControlCore
 
         public void SaveConfiguration()
         {
-            Arm.WriteXml();
-            Transporter.WriteXml();
-            Loader.WriteXml();
-            Rotor.WriteXml();
-            Pomp.WriteXml();
-            Demo.WriteXml();
+            Arm.WriteXml(path);
+            Transporter.WriteXml(path);
+            Loader.WriteXml(path);
+            Rotor.WriteXml(path);
+            Pomp.WriteXml(path);
+            Demo.WriteXml(path);
         }
         
         public async static void CheckFirmwareVersion()

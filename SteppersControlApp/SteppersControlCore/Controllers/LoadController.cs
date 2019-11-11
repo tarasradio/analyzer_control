@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.IO;
 using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.Utils;
@@ -25,15 +25,19 @@ namespace SteppersControlCore.Controllers
             Properties = new LoadControllerProperties();
         }
 
-        public void WriteXml()
+        public void WriteXml(string path)
         {
-            XMLSerializeHelper<LoadControllerProperties>.WriteXml(Properties, filename);
+            XMLSerializeHelper<LoadControllerProperties>.WriteXml(Properties, 
+                Path.Combine(path, filename) );
         }
 
         //Чтение насроек из файла
-        public void ReadXml()
+        public void ReadXml(string path)
         {
-            Properties = XMLSerializeHelper<LoadControllerProperties>.ReadXML(filename);
+            Properties = XMLSerializeHelper<LoadControllerProperties>.ReadXML(
+                Path.Combine(path, filename));
+            if (Properties == null)
+                Properties = new LoadControllerProperties();
         }
 
         public List<IAbstractCommand> HomeLoad()

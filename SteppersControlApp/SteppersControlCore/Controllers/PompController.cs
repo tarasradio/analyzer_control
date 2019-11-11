@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
@@ -23,15 +24,20 @@ namespace SteppersControlCore.Controllers
             Properties = new PompControllerProperties();
         }
 
-        public void WriteXml()
+        public void WriteXml(string path)
         {
-            XMLSerializeHelper<PompControllerProperties>.WriteXml(Properties, filename);
+            XMLSerializeHelper<PompControllerProperties>.WriteXml(Properties, 
+                Path.Combine(path, filename));
         }
 
         //Чтение насроек из файла
-        public void ReadXml()
+        public void ReadXml(string path)
         {
-            Properties = XMLSerializeHelper<PompControllerProperties>.ReadXML(filename);
+            Properties = XMLSerializeHelper<PompControllerProperties>.ReadXML(
+                Path.Combine(path, filename));
+
+            if (Properties == null)
+                Properties = new PompControllerProperties();
         }
 
         public List<IAbstractCommand> CloseValves()

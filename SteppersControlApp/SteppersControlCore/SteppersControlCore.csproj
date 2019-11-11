@@ -76,7 +76,7 @@
     <Compile Include="ControllersProperties\PompControllerProperties.cs" />
     <Compile Include="ControllersProperties\RotorControllerProperties.cs" />
     <Compile Include="ControllersProperties\TransporterControllerProperties.cs" />
-    <Compile Include="DemoExecutor.cs" />
+    <Compile Include="DemoController.cs" />
     <Compile Include="Elements\Elements.cs" />
     <Compile Include="Interfaces\IPacketFinder.cs" />
     <Compile Include="Interfaces\ISerial.cs" />

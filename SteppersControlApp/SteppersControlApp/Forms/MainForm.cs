@@ -174,7 +174,7 @@ namespace SteppersControlApp.Forms
 
             if(dialogResult == DialogResult.Yes)
             {
-                Core.Settings.SaveToFile("config.xml");
+                Core.Settings.SaveToFile("settings\\config.xml");
             }
             else if(dialogResult == DialogResult.Cancel ||
                 dialogResult == DialogResult.Abort)

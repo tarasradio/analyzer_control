@@ -20,12 +20,13 @@ namespace SteppersControlCore.Utils
 
             Directory.CreateDirectory("backup_settings");
             Directory.CreateDirectory(dir);
-
-            string fileNameForBackup =
-                dir + $"{filename}.xml";
-
-            File.Copy(filename + ".xml", fileNameForBackup);
-            File.Delete(filename + ".xml");
+            
+            if(File.Exists($"{filename}.xml"))
+            {
+                string fileNameForBackup = dir + $"{Path.GetFileName(filename)}.xml";
+                File.Copy(filename + ".xml", fileNameForBackup);
+                File.Delete(filename + ".xml");
+            }
 
             TextWriter writer = new StreamWriter(filename + ".xml");
             ser.Serialize(writer, data);
