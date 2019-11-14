@@ -17,7 +17,6 @@ namespace SteppersControlCore.Controllers
 
         public int LoadStepperPosition { get; set; } = 0;
         public int ShuttleStepperPosition { get; set; } = 0;
-        public int PushStepperPosition { get; set; } = 0;
 
         public int CurrentCell { get; private set; } = 0;
 
@@ -85,23 +84,46 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.StepsShuttleToStart } };
-            commands.Add( new MoveCncCommand(steppers) );
-
-            ShuttleStepperPosition = Properties.StepsShuttleToStart;
-
             executor.WaitExecution(commands);
         }
 
-        public void MoveShuttleToCassette()
+        public void LoadCartridge()
         {
             List<ICommand> commands = new List<ICommand>();
 
-            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperSpeed } };
-            commands.Add( new SetSpeedCncCommand(steppers) );
+            //Отъезд загрузки, чтобы крюк мог пройти под картриджем
+            steppers = new Dictionary<int, int>() {
+                { Properties.LoadStepper, Properties.LoadStepperSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.StepsShuttleToCassette } };
-            commands.Add( new MoveCncCommand(steppers) );
+            steppers = new Dictionary<int, int>() {
+                { Properties.LoadStepper, -Properties.StepsTurnToLoad } };
+
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            // Продвижение крюка до картриджа
+            steppers = new Dictionary<int, int>() {
+                { Properties.ShuttleStepper, Properties.ShuttleStepperSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                { Properties.ShuttleStepper, Properties.StepsShuttleToCartridge } };
+
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            // Возврат загрузки, чтобы крюк захватил картридж
+            steppers = new Dictionary<int, int>() {
+                { Properties.LoadStepper, Properties.LoadStepperSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                { Properties.LoadStepper, Properties.StepsTurnToLoad } };
+
+            commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
         }

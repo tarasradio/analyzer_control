@@ -102,7 +102,7 @@
             this.tubesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tubesList.Location = new System.Drawing.Point(3, 45);
             this.tubesList.Name = "tubesList";
-            this.tubesList.Size = new System.Drawing.Size(533, 379);
+            this.tubesList.Size = new System.Drawing.Size(561, 379);
             this.tubesList.TabIndex = 0;
             this.tubesList.SelectionChanged += new System.EventHandler(this.tubesList_SelectionChanged);
             // 
@@ -113,7 +113,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(53, 110);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(254, 231);
+            this.propertyGrid.Size = new System.Drawing.Size(282, 231);
             this.propertyGrid.TabIndex = 1;
             // 
             // editBarcodeLabel
@@ -134,7 +134,7 @@
             this.editBarcode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.editBarcode.Location = new System.Drawing.Point(381, 11);
             this.editBarcode.Name = "editBarcode";
-            this.editBarcode.Size = new System.Drawing.Size(331, 23);
+            this.editBarcode.Size = new System.Drawing.Size(359, 23);
             this.editBarcode.TabIndex = 5;
             // 
             // stagesList
@@ -193,7 +193,7 @@
             this.groupBox1.Controls.Add(this.removeStageButton);
             this.groupBox1.Controls.Add(this.addStageButton);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox1.Location = new System.Drawing.Point(542, 45);
+            this.groupBox1.Location = new System.Drawing.Point(570, 45);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(250, 182);
             this.groupBox1.TabIndex = 10;
@@ -211,7 +211,7 @@
             this.groupBox2.Controls.Add(this.editCartridgePosition);
             this.groupBox2.Controls.Add(this.cartridgeNumberLabel);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox2.Location = new System.Drawing.Point(542, 233);
+            this.groupBox2.Location = new System.Drawing.Point(570, 233);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(250, 152);
             this.groupBox2.TabIndex = 11;
@@ -303,7 +303,7 @@
             this.buttonUpdateBarcode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonUpdateBarcode.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonUpdateBarcode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonUpdateBarcode.Location = new System.Drawing.Point(718, 3);
+            this.buttonUpdateBarcode.Location = new System.Drawing.Point(746, 3);
             this.buttonUpdateBarcode.Name = "buttonUpdateBarcode";
             this.buttonUpdateBarcode.Size = new System.Drawing.Size(74, 36);
             this.buttonUpdateBarcode.TabIndex = 12;
@@ -325,7 +325,7 @@
             this.Controls.Add(this.buttonRemoveTube);
             this.Controls.Add(this.buttonAddTube);
             this.Name = "DemoExecutorView";
-            this.Size = new System.Drawing.Size(795, 427);
+            this.Size = new System.Drawing.Size(823, 427);
             ((System.ComponentModel.ISupportInitialize)(this.tubesList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stagesList)).EndInit();
             this.groupBox1.ResumeLayout(false);

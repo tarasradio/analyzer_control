@@ -9,11 +9,8 @@ namespace SteppersControlCore.ControllersProperties
         [DisplayName("Двигатель поворота загрузки")]
         public int LoadStepper { get; set; } = 10;
         [Category("1. Двигатели")]
-        [DisplayName("Двигатель челнока")]
+        [DisplayName("Двигатель крюка")]
         public int ShuttleStepper { get; set; } = 15;
-        [Category("1. Двигатели")]
-        [DisplayName("Двигатель толкателя")]
-        public int PushStepper { get; set; } = 0;
 
         [Category("2.1 Скорость двигателя поворота загрузки")]
         [DisplayName("Скорость движения загрузки домой")]
@@ -22,19 +19,12 @@ namespace SteppersControlCore.ControllersProperties
         [DisplayName("Скорость движения загрузки")]
         public int LoadStepperSpeed { get; set; } = 50;
 
-        [Category("2.2 Скорость двигателя челнока")]
-        [DisplayName("Скорость движения челнока домой")]
+        [Category("2.2 Скорость двигателя крюка")]
+        [DisplayName("Скорость движения крюка домой")]
         public int ShuttleStepperHomeSpeed { get; set; } = 500;
-        [Category("2.2 Скорость двигателя челнока")]
-        [DisplayName("Скорость движения челнока")]
+        [Category("2.2 Скорость двигателя крюка")]
+        [DisplayName("Скорость движения крюка")]
         public int ShuttleStepperSpeed { get; set; } = 200;
-
-        [Category("2.3 Скорость двигателя толкателя")]
-        [DisplayName("Скорость движения толкателя домой")]
-        public int PushStepperHomeSpeed { get; set; } = 500;
-        [Category("2.3 Скорость двигателя толкателя")]
-        [DisplayName("Скорость движения толкателя")]
-        public int PushStepperSpeed { get; set; } = 200;
 
         [Category("3.1 Шаги двигателя поворота загрузки")]
         [DisplayName("Шаги до ячеек с кассетами")]
@@ -56,13 +46,13 @@ namespace SteppersControlCore.ControllersProperties
         [DisplayName("Шаги до разгрузки")]
         public int StepsToUnload { get; set; } = 0;
 
-        [Category("3.2 Шаги двигателя челнока")]
-        [DisplayName("Шаги отъезда челнока от дома")]
-        public int StepsShuttleToStart { get; set; } = -20000;
+        [Category("3.1 Шаги двигателя поворота загрузки")]
+        [DisplayName("Шаги для отъезда при загрузке")]
+        public int StepsTurnToLoad { get; set; } = 1000;
 
         [Category("3.2 Шаги двигателя челнока")]
-        [DisplayName("Шаги движения челнока к кассете")]
-        public int StepsShuttleToCassette { get; set; } = -2840000;
+        [DisplayName("Шаги движения челнока к картриджу")]
+        public int StepsShuttleToCartridge { get; set; } = -613000;
 
         public LoadControllerProperties()
         {

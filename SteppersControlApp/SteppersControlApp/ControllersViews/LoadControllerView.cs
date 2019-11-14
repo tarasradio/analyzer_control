@@ -38,7 +38,7 @@ namespace SteppersControlApp.ControllersViews
                 });
         }
 
-        private void buttonTurnLoad_Click(object sender, EventArgs e)
+        private void buttonTurnLoadToCell_Click(object sender, EventArgs e)
         {
             int cell = (int)editCellNumber.Value;
 
@@ -50,12 +50,14 @@ namespace SteppersControlApp.ControllersViews
                 });
         }
 
-        private void buttonMoveShuttleToCassette_Click(object sender, EventArgs e)
+        private void buttonLoadCartridge_Click(object sender, EventArgs e)
         {
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Loader.MoveShuttleToCassette();
+                    Core.Loader.HomeShuttle();
+                    Core.Loader.LoadCartridge();
+                    Core.Loader.HomeShuttle();
                 });
         }
     }

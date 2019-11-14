@@ -2,13 +2,10 @@
 <LoadControllerProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <LoadStepper>10</LoadStepper>
   <ShuttleStepper>15</ShuttleStepper>
-  <PushStepper>1</PushStepper>
   <LoadStepperHomeSpeed>30</LoadStepperHomeSpeed>
   <LoadStepperSpeed>20</LoadStepperSpeed>
   <ShuttleStepperHomeSpeed>500</ShuttleStepperHomeSpeed>
   <ShuttleStepperSpeed>200</ShuttleStepperSpeed>
-  <PushStepperHomeSpeed>500</PushStepperHomeSpeed>
-  <PushStepperSpeed>200</PushStepperSpeed>
   <CellsSteps>
     <int>-2000</int>
     <int>-5000</int>
@@ -22,6 +19,6 @@
     <int>-29500</int>
   </CellsSteps>
   <StepsToUnload>-40000</StepsToUnload>
-  <StepsShuttleToStart>-20000</StepsShuttleToStart>
-  <StepsShuttleToCassette>-710000</StepsShuttleToCassette>
+  <StepsTurnToLoad>1000</StepsTurnToLoad>
+  <StepsShuttleToCartridge>-613000</StepsShuttleToCartridge>
 </LoadControllerProperties>
