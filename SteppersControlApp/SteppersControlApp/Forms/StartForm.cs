@@ -20,7 +20,7 @@ namespace SteppersControlApp.Forms
         {
             InitializeComponent();
             AutoUpdater.ReportErrors = true;
-            AutoUpdater.Start("https://github.com/tarasradio/stepper_control/updates/StepperControlApp.xml");
+            AutoUpdater.Start("https://raw.githubusercontent.com/tarasradio/stepper_control/master/updates/StepperControlApp.xml");
         }
 
         private void ButtonServiceMode_Click(object sender, EventArgs e)
