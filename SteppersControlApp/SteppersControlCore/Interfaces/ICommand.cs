@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using SteppersControlCore.CommunicationProtocol;
-
-namespace SteppersControlCore.MachineControl
+namespace SteppersControlCore.Interfaces
 {
-    
+    public interface ICommand
+    {
+        uint GetId();
+    }
 }

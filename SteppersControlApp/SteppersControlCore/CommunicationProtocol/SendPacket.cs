@@ -8,33 +8,33 @@ namespace SteppersControlCore.CommunicationProtocol
 {
     public class SendPacket
     {
-        private byte[] _buffer;
+        private byte[] buffer;
         const uint idLength = 4;
 
         public SendPacket(int dataLength)
         {
-            _buffer = new byte[dataLength + idLength];
+            buffer = new byte[dataLength + idLength];
         }
 
         public void SetPacketId(uint packetId)
         {
             byte[] packetIdBytes = BitConverter.GetBytes(packetId);
-            Array.Copy(packetIdBytes, 0, _buffer, 0, idLength);
+            Array.Copy(packetIdBytes, 0, buffer, 0, idLength);
         }
 
         public void SetData(int bytePosition, byte data)
         {
-            _buffer[idLength + bytePosition] = data;
+            buffer[idLength + bytePosition] = data;
         }
 
         public void SetData(int bytePosition, byte[] data)
         {
-            Array.Copy(data, 0, _buffer, idLength + bytePosition, data.Length);
+            Array.Copy(data, 0, buffer, idLength + bytePosition, data.Length);
         }
 
         public byte[] GetBytes()
         {
-            return _buffer;
+            return buffer;
         }
     }
 }

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using SteppersControlCore.CommunicationProtocol;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SteppersControlCore.CommunicationProtocol
+namespace SteppersControlCore.Interfaces
 {
-    public interface IDeviceCommand : IAbstractCommand
+    public interface IRemoteCommand : ICommand
     {
         Protocol.CommandTypes GetType();
         byte[] GetBytes();

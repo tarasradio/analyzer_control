@@ -25,7 +25,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Loader.HomeShuttle());
+                    Core.Loader.HomeShuttle();
                 });
         }
 
@@ -34,7 +34,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Loader.HomeLoad());
+                    Core.Loader.HomeLoad();
                 });
         }
 
@@ -45,8 +45,8 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Loader.HomeLoad());
-                    Core.CncExecutor.ExecuteTask(Core.Loader.TurnLoadToCell(cell));
+                    Core.Loader.HomeLoad();
+                    Core.Loader.TurnLoadToCell(cell);
                 });
         }
 
@@ -55,7 +55,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Loader.MoveShuttleToCassette());
+                    Core.Loader.MoveShuttleToCassette();
                 });
         }
     }

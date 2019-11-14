@@ -36,12 +36,13 @@
             // 
             // buttonPrepare
             // 
-            this.buttonPrepare.BackColor = System.Drawing.Color.GreenYellow;
+            this.buttonPrepare.BackColor = System.Drawing.Color.Green;
             this.buttonPrepare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonPrepare.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonPrepare.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonPrepare.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonPrepare.Location = new System.Drawing.Point(3, 3);
             this.buttonPrepare.Name = "buttonPrepare";
-            this.buttonPrepare.Size = new System.Drawing.Size(188, 31);
+            this.buttonPrepare.Size = new System.Drawing.Size(156, 31);
             this.buttonPrepare.TabIndex = 1;
             this.buttonPrepare.Text = "Подготовка";
             this.buttonPrepare.UseVisualStyleBackColor = false;
@@ -52,33 +53,37 @@
             this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid.Location = new System.Drawing.Point(197, 3);
+            this.propertyGrid.Location = new System.Drawing.Point(165, 3);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(442, 280);
+            this.propertyGrid.Size = new System.Drawing.Size(474, 280);
             this.propertyGrid.TabIndex = 2;
             // 
             // buttonScanAndTurn
             // 
+            this.buttonScanAndTurn.BackColor = System.Drawing.Color.SteelBlue;
             this.buttonScanAndTurn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonScanAndTurn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonScanAndTurn.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonScanAndTurn.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonScanAndTurn.Location = new System.Drawing.Point(3, 40);
             this.buttonScanAndTurn.Name = "buttonScanAndTurn";
-            this.buttonScanAndTurn.Size = new System.Drawing.Size(188, 31);
+            this.buttonScanAndTurn.Size = new System.Drawing.Size(156, 31);
             this.buttonScanAndTurn.TabIndex = 3;
             this.buttonScanAndTurn.Text = "Сканирование пробирки";
-            this.buttonScanAndTurn.UseVisualStyleBackColor = true;
+            this.buttonScanAndTurn.UseVisualStyleBackColor = false;
             this.buttonScanAndTurn.Click += new System.EventHandler(this.buttonScanAndTurn_Click);
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.SteelBlue;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.button1.Location = new System.Drawing.Point(3, 77);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(188, 31);
+            this.button1.Size = new System.Drawing.Size(156, 31);
             this.button1.TabIndex = 4;
             this.button1.Text = "Сдвиг";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             // 
             // TransporterControllerView
             // 

@@ -25,8 +25,8 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Arm.Home());
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.Arm.Home();
+                    Core.Rotor.Home();
                 });
         }
 
@@ -52,10 +52,8 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(
-                        Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
-                        RotorController.CellPosition.CenterCell) );
-                    Core.CncExecutor.ExecuteTask(Core.Arm.MoveToCartridge(ArmController.FromPosition.Home, cell));
+                    Core.Rotor.MoveCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CenterCell);
+                    Core.Arm.MoveToCartridge(ArmController.FromPosition.Home, cell);
                 });
         }
     }

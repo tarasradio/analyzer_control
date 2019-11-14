@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PompControllerView));
             this.buttonHome = new System.Windows.Forms.Button();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.buttonNeedleWashing = new System.Windows.Forms.Button();
@@ -43,14 +44,17 @@
             // 
             // buttonHome
             // 
-            this.buttonHome.BackColor = System.Drawing.Color.GreenYellow;
+            this.buttonHome.BackColor = System.Drawing.Color.Green;
             this.buttonHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonHome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonHome.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonHome.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonHome.Image = ((System.Drawing.Image)(resources.GetObject("buttonHome.Image")));
+            this.buttonHome.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonHome.Location = new System.Drawing.Point(3, 6);
             this.buttonHome.Name = "buttonHome";
-            this.buttonHome.Size = new System.Drawing.Size(145, 29);
+            this.buttonHome.Size = new System.Drawing.Size(145, 32);
             this.buttonHome.TabIndex = 1;
-            this.buttonHome.Text = "HOME";
+            this.buttonHome.Text = "В дом";
             this.buttonHome.UseVisualStyleBackColor = false;
             this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
             // 
@@ -61,15 +65,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(154, 6);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(506, 293);
+            this.propertyGrid.Size = new System.Drawing.Size(506, 290);
             this.propertyGrid.TabIndex = 10;
             // 
             // buttonNeedleWashing
             // 
-            this.buttonNeedleWashing.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonNeedleWashing.BackColor = System.Drawing.Color.SteelBlue;
             this.buttonNeedleWashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonNeedleWashing.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonNeedleWashing.Location = new System.Drawing.Point(3, 41);
+            this.buttonNeedleWashing.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonNeedleWashing.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonNeedleWashing.Location = new System.Drawing.Point(3, 44);
             this.buttonNeedleWashing.Name = "buttonNeedleWashing";
             this.buttonNeedleWashing.Size = new System.Drawing.Size(145, 29);
             this.buttonNeedleWashing.TabIndex = 11;
@@ -80,28 +85,29 @@
             // labelNumberCycles
             // 
             this.labelNumberCycles.AutoSize = true;
-            this.labelNumberCycles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNumberCycles.Location = new System.Drawing.Point(3, 73);
+            this.labelNumberCycles.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNumberCycles.Location = new System.Drawing.Point(3, 76);
             this.labelNumberCycles.Name = "labelNumberCycles";
-            this.labelNumberCycles.Size = new System.Drawing.Size(59, 16);
+            this.labelNumberCycles.Size = new System.Drawing.Size(52, 15);
             this.labelNumberCycles.TabIndex = 19;
             this.labelNumberCycles.Text = "Циклов:";
             // 
             // editNumberCycles
             // 
-            this.editNumberCycles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editNumberCycles.Location = new System.Drawing.Point(3, 92);
+            this.editNumberCycles.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editNumberCycles.Location = new System.Drawing.Point(3, 94);
             this.editNumberCycles.Name = "editNumberCycles";
-            this.editNumberCycles.Size = new System.Drawing.Size(145, 22);
+            this.editNumberCycles.Size = new System.Drawing.Size(145, 25);
             this.editNumberCycles.TabIndex = 18;
             this.editNumberCycles.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // buttonSuction
             // 
-            this.buttonSuction.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonSuction.BackColor = System.Drawing.Color.SteelBlue;
             this.buttonSuction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSuction.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonSuction.Location = new System.Drawing.Point(3, 120);
+            this.buttonSuction.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonSuction.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonSuction.Location = new System.Drawing.Point(3, 125);
             this.buttonSuction.Name = "buttonSuction";
             this.buttonSuction.Size = new System.Drawing.Size(145, 29);
             this.buttonSuction.TabIndex = 20;
@@ -112,28 +118,29 @@
             // labelSuctionValue
             // 
             this.labelSuctionValue.AutoSize = true;
-            this.labelSuctionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelSuctionValue.Location = new System.Drawing.Point(3, 152);
+            this.labelSuctionValue.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelSuctionValue.Location = new System.Drawing.Point(3, 157);
             this.labelSuctionValue.Name = "labelSuctionValue";
-            this.labelSuctionValue.Size = new System.Drawing.Size(130, 16);
+            this.labelSuctionValue.Size = new System.Drawing.Size(110, 15);
             this.labelSuctionValue.TabIndex = 22;
             this.labelSuctionValue.Text = "Объем материала:";
             // 
             // editSuctionValue
             // 
-            this.editSuctionValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editSuctionValue.Location = new System.Drawing.Point(3, 171);
+            this.editSuctionValue.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editSuctionValue.Location = new System.Drawing.Point(3, 175);
             this.editSuctionValue.Name = "editSuctionValue";
-            this.editSuctionValue.Size = new System.Drawing.Size(145, 22);
+            this.editSuctionValue.Size = new System.Drawing.Size(145, 25);
             this.editSuctionValue.TabIndex = 21;
             this.editSuctionValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // buttonUnsuction
             // 
-            this.buttonUnsuction.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonUnsuction.BackColor = System.Drawing.Color.SteelBlue;
             this.buttonUnsuction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUnsuction.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonUnsuction.Location = new System.Drawing.Point(3, 199);
+            this.buttonUnsuction.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonUnsuction.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonUnsuction.Location = new System.Drawing.Point(3, 206);
             this.buttonUnsuction.Name = "buttonUnsuction";
             this.buttonUnsuction.Size = new System.Drawing.Size(145, 29);
             this.buttonUnsuction.TabIndex = 23;

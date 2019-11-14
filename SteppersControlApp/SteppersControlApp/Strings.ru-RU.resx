@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="button_abort_execution_text" xml:space="preserve">
-    <value>Прервать выполнение (F8)</value>
+    <value>Остановка (F8)</value>
   </data>
   <data name="button_show_control_panel_text" xml:space="preserve">
-    <value>Панель управления</value>
+    <value>Двигатели</value>
   </data>
   <data name="button_start_demo_text" xml:space="preserve">
     <value>Демо (F7)</value>
   </data>
   <data name="button_update_text" xml:space="preserve">
-    <value>Обновить список портов (F5)</value>
+    <value>Поиск портов (F5)</value>
   </data>
   <data name="connect_text" xml:space="preserve">
     <value>Подключиться</value>

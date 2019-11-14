@@ -25,7 +25,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Transporter.PrepareBeforeScanning());
+                    Core.Transporter.PrepareBeforeScanning();
                 });
         }
 
@@ -34,7 +34,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Transporter.TurnAndScanTube());
+                    Core.Transporter.TurnAndScanTube();
                 });
         }
     }

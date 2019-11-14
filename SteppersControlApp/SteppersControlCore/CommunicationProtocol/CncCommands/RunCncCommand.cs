@@ -1,14 +1,10 @@
-﻿using System;
+﻿using SteppersControlCore.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SteppersControlCore.CommunicationProtocol;
 
 namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
-    public class RunCncCommand : AbstractCommand, IDeviceCommand
+    public class RunCncCommand : AbstractCommand, IRemoteCommand
     {
         private Dictionary<int, int> _steppers;
         const int BytesPerStepper = 5;

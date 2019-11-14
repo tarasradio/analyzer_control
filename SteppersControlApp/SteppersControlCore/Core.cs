@@ -20,7 +20,7 @@ namespace SteppersControlCore
         public static PacketFinder PackFinder { get; private set; } = new PacketFinder();
         public static PackageHandler PackHandler { get; private set; } = new PackageHandler();
         public static SerialHelper Serial { get; private set; }
-        public static CncExecutor CncExecutor { get; private set; }
+        public static CommandExecutor CmdExecutor { get; private set; }
         public static TaskExecutor Executor { get; private set; }
 
         public static ArmController Arm { get; private set; }
@@ -31,12 +31,13 @@ namespace SteppersControlCore
 
         public static DemoController Demo { get; private set; }
 
-        private static object _syncRoot = new object();
+        private static object locker = new object();
 
         private static ushort[] _sensorsValues = null;
         private static ushort[] _steppersStates = null;
 
-        private static string _lastBarCode = null;
+        private static string _lastABarCode = null;
+        private static string _lastBBarCode = null;
         private static string _lastFirmwareVersionResponse = null;
         private static string path = null;
 
@@ -54,53 +55,70 @@ namespace SteppersControlCore
 
             path = System.IO.Path.GetDirectoryName(configurationFilename);
             
-            Arm = new ArmController();
-            Arm.ReadXml(path);
-
-            Transporter = new TransporterController();
-            Transporter.ReadXml(path);
-
-            Loader = new LoadController();
-            Loader.ReadXml(path);
-
-            Rotor = new RotorController();
-            Rotor.ReadXml(path);
-
-            Pomp = new PompController();
-            Pomp.ReadXml(path);
-
-            Demo = new DemoController();
-            Demo.ReadXml(path);
-
             PackFinder.PacketReceived += PackHandler.ProcessPacket;
 
             Serial = new SerialHelper(PackFinder);
 
-            PackHandler.BarCodeAReceived += PackHandler_BarCodeReceived;
+            PackHandler.BarCodeAReceived += PackHandler_BarCodeAReceived;
+            PackHandler.BarCodeBReceived += PackHandler_BarCodeBReceived;
             PackHandler.FirmwareVersionReceived += PackHandler_FirmwareVersionReceived;
             PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived;
             PackHandler.SteppersStatesReceived += PackHandler_SteppersStatesReceived;
 
             PackHandler.MessageReceived += Logger.AddMessage;
 
-            CncExecutor = new CncExecutor();
+            CmdExecutor = new CommandExecutor();
             Executor = new TaskExecutor();
+
+            Arm = new ArmController(CmdExecutor);
+            Arm.ReadXml(path);
+
+            Transporter = new TransporterController(CmdExecutor);
+            Transporter.ReadXml(path);
+
+            Loader = new LoadController(CmdExecutor);
+            Loader.ReadXml(path);
+
+            Rotor = new RotorController(CmdExecutor);
+            Rotor.ReadXml(path);
+
+            Pomp = new PompController(CmdExecutor);
+            Pomp.ReadXml(path);
+
+            Demo = new DemoController();
+            Demo.ReadXml(path);
 
             PackHandler.CommandStateResponseReceived += PackHandler_CommandStateResponseReceived;
             
             Logger.AddMessage("Запись работы системы начата");
         }
 
+        private void PackHandler_BarCodeAReceived(string message)
+        {
+            lock (locker)
+            {
+                _lastABarCode = message;
+            }
+        }
+
+        private void PackHandler_BarCodeBReceived(string message)
+        {
+            lock (locker)
+            {
+                _lastBBarCode = message;
+            }
+        }
+
         private void PackHandler_CommandStateResponseReceived(uint commandId, Protocol.CommandStates state)
         {
-            CncExecutor.ChangeSuccesCommandId(commandId, state);
+            CmdExecutor.UpdateExecutedCommandState(commandId, state);
         }
 
         private void PackHandler_SteppersStatesReceived(ushort[] states)
         {
             if (states.Length != Settings.Steppers.Count)
                 return;
-            lock (_syncRoot)
+            lock (locker)
             {
                 Array.Copy(states, _steppersStates, states.Length);
             }
@@ -110,7 +128,7 @@ namespace SteppersControlCore
         {
             if (states.Length != Settings.Sensors.Count)
                 return;
-            lock (_syncRoot)
+            lock (locker)
             {
                 Array.Copy(states, _sensorsValues, states.Length);
             }
@@ -119,14 +137,6 @@ namespace SteppersControlCore
         private void PackHandler_FirmwareVersionReceived(string message)
         {
             _lastFirmwareVersionResponse = message;
-        }
-
-        private void PackHandler_BarCodeReceived(string message)
-        {
-            lock(_syncRoot)
-            {
-                _lastBarCode = message;
-            }
         }
 
         public void SaveConfiguration()
@@ -177,7 +187,7 @@ namespace SteppersControlCore
         {
             if (values.Length != Settings.Sensors.Count)
                 return;
-            lock(_syncRoot)
+            lock(locker)
             {
                 Array.Copy(values, _sensorsValues, values.Length);
             }
@@ -187,7 +197,7 @@ namespace SteppersControlCore
         {
             ushort[] states = new ushort[Settings.Steppers.Count];
 
-            lock (_syncRoot)
+            lock (locker)
             {
                 Array.Copy(_steppersStates, states, _steppersStates.Length);
             }
@@ -199,7 +209,7 @@ namespace SteppersControlCore
         {
             ushort[] values = new ushort[Settings.Sensors.Count];
 
-            lock(_syncRoot)
+            lock(locker)
             {
                 Array.Copy(_sensorsValues, values, _sensorsValues.Length);
             }
@@ -211,7 +221,7 @@ namespace SteppersControlCore
         {
             ushort value = 0;
 
-            lock(_syncRoot)
+            lock(locker)
             {
                 value = _sensorsValues[sensor];
             }
@@ -219,14 +229,27 @@ namespace SteppersControlCore
             return value;
         }
         
-        public static string GetLastBarCode()
+        public static string GetLastABarCode()
         {
             string barCode = null;
 
-            lock(_syncRoot)
+            lock(locker)
             {
-                barCode = _lastBarCode;
-                _lastBarCode = null;
+                barCode = _lastABarCode;
+                _lastABarCode = null;
+            }
+
+            return barCode;
+        }
+
+        public static string GetLastBBarCode()
+        {
+            string barCode = null;
+
+            lock (locker)
+            {
+                barCode = _lastBBarCode;
+                _lastBBarCode = null;
             }
 
             return barCode;
@@ -235,7 +258,7 @@ namespace SteppersControlCore
         public static void AbortExecution()
         {
             Executor.AbortExecution();
-            CncExecutor.AbortExecution();
+            CmdExecutor.AbortExecution();
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }
     }

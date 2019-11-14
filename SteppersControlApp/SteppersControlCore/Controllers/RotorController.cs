@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using SteppersControlCore.CommunicationProtocol;
-using SteppersControlCore.CommunicationProtocol.CncCommands;
+﻿using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.StepperCommands;
-using SteppersControlCore.Elements;
-using SteppersControlCore.Utils;
-
 using SteppersControlCore.ControllersProperties;
+using SteppersControlCore.Elements;
+using SteppersControlCore.Interfaces;
+using SteppersControlCore.Utils;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SteppersControlCore.Controllers
 {
@@ -24,7 +17,7 @@ namespace SteppersControlCore.Controllers
 
         const string filename = "RotorControllerProps";
 
-        public RotorController() : base()
+        public RotorController(ICommandExecutor executor) : base(executor)
         {
             Properties = new RotorControllerProperties();
         }
@@ -45,9 +38,9 @@ namespace SteppersControlCore.Controllers
                 Properties = new RotorControllerProperties();
         }
 
-        public List<IAbstractCommand> Home()
+        public void Home()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorHomeSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
@@ -57,12 +50,12 @@ namespace SteppersControlCore.Controllers
 
             RotorStepperPosition = 0;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> MoveToWashBuffer()
+        public void MoveToWashBuffer()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
@@ -72,12 +65,12 @@ namespace SteppersControlCore.Controllers
 
             RotorStepperPosition = Properties.StepsToWashBuffer;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> MoveToUnload()
+        public void MoveToUnload()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
@@ -87,12 +80,12 @@ namespace SteppersControlCore.Controllers
 
             RotorStepperPosition = Properties.StepsToUnload;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
         
-        public List<IAbstractCommand> MoveToLoad(int cellNumber, int position)
+        public void MoveToLoad(int cellNumber, int position)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
@@ -102,7 +95,7 @@ namespace SteppersControlCore.Controllers
 
             RotorStepperPosition = Properties.StepsToLoad[position];
 
-            return commands;
+            executor.WaitExecution(commands);
         }
         
         public enum CellPosition
@@ -112,9 +105,9 @@ namespace SteppersControlCore.Controllers
             CellRight
         };
 
-        public List<IAbstractCommand> MoveCellUnderNeedle(int cellNumber, CartridgeCell cell, CellPosition position)
+        public void MoveCellUnderNeedle(int cellNumber, CartridgeCell cell, CellPosition position)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.RotorStepper, (uint)Properties.RotorSpeed));
 
@@ -145,7 +138,7 @@ namespace SteppersControlCore.Controllers
 
             RotorStepperPosition = turnSteps;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
     }
 }

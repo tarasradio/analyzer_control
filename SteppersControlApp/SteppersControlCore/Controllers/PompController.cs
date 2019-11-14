@@ -5,6 +5,7 @@ using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.Utils;
 using SteppersControlCore.ControllersProperties;
+using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.Controllers
 {
@@ -19,7 +20,7 @@ namespace SteppersControlCore.Controllers
         public int BigPistonStepperPosition { get; set; } = 0;
         public int SmallPistonStepperPosition { get; set; } = 0;
 
-        public PompController() : base()
+        public PompController(ICommandExecutor executor) : base(executor)
         {
             Properties = new PompControllerProperties();
         }
@@ -40,18 +41,18 @@ namespace SteppersControlCore.Controllers
                 Properties = new PompControllerProperties();
         }
 
-        public List<IAbstractCommand> CloseValves()
+        public void CloseValves()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             commands.Add(new OnDeviceCncCommand(new List<int>() { 0 ,1 }));
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> Home()
+        public void Home()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new OnDeviceCncCommand(new List<int>() { 0 }));
             
@@ -72,12 +73,12 @@ namespace SteppersControlCore.Controllers
             BigPistonStepperPosition = 0;
             SmallPistonStepperPosition = 0;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> Suction(int value)
+        public void Suction(int value)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
             commands.Add( new OffDeviceCncCommand(new List<int>() { 1 }) );
@@ -96,12 +97,12 @@ namespace SteppersControlCore.Controllers
 
             SmallPistonStepperPosition = Properties.SmallPistonSuctionSteps;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> Unsuction(int value)
+        public void Unsuction(int value)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
             
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
             commands.Add( new OffDeviceCncCommand(new List<int>() { 1 }) );
@@ -120,12 +121,12 @@ namespace SteppersControlCore.Controllers
 
             SmallPistonStepperPosition = 0;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> Washing(int cycles)
+        public void Washing(int cycles)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             for (int i = 0; i < cycles; i++)
             {
@@ -163,7 +164,7 @@ namespace SteppersControlCore.Controllers
             SmallPistonStepperPosition = Properties.BigPistonWashingSteps;
             BigPistonStepperPosition = Properties.SmallPistonWashingSteps;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
     }
 }

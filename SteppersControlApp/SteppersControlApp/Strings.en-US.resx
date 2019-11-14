@@ -136,9 +136,9 @@
     <value>Disconnect</value>
   </data>
   <data name="no_ports_found" xml:space="preserve">
-    <value>Port Search - No Open Ports Found</value>
+    <value>Port search - No open ports found</value>
   </data>
   <data name="ports_found" xml:space="preserve">
-    <value>Port Search - Open Ports Found</value>
+    <value>Port search - Open ports found</value>
   </data>
 </root>

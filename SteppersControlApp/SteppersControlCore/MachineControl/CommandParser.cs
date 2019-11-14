@@ -10,20 +10,21 @@ using SteppersControlCore.CommunicationProtocol;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.Utils;
+using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.MachineControl
 {
     public class CncProgram
     {
-        public List<IAbstractCommand> Commands { get; set; }
+        public List<ICommand> Commands { get; set; }
 
         public CncProgram()
         {
-            Commands = new List<IAbstractCommand>();
+            Commands = new List<ICommand>();
         }
     }
 
-    public class CncParser
+    public class CommandParser
     {
         readonly Regex cncCommandPattern = new Regex(@"(MOVE|SPEED|STOP|HOME|ON|OFF|WAITR|WAITF|DELAY|RUN)(\s+\w+(-)?\d+)+", RegexOptions.IgnoreCase);
 
@@ -53,14 +54,14 @@ namespace SteppersControlCore.MachineControl
         readonly Regex runCommandPattern = new Regex(@"RUN(\s+\w+\d+)+", RegexOptions.IgnoreCase);
         readonly Regex sensorArgumentPattern = new Regex(@"\s+S(?<sensor>\d+)\s*(?<edgeType>R|F)(?<value>(-)?\d+)", RegexOptions.IgnoreCase);
 
-        public CncParser()
+        public CommandParser()
         {
 
         }
         
-        public CncProgram Parse(string programText)
+        public List<ICommand> Parse(string programText)
         {
-            CncProgram program = new CncProgram();
+            List<ICommand> commands = new List<ICommand>();
 
             string parsedCommand = "";
 
@@ -87,7 +88,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" M{motor} S = {steps}";
                     }
 
-                    program.Commands.Add(new MoveCncCommand(arguments));
+                    commands.Add(new MoveCncCommand(arguments));
                 }
                 else if (speedCommandPattern.IsMatch(commandString.Value))
                 {
@@ -109,7 +110,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" M{motor} S = {speed}";
                     }
 
-                    program.Commands.Add(new SetSpeedCncCommand(arguments));
+                    commands.Add(new SetSpeedCncCommand(arguments));
                 }
                 else if (stopCommandPattern.IsMatch(commandString.Value))
                 {
@@ -152,7 +153,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" M{motor} S = {speed}";
                     }
 
-                    program.Commands.Add(new HomeCncCommand(arguments));
+                    commands.Add(new HomeCncCommand(arguments));
                 }
                 else if (onCommandPattern.IsMatch(commandString.Value))
                 {
@@ -173,7 +174,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" D{device}";
                     }
 
-                    program.Commands.Add(new OnDeviceCncCommand(arguments));
+                    commands.Add(new OnDeviceCncCommand(arguments));
                 }
                 else if (offCommandPattern.IsMatch(commandString.Value))
                 {
@@ -194,7 +195,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" D{device}";
                     }
 
-                    program.Commands.Add(new OffDeviceCncCommand(arguments));
+                    commands.Add(new OffDeviceCncCommand(arguments));
                 }
                 else if (delayCommandPattern.IsMatch(commandString.Value))
                 {
@@ -215,7 +216,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"time = {timeMs} ms";
                     }
 
-                    program.Commands.Add(new WaitTimeCommand((uint)timeMs));
+                    commands.Add(new WaitTimeCommand((uint)timeMs));
                 }
                 else if (waitRisingCommandPattern.IsMatch(commandString.Value))
                 {
@@ -243,7 +244,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"sensor = {sensor}, value = {value}";
                     }
 
-                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor,(uint)value, Protocol.ValueEdge.RisingEdge));
+                    commands.Add(new WaitSensorValueCommand((uint)sensor,(uint)value, Protocol.ValueEdge.RisingEdge));
                 }
                 else if (waitFallingCommandPattern.IsMatch(commandString.Value))
                 {
@@ -271,7 +272,7 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $"sensor = {sensor}, value = {value}";
                     }
 
-                    program.Commands.Add(new WaitSensorValueCommand((uint)sensor, (uint)value, Protocol.ValueEdge.FallingEdge));
+                    commands.Add(new WaitSensorValueCommand((uint)sensor, (uint)value, Protocol.ValueEdge.FallingEdge));
                 }
                 else if (runCommandPattern.IsMatch(commandString.Value))
                 {
@@ -319,13 +320,13 @@ namespace SteppersControlCore.MachineControl
                         parsedCommand += $" | sensor = {sensor}, value = {value}, edge = {edgeType}";
                     }
 
-                    program.Commands.Add(new RunCncCommand(arguments, (uint)sensor, (uint)value, edgeType));
+                    commands.Add(new RunCncCommand(arguments, (uint)sensor, (uint)value, edgeType));
                 }
                 parsedCommand += "}";
                 Logger.AddMessage(parsedCommand);
             }
 
-            return program;
+            return commands;
         }
     }
 }

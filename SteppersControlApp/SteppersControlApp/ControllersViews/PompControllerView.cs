@@ -27,7 +27,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Pomp.Washing(cycles));
+                    Core.Pomp.Washing(cycles);
                 });
         }
 
@@ -36,7 +36,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Pomp.Home());
+                    Core.Pomp.Home();
                 });
         }
 
@@ -47,7 +47,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Pomp.Suction(value));
+                    Core.Pomp.Suction(value);
                 });
         }
 
@@ -58,7 +58,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Pomp.Unsuction(value));
+                    Core.Pomp.Unsuction(value);
                 });
         }
     }

@@ -7,6 +7,8 @@ using SteppersControlCore.Utils;
 using System.Collections.Generic;
 using System.IO;
 
+using SteppersControlCore.Interfaces;
+
 namespace SteppersControlCore.Controllers
 {
     public class ArmController : ControllerBase
@@ -17,7 +19,7 @@ namespace SteppersControlCore.Controllers
         public int LiftStepperPosition { get; set; } = 0;
         public int TurnStepperPosition { get; set; } = 0;
 
-        public ArmController() : base()
+        public ArmController(ICommandExecutor executor) : base(executor)
         {
             Properties = new ArmControllerProperties();
         }
@@ -37,9 +39,9 @@ namespace SteppersControlCore.Controllers
                 Properties = new ArmControllerProperties();
         }
 
-        public List<IAbstractCommand> MoveOnTube()
+        public void MoveOnTube()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до пробирки
             commands.Add(new SetSpeedCommand(Properties.TurnStepper, (uint)Properties.TurnStepperSpeed));
@@ -60,12 +62,12 @@ namespace SteppersControlCore.Controllers
             TurnStepperPosition = Properties.StepsToTube;
             LiftStepperPosition = -1; // ибо неизвестн, где он будет после касания жидкости в пробирке
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> Home()
+        public void Home()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             // Поднятие иглы
             commands.Add(new SetSpeedCommand(Properties.LiftStepper, 1000));
@@ -82,12 +84,12 @@ namespace SteppersControlCore.Controllers
             LiftStepperPosition = 0;
             TurnStepperPosition = 0;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> MoveOnWashing()
+        public void MoveOnWashing()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до промывки
             commands.Add(new SetSpeedCommand(Properties.TurnStepper, 50));
@@ -104,7 +106,7 @@ namespace SteppersControlCore.Controllers
             TurnStepperPosition = Properties.StepsTurnToWashing;
             LiftStepperPosition = Properties.StepsDownToWashing;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
         public enum FromPosition
@@ -118,11 +120,10 @@ namespace SteppersControlCore.Controllers
             THirdCell
         }
 
-
         //TODO: выяснить, используем относительное количество шагов или нет!!!
-        public List<IAbstractCommand> BrokeCartridge()
+        public void BrokeCartridge()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             // Протыкание
             commands.Add(new SetSpeedCommand(Properties.LiftStepper, (uint)Properties.LiftStepperSpeed));
@@ -132,13 +133,13 @@ namespace SteppersControlCore.Controllers
 
             //LiftStepperPosition = Props.StepsOnBroke;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
         //TODO: Доделать, ибо говно, убрать from position
-        public List<IAbstractCommand> MoveToCartridge(FromPosition fromPosition, CartridgeCell cell)
+        public void MoveToCartridge(FromPosition fromPosition, CartridgeCell cell)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
             
             int turnSteps = 0;
             int upSteps = 0;
@@ -225,7 +226,7 @@ namespace SteppersControlCore.Controllers
                 commands.Add(new MoveCncCommand(steppers));
             }
 
-            return commands;
+            executor.WaitExecution(commands);
         }
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class StopCommand : AbstractCommand, IDeviceCommand
+    public class StopCommand : AbstractCommand, IRemoteCommand
     {
         public enum StopType
         {

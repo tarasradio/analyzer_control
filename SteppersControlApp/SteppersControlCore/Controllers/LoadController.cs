@@ -5,6 +5,7 @@ using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.Utils;
 
 using SteppersControlCore.ControllersProperties;
+using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.Controllers
 {
@@ -20,7 +21,7 @@ namespace SteppersControlCore.Controllers
 
         public int CurrentCell { get; private set; } = 0;
 
-        public LoadController() : base()
+        public LoadController(ICommandExecutor executor) : base(executor)
         {
             Properties = new LoadControllerProperties();
         }
@@ -40,9 +41,9 @@ namespace SteppersControlCore.Controllers
                 Properties = new LoadControllerProperties();
         }
 
-        public List<IAbstractCommand> HomeLoad()
+        public void HomeLoad()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.LoadStepper, Properties.LoadStepperHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
@@ -52,21 +53,12 @@ namespace SteppersControlCore.Controllers
 
             LoadStepperPosition = 0;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-
-        // Calculation of necessary steps using the target and current position (in steps)
-        // The target position is determined by the absolute number of steps from the starting position (0)
-        // General rule: needed steps = taget_position - current_position
-        // Example 1: position = 3000; target position = 2000; necessary steps = 2000 - 3000 = -1000
-        // Example 2: position = 2000; target position = 3000; necessary steps = 3000 - 2000 = 1000
-        // Example 3: position = -3000; target position = -2000; necessary steps = -2000 - (-3000) = 1000
-        // Example 4: position = -2000; target position = -3000; necessary steps = -3000 - (-2000) = -1000
-
-        public List<IAbstractCommand> TurnLoadToCell(int cell)
+        public void TurnLoadToCell(int cell)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             CurrentCell = cell;
 
@@ -80,12 +72,12 @@ namespace SteppersControlCore.Controllers
 
             LoadStepperPosition = Properties.CellsSteps[cell];
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> HomeShuttle()
+        public void HomeShuttle()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
@@ -98,12 +90,12 @@ namespace SteppersControlCore.Controllers
 
             ShuttleStepperPosition = Properties.StepsShuttleToStart;
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> MoveShuttleToCassette()
+        public void MoveShuttleToCassette()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
@@ -111,7 +103,7 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.StepsShuttleToCassette } };
             commands.Add( new MoveCncCommand(steppers) );
 
-            return commands;
+            executor.WaitExecution(commands);
         }
     }
 }

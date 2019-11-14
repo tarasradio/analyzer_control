@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SteppersControlCore.CommunicationProtocol;
+﻿using SteppersControlCore.Interfaces;
+using System;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class MoveCommand : AbstractCommand, IDeviceCommand
+    public class MoveCommand : AbstractCommand, IRemoteCommand
     {
         private byte _stepper;
         private int _countSteps;

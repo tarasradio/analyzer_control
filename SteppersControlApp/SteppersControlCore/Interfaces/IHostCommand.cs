@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SteppersControlCore.CommunicationProtocol
+namespace SteppersControlCore.Interfaces
 {
-    public interface IHostCommand
+    public interface IHostCommand : ICommand
     {
         void Execute();
     }

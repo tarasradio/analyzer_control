@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
+using SteppersControlCore.Interfaces;
 using System.Threading;
 
 namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
     public class WaitTimeCommand : AbstractCommand, IHostCommand
     {
-        uint _timePeriodMs = 0;
+        private uint timeDelay = 0;
 
-        public WaitTimeCommand(uint timePeriodMs) : base()
+        public WaitTimeCommand(uint period) : base()
         {
-            _timePeriodMs = timePeriodMs;
+            timeDelay = period;
         }
 
         public void Execute()
         {
-            Thread.Sleep((int)_timePeriodMs);
+            Thread.Sleep((int)timeDelay);
         }
     }
 }

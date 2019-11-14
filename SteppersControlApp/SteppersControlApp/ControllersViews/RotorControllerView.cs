@@ -27,7 +27,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
+                    Core.Rotor.Home();
                 });
         }
 
@@ -56,8 +56,8 @@ namespace SteppersControlApp.ControllersViews
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveToLoad(cellNumber, loadPosition));
+                    Core.Rotor.Home();
+                    Core.Rotor.MoveToLoad(cellNumber, loadPosition);
                 });
             }
             else if(selectNeedleLeftPlace.Checked)
@@ -65,9 +65,8 @@ namespace SteppersControlApp.ControllersViews
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
-                        RotorController.CellPosition.CellLeft));
+                    Core.Rotor.Home();
+                    Core.Rotor.MoveCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CellLeft);
                 });
             }
             else if(selectNeedleRightPlace.Checked)
@@ -75,9 +74,8 @@ namespace SteppersControlApp.ControllersViews
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveCellUnderNeedle(cellNumber, cell,
-                        RotorController.CellPosition.CellRight));
+                    Core.Rotor.Home();
+                    Core.Rotor.MoveCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CellRight);
                 });
             }
             else if(selectWashingPlace.Checked)
@@ -85,8 +83,8 @@ namespace SteppersControlApp.ControllersViews
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveToWashBuffer());
+                    Core.Rotor.Home();
+                    Core.Rotor.MoveToWashBuffer();
                 });
             }
             else if(selectUnloadPlace.Checked)
@@ -94,8 +92,8 @@ namespace SteppersControlApp.ControllersViews
                 Core.Executor.StartTask(
                 () =>
                 {
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.Home());
-                    Core.CncExecutor.ExecuteTask(Core.Rotor.MoveToUnload());
+                    Core.Rotor.Home();
+                    Core.Rotor.MoveToUnload();
                 });
             }
         }

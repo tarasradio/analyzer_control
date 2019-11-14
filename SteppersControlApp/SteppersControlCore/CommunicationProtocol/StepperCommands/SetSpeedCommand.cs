@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SteppersControlCore.Interfaces;
+using System;
 
 namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
-    public class SetSpeedCommand : AbstractCommand, IDeviceCommand
+    public class SetSpeedCommand : AbstractCommand, IRemoteCommand
     {
         private byte _stepper;
         uint _speed;

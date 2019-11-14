@@ -1,32 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
+﻿using FastColoredTextBoxNS;
 using SteppersControlCore;
-
-using FastColoredTextBoxNS;
-using System.Text.RegularExpressions;
-
+using SteppersControlCore.Interfaces;
 using SteppersControlCore.MachineControl;
-
-using SteppersControlCore.CommunicationProtocol;
-using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
-using SteppersControlCore.CommunicationProtocol.CncCommands;
-using SteppersControlCore.CommunicationProtocol.StepperCommands;
-using SteppersControlCore.SerialCommunication;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace SteppersControlApp.Views
 {
     public partial class CNCView : UserControl
     {
-        CncProgram _program;
+        List<ICommand> commands;
 
         public CNCView()
         {
@@ -73,19 +60,15 @@ namespace SteppersControlApp.Views
             e.ChangedRange.SetStyle(commentsStyle, @"//.*$", RegexOptions.Multiline);
         }
 
-        bool testProgram()
+        private void ParseProgram()
         {
-            CncParser parser = new CncParser();
-            _program = parser.Parse(programTextBox.Text);
-
-            Logger.AddMessage($"Программа содержит {_program.Commands.Count} команд.");
-
-            return true;
+            commands = new CommandParser().Parse(programTextBox.Text);
+            Logger.AddMessage($"Программа содержит { commands.Count } команд.");
         }
 
         private void buttonTestProgram_Click(object sender, EventArgs e)
         {
-            testProgram();
+            ParseProgram();
         }
 
         private void buttonOpenFile_Click(object sender, EventArgs e)
@@ -126,13 +109,15 @@ namespace SteppersControlApp.Views
         
         private void buttonRunProgram_Click(object sender, EventArgs e)
         {
-            if(testProgram())
+            ParseProgram();
+
+            if(commands.Count > 0)
             {
                 executionStatusLabel.Text = "Выполнение программы запущено";
-                executionProgressLabel.Text = $"Выполнено команд: {0} из {_program.Commands.Count}";
+                executionProgressLabel.Text = $"Выполнено команд: {0} из {commands.Count}";
                 executionProgressBar.Value = 0;
 
-                Core.CncExecutor.StartExecution(_program.Commands);
+                Core.CmdExecutor.RunExecution(commands);
             }
         }
 
@@ -147,7 +132,7 @@ namespace SteppersControlApp.Views
             }
             else
             {
-                commandsCount = _program.Commands.Count;
+                commandsCount = commands.Count;
             }
 
             progress = ((double)executedCommandNumber / commandsCount) * 100.0;
@@ -163,9 +148,8 @@ namespace SteppersControlApp.Views
 
         private void buttonAbortExecution_Click(object sender, EventArgs e)
         {
-            Core.Executor.AbortExecution();
-            Core.CncExecutor.AbortExecution();
-            Core.Serial.SendPacket(new AbortExecutionCommand().GetBytes());
+            Core.AbortExecution();
+
             executionStatusLabel.Text = "Выполнение программы было прерванно";
         }
 

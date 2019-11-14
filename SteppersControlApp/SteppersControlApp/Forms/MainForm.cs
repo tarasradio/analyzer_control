@@ -50,7 +50,7 @@ namespace SteppersControlApp.Forms
         {
             InitializeComponent();
             resourceManager = new ResourceManager("SteppersControlApp.Strings", typeof(Resources).Assembly);
-            culture = new CultureInfo("en-US");
+            culture = new CultureInfo("ru-RU");
 
             UpdateCurrentLanguage();
         }
@@ -69,6 +69,7 @@ namespace SteppersControlApp.Forms
             editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
 
             buttonConnect.Enabled = false;
+            buttonConnect.Visible = false;
         }
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
@@ -88,14 +89,17 @@ namespace SteppersControlApp.Forms
                 sensorsView.StopUpdate();
 
                 buttonConnect.Text = resourceManager.GetString("connect_text", culture);
-                //buttonConnect.Text = "Подключиться";
                 connectionState.Text = "Ожидание соединения";
+
+                buttonUpdateList.Enabled = true;
+                selectPort.Enabled = true;
+                editBaudrate.Enabled = true;
 
                 rescanOpenPorts();
             }
             else
             {
-                string portName = portsList.SelectedItem.ToString();
+                string portName = selectPort.SelectedItem.ToString();
                 int baudrate = int.Parse(editBaudrate.SelectedItem.ToString());
 
                 bool isOK = Core.Serial.Open(portName, baudrate);
@@ -108,10 +112,13 @@ namespace SteppersControlApp.Forms
                     Logger.AddMessage(
                         "Открытие подключения - подключение к " + portName + " открыто");
                     buttonConnect.Text = resourceManager.GetString("disconnect_text", culture);
-                    //buttonConnect.Text = "Отключение";
 
                     steppersGridView.StartUpdate();
                     sensorsView.StartUpdate();
+
+                    buttonUpdateList.Enabled = false;
+                    selectPort.Enabled = false;
+                    editBaudrate.Enabled = false;
                 }
                 else
                 {
@@ -131,29 +138,33 @@ namespace SteppersControlApp.Forms
 
         private void rescanOpenPorts()
         {
-            portsList.Items.Clear();
+            selectPort.Items.Clear();
 
             String[] portsNames = Core.Serial.GetAvailablePorts();
 
             if(portsNames.Length != 0)
             {
-                portsList.Items.AddRange(portsNames);
+                selectPort.Items.AddRange(portsNames);
                 Logger.AddMessage( resourceManager.GetString("ports_found", culture));
                 buttonConnect.Enabled = true;
-                portsList.SelectedIndex = 0;
+                buttonConnect.Visible = true;
+                selectPort.SelectedIndex = 0;
             }
             else
             {
                 Logger.AddMessage(
                     resourceManager.GetString("no_ports_found", culture));
                 buttonConnect.Enabled = false;
-                portsList.SelectedText = "";
+                buttonConnect.Visible = false;
+                selectPort.SelectedText = "";
             }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             InitializeAll();
+
+            Text = $"Управление анализами - версия {Application.ProductVersion}";
 
             steppersGridView.UpdateInformation();
             devicesControlView.UpdateInformation();
@@ -194,11 +205,6 @@ namespace SteppersControlApp.Forms
             }
         }
 
-        private void buttonSaveConfig_Click(object sender, EventArgs e)
-        {
-            Core.Settings.SaveToFile("config.xml");
-        }
-
         private void abortExecutionButton_Click(object sender, EventArgs e)
         {
             Core.AbortExecution();
@@ -223,11 +229,6 @@ namespace SteppersControlApp.Forms
             {
                 Core.Demo.StartDemo();
             }
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

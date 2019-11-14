@@ -1,11 +1,7 @@
-﻿using SteppersControlCore;
+﻿using SteppersControlApp.Forms;
+using SteppersControlCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using SteppersControlApp.Forms;
 
 namespace SteppersControlApp
 {

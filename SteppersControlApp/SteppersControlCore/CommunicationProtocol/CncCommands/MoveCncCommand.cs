@@ -1,12 +1,9 @@
-﻿using System;
+﻿using SteppersControlCore.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
-    public class MoveCncCommand : SteppersCncCommand, IDeviceCommand
+    public class MoveCncCommand : SteppersCncCommand, IRemoteCommand
     {
         private Dictionary<int, int> _steps;
 

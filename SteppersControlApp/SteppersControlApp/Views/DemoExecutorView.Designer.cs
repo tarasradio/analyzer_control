@@ -40,7 +40,6 @@
             this.addStageButton = new System.Windows.Forms.Button();
             this.removeStageButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.editStageButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.saveStageChangesButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -62,25 +61,35 @@
             // 
             // buttonAddTube
             // 
-            this.buttonAddTube.BackColor = System.Drawing.Color.GreenYellow;
+            this.buttonAddTube.BackColor = System.Drawing.Color.Green;
             this.buttonAddTube.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddTube.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonAddTube.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonAddTube.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddTube.Image")));
+            this.buttonAddTube.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonAddTube.Location = new System.Drawing.Point(3, 3);
             this.buttonAddTube.Name = "buttonAddTube";
-            this.buttonAddTube.Size = new System.Drawing.Size(131, 23);
+            this.buttonAddTube.Size = new System.Drawing.Size(153, 36);
             this.buttonAddTube.TabIndex = 2;
             this.buttonAddTube.Text = "Добавить пробирку";
+            this.buttonAddTube.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonAddTube.UseVisualStyleBackColor = false;
             this.buttonAddTube.Click += new System.EventHandler(this.buttonAddTube_Click);
             // 
             // buttonRemoveTube
             // 
-            this.buttonRemoveTube.BackColor = System.Drawing.Color.Yellow;
+            this.buttonRemoveTube.BackColor = System.Drawing.Color.OrangeRed;
             this.buttonRemoveTube.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonRemoveTube.Location = new System.Drawing.Point(140, 3);
+            this.buttonRemoveTube.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonRemoveTube.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonRemoveTube.Image = ((System.Drawing.Image)(resources.GetObject("buttonRemoveTube.Image")));
+            this.buttonRemoveTube.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonRemoveTube.Location = new System.Drawing.Point(162, 3);
             this.buttonRemoveTube.Name = "buttonRemoveTube";
-            this.buttonRemoveTube.Size = new System.Drawing.Size(131, 23);
+            this.buttonRemoveTube.Size = new System.Drawing.Size(142, 36);
             this.buttonRemoveTube.TabIndex = 3;
             this.buttonRemoveTube.Text = "Удалить пробирку";
+            this.buttonRemoveTube.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonRemoveTube.UseVisualStyleBackColor = false;
             this.buttonRemoveTube.Click += new System.EventHandler(this.buttonRemoveTube_Click);
             // 
@@ -91,9 +100,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tubesList.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.tubesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tubesList.Location = new System.Drawing.Point(3, 32);
+            this.tubesList.Location = new System.Drawing.Point(3, 45);
             this.tubesList.Name = "tubesList";
-            this.tubesList.Size = new System.Drawing.Size(533, 359);
+            this.tubesList.Size = new System.Drawing.Size(533, 379);
             this.tubesList.TabIndex = 0;
             this.tubesList.SelectionChanged += new System.EventHandler(this.tubesList_SelectionChanged);
             // 
@@ -104,25 +113,28 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(53, 110);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(254, 198);
+            this.propertyGrid.Size = new System.Drawing.Size(254, 231);
             this.propertyGrid.TabIndex = 1;
             // 
             // editBarcodeLabel
             // 
             this.editBarcodeLabel.AutoSize = true;
-            this.editBarcodeLabel.Location = new System.Drawing.Point(277, 8);
+            this.editBarcodeLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editBarcodeLabel.Location = new System.Drawing.Point(310, 14);
             this.editBarcodeLabel.Name = "editBarcodeLabel";
-            this.editBarcodeLabel.Size = new System.Drawing.Size(59, 13);
+            this.editBarcodeLabel.Size = new System.Drawing.Size(65, 15);
             this.editBarcodeLabel.TabIndex = 4;
             this.editBarcodeLabel.Text = "Штрихкод:";
+            this.editBarcodeLabel.Click += new System.EventHandler(this.editBarcodeLabel_Click);
             // 
             // editBarcode
             // 
             this.editBarcode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.editBarcode.Location = new System.Drawing.Point(342, 5);
+            this.editBarcode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editBarcode.Location = new System.Drawing.Point(381, 11);
             this.editBarcode.Name = "editBarcode";
-            this.editBarcode.Size = new System.Drawing.Size(364, 20);
+            this.editBarcode.Size = new System.Drawing.Size(331, 23);
             this.editBarcode.TabIndex = 5;
             // 
             // stagesList
@@ -134,66 +146,59 @@
             this.stagesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.stagesList.Location = new System.Drawing.Point(6, 19);
             this.stagesList.Name = "stagesList";
-            this.stagesList.Size = new System.Drawing.Size(238, 119);
+            this.stagesList.Size = new System.Drawing.Size(238, 115);
             this.stagesList.TabIndex = 6;
             this.stagesList.SelectionChanged += new System.EventHandler(this.stagesList_SelectionChanged);
             // 
             // addStageButton
             // 
             this.addStageButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addStageButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.addStageButton.BackColor = System.Drawing.Color.Green;
             this.addStageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addStageButton.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.addStageButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.addStageButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.addStageButton.Image = ((System.Drawing.Image)(resources.GetObject("addStageButton.Image")));
-            this.addStageButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.addStageButton.Location = new System.Drawing.Point(100, 144);
+            this.addStageButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.addStageButton.Location = new System.Drawing.Point(52, 140);
             this.addStageButton.Name = "addStageButton";
-            this.addStageButton.Size = new System.Drawing.Size(44, 44);
+            this.addStageButton.Size = new System.Drawing.Size(97, 36);
             this.addStageButton.TabIndex = 8;
+            this.addStageButton.Text = "Добавить";
+            this.addStageButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.addStageButton.UseVisualStyleBackColor = false;
             this.addStageButton.Click += new System.EventHandler(this.addStageButton_Click);
             // 
             // removeStageButton
             // 
             this.removeStageButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.removeStageButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.removeStageButton.BackColor = System.Drawing.Color.OrangeRed;
             this.removeStageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.removeStageButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.removeStageButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.removeStageButton.Image = ((System.Drawing.Image)(resources.GetObject("removeStageButton.Image")));
-            this.removeStageButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.removeStageButton.Location = new System.Drawing.Point(200, 144);
+            this.removeStageButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.removeStageButton.Location = new System.Drawing.Point(155, 140);
             this.removeStageButton.Name = "removeStageButton";
-            this.removeStageButton.Size = new System.Drawing.Size(44, 44);
+            this.removeStageButton.Size = new System.Drawing.Size(89, 36);
             this.removeStageButton.TabIndex = 9;
+            this.removeStageButton.Text = "Удалить";
+            this.removeStageButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.removeStageButton.UseVisualStyleBackColor = false;
             this.removeStageButton.Click += new System.EventHandler(this.removeStageButton_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.editStageButton);
             this.groupBox1.Controls.Add(this.stagesList);
             this.groupBox1.Controls.Add(this.removeStageButton);
             this.groupBox1.Controls.Add(this.addStageButton);
-            this.groupBox1.Location = new System.Drawing.Point(542, 31);
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox1.Location = new System.Drawing.Point(542, 45);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(250, 195);
+            this.groupBox1.Size = new System.Drawing.Size(250, 182);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Список стадий";
-            // 
-            // editStageButton
-            // 
-            this.editStageButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.editStageButton.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.editStageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.editStageButton.Image = ((System.Drawing.Image)(resources.GetObject("editStageButton.Image")));
-            this.editStageButton.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.editStageButton.Location = new System.Drawing.Point(150, 144);
-            this.editStageButton.Name = "editStageButton";
-            this.editStageButton.Size = new System.Drawing.Size(44, 44);
-            this.editStageButton.TabIndex = 10;
-            this.editStageButton.UseVisualStyleBackColor = false;
-            this.editStageButton.Click += new System.EventHandler(this.editStageButton_Click);
             // 
             // groupBox2
             // 
@@ -205,39 +210,46 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.editCartridgePosition);
             this.groupBox2.Controls.Add(this.cartridgeNumberLabel);
-            this.groupBox2.Location = new System.Drawing.Point(542, 232);
+            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox2.Location = new System.Drawing.Point(542, 233);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(250, 129);
+            this.groupBox2.Size = new System.Drawing.Size(250, 152);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Свойства стадии";
             // 
             // saveStageChangesButton
             // 
-            this.saveStageChangesButton.BackColor = System.Drawing.Color.GreenYellow;
+            this.saveStageChangesButton.BackColor = System.Drawing.Color.SteelBlue;
             this.saveStageChangesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.saveStageChangesButton.Location = new System.Drawing.Point(6, 98);
+            this.saveStageChangesButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.saveStageChangesButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.saveStageChangesButton.Image = ((System.Drawing.Image)(resources.GetObject("saveStageChangesButton.Image")));
+            this.saveStageChangesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.saveStageChangesButton.Location = new System.Drawing.Point(75, 108);
             this.saveStageChangesButton.Name = "saveStageChangesButton";
-            this.saveStageChangesButton.Size = new System.Drawing.Size(238, 23);
+            this.saveStageChangesButton.Size = new System.Drawing.Size(169, 36);
             this.saveStageChangesButton.TabIndex = 6;
             this.saveStageChangesButton.Text = "Применить изменения";
+            this.saveStageChangesButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.saveStageChangesButton.UseVisualStyleBackColor = false;
             this.saveStageChangesButton.Click += new System.EventHandler(this.saveStageChangesButton_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 74);
+            this.label2.Location = new System.Drawing.Point(3, 81);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(138, 13);
+            this.label2.Size = new System.Drawing.Size(153, 15);
             this.label2.TabIndex = 5;
             this.label2.Text = "Время инкубации (минут):";
             // 
             // editTimeToPerform
             // 
-            this.editTimeToPerform.Location = new System.Drawing.Point(150, 72);
+            this.editTimeToPerform.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editTimeToPerform.Location = new System.Drawing.Point(162, 77);
             this.editTimeToPerform.Name = "editTimeToPerform";
-            this.editTimeToPerform.Size = new System.Drawing.Size(94, 20);
+            this.editTimeToPerform.Size = new System.Drawing.Size(82, 25);
             this.editTimeToPerform.TabIndex = 4;
             this.editTimeToPerform.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -248,34 +260,35 @@
             "Первая",
             "Вторая",
             "Третья"});
-            this.selectCellType.Location = new System.Drawing.Point(62, 45);
+            this.selectCellType.Location = new System.Drawing.Point(62, 48);
             this.selectCellType.Name = "selectCellType";
-            this.selectCellType.Size = new System.Drawing.Size(182, 21);
+            this.selectCellType.Size = new System.Drawing.Size(182, 23);
             this.selectCellType.TabIndex = 3;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 48);
+            this.label1.Location = new System.Drawing.Point(6, 49);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 13);
+            this.label1.Size = new System.Drawing.Size(49, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "Ячейка:";
             // 
             // editCartridgePosition
             // 
-            this.editCartridgePosition.Location = new System.Drawing.Point(150, 19);
+            this.editCartridgePosition.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editCartridgePosition.Location = new System.Drawing.Point(162, 17);
             this.editCartridgePosition.Name = "editCartridgePosition";
-            this.editCartridgePosition.Size = new System.Drawing.Size(94, 20);
+            this.editCartridgePosition.Size = new System.Drawing.Size(82, 25);
             this.editCartridgePosition.TabIndex = 1;
             this.editCartridgePosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // cartridgeNumberLabel
             // 
             this.cartridgeNumberLabel.AutoSize = true;
-            this.cartridgeNumberLabel.Location = new System.Drawing.Point(8, 21);
+            this.cartridgeNumberLabel.Location = new System.Drawing.Point(6, 21);
             this.cartridgeNumberLabel.Name = "cartridgeNumberLabel";
-            this.cartridgeNumberLabel.Size = new System.Drawing.Size(112, 13);
+            this.cartridgeNumberLabel.Size = new System.Drawing.Size(120, 15);
             this.cartridgeNumberLabel.TabIndex = 0;
             this.cartridgeNumberLabel.Text = "Позиция картриджа:";
             // 
@@ -286,11 +299,13 @@
             // buttonUpdateBarcode
             // 
             this.buttonUpdateBarcode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonUpdateBarcode.BackColor = System.Drawing.Color.GreenYellow;
+            this.buttonUpdateBarcode.BackColor = System.Drawing.Color.SteelBlue;
             this.buttonUpdateBarcode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonUpdateBarcode.Location = new System.Drawing.Point(712, 3);
+            this.buttonUpdateBarcode.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonUpdateBarcode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonUpdateBarcode.Location = new System.Drawing.Point(718, 3);
             this.buttonUpdateBarcode.Name = "buttonUpdateBarcode";
-            this.buttonUpdateBarcode.Size = new System.Drawing.Size(74, 23);
+            this.buttonUpdateBarcode.Size = new System.Drawing.Size(74, 36);
             this.buttonUpdateBarcode.TabIndex = 12;
             this.buttonUpdateBarcode.Text = "Изменить";
             this.buttonUpdateBarcode.UseVisualStyleBackColor = false;
@@ -310,7 +325,7 @@
             this.Controls.Add(this.buttonRemoveTube);
             this.Controls.Add(this.buttonAddTube);
             this.Name = "DemoExecutorView";
-            this.Size = new System.Drawing.Size(795, 394);
+            this.Size = new System.Drawing.Size(795, 427);
             ((System.ComponentModel.ISupportInitialize)(this.tubesList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stagesList)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -335,7 +350,6 @@
         private System.Windows.Forms.Button addStageButton;
         private System.Windows.Forms.Button removeStageButton;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button editStageButton;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ComboBox selectCellType;
         private System.Windows.Forms.Label label1;

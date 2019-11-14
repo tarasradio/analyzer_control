@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RotorControllerView));
             this.buttonHome = new System.Windows.Forms.Button();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.buttonMoveCell = new System.Windows.Forms.Button();
@@ -54,14 +55,17 @@
             // 
             // buttonHome
             // 
-            this.buttonHome.BackColor = System.Drawing.Color.GreenYellow;
+            this.buttonHome.BackColor = System.Drawing.Color.Green;
             this.buttonHome.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonHome.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonHome.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonHome.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonHome.Image = ((System.Drawing.Image)(resources.GetObject("buttonHome.Image")));
+            this.buttonHome.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonHome.Location = new System.Drawing.Point(3, 3);
             this.buttonHome.Name = "buttonHome";
-            this.buttonHome.Size = new System.Drawing.Size(156, 28);
+            this.buttonHome.Size = new System.Drawing.Size(169, 32);
             this.buttonHome.TabIndex = 1;
-            this.buttonHome.Text = "HOME";
+            this.buttonHome.Text = "В дом";
             this.buttonHome.UseVisualStyleBackColor = false;
             this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
             // 
@@ -70,21 +74,23 @@
             this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid.Location = new System.Drawing.Point(165, 3);
+            this.propertyGrid.Location = new System.Drawing.Point(178, 3);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(560, 464);
+            this.propertyGrid.Size = new System.Drawing.Size(547, 464);
             this.propertyGrid.TabIndex = 10;
             // 
             // buttonMoveCell
             // 
+            this.buttonMoveCell.BackColor = System.Drawing.Color.SteelBlue;
             this.buttonMoveCell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMoveCell.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonMoveCell.Location = new System.Drawing.Point(3, 37);
+            this.buttonMoveCell.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonMoveCell.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonMoveCell.Location = new System.Drawing.Point(3, 41);
             this.buttonMoveCell.Name = "buttonMoveCell";
-            this.buttonMoveCell.Size = new System.Drawing.Size(156, 28);
+            this.buttonMoveCell.Size = new System.Drawing.Size(169, 28);
             this.buttonMoveCell.TabIndex = 11;
             this.buttonMoveCell.Text = "Переместить ячейку";
-            this.buttonMoveCell.UseVisualStyleBackColor = true;
+            this.buttonMoveCell.UseVisualStyleBackColor = false;
             this.buttonMoveCell.Click += new System.EventHandler(this.buttonMoveCell_Click);
             // 
             // groupBoxSelectCell
@@ -94,9 +100,10 @@
             this.groupBoxSelectCell.Controls.Add(this.selectLoadPlace);
             this.groupBoxSelectCell.Controls.Add(this.selectNeedleLeftPlace);
             this.groupBoxSelectCell.Controls.Add(this.selectWashingPlace);
-            this.groupBoxSelectCell.Location = new System.Drawing.Point(3, 159);
+            this.groupBoxSelectCell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBoxSelectCell.Location = new System.Drawing.Point(3, 137);
             this.groupBoxSelectCell.Name = "groupBoxSelectCell";
-            this.groupBoxSelectCell.Size = new System.Drawing.Size(156, 134);
+            this.groupBoxSelectCell.Size = new System.Drawing.Size(169, 134);
             this.groupBoxSelectCell.TabIndex = 12;
             this.groupBoxSelectCell.TabStop = false;
             this.groupBoxSelectCell.Text = "Выбор места";
@@ -106,7 +113,7 @@
             this.selectUnloadPlace.AutoSize = true;
             this.selectUnloadPlace.Location = new System.Drawing.Point(6, 111);
             this.selectUnloadPlace.Name = "selectUnloadPlace";
-            this.selectUnloadPlace.Size = new System.Drawing.Size(74, 17);
+            this.selectUnloadPlace.Size = new System.Drawing.Size(76, 19);
             this.selectUnloadPlace.TabIndex = 8;
             this.selectUnloadPlace.Text = "Выгрузка";
             this.selectUnloadPlace.UseVisualStyleBackColor = true;
@@ -117,7 +124,7 @@
             this.selectNeedleRightPlace.Checked = true;
             this.selectNeedleRightPlace.Location = new System.Drawing.Point(6, 42);
             this.selectNeedleRightPlace.Name = "selectNeedleRightPlace";
-            this.selectNeedleRightPlace.Size = new System.Drawing.Size(89, 17);
+            this.selectNeedleRightPlace.Size = new System.Drawing.Size(96, 19);
             this.selectNeedleRightPlace.TabIndex = 4;
             this.selectNeedleRightPlace.TabStop = true;
             this.selectNeedleRightPlace.Text = "Игла (право)";
@@ -128,7 +135,7 @@
             this.selectLoadPlace.AutoSize = true;
             this.selectLoadPlace.Location = new System.Drawing.Point(6, 88);
             this.selectLoadPlace.Name = "selectLoadPlace";
-            this.selectLoadPlace.Size = new System.Drawing.Size(72, 17);
+            this.selectLoadPlace.Size = new System.Drawing.Size(73, 19);
             this.selectLoadPlace.TabIndex = 7;
             this.selectLoadPlace.Text = "Загрузка";
             this.selectLoadPlace.UseVisualStyleBackColor = true;
@@ -138,7 +145,7 @@
             this.selectNeedleLeftPlace.AutoSize = true;
             this.selectNeedleLeftPlace.Location = new System.Drawing.Point(6, 19);
             this.selectNeedleLeftPlace.Name = "selectNeedleLeftPlace";
-            this.selectNeedleLeftPlace.Size = new System.Drawing.Size(83, 17);
+            this.selectNeedleLeftPlace.Size = new System.Drawing.Size(89, 19);
             this.selectNeedleLeftPlace.TabIndex = 5;
             this.selectNeedleLeftPlace.Text = "Игла (лево)";
             this.selectNeedleLeftPlace.UseVisualStyleBackColor = true;
@@ -148,27 +155,27 @@
             this.selectWashingPlace.AutoSize = true;
             this.selectWashingPlace.Location = new System.Drawing.Point(6, 65);
             this.selectWashingPlace.Name = "selectWashingPlace";
-            this.selectWashingPlace.Size = new System.Drawing.Size(79, 17);
+            this.selectWashingPlace.Size = new System.Drawing.Size(84, 19);
             this.selectWashingPlace.TabIndex = 6;
             this.selectWashingPlace.Text = "Промывка";
             this.selectWashingPlace.UseVisualStyleBackColor = true;
             // 
             // editCellNumber
             // 
-            this.editCellNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editCellNumber.Location = new System.Drawing.Point(3, 87);
+            this.editCellNumber.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editCellNumber.Location = new System.Drawing.Point(117, 75);
             this.editCellNumber.Name = "editCellNumber";
-            this.editCellNumber.Size = new System.Drawing.Size(156, 22);
+            this.editCellNumber.Size = new System.Drawing.Size(55, 25);
             this.editCellNumber.TabIndex = 13;
             this.editCellNumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // labelNumberCell
             // 
             this.labelNumberCell.AutoSize = true;
-            this.labelNumberCell.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNumberCell.Location = new System.Drawing.Point(3, 68);
+            this.labelNumberCell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNumberCell.Location = new System.Drawing.Point(3, 79);
             this.labelNumberCell.Name = "labelNumberCell";
-            this.labelNumberCell.Size = new System.Drawing.Size(103, 16);
+            this.labelNumberCell.Size = new System.Drawing.Size(90, 15);
             this.labelNumberCell.TabIndex = 14;
             this.labelNumberCell.Text = "Номер ячейки:";
             // 
@@ -178,9 +185,10 @@
             this.groupBox1.Controls.Add(this.selectThirdCell);
             this.groupBox1.Controls.Add(this.selectFirstCell);
             this.groupBox1.Controls.Add(this.selectSecondCell);
-            this.groupBox1.Location = new System.Drawing.Point(3, 299);
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.groupBox1.Location = new System.Drawing.Point(3, 277);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(156, 111);
+            this.groupBox1.Size = new System.Drawing.Size(169, 111);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Выбор ячейки";
@@ -191,7 +199,7 @@
             this.selectWhiteCell.Checked = true;
             this.selectWhiteCell.Location = new System.Drawing.Point(6, 19);
             this.selectWhiteCell.Name = "selectWhiteCell";
-            this.selectWhiteCell.Size = new System.Drawing.Size(56, 17);
+            this.selectWhiteCell.Size = new System.Drawing.Size(57, 19);
             this.selectWhiteCell.TabIndex = 4;
             this.selectWhiteCell.TabStop = true;
             this.selectWhiteCell.Text = "Белая";
@@ -202,7 +210,7 @@
             this.selectThirdCell.AutoSize = true;
             this.selectThirdCell.Location = new System.Drawing.Point(6, 88);
             this.selectThirdCell.Name = "selectThirdCell";
-            this.selectThirdCell.Size = new System.Drawing.Size(61, 17);
+            this.selectThirdCell.Size = new System.Drawing.Size(61, 19);
             this.selectThirdCell.TabIndex = 7;
             this.selectThirdCell.Text = "Третья";
             this.selectThirdCell.UseVisualStyleBackColor = true;
@@ -212,7 +220,7 @@
             this.selectFirstCell.AutoSize = true;
             this.selectFirstCell.Location = new System.Drawing.Point(6, 42);
             this.selectFirstCell.Name = "selectFirstCell";
-            this.selectFirstCell.Size = new System.Drawing.Size(63, 17);
+            this.selectFirstCell.Size = new System.Drawing.Size(65, 19);
             this.selectFirstCell.TabIndex = 5;
             this.selectFirstCell.Text = "Первая";
             this.selectFirstCell.UseVisualStyleBackColor = true;
@@ -222,7 +230,7 @@
             this.selectSecondCell.AutoSize = true;
             this.selectSecondCell.Location = new System.Drawing.Point(6, 65);
             this.selectSecondCell.Name = "selectSecondCell";
-            this.selectSecondCell.Size = new System.Drawing.Size(61, 17);
+            this.selectSecondCell.Size = new System.Drawing.Size(63, 19);
             this.selectSecondCell.TabIndex = 6;
             this.selectSecondCell.Text = "Вторая";
             this.selectSecondCell.UseVisualStyleBackColor = true;
@@ -230,19 +238,19 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(3, 112);
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(3, 110);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(132, 16);
+            this.label1.Size = new System.Drawing.Size(108, 15);
             this.label1.TabIndex = 17;
             this.label1.Text = "Позиция загрузки:";
             // 
             // editLoadPosition
             // 
-            this.editLoadPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editLoadPosition.Location = new System.Drawing.Point(3, 131);
+            this.editLoadPosition.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editLoadPosition.Location = new System.Drawing.Point(117, 106);
             this.editLoadPosition.Name = "editLoadPosition";
-            this.editLoadPosition.Size = new System.Drawing.Size(156, 22);
+            this.editLoadPosition.Size = new System.Drawing.Size(55, 25);
             this.editLoadPosition.TabIndex = 16;
             this.editLoadPosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 

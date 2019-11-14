@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
-    public class GetFirmwareVersionCommand : AbstractCommand, IDeviceCommand
+    public class GetFirmwareVersionCommand : AbstractCommand, IRemoteCommand
     {
         public GetFirmwareVersionCommand() : base()
         {
@@ -23,7 +19,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
             return packet.GetBytes();
         }
 
-        Protocol.CommandTypes IDeviceCommand.GetType()
+        public new Protocol.CommandTypes GetType()
         {
             return Protocol.CommandTypes.SIMPLE_COMMAND;
         }

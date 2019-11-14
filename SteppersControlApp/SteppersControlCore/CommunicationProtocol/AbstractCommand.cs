@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SteppersControlCore.Interfaces;
+
 namespace SteppersControlCore.CommunicationProtocol
 {
-    public class AbstractCommand : IAbstractCommand
+    public class AbstractCommand : ICommand
     {
         protected uint _commandId = 0;
 

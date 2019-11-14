@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SteppersControlCore.CommunicationProtocol;
-using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
+﻿using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.CommunicationProtocol.CncCommands;
 using SteppersControlCore.CommunicationProtocol.StepperCommands;
-
-using System.ComponentModel;
-using System.Xml.Serialization;
-using System.IO;
-using SteppersControlCore.Utils;
-
 using SteppersControlCore.ControllersProperties;
+using SteppersControlCore.Interfaces;
+using SteppersControlCore.Utils;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SteppersControlCore.Controllers
 {
@@ -26,7 +17,7 @@ namespace SteppersControlCore.Controllers
 
         public int TransporterStepperPosition { get; set; } = 0;
 
-        public TransporterController() : base()
+        public TransporterController(ICommandExecutor executor) : base(executor)
         {
             Properties = new TransporterControllerProperties();
         }
@@ -47,9 +38,9 @@ namespace SteppersControlCore.Controllers
                 Properties = new TransporterControllerProperties();
         }
 
-        public List<IAbstractCommand> PrepareBeforeScanning()
+        public void PrepareBeforeScanning()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.TransporterStepper, 100));
 
@@ -61,7 +52,7 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.TransporterStepper, Properties.StepsOneTube / 2 } };
             commands.Add(new MoveCncCommand(steppers));
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
         public enum ShiftType
@@ -71,9 +62,9 @@ namespace SteppersControlCore.Controllers
         };
 
         // Сдвиг
-        public List<IAbstractCommand> Shift(bool reverse, ShiftType shiftType = ShiftType.OneTube)
+        public void Shift(bool reverse, ShiftType shiftType = ShiftType.OneTube)
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.TransporterStepper, 50));
 
@@ -85,12 +76,12 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.TransporterStepper, steps } };
             commands.Add(new MoveCncCommand(steppers));
 
-            return commands;
+            executor.WaitExecution(commands);
         }
 
-        public List<IAbstractCommand> TurnAndScanTube()
+        public void TurnAndScanTube()
         {
-            List<IAbstractCommand> commands = new List<IAbstractCommand>();
+            List<ICommand> commands = new List<ICommand>();
             
             // Сканирование пробирки
             commands.Add(new BarStartCommand());
@@ -101,7 +92,7 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.TurnTubeStepper, Properties.StepsToTurnTube } };
             commands.Add(new MoveCncCommand(steppers));
 
-            return commands;
+            executor.WaitExecution(commands);
         }
     }
 }

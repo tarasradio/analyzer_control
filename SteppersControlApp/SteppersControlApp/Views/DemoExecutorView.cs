@@ -28,7 +28,7 @@ namespace SteppersControlApp.ControllersViews
         {
             InitializeComponent();
 
-            buttonRemoveTube.Enabled = false;
+            buttonRemoveTube.Visible = false;
 
             _updateTimer.Interval = 100;
             _updateTimer.Tick += updateValues;
@@ -56,7 +56,7 @@ namespace SteppersControlApp.ControllersViews
         {
             Core.Demo.Properties.Tubes.Add(new TubeInfo());
 
-            buttonRemoveTube.Enabled = true;
+            buttonRemoveTube.Visible = true;
         }
 
         private void buttonRemoveTube_Click(object sender, EventArgs e)
@@ -65,7 +65,7 @@ namespace SteppersControlApp.ControllersViews
 
             if (Core.Demo.Properties.Tubes.Count == 0)
             {
-                buttonRemoveTube.Enabled = false;
+                buttonRemoveTube.Visible = false;
                 selectedTube = null;
             }  
         }
@@ -93,7 +93,7 @@ namespace SteppersControlApp.ControllersViews
                 tubesList[0, i].Value = i + 1;
                 tubesList[1, i].Value = $"{Core.Demo.Properties.Tubes[i].BarCode}";
 
-                String state = "Не найдена";
+                string state = "Не найдена";
 
                 if(Core.Demo.Properties.Tubes[i].IsFind)
                 {
@@ -116,12 +116,12 @@ namespace SteppersControlApp.ControllersViews
             if (selectedTube != null)
             {
                 editBarcode.Text = selectedTube.BarCode;
-                buttonUpdateBarcode.Enabled = true;
+                buttonUpdateBarcode.Enabled = Visible;
             }
             else
             {
                 editBarcode.Text = "";
-                buttonUpdateBarcode.Enabled = false;
+                buttonUpdateBarcode.Enabled = Visible;
             }
         }
 
@@ -129,20 +129,17 @@ namespace SteppersControlApp.ControllersViews
         {
             if (selectedTube == null)
             {
-                editStageButton.Enabled = false;
-                removeStageButton.Enabled = false;
+                removeStageButton.Visible = false;
                 return;
             }
 
             if (selectedTube.Stages.Count == 0)
             {
-                editStageButton.Enabled = false;
-                removeStageButton.Enabled = false;
+                removeStageButton.Visible = false;
             }
             else
             {
-                editStageButton.Enabled = true;
-                removeStageButton.Enabled = true;
+                removeStageButton.Visible = true;
             }
 
             stagesList.RowCount = selectedTube.Stages.Count;
@@ -167,6 +164,7 @@ namespace SteppersControlApp.ControllersViews
                 editTimeToPerform.Enabled = false;
                 editCartridgePosition.Enabled = false;
                 selectCellType.Enabled = false;
+                saveStageChangesButton.Visible = false;
 
                 return;
             }
@@ -175,6 +173,7 @@ namespace SteppersControlApp.ControllersViews
                 editTimeToPerform.Enabled = true;
                 editCartridgePosition.Enabled = true;
                 selectCellType.Enabled = true;
+                saveStageChangesButton.Visible = true;
 
                 editTimeToPerform.Value = selectedTube.Stages[stagesList.CurrentRow.Index].TimeToPerform;
                 editCartridgePosition.Value = selectedTube.Stages[stagesList.CurrentRow.Index].CartridgePosition;
@@ -275,6 +274,11 @@ namespace SteppersControlApp.ControllersViews
         {
             if (selectedTube == null) return;
             selectedTube.BarCode = editBarcode.Text;
+        }
+
+        private void editBarcodeLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

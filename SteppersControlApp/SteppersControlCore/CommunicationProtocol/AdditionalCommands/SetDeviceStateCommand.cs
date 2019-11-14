@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
-    public class SetDeviceStateCommand : AbstractCommand, IDeviceCommand
+    public class SetDeviceStateCommand : AbstractCommand, IRemoteCommand
     {
         public enum DeviseState
         {

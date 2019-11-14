@@ -16,7 +16,7 @@ namespace SteppersControlCore.MachineControl
     public class TaskExecutor
     {
         public delegate void TaskDelegate();
-        private static object _syncRoot = new object();
+        private static object locker = new object();
         private Thread _executionThread;
 
         public TaskExecutor()
@@ -26,7 +26,7 @@ namespace SteppersControlCore.MachineControl
 
         public void AbortExecution()
         {
-            lock(_syncRoot)
+            lock(locker)
             {
                 if (_executionThread != null && _executionThread.IsAlive)
                     _executionThread.Abort();
@@ -40,15 +40,15 @@ namespace SteppersControlCore.MachineControl
 
         public void StartTask(TaskDelegate task)
         {
-            lock (_syncRoot)
+            AbortExecution();
+
+            _executionThread = new Thread(new ThreadStart(task))
             {
-                if (_executionThread != null && _executionThread.IsAlive)
-                    _executionThread.Abort();
-                _executionThread = new Thread(new ThreadStart(task));
-                _executionThread.Priority = ThreadPriority.Lowest;
-                _executionThread.IsBackground = true;
-                _executionThread.Start();
-            }
+                Priority = ThreadPriority.Lowest,
+                IsBackground = true
+            };
+
+            _executionThread.Start();
         }
     }
 }

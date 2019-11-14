@@ -1,12 +1,9 @@
-﻿using System;
+﻿using SteppersControlCore.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
-    public class OffDeviceCncCommand : AbstractCommand, IDeviceCommand
+    public class OffDeviceCncCommand : AbstractCommand, IRemoteCommand
     {
         private List<int> _devices;
 

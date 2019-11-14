@@ -1,12 +1,11 @@
-﻿using SteppersControlCore.CommunicationProtocol;
-using SteppersControlCore.Controllers;
+﻿using SteppersControlCore.Controllers;
 using SteppersControlCore.Elements;
+using SteppersControlCore.Interfaces;
 using SteppersControlCore.Utils;
-
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Timers;
 
 namespace SteppersControlCore
@@ -109,11 +108,12 @@ namespace SteppersControlCore
             washingNeedleTask();
 
             //Закрываем клапана
-            WaitExecution(Core.Pomp.CloseValves());
+            Core.Pomp.CloseValves();
 
             Logger.AddMessage($"Prepare before scanning task [Start]");
-            WaitExecution(Core.Arm.Home());
-            WaitExecution(Core.Transporter.PrepareBeforeScanning());
+
+            Core.Arm.Home();
+            Core.Transporter.PrepareBeforeScanning();
 
             Logger.AddMessage($"Prepare before scanning task [Finish]");
 
@@ -226,11 +226,13 @@ namespace SteppersControlCore
         private void initTask()
         {
             Logger.AddMessage($"Init task [Start]");
-            WaitExecution( Core.Arm.Home() );
-            WaitExecution( Core.Loader.HomeShuttle() );
-            WaitExecution( Core.Loader.HomeLoad() );
-            WaitExecution( Core.Rotor.Home() );
-            WaitExecution( Core.Pomp.Home() );
+
+            Core.Arm.Home();
+            Core.Loader.HomeShuttle();
+            Core.Loader.HomeLoad();
+            Core.Rotor.Home();
+            Core.Pomp.Home();
+
             Logger.AddMessage($"Init task [Finish]");
         }
 
@@ -240,10 +242,12 @@ namespace SteppersControlCore
         private void washingNeedleTask()
         {
             Logger.AddMessage($"Washing needle task [Start]");
-            WaitExecution( Core.Arm.Home() );
-            WaitExecution( Core.Arm.MoveOnWashing() );
-            WaitExecution( Core.Pomp.Washing(2) );
-            WaitExecution( Core.Pomp.Home() );
+
+            Core.Arm.Home();
+            Core.Arm.MoveOnWashing();
+            Core.Pomp.Washing(2);
+            Core.Pomp.Home();
+
             Logger.AddMessage($"Washing needle task [Finish]");
         }
         
@@ -259,15 +263,15 @@ namespace SteppersControlCore
 
             Logger.AddMessage($"Scan tube task [Start]");
             //Закрываем клапана
-            WaitExecution(Core.Pomp.CloseValves());
-            WaitExecution(Core.Transporter.Shift(false));
+            Core.Pomp.CloseValves();
+            Core.Transporter.Shift(false);
 
             while (numberRepeat < countRepeats)
             {
-                WaitExecution(Core.Transporter.TurnAndScanTube());
+                Core.Transporter.TurnAndScanTube();
                 cells[currentCell] = new TubeCell();
 
-                String barCode = Core.GetLastBarCode();
+                String barCode = Core.GetLastABarCode();
 
                 if (barCode != null)
                 {
@@ -314,46 +318,46 @@ namespace SteppersControlCore
         {
             Logger.AddMessage($"Пробирка [{tube.BarCode}] - {tube.CurrentStage}-я стадия [Start]");
 
-            WaitExecution(Core.Arm.Home());
+            Core.Arm.Home();
             washingNeedleTask(); // Промывка иглы
 
             // Начало выполнения подготовительного этапа
 
             // Подводим нужную ячейку картриджа под иглу
-            WaitExecution(Core.Rotor.Home());
-            WaitExecution(Core.Rotor.MoveCellUnderNeedle(
+            Core.Rotor.Home();
+            Core.Rotor.MoveCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
                 tube.Stages[tube.CurrentStage].Cell,
-                RotorController.CellPosition.CellLeft));
+                RotorController.CellPosition.CellLeft);
 
             // Устанавливаем иглу над нужной ячейкой картриджа
-            WaitExecution(Core.Arm.MoveToCartridge(
+            Core.Arm.MoveToCartridge(
                 ArmController.FromPosition.Washing,
-                tube.Stages[tube.CurrentStage].Cell));
+                tube.Stages[tube.CurrentStage].Cell);
 
             // Прокалываем ячейку картриджа
-            WaitExecution(Core.Arm.BrokeCartridge());
+            Core.Arm.BrokeCartridge();
 
             // Забираем реагент из ячейки картриджа
-            WaitExecution(Core.Pomp.Suction(0));
+            Core.Pomp.Suction(0);
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            WaitExecution(Core.Arm.MoveToCartridge(
+            Core.Arm.MoveToCartridge(
                 ArmController.FromPosition.FirstCell,
-                CartridgeCell.WhiteCell));
+                CartridgeCell.WhiteCell);
 
             // Подводим белую кювету картриджа под иглу
-            WaitExecution(Core.Rotor.Home());
-            WaitExecution(Core.Rotor.MoveCellUnderNeedle(
+            Core.Rotor.Home();
+            Core.Rotor.MoveCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
                 CartridgeCell.WhiteCell,
-                RotorController.CellPosition.CellRight));
+                RotorController.CellPosition.CellRight);
 
             // Опускаем иглу в кювету
-            WaitExecution(Core.Arm.BrokeCartridge());
+            Core.Arm.BrokeCartridge();
 
             // Сливаем реагент в белую кювету
-            WaitExecution(Core.Pomp.Unsuction(0));
+            Core.Pomp.Unsuction(0);
 
             // Конец выполнения подготовительного этапа
 
@@ -369,33 +373,33 @@ namespace SteppersControlCore
             Logger.AddMessage($"Пробирка [{tube.BarCode}] - подготовительная (0-я) стадия [Start]");
 
             // Смещаем пробирку, чтобы она оказалась под иглой
-            WaitExecution(Core.Transporter.Shift(false, TransporterController.ShiftType.HalfTube));
+            Core.Transporter.Shift(false, TransporterController.ShiftType.HalfTube);
             
             // Устанавливаем иглу над пробиркой и опускаем ее до контакта с материалом в пробирке
-            WaitExecution(Core.Arm.MoveOnTube());
+            Core.Arm.MoveOnTube();
             
             // Набираем материал из пробирки
-            WaitExecution(Core.Pomp.Suction(0));
+            Core.Pomp.Suction(0);
             
             // Подводим белую кювету картриджа под иглу
-            WaitExecution(Core.Rotor.Home());
-            WaitExecution(Core.Rotor.MoveCellUnderNeedle( 
+            Core.Rotor.Home();
+            Core.Rotor.MoveCellUnderNeedle( 
                 tube.Stages[0].CartridgePosition,
                 CartridgeCell.WhiteCell,
-                RotorController.CellPosition.CenterCell));
+                RotorController.CellPosition.CenterCell);
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            WaitExecution(Core.Arm.MoveToCartridge(
+            Core.Arm.MoveToCartridge(
                 ArmController.FromPosition.Tube,
-                CartridgeCell.WhiteCell));
+                CartridgeCell.WhiteCell);
 
             // Опускаем иглу в кювету
-            WaitExecution(Core.Arm.BrokeCartridge() );
+            Core.Arm.BrokeCartridge();
 
             // Сливаем материал в белую кювету
-            WaitExecution(Core.Pomp.Unsuction(0)); // слив из иглы в картридж
+            Core.Pomp.Unsuction(0); // слив из иглы в картридж
 
-            WaitExecution(Core.Arm.Home());
+            Core.Arm.Home();
             
             // Промываем иглу
             washingNeedleTask();
@@ -404,17 +408,12 @@ namespace SteppersControlCore
             performMiddleTask(tube);
             
             // Устанавливаем иглу в домашнюю позицию
-            WaitExecution(Core.Arm.Home());
+            Core.Arm.Home();
 
             // Смещаем пробирку обратно
-            WaitExecution(Core.Transporter.Shift(true, TransporterController.ShiftType.HalfTube));
+            Core.Transporter.Shift(true, TransporterController.ShiftType.HalfTube);
 
             Logger.AddMessage($"Пробирка [{tube.BarCode}] - подготовительная (0-я) стадия [Stop]");
-        }
-
-        private void WaitExecution(List<IAbstractCommand> task)
-        {
-            Core.CncExecutor.ExecuteTask(task);
         }
     }
 }

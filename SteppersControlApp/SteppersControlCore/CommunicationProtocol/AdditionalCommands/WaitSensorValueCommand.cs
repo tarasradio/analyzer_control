@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SteppersControlCore.CommunicationProtocol;
-using SteppersControlCore;
+﻿using SteppersControlCore.Interfaces;
 using System.Threading;
 
 namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
