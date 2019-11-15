@@ -78,6 +78,7 @@
     <Compile Include="Interfaces\ICommand.cs" />
     <Compile Include="Interfaces\ICommandExecutor.cs" />
     <Compile Include="Interfaces\IHostCommand.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IPacketFinder.cs" />
     <Compile Include="Interfaces\IRemoteCommand.cs" />
     <Compile Include="Interfaces\ISerial.cs" />

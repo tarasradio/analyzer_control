@@ -63,7 +63,6 @@ namespace SteppersControlApp.Views
         private void ParseProgram()
         {
             commands = new CommandParser().Parse(programTextBox.Text);
-            Logger.AddMessage($"Программа содержит { commands.Count } команд.");
         }
 
         private void buttonTestProgram_Click(object sender, EventArgs e)
@@ -85,7 +84,7 @@ namespace SteppersControlApp.Views
                 }
                 catch (System.IO.FileNotFoundException)
                 {
-                    Logger.AddMessage("Ошибка при открытии файла - Файл не найден.");
+                    Logger.Info("Ошибка при открытии файла - Файл не найден.");
                 }
             }
         }
@@ -102,7 +101,7 @@ namespace SteppersControlApp.Views
                 }
                 catch(System.IO.FileNotFoundException)
                 {
-                    Logger.AddMessage("Ошибка при сохранении файла.");
+                    Logger.Info("Ошибка при сохранении файла.");
                 }
             }
         }

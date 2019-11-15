@@ -1,4 +1,5 @@
 #include "system.hpp"
+#include "emulator.hpp"
 #include "command_executor.hpp"
 
 #include "protocol.hpp"
@@ -255,6 +256,10 @@ void CommandExecutor::executeBarStartCommand(uint8_t *packet, uint32_t packetId)
 void CommandExecutor::executeHomeCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
+#ifdef EMULATOR
+    Emulator::RunTask();
+#endif
     
     int8_t stepper = packet[0];
     int32_t fullSpeed = readLong(packet + 1);
@@ -279,6 +284,10 @@ void CommandExecutor::executeRunCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
+#ifdef EMULATOR
+    Emulator::RunTask();
+#endif
+
     int8_t stepper = packet[0];
     int32_t fullSpeed = readLong(packet + 1);
 
@@ -300,6 +309,10 @@ void CommandExecutor::executeRunCommand(uint8_t *packet, uint32_t packetId)
 void CommandExecutor::executeMoveCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
+#ifdef EMULATOR
+    Emulator::RunTask();
+#endif
 
     int8_t stepper = packet[0];
     int32_t steps = readLong(packet + 1);
@@ -402,6 +415,10 @@ void CommandExecutor::executeCncMoveCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
+#ifdef EMULATOR
+    Emulator::RunTask();
+#endif
+
     int8_t countOfSteppers = packet[0];
 
     movingController->clearState();
@@ -440,6 +457,10 @@ void CommandExecutor::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
+#ifdef EMULATOR
+    Emulator::RunTask();
+#endif
+
     uint8_t countOfSteppers = packet[0];
 
     homingController->clearState();
@@ -477,6 +498,10 @@ void CommandExecutor::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
 void CommandExecutor::executeCncRunCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
+
+#ifdef EMULATOR
+    Emulator::RunTask();
+#endif
 
     uint8_t countOfSteppers = packet[0];
 

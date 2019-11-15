@@ -1,4 +1,5 @@
 #include "system.hpp"
+#include "emulator.hpp"
 
 #include "homing_controller.hpp"
 
@@ -69,9 +70,30 @@ void HomingController::addStepperForHoming(int8_t stepper, int32_t speed)
 
 uint8_t HomingController::updateState()
 {
-    #ifdef EMULATOR
-        return 0;
-    #endif
+#ifdef EMULATOR
+
+    if(Emulator::TaskIsRunning() && countHomeSteppers > 0)
+    {
+#ifdef DEBUG
+        {
+            String message = "elapsed time = " + String(Emulator::GetElapsedMilliseconds());
+            Protocol::SendMessage(message.c_str());
+        }
+#endif
+        if(Emulator::GetElapsedMilliseconds() >= MOVE_DELAY)
+        {
+#ifdef DEBUG
+        {
+            String message = "Stop task";
+            Protocol::SendMessage(message.c_str());
+        }
+#endif
+            Emulator::StopTask();
+            countHomeSteppers = 0;
+        }
+    }
+    return countHomeSteppers;
+#endif
     
     if (0 == getSteppersInHoming())
     {

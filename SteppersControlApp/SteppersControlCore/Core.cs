@@ -90,7 +90,7 @@ namespace SteppersControlCore
 
             PackHandler.CommandStateResponseReceived += PackHandler_CommandStateResponseReceived;
             
-            Logger.AddMessage("Запись работы системы начата");
+            Logger.Info("Запись работы системы начата");
         }
 
         private void PackHandler_BarCodeAReceived(string message)
@@ -167,17 +167,17 @@ namespace SteppersControlCore
                 {
                     if (String.Equals(FirmwareVersion, _lastFirmwareVersionResponse))
                     {
-                        Logger.AddMessage("Версия платы совпадает с требуемой");
+                        Logger.Info("[System] - Версия платы совпадает с требуемой.");
                     }
                     else
                     {
-                        Logger.AddMessage("Версия платы не совпадает с требуемой. " +
+                        Logger.Info("[System] - Версия платы не совпадает с требуемой. " +
                             "Подключено несовместимое устройство или требуется обновить прошивку. ");
                     }
                 }
                 else
                 {
-                    Logger.AddMessage("Версия платы не совпадает с требуемой. " +
+                    Logger.Info("[System] - Версия платы не совпадает с требуемой. " +
                             "Подключено несовместимое устройство или требуется обновить прошивку. ");
                 }
             });
@@ -259,6 +259,7 @@ namespace SteppersControlCore
         {
             Executor.AbortExecution();
             CmdExecutor.AbortExecution();
+            Demo.AbortExecution();
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }
     }

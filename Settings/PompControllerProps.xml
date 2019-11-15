@@ -9,7 +9,7 @@
   <SmallPistonSpeed>200</SmallPistonSpeed>
   <SmallPistonWashingSpeed>150</SmallPistonWashingSpeed>
   <SmallPistonSuctionSpeed>200</SmallPistonSuctionSpeed>
-  <SmallPistonSuctionSteps>200000</SmallPistonSuctionSteps>
-  <BigPistonWashingSteps>700000</BigPistonWashingSteps>
-  <SmallPistonWashingSteps>700000</SmallPistonWashingSteps>
+  <SmallPistonSuctionSteps>-200000</SmallPistonSuctionSteps>
+  <BigPistonWashingSteps>-700000</BigPistonWashingSteps>
+  <SmallPistonWashingSteps>-700000</SmallPistonWashingSteps>
 </PompControllerProperties>
