@@ -31,13 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RotorControllerView));
             this.buttonHome = new System.Windows.Forms.Button();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-            this.buttonMoveCell = new System.Windows.Forms.Button();
+            this.buttonPlaceCell = new System.Windows.Forms.Button();
             this.groupBoxSelectCell = new System.Windows.Forms.GroupBox();
-            this.selectUnloadPlace = new System.Windows.Forms.RadioButton();
+            this.selectDischargePlace = new System.Windows.Forms.RadioButton();
             this.selectNeedleRightPlace = new System.Windows.Forms.RadioButton();
-            this.selectLoadPlace = new System.Windows.Forms.RadioButton();
+            this.selectChargePlace = new System.Windows.Forms.RadioButton();
             this.selectNeedleLeftPlace = new System.Windows.Forms.RadioButton();
-            this.selectWashingPlace = new System.Windows.Forms.RadioButton();
+            this.selectWashBufferPlace = new System.Windows.Forms.RadioButton();
             this.editCellNumber = new System.Windows.Forms.NumericUpDown();
             this.labelNumberCell = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -46,11 +46,11 @@
             this.selectFirstCell = new System.Windows.Forms.RadioButton();
             this.selectSecondCell = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.editLoadPosition = new System.Windows.Forms.NumericUpDown();
+            this.editChargePosition = new System.Windows.Forms.NumericUpDown();
             this.groupBoxSelectCell.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.editLoadPosition)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editChargePosition)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonHome
@@ -79,27 +79,27 @@
             this.propertyGrid.Size = new System.Drawing.Size(547, 464);
             this.propertyGrid.TabIndex = 10;
             // 
-            // buttonMoveCell
+            // buttonPlaceCell
             // 
-            this.buttonMoveCell.BackColor = System.Drawing.Color.SteelBlue;
-            this.buttonMoveCell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonMoveCell.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonMoveCell.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonMoveCell.Location = new System.Drawing.Point(3, 41);
-            this.buttonMoveCell.Name = "buttonMoveCell";
-            this.buttonMoveCell.Size = new System.Drawing.Size(169, 28);
-            this.buttonMoveCell.TabIndex = 11;
-            this.buttonMoveCell.Text = "Переместить ячейку";
-            this.buttonMoveCell.UseVisualStyleBackColor = false;
-            this.buttonMoveCell.Click += new System.EventHandler(this.buttonMoveCell_Click);
+            this.buttonPlaceCell.BackColor = System.Drawing.Color.SteelBlue;
+            this.buttonPlaceCell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonPlaceCell.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonPlaceCell.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonPlaceCell.Location = new System.Drawing.Point(3, 41);
+            this.buttonPlaceCell.Name = "buttonPlaceCell";
+            this.buttonPlaceCell.Size = new System.Drawing.Size(169, 28);
+            this.buttonPlaceCell.TabIndex = 11;
+            this.buttonPlaceCell.Text = "Переместить ячейку";
+            this.buttonPlaceCell.UseVisualStyleBackColor = false;
+            this.buttonPlaceCell.Click += new System.EventHandler(this.buttonMoveCell_Click);
             // 
             // groupBoxSelectCell
             // 
-            this.groupBoxSelectCell.Controls.Add(this.selectUnloadPlace);
+            this.groupBoxSelectCell.Controls.Add(this.selectDischargePlace);
             this.groupBoxSelectCell.Controls.Add(this.selectNeedleRightPlace);
-            this.groupBoxSelectCell.Controls.Add(this.selectLoadPlace);
+            this.groupBoxSelectCell.Controls.Add(this.selectChargePlace);
             this.groupBoxSelectCell.Controls.Add(this.selectNeedleLeftPlace);
-            this.groupBoxSelectCell.Controls.Add(this.selectWashingPlace);
+            this.groupBoxSelectCell.Controls.Add(this.selectWashBufferPlace);
             this.groupBoxSelectCell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBoxSelectCell.Location = new System.Drawing.Point(3, 137);
             this.groupBoxSelectCell.Name = "groupBoxSelectCell";
@@ -108,15 +108,15 @@
             this.groupBoxSelectCell.TabStop = false;
             this.groupBoxSelectCell.Text = "Выбор места";
             // 
-            // selectUnloadPlace
+            // selectDischargePlace
             // 
-            this.selectUnloadPlace.AutoSize = true;
-            this.selectUnloadPlace.Location = new System.Drawing.Point(6, 111);
-            this.selectUnloadPlace.Name = "selectUnloadPlace";
-            this.selectUnloadPlace.Size = new System.Drawing.Size(76, 19);
-            this.selectUnloadPlace.TabIndex = 8;
-            this.selectUnloadPlace.Text = "Выгрузка";
-            this.selectUnloadPlace.UseVisualStyleBackColor = true;
+            this.selectDischargePlace.AutoSize = true;
+            this.selectDischargePlace.Location = new System.Drawing.Point(6, 111);
+            this.selectDischargePlace.Name = "selectDischargePlace";
+            this.selectDischargePlace.Size = new System.Drawing.Size(76, 19);
+            this.selectDischargePlace.TabIndex = 8;
+            this.selectDischargePlace.Text = "Выгрузка";
+            this.selectDischargePlace.UseVisualStyleBackColor = true;
             // 
             // selectNeedleRightPlace
             // 
@@ -130,15 +130,15 @@
             this.selectNeedleRightPlace.Text = "Игла (право)";
             this.selectNeedleRightPlace.UseVisualStyleBackColor = true;
             // 
-            // selectLoadPlace
+            // selectChargePlace
             // 
-            this.selectLoadPlace.AutoSize = true;
-            this.selectLoadPlace.Location = new System.Drawing.Point(6, 88);
-            this.selectLoadPlace.Name = "selectLoadPlace";
-            this.selectLoadPlace.Size = new System.Drawing.Size(73, 19);
-            this.selectLoadPlace.TabIndex = 7;
-            this.selectLoadPlace.Text = "Загрузка";
-            this.selectLoadPlace.UseVisualStyleBackColor = true;
+            this.selectChargePlace.AutoSize = true;
+            this.selectChargePlace.Location = new System.Drawing.Point(6, 88);
+            this.selectChargePlace.Name = "selectChargePlace";
+            this.selectChargePlace.Size = new System.Drawing.Size(73, 19);
+            this.selectChargePlace.TabIndex = 7;
+            this.selectChargePlace.Text = "Загрузка";
+            this.selectChargePlace.UseVisualStyleBackColor = true;
             // 
             // selectNeedleLeftPlace
             // 
@@ -152,13 +152,13 @@
             // 
             // selectWashingPlace
             // 
-            this.selectWashingPlace.AutoSize = true;
-            this.selectWashingPlace.Location = new System.Drawing.Point(6, 65);
-            this.selectWashingPlace.Name = "selectWashingPlace";
-            this.selectWashingPlace.Size = new System.Drawing.Size(84, 19);
-            this.selectWashingPlace.TabIndex = 6;
-            this.selectWashingPlace.Text = "Промывка";
-            this.selectWashingPlace.UseVisualStyleBackColor = true;
+            this.selectWashBufferPlace.AutoSize = true;
+            this.selectWashBufferPlace.Location = new System.Drawing.Point(6, 65);
+            this.selectWashBufferPlace.Name = "selectWashingPlace";
+            this.selectWashBufferPlace.Size = new System.Drawing.Size(84, 19);
+            this.selectWashBufferPlace.TabIndex = 6;
+            this.selectWashBufferPlace.Text = "Промывка";
+            this.selectWashBufferPlace.UseVisualStyleBackColor = true;
             // 
             // editCellNumber
             // 
@@ -245,26 +245,26 @@
             this.label1.TabIndex = 17;
             this.label1.Text = "Позиция загрузки:";
             // 
-            // editLoadPosition
+            // editChargePosition
             // 
-            this.editLoadPosition.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.editLoadPosition.Location = new System.Drawing.Point(117, 106);
-            this.editLoadPosition.Name = "editLoadPosition";
-            this.editLoadPosition.Size = new System.Drawing.Size(55, 25);
-            this.editLoadPosition.TabIndex = 16;
-            this.editLoadPosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.editChargePosition.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editChargePosition.Location = new System.Drawing.Point(117, 106);
+            this.editChargePosition.Name = "editChargePosition";
+            this.editChargePosition.Size = new System.Drawing.Size(55, 25);
+            this.editChargePosition.TabIndex = 16;
+            this.editChargePosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // RotorControllerView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.editLoadPosition);
+            this.Controls.Add(this.editChargePosition);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.labelNumberCell);
             this.Controls.Add(this.editCellNumber);
             this.Controls.Add(this.groupBoxSelectCell);
-            this.Controls.Add(this.buttonMoveCell);
+            this.Controls.Add(this.buttonPlaceCell);
             this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.buttonHome);
             this.Name = "RotorControllerView";
@@ -274,7 +274,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.editLoadPosition)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editChargePosition)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -284,12 +284,12 @@
 
         private System.Windows.Forms.Button buttonHome;
         private System.Windows.Forms.PropertyGrid propertyGrid;
-        private System.Windows.Forms.Button buttonMoveCell;
+        private System.Windows.Forms.Button buttonPlaceCell;
         private System.Windows.Forms.GroupBox groupBoxSelectCell;
         private System.Windows.Forms.RadioButton selectNeedleRightPlace;
-        private System.Windows.Forms.RadioButton selectLoadPlace;
+        private System.Windows.Forms.RadioButton selectChargePlace;
         private System.Windows.Forms.RadioButton selectNeedleLeftPlace;
-        private System.Windows.Forms.RadioButton selectWashingPlace;
+        private System.Windows.Forms.RadioButton selectWashBufferPlace;
         private System.Windows.Forms.NumericUpDown editCellNumber;
         private System.Windows.Forms.Label labelNumberCell;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -298,7 +298,7 @@
         private System.Windows.Forms.RadioButton selectFirstCell;
         private System.Windows.Forms.RadioButton selectSecondCell;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown editLoadPosition;
-        private System.Windows.Forms.RadioButton selectUnloadPlace;
+        private System.Windows.Forms.NumericUpDown editChargePosition;
+        private System.Windows.Forms.RadioButton selectDischargePlace;
     }
 }

@@ -75,7 +75,6 @@ namespace SteppersControlApp.ControllersViews
             if (Core.Demo.Properties.Tubes.Count == 0)
                 return;
             selectedTube = Core.Demo.Properties.Tubes[tubesList.CurrentRow.Index];
-            propertyGrid.SelectedObject = selectedTube;
 
             buttonRemoveTube.Enabled = true;
 

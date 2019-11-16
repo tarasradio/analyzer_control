@@ -85,11 +85,11 @@
     <Compile Include="ControllersViews\AdditionalMovesView.Designer.cs">
       <DependentUpon>AdditionalMovesView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControllersViews\ArmControllerView.cs">
+    <Compile Include="ControllersViews\NeedleControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ControllersViews\ArmControllerView.Designer.cs">
-      <DependentUpon>ArmControllerView.cs</DependentUpon>
+    <Compile Include="ControllersViews\NeedleControllerView.Designer.cs">
+      <DependentUpon>NeedleControllerView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\DemoExecutorView.cs">
       <SubType>UserControl</SubType>
@@ -97,11 +97,11 @@
     <Compile Include="Views\DemoExecutorView.Designer.cs">
       <DependentUpon>DemoExecutorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControllersViews\LoadControllerView.cs">
+    <Compile Include="ControllersViews\ChargeControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ControllersViews\LoadControllerView.Designer.cs">
-      <DependentUpon>LoadControllerView.cs</DependentUpon>
+    <Compile Include="ControllersViews\ChargeControllerView.Designer.cs">
+      <DependentUpon>ChargeControllerView.cs</DependentUpon>
     </Compile>
     <Compile Include="ControllersViews\PompControllerView.cs">
       <SubType>UserControl</SubType>
@@ -189,14 +189,14 @@
     <EmbeddedResource Include="ControllersViews\AdditionalMovesView.resx">
       <DependentUpon>AdditionalMovesView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ControllersViews\ArmControllerView.resx">
-      <DependentUpon>ArmControllerView.cs</DependentUpon>
+    <EmbeddedResource Include="ControllersViews\NeedleControllerView.resx">
+      <DependentUpon>NeedleControllerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DemoExecutorView.resx">
       <DependentUpon>DemoExecutorView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ControllersViews\LoadControllerView.resx">
-      <DependentUpon>LoadControllerView.cs</DependentUpon>
+    <EmbeddedResource Include="ControllersViews\ChargeControllerView.resx">
+      <DependentUpon>ChargeControllerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControllersViews\PompControllerView.resx">
       <DependentUpon>PompControllerView.cs</DependentUpon>

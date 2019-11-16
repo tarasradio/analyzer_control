@@ -230,5 +230,10 @@ namespace SteppersControlApp.Forms
                 Core.Demo.StartDemo();
             }
         }
+
+        private void steppersGridView_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

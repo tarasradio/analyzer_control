@@ -79,7 +79,7 @@ namespace SteppersControlCore.Controllers
             executor.WaitExecution(commands);
         }
 
-        public void TurnAndScanTube()
+        public void RotateAndScanTube()
         {
             List<ICommand> commands = new List<ICommand>();
             

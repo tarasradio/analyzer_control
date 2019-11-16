@@ -23,10 +23,10 @@ namespace SteppersControlCore
         public static CommandExecutor CmdExecutor { get; private set; }
         public static TaskExecutor Executor { get; private set; }
 
-        public static ArmController Arm { get; private set; }
+        public static NeedleController Needle { get; private set; }
         public static TransporterController Transporter { get; private set; }
         public static RotorController Rotor { get; private set; }
-        public static LoadController Loader { get; private set; }
+        public static ChargeController Charger { get; private set; }
         public static PompController Pomp { get; private set; }
 
         public static DemoController Demo { get; private set; }
@@ -70,14 +70,14 @@ namespace SteppersControlCore
             CmdExecutor = new CommandExecutor();
             Executor = new TaskExecutor();
 
-            Arm = new ArmController(CmdExecutor);
-            Arm.ReadXml(path);
+            Needle = new NeedleController(CmdExecutor);
+            Needle.ReadXml(path);
 
             Transporter = new TransporterController(CmdExecutor);
             Transporter.ReadXml(path);
 
-            Loader = new LoadController(CmdExecutor);
-            Loader.ReadXml(path);
+            Charger = new ChargeController(CmdExecutor);
+            Charger.ReadXml(path);
 
             Rotor = new RotorController(CmdExecutor);
             Rotor.ReadXml(path);
@@ -141,9 +141,9 @@ namespace SteppersControlCore
 
         public void SaveConfiguration()
         {
-            Arm.WriteXml(path);
+            Needle.WriteXml(path);
             Transporter.WriteXml(path);
-            Loader.WriteXml(path);
+            Charger.WriteXml(path);
             Rotor.WriteXml(path);
             Pomp.WriteXml(path);
             Demo.WriteXml(path);

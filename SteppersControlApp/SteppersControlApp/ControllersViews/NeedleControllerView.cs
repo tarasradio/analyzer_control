@@ -7,21 +7,21 @@ using SteppersControlCore.Elements;
 
 namespace SteppersControlApp.ControllersViews
 {
-    public partial class ArmControllerView : UserControl
+    public partial class NeedleControllerView : UserControl
     {
-        public ArmControllerView()
+        public NeedleControllerView()
         {
             InitializeComponent();
-            if(Core.Arm != null)
-                propertyGrid.SelectedObject = Core.Arm.Properties;
+            if(Core.Needle != null)
+                propertyGrid.SelectedObject = Core.Needle.Properties;
         }
 
-        private void buttonHome_Click(object sender, EventArgs e)
+        private void buttonHomeRotator_Click(object sender, EventArgs e)
         {
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Arm.Home();
+                    Core.Needle.HomeRotator();
                 });
         }
 
@@ -30,8 +30,8 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Arm.Home();
-                    Core.Arm.MoveOnTube();
+                    Core.Needle.HomeAll();
+                    Core.Needle.TurnToTubeAndWaitTouch();
                 });
         }
 
@@ -40,12 +40,12 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Arm.Home();
-                    Core.Arm.MoveOnWashing();
+                    Core.Needle.HomeAll();
+                    Core.Needle.TurnAndGoDownToWashing();
                 });
         }
 
-        private void moveOnCartridgeButton_Click(object sender, EventArgs e)
+        private void buttonTurnToCartridge_Click(object sender, EventArgs e)
         {
             CartridgeCell cell = CartridgeCell.WhiteCell;
 
@@ -62,22 +62,31 @@ namespace SteppersControlApp.ControllersViews
                 cell = CartridgeCell.ThirdCell;
             }
 
-            ArmController.FromPosition fromPosition = ArmController.FromPosition.Home;
+            NeedleController.FromPosition fromPosition = NeedleController.FromPosition.Home;
 
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Arm.Home();
-                    Core.Arm.MoveToCartridge(fromPosition, cell);
+                    Core.Needle.HomeAll();
+                    Core.Needle.TurnToCartridge(fromPosition, cell);
                 });
         }
 
-        private void buttonBrokeCartridge_Click(object sender, EventArgs e)
+        private void buttonGoDownAndBrokeCartridge_Click(object sender, EventArgs e)
         {
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Arm.BrokeCartridge();
+                    Core.Needle.GoDownAndBrokeCartridge();
+                });
+        }
+
+        private void buttonHomeLift_Click(object sender, EventArgs e)
+        {
+            Core.Executor.StartTask(
+                () =>
+                {
+                    Core.Needle.HomeLift();
                 });
         }
     }

@@ -53,7 +53,7 @@ namespace SteppersControlCore.Controllers
             executor.WaitExecution(commands);
         }
 
-        public void MoveToWashBuffer()
+        public void PlaceCellUnderWashBuffer()
         {
             List<ICommand> commands = new List<ICommand>();
 
@@ -68,7 +68,7 @@ namespace SteppersControlCore.Controllers
             executor.WaitExecution(commands);
         }
 
-        public void MoveToUnload()
+        public void PlaceCellAtDischarge()
         {
             List<ICommand> commands = new List<ICommand>();
 
@@ -83,17 +83,17 @@ namespace SteppersControlCore.Controllers
             executor.WaitExecution(commands);
         }
         
-        public void MoveToLoad(int cellNumber, int position)
+        public void PlaceCellAtCharge(int cellNumber, int chargePosition)
         {
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.StepsToLoad[position] - RotorStepperPosition} };
+            steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.StepsToLoad[chargePosition] - RotorStepperPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
-            RotorStepperPosition = Properties.StepsToLoad[position];
+            RotorStepperPosition = Properties.StepsToLoad[chargePosition];
 
             executor.WaitExecution(commands);
         }
@@ -105,7 +105,7 @@ namespace SteppersControlCore.Controllers
             CellRight
         };
 
-        public void MoveCellUnderNeedle(int cellNumber, CartridgeCell cell, CellPosition position)
+        public void PlaceCellUnderNeedle(int cellNumber, CartridgeCell cell, CellPosition position)
         {
             List<ICommand> commands = new List<ICommand>();
             

@@ -113,36 +113,36 @@ namespace SteppersControlCore
                 }
             }
                
-            initTask();
-            washingNeedleTask();
+            initializationTask();
+            needleWashingTask();
 
             //Закрываем клапана
             Core.Pomp.CloseValves();
 
             Logger.ControllerInfo($"Запущена подготовка перед сканированием пробирок");
 
-            Core.Arm.Home();
+            Core.Needle.HomeAll();
             Core.Transporter.PrepareBeforeScanning();
 
             Logger.ControllerInfo($"Подготовка завершена");
 
             currentCell = 0;
 
-            while (haveTasks()) // пока есть задачи
+            while (haveOutstandingTasks()) // пока есть задачи
             {
                 if (currentCell == numberTubeCells) // прошли полный круг
                 {
                     currentCell = 0;
                 }
 
-                if (findTubeTask(3) == false)
+                if (tubeSearchTask(3) == false)
                 {
                     Logger.ControllerInfo($"Пробирка со штрихкодом [{cells[currentCell].BarCode}] не найдена в списке задач!");
                 }
                 
                 if(currentCell >= 7 && cells[currentCell - 7].HaveTube == true) // первая пробирка уже под иглой
                 {
-                    TubeInfo tube = findBarCode(cells[currentCell - 7].BarCode);
+                    TubeInfo tube = searchBarcodeInDatabase(cells[currentCell - 7].BarCode);
                     
                     if(null != tube)
                     {
@@ -155,7 +155,7 @@ namespace SteppersControlCore
                         // постановка на выполнение задач и забор из пробирки в белую кювету
 
                         tube.CurrentStage = 0;
-                        PerformFirstStageTask(tube);
+                        performingPreparatoryTask(tube);
 
                         lock (locker)
                         {
@@ -164,7 +164,7 @@ namespace SteppersControlCore
                     }
                 }
 
-                performTasks();
+                performingOutstandingTasks();
                 currentCell++;
             }
 
@@ -174,7 +174,7 @@ namespace SteppersControlCore
         /// <summary>
         /// Выполнение запланированных задач
         /// </summary>
-        private void performTasks()
+        private void performingOutstandingTasks()
         {
             foreach (TubeInfo tube in Properties.Tubes)
             {
@@ -188,13 +188,13 @@ namespace SteppersControlCore
                         tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
                         Logger.ControllerInfo($"Завершена инкубация для пробирки [{tube.BarCode}]!");
 
-                        performMiddleTask(tube);
+                        performingIntermediateTask(tube);
                     }
                     else
                     {
                         Logger.ControllerInfo($"Завершены все стадии анализа для пробирки [{tube.BarCode}]!");
 
-                        performFinishTask(tube);
+                        performingFinishTask(tube);
                     }
                 }
             }
@@ -205,7 +205,7 @@ namespace SteppersControlCore
         /// </summary>
         /// <param name="barCode">Искомый штрихкод</param>
         /// <returns>Пробирка со штрихкодом или null</returns>
-        private TubeInfo findBarCode(string barCode)
+        private TubeInfo searchBarcodeInDatabase(string barCode)
         {
             foreach (TubeInfo tube in Properties.Tubes)
             {
@@ -219,7 +219,7 @@ namespace SteppersControlCore
         /// Проверка наличия невыполненных задач
         /// </summary>
         /// <returns>Наличие невыполненных задач</returns>
-        private bool haveTasks()
+        private bool haveOutstandingTasks()
         {
             foreach(TubeInfo tube in Properties.Tubes)
             {
@@ -232,13 +232,13 @@ namespace SteppersControlCore
         /// <summary>
         /// Инициализация
         /// </summary>
-        private void initTask()
+        private void initializationTask()
         {
             Logger.ControllerInfo($"Запущена инициализация всех устройств");
 
-            Core.Arm.Home();
-            Core.Loader.HomeShuttle();
-            Core.Loader.HomeLoad();
+            Core.Needle.HomeAll();
+            Core.Charger.HomeHook();
+            Core.Charger.HomeRotator();
             Core.Rotor.Home();
             Core.Pomp.Home();
 
@@ -248,12 +248,12 @@ namespace SteppersControlCore
         /// <summary>
         /// Промывка иглы
         /// </summary>
-        private void washingNeedleTask()
+        private void needleWashingTask()
         {
             Logger.ControllerInfo($"Запущена промывка иглы");
 
-            Core.Arm.Home();
-            Core.Arm.MoveOnWashing();
+            Core.Needle.HomeAll();
+            Core.Needle.TurnAndGoDownToWashing();
             Core.Pomp.Washing(2);
             Core.Pomp.Home();
 
@@ -263,9 +263,9 @@ namespace SteppersControlCore
         /// <summary>
         /// Поиск пробирки в конвейере (поиск штрихкода)
         /// </summary>
-        /// <param name="countRepeats">Число повторений поиска</param>
+        /// <param name="numberAttempts">Количество попыток (при неудаче)</param>
         /// <returns>Успешность выполнения</returns>
-        private bool findTubeTask(int countRepeats)
+        private bool tubeSearchTask(int numberAttempts)
         {
             int numberRepeat = 0;
             bool result = false;
@@ -275,9 +275,9 @@ namespace SteppersControlCore
             Core.Pomp.CloseValves();
             Core.Transporter.Shift(false);
 
-            while (numberRepeat < countRepeats)
+            while (numberRepeat < numberAttempts)
             {
-                Core.Transporter.TurnAndScanTube();
+                Core.Transporter.RotateAndScanTube();
                 cells[currentCell] = new TubeCell();
 
                 String barCode = Core.GetLastABarCode();
@@ -288,7 +288,7 @@ namespace SteppersControlCore
                     cells[currentCell].BarCode = barCode;
                     Logger.ControllerInfo($"В ячейке под номером {currentCell} найдена пробирка!");
 
-                    TubeInfo tube = findBarCode(cells[currentCell].BarCode);
+                    TubeInfo tube = searchBarcodeInDatabase(cells[currentCell].BarCode);
 
                     if(tube != null)
                     {
@@ -314,7 +314,7 @@ namespace SteppersControlCore
         /// (перенос материала из белой кюветы в прозрачную кювету и снятие показаний с датчика)
         /// </summary>
         /// <param name="tube">Пробирка</param>
-        private void performFinishTask(TubeInfo tube)
+        private void performingFinishTask(TubeInfo tube)
         {
 
         }
@@ -323,47 +323,47 @@ namespace SteppersControlCore
         /// Выполнение промежуточной задачи (добавление реагентов из ячейки в белую кювету)
         /// </summary>
         /// <param name="tube">Пробирка</param>
-        private void performMiddleTask(TubeInfo tube)
+        private void performingIntermediateTask(TubeInfo tube)
         {
             Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - запущено выполнение {tube.CurrentStage}-я стадии.");
 
-            Core.Arm.Home();
-            washingNeedleTask(); // Промывка иглы
+            Core.Needle.HomeAll();
+            needleWashingTask(); // Промывка иглы
 
             // Начало выполнения подготовительного этапа
 
             // Подводим нужную ячейку картриджа под иглу
             Core.Rotor.Home();
-            Core.Rotor.MoveCellUnderNeedle(
+            Core.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
                 tube.Stages[tube.CurrentStage].Cell,
                 RotorController.CellPosition.CellLeft);
 
             // Устанавливаем иглу над нужной ячейкой картриджа
-            Core.Arm.MoveToCartridge(
-                ArmController.FromPosition.Washing,
+            Core.Needle.TurnToCartridge(
+                NeedleController.FromPosition.Washing,
                 tube.Stages[tube.CurrentStage].Cell);
 
             // Прокалываем ячейку картриджа
-            Core.Arm.BrokeCartridge();
+            Core.Needle.GoDownAndBrokeCartridge();
 
             // Забираем реагент из ячейки картриджа
             Core.Pomp.Suction(0);
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            Core.Arm.MoveToCartridge(
-                ArmController.FromPosition.FirstCell,
+            Core.Needle.TurnToCartridge(
+                NeedleController.FromPosition.FirstCell,
                 CartridgeCell.WhiteCell);
 
             // Подводим белую кювету картриджа под иглу
             Core.Rotor.Home();
-            Core.Rotor.MoveCellUnderNeedle(
+            Core.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
                 CartridgeCell.WhiteCell,
                 RotorController.CellPosition.CellRight);
 
             // Опускаем иглу в кювету
-            Core.Arm.BrokeCartridge();
+            Core.Needle.GoDownAndBrokeCartridge();
 
             // Сливаем реагент в белую кювету
             Core.Pomp.Unsuction(0);
@@ -374,10 +374,10 @@ namespace SteppersControlCore
         }
 
         /// <summary>
-        /// Выполнение первой стадии (включает забор материала из пробирки)
+        /// Выполнение подготовительной задачи (включает забор материала из пробирки)
         /// </summary>
         /// <param name="tube">Пробирка</param>
-        private void PerformFirstStageTask(TubeInfo tube)
+        private void performingPreparatoryTask(TubeInfo tube)
         {
             Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной (0-й) стадии.");
 
@@ -385,39 +385,39 @@ namespace SteppersControlCore
             Core.Transporter.Shift(false, TransporterController.ShiftType.HalfTube);
             
             // Устанавливаем иглу над пробиркой и опускаем ее до контакта с материалом в пробирке
-            Core.Arm.MoveOnTube();
+            Core.Needle.TurnToTubeAndWaitTouch();
             
             // Набираем материал из пробирки
             Core.Pomp.Suction(0);
             
             // Подводим белую кювету картриджа под иглу
             Core.Rotor.Home();
-            Core.Rotor.MoveCellUnderNeedle( 
+            Core.Rotor.PlaceCellUnderNeedle( 
                 tube.Stages[0].CartridgePosition,
                 CartridgeCell.WhiteCell,
                 RotorController.CellPosition.CenterCell);
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            Core.Arm.MoveToCartridge(
-                ArmController.FromPosition.Tube,
+            Core.Needle.TurnToCartridge(
+                NeedleController.FromPosition.Tube,
                 CartridgeCell.WhiteCell);
 
             // Опускаем иглу в кювету
-            Core.Arm.BrokeCartridge();
+            Core.Needle.GoDownAndBrokeCartridge();
 
             // Сливаем материал в белую кювету
             Core.Pomp.Unsuction(0); // слив из иглы в картридж
 
-            Core.Arm.Home();
+            Core.Needle.HomeAll();
             
             // Промываем иглу
-            washingNeedleTask();
+            needleWashingTask();
 
             // Выполняем перенос реагента из нужной ячейки картриджа в белую кювету
-            performMiddleTask(tube);
+            performingIntermediateTask(tube);
             
             // Устанавливаем иглу в домашнюю позицию
-            Core.Arm.Home();
+            Core.Needle.HomeAll();
 
             // Смещаем пробирку обратно
             Core.Transporter.Shift(true, TransporterController.ShiftType.HalfTube);

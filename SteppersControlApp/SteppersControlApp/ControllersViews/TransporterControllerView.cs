@@ -34,7 +34,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Transporter.TurnAndScanTube();
+                    Core.Transporter.RotateAndScanTube();
                 });
         }
     }

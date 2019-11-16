@@ -33,7 +33,6 @@
             this.buttonAddTube = new System.Windows.Forms.Button();
             this.buttonRemoveTube = new System.Windows.Forms.Button();
             this.tubesList = new ViewLibrary.DoubleBufferedDataGridView();
-            this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.editBarcodeLabel = new System.Windows.Forms.Label();
             this.editBarcode = new System.Windows.Forms.TextBox();
             this.stagesList = new ViewLibrary.DoubleBufferedDataGridView();
@@ -50,6 +49,7 @@
             this.cartridgeNumberLabel = new System.Windows.Forms.Label();
             this.stageBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonUpdateBarcode = new System.Windows.Forms.Button();
+            this.logView1 = new SteppersControlApp.Views.LogView();
             ((System.ComponentModel.ISupportInitialize)(this.tubesList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stagesList)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -102,19 +102,9 @@
             this.tubesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tubesList.Location = new System.Drawing.Point(3, 45);
             this.tubesList.Name = "tubesList";
-            this.tubesList.Size = new System.Drawing.Size(561, 379);
+            this.tubesList.Size = new System.Drawing.Size(561, 182);
             this.tubesList.TabIndex = 0;
             this.tubesList.SelectionChanged += new System.EventHandler(this.tubesList_SelectionChanged);
-            // 
-            // propertyGrid
-            // 
-            this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid.Location = new System.Drawing.Point(53, 110);
-            this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(282, 231);
-            this.propertyGrid.TabIndex = 1;
             // 
             // editBarcodeLabel
             // 
@@ -311,17 +301,26 @@
             this.buttonUpdateBarcode.UseVisualStyleBackColor = false;
             this.buttonUpdateBarcode.Click += new System.EventHandler(this.buttonUpdateBarcode_Click);
             // 
+            // logView1
+            // 
+            this.logView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.logView1.Location = new System.Drawing.Point(3, 233);
+            this.logView1.Name = "logView1";
+            this.logView1.Size = new System.Drawing.Size(561, 191);
+            this.logView1.TabIndex = 13;
+            // 
             // DemoExecutorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.logView1);
             this.Controls.Add(this.buttonUpdateBarcode);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.editBarcode);
             this.Controls.Add(this.editBarcodeLabel);
             this.Controls.Add(this.tubesList);
-            this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.buttonRemoveTube);
             this.Controls.Add(this.buttonAddTube);
             this.Name = "DemoExecutorView";
@@ -343,7 +342,6 @@
         private System.Windows.Forms.Button buttonAddTube;
         private System.Windows.Forms.Button buttonRemoveTube;
         private ViewLibrary.DoubleBufferedDataGridView tubesList;
-        private System.Windows.Forms.PropertyGrid propertyGrid;
         private System.Windows.Forms.Label editBarcodeLabel;
         private System.Windows.Forms.TextBox editBarcode;
         private ViewLibrary.DoubleBufferedDataGridView stagesList;
@@ -360,5 +358,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown editTimeToPerform;
         private System.Windows.Forms.Button buttonUpdateBarcode;
+        private Views.LogView logView1;
     }
 }
