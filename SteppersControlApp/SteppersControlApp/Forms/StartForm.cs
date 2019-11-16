@@ -20,6 +20,7 @@ namespace SteppersControlApp.Forms
         {
             InitializeComponent();
             AutoUpdater.ReportErrors = true;
+            AutoUpdater.Mandatory = true;
             AutoUpdater.Start("https://raw.githubusercontent.com/tarasradio/stepper_control/master/updates/StepperControlApp.xml");
         }
 
