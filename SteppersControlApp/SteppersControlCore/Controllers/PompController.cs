@@ -45,7 +45,7 @@ namespace SteppersControlCore.Controllers
         {
             List<ICommand> commands = new List<ICommand>();
 
-            commands.Add(new OnDeviceCncCommand(new List<int>() { 0 ,1 }));
+            commands.Add(new OffDeviceCncCommand(new List<int>() { 0 , 1 }));
 
             executor.WaitExecution(commands);
         }
