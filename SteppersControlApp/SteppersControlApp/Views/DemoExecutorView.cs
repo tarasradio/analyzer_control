@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using SteppersControlApp.Forms;
+using SteppersControlApp.Views;
 using SteppersControlCore;
 using SteppersControlCore.Elements;
-using SteppersControlApp.Views;
+using System;
+using System.Windows.Forms;
 
 namespace SteppersControlApp.ControllersViews
 {
@@ -17,24 +11,23 @@ namespace SteppersControlApp.ControllersViews
     {
         TubeInfo selectedTube = null;
 
-        string[] _tubesColumnHeaders = { "#", "Штихкод", "Состояние", "Осталось"};
-        string[] _stagesColumnHeaders = { "#", "Ячейка", "Время выполнения" };
-
-        public string[] CartridgeCellTitles = { "Белая", "Первая", "Вторая", "Третья" };
+        string[] analisesColumnHeaders = { "#", "Штихкод", "Состояние", "Осталось"};
 
         Timer _updateTimer = new Timer();
 
         public DemoExecutorView()
         {
             InitializeComponent();
+        }
 
+        private void DemoExecutorView_Load(object sender, EventArgs e)
+        {
+            drawTubesGrid();
+            
             buttonRemoveTube.Visible = false;
 
             _updateTimer.Interval = 100;
             _updateTimer.Tick += updateValues;
-
-            drawTubesGrid();
-            drawStagesList();
         }
 
         private void updateValues(object sender, EventArgs e)
@@ -76,9 +69,7 @@ namespace SteppersControlApp.ControllersViews
                 return;
             selectedTube = Core.Demo.Properties.Tubes[tubesList.CurrentRow.Index];
 
-            buttonRemoveTube.Enabled = true;
-
-            showSelectedTubeProperties();
+            buttonRemoveTube.Visible = true;
         }
 
         private void updateTubesGrid()
@@ -104,82 +95,6 @@ namespace SteppersControlApp.ControllersViews
             }
         }
 
-        private void showSelectedTubeProperties()
-        {
-            updateStagesList();
-            updateBarcodeField();
-        }
-
-        private void updateBarcodeField()
-        {
-            if (selectedTube != null)
-            {
-                editBarcode.Text = selectedTube.BarCode;
-                buttonUpdateBarcode.Enabled = Visible;
-            }
-            else
-            {
-                editBarcode.Text = "";
-                buttonUpdateBarcode.Enabled = Visible;
-            }
-        }
-
-        private void updateStagesList()
-        {
-            if (selectedTube == null)
-            {
-                removeStageButton.Visible = false;
-                return;
-            }
-
-            if (selectedTube.Stages.Count == 0)
-            {
-                removeStageButton.Visible = false;
-            }
-            else
-            {
-                removeStageButton.Visible = true;
-            }
-
-            stagesList.RowCount = selectedTube.Stages.Count;
-
-            for (int i = 0; i < selectedTube.Stages.Count; i++)
-            {
-                stagesList[0, i].Value = i + 1;
-                string title = CartridgeCellTitles[(int)selectedTube.Stages[i].Cell];
-                stagesList[1, i].Value = title;
-                stagesList[2, i].Value = $"{ selectedTube.Stages[i].TimeToPerform} минут";
-            }
-        }
-
-        void showStageFields()
-        {
-            if (selectedTube == null || selectedTube.Stages.Count == 0)
-            {
-                editTimeToPerform.Value = 0;
-                editCartridgePosition.Value = 0;
-                selectCellType.SelectedIndex = -1;
-
-                editTimeToPerform.Enabled = false;
-                editCartridgePosition.Enabled = false;
-                selectCellType.Enabled = false;
-                saveStageChangesButton.Visible = false;
-
-                return;
-            }
-            else
-            {
-                editTimeToPerform.Enabled = true;
-                editCartridgePosition.Enabled = true;
-                selectCellType.Enabled = true;
-                saveStageChangesButton.Visible = true;
-
-                editTimeToPerform.Value = selectedTube.Stages[stagesList.CurrentRow.Index].TimeToPerform;
-                editCartridgePosition.Value = selectedTube.Stages[stagesList.CurrentRow.Index].CartridgePosition;
-                selectCellType.SelectedIndex = (int)selectedTube.Stages[stagesList.CurrentRow.Index].Cell - 1;
-            }
-        }
-
         private void drawTubesGrid()
         {
             ViewStyler.styleGrid(tubesList);
@@ -187,10 +102,10 @@ namespace SteppersControlApp.ControllersViews
             tubesList.MultiSelect = false;
             tubesList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            tubesList.ColumnCount = _tubesColumnHeaders.Length;
+            tubesList.ColumnCount = analisesColumnHeaders.Length;
 
-            for (int i = 0; i < _tubesColumnHeaders.Length; i++)
-                tubesList.Columns[i].HeaderText = _tubesColumnHeaders[i];
+            for (int i = 0; i < analisesColumnHeaders.Length; i++)
+                tubesList.Columns[i].HeaderText = analisesColumnHeaders[i];
 
             tubesList.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             tubesList.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -203,81 +118,12 @@ namespace SteppersControlApp.ControllersViews
             tubesList.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
-        private void drawStagesList()
+        private void buttonEditTube_Click(object sender, EventArgs e)
         {
-            ViewStyler.styleGrid(stagesList);
-
-            stagesList.MultiSelect = false;
-            stagesList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-            stagesList.ColumnCount = _stagesColumnHeaders.Length;
-
-            for (int i = 0; i < _stagesColumnHeaders.Length; i++)
-                stagesList.Columns[i].HeaderText = _stagesColumnHeaders[i];
-
-            stagesList.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            stagesList.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            stagesList.Columns[0].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            stagesList.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            stagesList.Columns[1].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            stagesList.Columns[1].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-            stagesList.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            stagesList.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            stagesList.Columns[2].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        }
-
-        private void addStageButton_Click(object sender, EventArgs e)
-        {
-            if (selectedTube == null) return;
-
-            selectedTube.Stages.Add(new Stage() {
-                CartridgePosition = 0,
-                Cell = CartridgeCell.FirstCell,
-                TimeToPerform = 5 });
-
-            updateStagesList();
-        }
-
-        private void editStageButton_Click(object sender, EventArgs e)
-        {
-            if (selectedTube == null) return;
-        }
-
-        private void removeStageButton_Click(object sender, EventArgs e)
-        {
-            if (selectedTube == null) return;
-            if (selectedTube.Stages.Count == 0) return;
-
-            selectedTube.Stages.RemoveAt(stagesList.CurrentRow.Index);
-
-            updateStagesList();
-        }
-
-        private void stagesList_SelectionChanged(object sender, EventArgs e)
-        {
-            showStageFields();
-        }
-
-        private void saveStageChangesButton_Click(object sender, EventArgs e)
-        {
-            selectedTube.Stages[stagesList.CurrentRow.Index].TimeToPerform = (int)editTimeToPerform.Value;
-            selectedTube.Stages[stagesList.CurrentRow.Index].CartridgePosition = (int)editCartridgePosition.Value;
-            selectedTube.Stages[stagesList.CurrentRow.Index].Cell = (CartridgeCell)(selectCellType.SelectedIndex + 1);
-
-            updateStagesList();
-        }
-
-        private void buttonUpdateBarcode_Click(object sender, EventArgs e)
-        {
-            if (selectedTube == null) return;
-            selectedTube.BarCode = editBarcode.Text;
-        }
-
-        private void editBarcodeLabel_Click(object sender, EventArgs e)
-        {
-
+            EditTubeDialogForm dialogForm = new EditTubeDialogForm();
+            dialogForm.SetTube(selectedTube);
+            dialogForm.StartPosition = FormStartPosition.CenterScreen;
+            dialogForm.ShowDialog();
         }
     }
 }

@@ -40,6 +40,7 @@ namespace SteppersControlCore.Controllers
 
         public void Home()
         {
+            Logger.ControllerInfo($"[Rotor] - Home started");
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorHomeSpeed } };
@@ -51,10 +52,12 @@ namespace SteppersControlCore.Controllers
             RotorStepperPosition = 0;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Rotor] - Home finished");
         }
 
         public void PlaceCellUnderWashBuffer()
         {
+            Logger.ControllerInfo($"[Rotor] - Placing cell under washing buffer started");
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
@@ -66,10 +69,12 @@ namespace SteppersControlCore.Controllers
             RotorStepperPosition = Properties.StepsToWashBuffer;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Rotor] - Placing cell under washing buffer finished");
         }
 
         public void PlaceCellAtDischarge()
         {
+            Logger.ControllerInfo($"[Rotor] - Placing cell at discharger started");
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
@@ -81,10 +86,12 @@ namespace SteppersControlCore.Controllers
             RotorStepperPosition = Properties.StepsToUnload;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Rotor] - Placing cell at discharger finished");
         }
         
         public void PlaceCellAtCharge(int cellNumber, int chargePosition)
         {
+            Logger.ControllerInfo($"[Rotor] - Placing cell at charger started");
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.RotorStepper, Properties.RotorSpeed } };
@@ -96,6 +103,7 @@ namespace SteppersControlCore.Controllers
             RotorStepperPosition = Properties.StepsToLoad[chargePosition];
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Rotor] - Placing cell at charger finished");
         }
         
         public enum CellPosition
@@ -107,6 +115,7 @@ namespace SteppersControlCore.Controllers
 
         public void PlaceCellUnderNeedle(int cellNumber, CartridgeCell cell, CellPosition position)
         {
+            Logger.ControllerInfo($"[Rotor] - Placing cell under needle started");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.RotorStepper, (uint)Properties.RotorSpeed));
@@ -139,6 +148,7 @@ namespace SteppersControlCore.Controllers
             RotorStepperPosition = turnSteps;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Rotor] - Placing cell under needle finished");
         }
     }
 }

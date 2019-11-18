@@ -16,6 +16,7 @@ BarScanner::BarScanner()
 void BarScanner::updateState()
 {
 #ifdef EMULATOR
+    if(Emulator::BarCodeExist())
         Protocol::SendBarCode(Emulator::GetBarCodeMessage());
     return;
 #endif
@@ -29,9 +30,10 @@ void BarScanner::updateState()
             // Обработка приема сообщения
 
             barBuffer[currentBarByte] = '\0';
+#ifdef DUBUG
             String message = "[Bar read] code = " + String((char*)barBuffer);
             Protocol::SendMessage(message.c_str());
-
+#endif
             Protocol::SendBarCode(String((char*)barBuffer).c_str());
 
             currentBarByte = 0;
@@ -42,8 +44,10 @@ void BarScanner::updateState()
             if(currentBarByte >= 64)
             {
                 // слишком длинное сообщение
+#ifdef DUBUG
                 String message = "[Bar read] overflow";
                 Protocol::SendMessage(message.c_str());
+#endif
                 currentBarByte = 0;
             }
         }
@@ -54,5 +58,8 @@ const byte scanCommand[] = {0x7E, 0x00, 0x08, 0x01, 0x00, 0x02, 0x01, 0xAB, 0xCD
 
 void BarScanner::startScan()
 {
+#ifdef EMULATOR
+    Emulator::NextBarCode();
+#endif
     Serial1.write(scanCommand, 9);
 }

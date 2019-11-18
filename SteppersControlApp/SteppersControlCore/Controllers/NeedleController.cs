@@ -41,6 +41,7 @@ namespace SteppersControlCore.Controllers
 
         public void TurnToTubeAndWaitTouch()
         {
+            Logger.ControllerInfo($"[Needle] - Turn to tube and wait touch started");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до пробирки
@@ -63,10 +64,12 @@ namespace SteppersControlCore.Controllers
             LiftPosition = -1; // ибо неизвестн, где он будет после касания жидкости в пробирке
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Needle] - Turn to tube and wait touch finished");
         }
 
         public void HomeRotator()
         {
+            Logger.ControllerInfo($"[Needle] - Home rotator started");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.RotatorStepper, 1000));
@@ -78,10 +81,12 @@ namespace SteppersControlCore.Controllers
             RotatorPosition = 0;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Needle] - Home rotator finished");
         }
 
         public void HomeLift()
         {
+            Logger.ControllerInfo($"[Needle] - Home lift started");
             List<ICommand> commands = new List<ICommand>();
 
             
@@ -91,6 +96,7 @@ namespace SteppersControlCore.Controllers
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Needle] - Home lift finished");
         }
 
         public void HomeAll()
@@ -103,6 +109,7 @@ namespace SteppersControlCore.Controllers
 
         public void TurnAndGoDownToWashing()
         {
+            Logger.ControllerInfo($"[Needle] - Turn and go down to washing started");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до промывки
@@ -121,6 +128,7 @@ namespace SteppersControlCore.Controllers
             LiftPosition = Properties.LiftStepsGoDownToWashing;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Needle] - Turn and go down to washing finished");
         }
 
         public enum FromPosition
@@ -137,6 +145,7 @@ namespace SteppersControlCore.Controllers
         //TODO: выяснить, используем относительное количество шагов или нет!!!
         public void GoDownAndBrokeCartridge()
         {
+            Logger.ControllerInfo($"[Needle] - Go down and broke cartridge started");
             List<ICommand> commands = new List<ICommand>();
 
             // Протыкание
@@ -148,11 +157,13 @@ namespace SteppersControlCore.Controllers
             //LiftStepperPosition = Props.StepsOnBroke;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Needle] - Go down and broke cartridge finished");
         }
 
         //TODO: Доделать, ибо говно, убрать from position
         public void TurnToCartridge(FromPosition fromPosition, CartridgeCell cell)
         {
+            Logger.ControllerInfo($"[Needle] - Turn to cartridge started");
             List<ICommand> commands = new List<ICommand>();
             
             int turnSteps = 0;
@@ -241,6 +252,7 @@ namespace SteppersControlCore.Controllers
             }
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Needle] - Turn to cartridge finished");
         }
     }
 }

@@ -8,8 +8,6 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 
-#define DEBUG
-
 enum StopType
 {
     STOP_SOFT = 0x00,
@@ -144,8 +142,10 @@ void CommandExecutor::listenPacket(uint8_t *packet, uint8_t packetLength)
         break;
         default:
         {
+#ifdef DEBUG
             String message = "Unknown command!";
             Protocol::SendMessage(message.c_str());
+#endif
         }
         break;
     }

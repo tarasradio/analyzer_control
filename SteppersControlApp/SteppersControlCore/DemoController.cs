@@ -66,7 +66,7 @@ namespace SteppersControlCore
             if(stopWatch.ElapsedMilliseconds >= 60000)
             {
                 stopWatch.Restart();
-                Logger.ControllerInfo("Прошла минута");
+                Logger.DemoInfo("Прошла минута");
                 
                 // уменьшаем оставшееся время инкубации
                 foreach (TubeInfo tube in Properties.Tubes)
@@ -119,12 +119,12 @@ namespace SteppersControlCore
             //Закрываем клапана
             Core.Pomp.CloseValves();
 
-            Logger.ControllerInfo($"Запущена подготовка перед сканированием пробирок");
+            Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
             Core.Needle.HomeAll();
             Core.Transporter.PrepareBeforeScanning();
 
-            Logger.ControllerInfo($"Подготовка завершена");
+            Logger.DemoInfo($"Подготовка завершена");
 
             currentCell = 0;
 
@@ -137,7 +137,7 @@ namespace SteppersControlCore
 
                 if (tubeSearchTask(3) == false)
                 {
-                    Logger.ControllerInfo($"Пробирка со штрихкодом [{cells[currentCell].BarCode}] не найдена в списке задач!");
+                    Logger.DemoInfo($"Пробирка со штрихкодом [{cells[currentCell].BarCode}] не найдена в списке задач!");
                 }
                 
                 if(currentCell >= 7 && cells[currentCell - 7].HaveTube == true) // первая пробирка уже под иглой
@@ -151,7 +151,7 @@ namespace SteppersControlCore
                             tube.IsFind = true;
                         }
 
-                        Logger.ControllerInfo($"Пробирка со штрихкодом [{tube.BarCode}] запущена в обработку!");
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{tube.BarCode}] запущена в обработку!");
                         // постановка на выполнение задач и забор из пробирки в белую кювету
 
                         tube.CurrentStage = 0;
@@ -168,7 +168,7 @@ namespace SteppersControlCore
                 currentCell++;
             }
 
-            Logger.ControllerInfo($"Все пробирки обработаны!");
+            Logger.DemoInfo($"Все пробирки обработаны!");
         }
 
         /// <summary>
@@ -186,13 +186,13 @@ namespace SteppersControlCore
                     if (tube.CurrentStage < tube.Stages.Count)
                     {
                         tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
-                        Logger.ControllerInfo($"Завершена инкубация для пробирки [{tube.BarCode}]!");
+                        Logger.DemoInfo($"Завершена инкубация для пробирки [{tube.BarCode}]!");
 
                         performingIntermediateTask(tube);
                     }
                     else
                     {
-                        Logger.ControllerInfo($"Завершены все стадии анализа для пробирки [{tube.BarCode}]!");
+                        Logger.DemoInfo($"Завершены все стадии анализа для пробирки [{tube.BarCode}]!");
 
                         performingFinishTask(tube);
                     }
@@ -234,7 +234,7 @@ namespace SteppersControlCore
         /// </summary>
         private void initializationTask()
         {
-            Logger.ControllerInfo($"Запущена инициализация всех устройств");
+            Logger.DemoInfo($"Запущена инициализация всех устройств");
 
             Core.Needle.HomeAll();
             Core.Charger.HomeHook();
@@ -242,7 +242,7 @@ namespace SteppersControlCore
             Core.Rotor.Home();
             Core.Pomp.Home();
 
-            Logger.ControllerInfo($"Инициализация завершена");
+            Logger.DemoInfo($"Инициализация завершена");
         }
 
         /// <summary>
@@ -250,14 +250,14 @@ namespace SteppersControlCore
         /// </summary>
         private void needleWashingTask()
         {
-            Logger.ControllerInfo($"Запущена промывка иглы");
+            Logger.DemoInfo($"Запущена промывка иглы");
 
             Core.Needle.HomeAll();
             Core.Needle.TurnAndGoDownToWashing();
             Core.Pomp.Washing(2);
             Core.Pomp.Home();
 
-            Logger.ControllerInfo($"Промывка иглы завершена.");
+            Logger.DemoInfo($"Промывка иглы завершена.");
         }
         
         /// <summary>
@@ -267,26 +267,26 @@ namespace SteppersControlCore
         /// <returns>Успешность выполнения</returns>
         private bool tubeSearchTask(int numberAttempts)
         {
-            int numberRepeat = 0;
+            int attempt = 0;
             bool result = false;
 
-            Logger.ControllerInfo($"Запущен поиск пробирки (сканирование)");
+            Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
             //Закрываем клапана
             Core.Pomp.CloseValves();
             Core.Transporter.Shift(false);
 
-            while (numberRepeat < numberAttempts)
+            while (attempt < numberAttempts)
             {
                 Core.Transporter.RotateAndScanTube();
                 cells[currentCell] = new TubeCell();
 
-                String barCode = Core.GetLastABarCode();
+                string barCode = Core.GetLastABarCode();
 
                 if (barCode != null)
                 {
                     cells[currentCell].HaveTube = true;
                     cells[currentCell].BarCode = barCode;
-                    Logger.ControllerInfo($"В ячейке под номером {currentCell} найдена пробирка!");
+                    Logger.DemoInfo($"В ячейке под номером {currentCell} найдена пробирка!");
 
                     TubeInfo tube = searchBarcodeInDatabase(cells[currentCell].BarCode);
 
@@ -296,12 +296,12 @@ namespace SteppersControlCore
                         {
                             tube.IsFind = true;
                         }
-                        Logger.ControllerInfo($"Штрихкод [{tube.BarCode}] найден  списке задач!");
+                        Logger.DemoInfo($"Штрихкод [{tube.BarCode}] найден  списке задач!");
                         result = true;
                         break;
                     } 
                 }
-                numberRepeat++;
+                attempt++;
             }
 
             Logger.ControllerInfo($"Поиск пробирки (сканирование) завершен.");
@@ -370,7 +370,7 @@ namespace SteppersControlCore
 
             // Конец выполнения подготовительного этапа
 
-            Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-я стадии.");
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-я стадии.");
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace SteppersControlCore
         /// <param name="tube">Пробирка</param>
         private void performingPreparatoryTask(TubeInfo tube)
         {
-            Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной (0-й) стадии.");
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной (0-й) стадии.");
 
             // Смещаем пробирку, чтобы она оказалась под иглой
             Core.Transporter.Shift(false, TransporterController.ShiftType.HalfTube);
@@ -422,7 +422,7 @@ namespace SteppersControlCore
             // Смещаем пробирку обратно
             Core.Transporter.Shift(true, TransporterController.ShiftType.HalfTube);
 
-            Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - завершено выполнение подготовительной (0-й) стадии.");
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение подготовительной (0-й) стадии.");
         }
     }
 }
