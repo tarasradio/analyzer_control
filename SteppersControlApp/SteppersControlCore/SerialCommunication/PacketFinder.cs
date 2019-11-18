@@ -31,7 +31,7 @@ namespace SteppersControlCore.SerialCommunication
             _packetBuffer[packetTail++] = bufferByte;
 
             if (packetTail == maxPacketLength) {
-                Logger.AddMessage($"Packet size overflow");
+                Logger.Info($"[Packet finder] - Превышен размер пакета.");
                 packetTail = 0;
             }
             escapeFlag = false;

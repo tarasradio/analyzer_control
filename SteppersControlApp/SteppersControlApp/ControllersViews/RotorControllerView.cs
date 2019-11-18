@@ -34,7 +34,7 @@ namespace SteppersControlApp.ControllersViews
         private void buttonMoveCell_Click(object sender, EventArgs e)
         {
             int cellNumber = (int)editCellNumber.Value;
-            int loadPosition = (int)editLoadPosition.Value;
+            int chargePosition = (int)editChargePosition.Value;
 
             CartridgeCell cell = CartridgeCell.WhiteCell;
 
@@ -51,13 +51,13 @@ namespace SteppersControlApp.ControllersViews
                 cell = CartridgeCell.ThirdCell;
             }
 
-            if (selectLoadPlace.Checked)
+            if (selectChargePlace.Checked)
             {
                 Core.Executor.StartTask(
                 () =>
                 {
                     Core.Rotor.Home();
-                    Core.Rotor.MoveToLoad(cellNumber, loadPosition);
+                    Core.Rotor.PlaceCellAtCharge(cellNumber, chargePosition);
                 });
             }
             else if(selectNeedleLeftPlace.Checked)
@@ -66,7 +66,7 @@ namespace SteppersControlApp.ControllersViews
                 () =>
                 {
                     Core.Rotor.Home();
-                    Core.Rotor.MoveCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CellLeft);
+                    Core.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CellLeft);
                 });
             }
             else if(selectNeedleRightPlace.Checked)
@@ -75,25 +75,25 @@ namespace SteppersControlApp.ControllersViews
                 () =>
                 {
                     Core.Rotor.Home();
-                    Core.Rotor.MoveCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CellRight);
+                    Core.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CellRight);
                 });
             }
-            else if(selectWashingPlace.Checked)
+            else if(selectWashBufferPlace.Checked)
             {
                 Core.Executor.StartTask(
                 () =>
                 {
                     Core.Rotor.Home();
-                    Core.Rotor.MoveToWashBuffer();
+                    Core.Rotor.PlaceCellUnderWashBuffer();
                 });
             }
-            else if(selectUnloadPlace.Checked)
+            else if(selectDischargePlace.Checked)
             {
                 Core.Executor.StartTask(
                 () =>
                 {
                     Core.Rotor.Home();
-                    Core.Rotor.MoveToUnload();
+                    Core.Rotor.PlaceCellAtDischarge();
                 });
             }
         }

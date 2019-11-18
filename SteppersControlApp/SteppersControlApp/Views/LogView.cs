@@ -19,20 +19,48 @@ namespace SteppersControlApp.Views
         public LogView()
         {
             InitializeComponent();
+            Logger.NewInfoMessageAdded += Logger_NewInfoMessageAdded;
+            Logger.NewDemoInfoMessageAdded += Logger_NewDemoInfoMessageAdded;
+            Logger.NewControllerInfoMessageAdded += Logger_NewControllerInfoMessageAdded;
             Logger.OnNewMessageAdded += Logger_OnNewMessageAdded;
+        }
+
+        private void Logger_NewControllerInfoMessageAdded(string message)
+        {
+            BeginInvoke((Action)(() =>
+            {
+                AddMessage(message, Color.Green);
+            }));
+        }
+
+        private void Logger_NewDemoInfoMessageAdded(string message)
+        {
+            BeginInvoke((Action)(() =>
+            {
+                AddMessage(message, Color.OrangeRed);
+            }));
+        }
+
+        private void Logger_NewInfoMessageAdded(string message)
+        {
+            BeginInvoke((Action)(() =>
+            {
+                AddMessage(message, Color.Blue);
+            }));
         }
 
         private void Logger_OnNewMessageAdded(string message)
         {
             BeginInvoke((Action)( () =>
             {
-                AddMessage(message);
+                AddMessage(message, Color.Black);
             }) );
         }
 
-        public void AddMessage(string message)
+        public void AddMessage(string message, Color color)
         {
             this.InvokeThread(() => {
+                logTextBox.SelectionColor = color;
                 logTextBox.AppendText(message);
                 logTextBox.Select(logTextBox.Text.Length, 0);
                 logTextBox.ScrollToCaret();

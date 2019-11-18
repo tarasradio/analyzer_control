@@ -44,50 +44,45 @@
             this.buttonAbortExecution = new System.Windows.Forms.ToolStripButton();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.devicesTabPage = new System.Windows.Forms.TabPage();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.steppersGridView = new SteppersControlApp.Views.SteppersGridView();
             this.devicesControlView = new SteppersControlApp.Views.DevicesControlView();
-            this.sensorsTabPage = new System.Windows.Forms.TabPage();
-            this.sensorsView = new SteppersControlApp.Views.SensorsView();
             this.cncTabPage = new System.Windows.Forms.TabPage();
             this.cncView = new SteppersControlApp.Views.CNCView();
             this.armTabPage = new System.Windows.Forms.TabPage();
-            this.armControllerView = new SteppersControlApp.ControllersViews.ArmControllerView();
+            this.armControllerView = new SteppersControlApp.ControllersViews.NeedleControllerView();
             this.tranporterTabPage = new System.Windows.Forms.TabPage();
             this.transporterControllerView = new SteppersControlApp.ControllersViews.TransporterControllerView();
             this.rotorTabPage = new System.Windows.Forms.TabPage();
             this.rotorControllerView = new SteppersControlApp.ControllersViews.RotorControllerView();
             this.loadTabPage = new System.Windows.Forms.TabPage();
-            this.loadControllerView = new SteppersControlApp.ControllersViews.LoadControllerView();
+            this.loadControllerView = new SteppersControlApp.ControllersViews.ChargeControllerView();
             this.pompTabPage = new System.Windows.Forms.TabPage();
             this.pompControllerView = new SteppersControlApp.ControllersViews.PompControllerView();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.complexMovesTabPage = new System.Windows.Forms.TabPage();
             this.additionalMovesView = new SteppersControlApp.ControllersViews.AdditionalMovesView();
             this.demoTabPage = new System.Windows.Forms.TabPage();
             this.demoExecutorView = new SteppersControlApp.ControllersViews.DemoExecutorView();
             this.logView = new SteppersControlApp.Views.LogView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.sensorsView = new SteppersControlApp.Views.SensorsView();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
             this.devicesTabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
-            this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.Panel2.SuspendLayout();
-            this.splitContainer.SuspendLayout();
-            this.sensorsTabPage.SuspendLayout();
             this.cncTabPage.SuspendLayout();
             this.armTabPage.SuspendLayout();
             this.tranporterTabPage.SuspendLayout();
             this.rotorTabPage.SuspendLayout();
             this.loadTabPage.SuspendLayout();
             this.pompTabPage.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.complexMovesTabPage.SuspendLayout();
             this.demoTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // connectionState
@@ -108,9 +103,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.connectionState});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 606);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 640);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(928, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(889, 22);
             this.statusStrip1.TabIndex = 10;
             this.statusStrip1.Text = "statusStrip";
             // 
@@ -131,7 +126,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(928, 35);
+            this.toolStrip1.Size = new System.Drawing.Size(889, 35);
             this.toolStrip1.TabIndex = 14;
             this.toolStrip1.Text = "toolStrip";
             // 
@@ -243,92 +238,47 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTabControl.Controls.Add(this.devicesTabPage);
-            this.mainTabControl.Controls.Add(this.sensorsTabPage);
             this.mainTabControl.Controls.Add(this.cncTabPage);
             this.mainTabControl.Controls.Add(this.armTabPage);
             this.mainTabControl.Controls.Add(this.tranporterTabPage);
             this.mainTabControl.Controls.Add(this.rotorTabPage);
             this.mainTabControl.Controls.Add(this.loadTabPage);
             this.mainTabControl.Controls.Add(this.pompTabPage);
-            this.mainTabControl.Controls.Add(this.tabPage1);
+            this.mainTabControl.Controls.Add(this.complexMovesTabPage);
             this.mainTabControl.Controls.Add(this.demoTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(3, 3);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
-            this.mainTabControl.Size = new System.Drawing.Size(922, 416);
+            this.mainTabControl.Size = new System.Drawing.Size(883, 441);
             this.mainTabControl.TabIndex = 15;
             // 
             // devicesTabPage
             // 
-            this.devicesTabPage.Controls.Add(this.splitContainer);
+            this.devicesTabPage.Controls.Add(this.tableLayoutPanel1);
             this.devicesTabPage.Location = new System.Drawing.Point(4, 22);
             this.devicesTabPage.Name = "devicesTabPage";
             this.devicesTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.devicesTabPage.Size = new System.Drawing.Size(914, 390);
+            this.devicesTabPage.Size = new System.Drawing.Size(963, 333);
             this.devicesTabPage.TabIndex = 0;
             this.devicesTabPage.Text = "Двигатели и устройства";
             this.devicesTabPage.UseVisualStyleBackColor = true;
             // 
-            // splitContainer
-            // 
-            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer.Location = new System.Drawing.Point(6, 6);
-            this.splitContainer.Name = "splitContainer";
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.BackColor = System.Drawing.Color.Transparent;
-            this.splitContainer.Panel1.Controls.Add(this.steppersGridView);
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.devicesControlView);
-            this.splitContainer.Size = new System.Drawing.Size(902, 378);
-            this.splitContainer.SplitterDistance = 584;
-            this.splitContainer.TabIndex = 18;
-            // 
             // steppersGridView
             // 
-            this.steppersGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.steppersGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.steppersGridView.Location = new System.Drawing.Point(3, 3);
             this.steppersGridView.Name = "steppersGridView";
-            this.steppersGridView.Size = new System.Drawing.Size(578, 372);
+            this.steppersGridView.Size = new System.Drawing.Size(421, 315);
             this.steppersGridView.TabIndex = 11;
+            this.steppersGridView.Load += new System.EventHandler(this.steppersGridView_Load);
             // 
             // devicesControlView
             // 
-            this.devicesControlView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.devicesControlView.Location = new System.Drawing.Point(3, 3);
+            this.devicesControlView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.devicesControlView.Location = new System.Drawing.Point(430, 3);
             this.devicesControlView.Name = "devicesControlView";
-            this.devicesControlView.Size = new System.Drawing.Size(308, 372);
+            this.devicesControlView.Size = new System.Drawing.Size(231, 315);
             this.devicesControlView.TabIndex = 17;
-            // 
-            // sensorsTabPage
-            // 
-            this.sensorsTabPage.Controls.Add(this.sensorsView);
-            this.sensorsTabPage.Location = new System.Drawing.Point(4, 22);
-            this.sensorsTabPage.Name = "sensorsTabPage";
-            this.sensorsTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.sensorsTabPage.Size = new System.Drawing.Size(914, 390);
-            this.sensorsTabPage.TabIndex = 10;
-            this.sensorsTabPage.Text = "Датчики";
-            this.sensorsTabPage.UseVisualStyleBackColor = true;
-            // 
-            // sensorsView
-            // 
-            this.sensorsView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.sensorsView.Location = new System.Drawing.Point(6, 6);
-            this.sensorsView.Name = "sensorsView";
-            this.sensorsView.Size = new System.Drawing.Size(902, 378);
-            this.sensorsView.TabIndex = 19;
             // 
             // cncTabPage
             // 
@@ -336,7 +286,7 @@
             this.cncTabPage.Location = new System.Drawing.Point(4, 22);
             this.cncTabPage.Name = "cncTabPage";
             this.cncTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.cncTabPage.Size = new System.Drawing.Size(914, 390);
+            this.cncTabPage.Size = new System.Drawing.Size(963, 333);
             this.cncTabPage.TabIndex = 1;
             this.cncTabPage.Text = "Программное управление";
             this.cncTabPage.UseVisualStyleBackColor = true;
@@ -348,7 +298,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cncView.Location = new System.Drawing.Point(6, 6);
             this.cncView.Name = "cncView";
-            this.cncView.Size = new System.Drawing.Size(902, 378);
+            this.cncView.Size = new System.Drawing.Size(951, 321);
             this.cncView.TabIndex = 0;
             // 
             // armTabPage
@@ -357,7 +307,7 @@
             this.armTabPage.Location = new System.Drawing.Point(4, 22);
             this.armTabPage.Name = "armTabPage";
             this.armTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.armTabPage.Size = new System.Drawing.Size(914, 390);
+            this.armTabPage.Size = new System.Drawing.Size(963, 333);
             this.armTabPage.TabIndex = 2;
             this.armTabPage.Text = "Рука";
             this.armTabPage.UseVisualStyleBackColor = true;
@@ -369,7 +319,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.armControllerView.Location = new System.Drawing.Point(6, 6);
             this.armControllerView.Name = "armControllerView";
-            this.armControllerView.Size = new System.Drawing.Size(902, 378);
+            this.armControllerView.Size = new System.Drawing.Size(951, 321);
             this.armControllerView.TabIndex = 0;
             // 
             // tranporterTabPage
@@ -378,7 +328,7 @@
             this.tranporterTabPage.Location = new System.Drawing.Point(4, 22);
             this.tranporterTabPage.Name = "tranporterTabPage";
             this.tranporterTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tranporterTabPage.Size = new System.Drawing.Size(914, 390);
+            this.tranporterTabPage.Size = new System.Drawing.Size(963, 333);
             this.tranporterTabPage.TabIndex = 4;
             this.tranporterTabPage.Text = "Конвейер";
             this.tranporterTabPage.UseVisualStyleBackColor = true;
@@ -390,7 +340,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.transporterControllerView.Location = new System.Drawing.Point(6, 6);
             this.transporterControllerView.Name = "transporterControllerView";
-            this.transporterControllerView.Size = new System.Drawing.Size(902, 378);
+            this.transporterControllerView.Size = new System.Drawing.Size(951, 321);
             this.transporterControllerView.TabIndex = 0;
             // 
             // rotorTabPage
@@ -399,7 +349,7 @@
             this.rotorTabPage.Location = new System.Drawing.Point(4, 22);
             this.rotorTabPage.Name = "rotorTabPage";
             this.rotorTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.rotorTabPage.Size = new System.Drawing.Size(914, 390);
+            this.rotorTabPage.Size = new System.Drawing.Size(963, 333);
             this.rotorTabPage.TabIndex = 3;
             this.rotorTabPage.Text = "Ротор";
             this.rotorTabPage.UseVisualStyleBackColor = true;
@@ -411,7 +361,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rotorControllerView.Location = new System.Drawing.Point(6, 6);
             this.rotorControllerView.Name = "rotorControllerView";
-            this.rotorControllerView.Size = new System.Drawing.Size(902, 378);
+            this.rotorControllerView.Size = new System.Drawing.Size(951, 321);
             this.rotorControllerView.TabIndex = 0;
             // 
             // loadTabPage
@@ -420,7 +370,7 @@
             this.loadTabPage.Location = new System.Drawing.Point(4, 22);
             this.loadTabPage.Name = "loadTabPage";
             this.loadTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.loadTabPage.Size = new System.Drawing.Size(914, 390);
+            this.loadTabPage.Size = new System.Drawing.Size(963, 333);
             this.loadTabPage.TabIndex = 5;
             this.loadTabPage.Text = "Загрузка";
             this.loadTabPage.UseVisualStyleBackColor = true;
@@ -432,7 +382,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.loadControllerView.Location = new System.Drawing.Point(6, 6);
             this.loadControllerView.Name = "loadControllerView";
-            this.loadControllerView.Size = new System.Drawing.Size(902, 378);
+            this.loadControllerView.Size = new System.Drawing.Size(951, 321);
             this.loadControllerView.TabIndex = 0;
             // 
             // pompTabPage
@@ -441,7 +391,7 @@
             this.pompTabPage.Location = new System.Drawing.Point(4, 22);
             this.pompTabPage.Name = "pompTabPage";
             this.pompTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.pompTabPage.Size = new System.Drawing.Size(914, 390);
+            this.pompTabPage.Size = new System.Drawing.Size(963, 333);
             this.pompTabPage.TabIndex = 6;
             this.pompTabPage.Text = "Насос";
             this.pompTabPage.UseVisualStyleBackColor = true;
@@ -453,19 +403,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pompControllerView.Location = new System.Drawing.Point(6, 6);
             this.pompControllerView.Name = "pompControllerView";
-            this.pompControllerView.Size = new System.Drawing.Size(902, 378);
+            this.pompControllerView.Size = new System.Drawing.Size(951, 321);
             this.pompControllerView.TabIndex = 0;
             // 
-            // tabPage1
+            // complexMovesTabPage
             // 
-            this.tabPage1.Controls.Add(this.additionalMovesView);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(910, 390);
-            this.tabPage1.TabIndex = 8;
-            this.tabPage1.Text = "Сложные движения";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.complexMovesTabPage.Controls.Add(this.additionalMovesView);
+            this.complexMovesTabPage.Location = new System.Drawing.Point(4, 22);
+            this.complexMovesTabPage.Name = "complexMovesTabPage";
+            this.complexMovesTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.complexMovesTabPage.Size = new System.Drawing.Size(963, 333);
+            this.complexMovesTabPage.TabIndex = 8;
+            this.complexMovesTabPage.Text = "Сложные движения";
+            this.complexMovesTabPage.UseVisualStyleBackColor = true;
             // 
             // additionalMovesView
             // 
@@ -474,7 +424,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.additionalMovesView.Location = new System.Drawing.Point(6, 6);
             this.additionalMovesView.Name = "additionalMovesView";
-            this.additionalMovesView.Size = new System.Drawing.Size(823, 378);
+            this.additionalMovesView.Size = new System.Drawing.Size(876, 321);
             this.additionalMovesView.TabIndex = 0;
             // 
             // demoTabPage
@@ -483,7 +433,7 @@
             this.demoTabPage.Location = new System.Drawing.Point(4, 22);
             this.demoTabPage.Name = "demoTabPage";
             this.demoTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.demoTabPage.Size = new System.Drawing.Size(910, 390);
+            this.demoTabPage.Size = new System.Drawing.Size(875, 415);
             this.demoTabPage.TabIndex = 9;
             this.demoTabPage.Text = "Демо";
             this.demoTabPage.UseVisualStyleBackColor = true;
@@ -495,7 +445,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.demoExecutorView.Location = new System.Drawing.Point(6, 6);
             this.demoExecutorView.Name = "demoExecutorView";
-            this.demoExecutorView.Size = new System.Drawing.Size(898, 378);
+            this.demoExecutorView.Size = new System.Drawing.Size(863, 403);
             this.demoExecutorView.TabIndex = 0;
             // 
             // logView
@@ -505,7 +455,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.logView.Location = new System.Drawing.Point(3, 3);
             this.logView.Name = "logView";
-            this.logView.Size = new System.Drawing.Size(922, 139);
+            this.logView.Size = new System.Drawing.Size(883, 148);
             this.logView.TabIndex = 13;
             // 
             // splitContainer1
@@ -522,15 +472,42 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.logView);
-            this.splitContainer1.Size = new System.Drawing.Size(928, 571);
-            this.splitContainer1.SplitterDistance = 422;
+            this.splitContainer1.Size = new System.Drawing.Size(889, 605);
+            this.splitContainer1.SplitterDistance = 447;
             this.splitContainer1.TabIndex = 16;
+            // 
+            // sensorsView
+            // 
+            this.sensorsView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sensorsView.Location = new System.Drawing.Point(667, 3);
+            this.sensorsView.Name = "sensorsView";
+            this.sensorsView.Size = new System.Drawing.Size(281, 315);
+            this.sensorsView.TabIndex = 20;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutPanel1.Controls.Add(this.sensorsView, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.steppersGridView, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.devicesControlView, 1, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 6);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(951, 321);
+            this.tableLayoutPanel1.TabIndex = 21;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(928, 628);
+            this.ClientSize = new System.Drawing.Size(889, 662);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
@@ -547,23 +524,19 @@
             this.toolStrip1.PerformLayout();
             this.mainTabControl.ResumeLayout(false);
             this.devicesTabPage.ResumeLayout(false);
-            this.splitContainer.Panel1.ResumeLayout(false);
-            this.splitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
-            this.splitContainer.ResumeLayout(false);
-            this.sensorsTabPage.ResumeLayout(false);
             this.cncTabPage.ResumeLayout(false);
             this.armTabPage.ResumeLayout(false);
             this.tranporterTabPage.ResumeLayout(false);
             this.rotorTabPage.ResumeLayout(false);
             this.loadTabPage.ResumeLayout(false);
             this.pompTabPage.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            this.complexMovesTabPage.ResumeLayout(false);
             this.demoTabPage.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -587,27 +560,26 @@
         private Views.CNCView cncView;
         private System.Windows.Forms.ToolStripComboBox editBaudrate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.SplitContainer splitContainer;
         private Views.DevicesControlView devicesControlView;
         private System.Windows.Forms.TabPage armTabPage;
         private System.Windows.Forms.TabPage rotorTabPage;
         private System.Windows.Forms.TabPage tranporterTabPage;
         private System.Windows.Forms.TabPage loadTabPage;
         private System.Windows.Forms.TabPage pompTabPage;
-        private ControllersViews.ArmControllerView armControllerView;
+        private ControllersViews.NeedleControllerView armControllerView;
         private System.Windows.Forms.ToolStripButton buttonAbortExecution;
         private ControllersViews.TransporterControllerView transporterControllerView;
         private ControllersViews.RotorControllerView rotorControllerView;
-        private ControllersViews.LoadControllerView loadControllerView;
+        private ControllersViews.ChargeControllerView loadControllerView;
         private ControllersViews.PompControllerView pompControllerView;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage complexMovesTabPage;
         private ControllersViews.AdditionalMovesView additionalMovesView;
         private System.Windows.Forms.ToolStripButton buttonStartDemo;
         private System.Windows.Forms.TabPage demoTabPage;
         private ControllersViews.DemoExecutorView demoExecutorView;
-        private System.Windows.Forms.TabPage sensorsTabPage;
-        private Views.SensorsView sensorsView;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private Views.SensorsView sensorsView;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
 

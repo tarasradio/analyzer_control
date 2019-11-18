@@ -22,7 +22,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
             while(!isComplete)
             {
                 ushort sensorValue = Core.GetSensorValue(_sensor);
-                Logger.AddMessage($"Wait value = {_value}, real value = {sensorValue}");
+                Logger.Info($"Wait value = {_value}, real value = {sensorValue}");
 
                 if(Protocol.ValueEdge.RisingEdge == _valueEdge)
                 {

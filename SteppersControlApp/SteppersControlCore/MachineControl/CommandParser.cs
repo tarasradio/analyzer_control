@@ -59,6 +59,17 @@ namespace SteppersControlCore.MachineControl
 
         }
         
+        private bool checkMotorNumber(int motor)
+        {
+            bool isSuccess = true;
+            if (motor < 0)
+            {
+                Logger.Info("[Command parser] - Номер мотора не может быть меньше 0.");
+                isSuccess = false; 
+            }
+            return isSuccess;
+        }
+
         public List<ICommand> Parse(string programText)
         {
             List<ICommand> commands = new List<ICommand>();
@@ -79,10 +90,7 @@ namespace SteppersControlCore.MachineControl
                         int motor = int.Parse(moveArgStr.Groups["motor"].Value);
                         int steps = int.Parse(moveArgStr.Groups["steps"].Value);
 
-                        if(motor < 0)
-                        {
-                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
-                        }
+                        checkMotorNumber(motor);
                         arguments[motor] = steps;
 
                         parsedCommand += $" M{motor} S = {steps}";
@@ -100,10 +108,7 @@ namespace SteppersControlCore.MachineControl
                         int motor = int.Parse(speedArgStr.Groups["motor"].Value);
                         int speed = int.Parse(speedArgStr.Groups["speed"].Value);
 
-                        if (motor < 0)
-                        {
-                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
-                        }
+                        checkMotorNumber(motor);
 
                         arguments[motor] = speed;
 
@@ -121,10 +126,7 @@ namespace SteppersControlCore.MachineControl
                     {
                         int motor = int.Parse(motorArgStr.Groups["motor"].Value);
 
-                        if (motor < 0)
-                        {
-                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
-                        }
+                        checkMotorNumber(motor);
 
                         arguments.Add(motor);
 
@@ -143,10 +145,7 @@ namespace SteppersControlCore.MachineControl
                         int motor = int.Parse(speedArgStr.Groups["motor"].Value);
                         int speed = int.Parse(speedArgStr.Groups["speed"].Value);
 
-                        if (motor < 0)
-                        {
-                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
-                        }
+                        checkMotorNumber(motor);
 
                         arguments[motor] = speed;
 
@@ -166,7 +165,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (device < 0)
                         {
-                            Logger.AddMessage(" Номер устройства не может быть меньше 0");
+                            Logger.Info("[Command parser] - Номер устройства не может быть меньше 0.");
                         }
 
                         arguments.Add(device);
@@ -187,7 +186,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (device < 0)
                         {
-                            Logger.AddMessage(" Номер устройства не может быть меньше 0");
+                            Logger.Info("[Command parser] - Номер устройства не может быть меньше 0.");
                         }
 
                         arguments.Add(device);
@@ -210,7 +209,7 @@ namespace SteppersControlCore.MachineControl
 
                         if (timeMs < 0)
                         {
-                            Logger.AddMessage(" Время задержки не может быть меньше 0");
+                            Logger.Info("[Command parser] - Время задержки не может быть меньше 0.");
                         }
 
                         parsedCommand += $"time = {timeMs} ms";
@@ -233,12 +232,12 @@ namespace SteppersControlCore.MachineControl
 
                         if (sensor < 0)
                         {
-                            Logger.AddMessage(" Номер датчика не может быть меньше 0");
+                            Logger.Info("[Command parser] - Номер датчика не может быть меньше 0.");
                         }
 
                         if (value < 0)
                         {
-                            Logger.AddMessage(" Значение датчика не может быть меньше 0");
+                            Logger.Info("[Command parser] - Значение датчика не может быть меньше 0.");
                         }
 
                         parsedCommand += $"sensor = {sensor}, value = {value}";
@@ -261,12 +260,12 @@ namespace SteppersControlCore.MachineControl
 
                         if (sensor < 0)
                         {
-                            Logger.AddMessage(" Номер датчика не может быть меньше 0");
+                            Logger.Info("[Command parser] - Номер датчика не может быть меньше 0.");
                         }
 
                         if (value < 0)
                         {
-                            Logger.AddMessage(" Значение датчика не может быть меньше 0");
+                            Logger.Info("[Command parser] - Значение датчика не может быть меньше 0.");
                         }
 
                         parsedCommand += $"sensor = {sensor}, value = {value}";
@@ -289,10 +288,7 @@ namespace SteppersControlCore.MachineControl
                         int motor = int.Parse(speedArgStr.Groups["motor"].Value);
                         int speed = int.Parse(speedArgStr.Groups["speed"].Value);
 
-                        if (motor < 0)
-                        {
-                            Logger.AddMessage(" Номер мотора не может быть меньше 0");
-                        }
+                        checkMotorNumber(motor);
 
                         arguments[motor] = speed;
 
@@ -309,12 +305,12 @@ namespace SteppersControlCore.MachineControl
                         
                         if (sensor < 0)
                         {
-                            Logger.AddMessage(" Номер датчика не может быть меньше 0");
+                            Logger.Info("[Command parser] - Номер датчика не может быть меньше 0.");
                         }
 
                         if (value < 0)
                         {
-                            Logger.AddMessage(" Значение датчика не может быть меньше 0");
+                            Logger.Info("[Command parser] - Значение датчика не может быть меньше 0.");
                         }
 
                         parsedCommand += $" | sensor = {sensor}, value = {value}, edge = {edgeType}";
@@ -323,8 +319,10 @@ namespace SteppersControlCore.MachineControl
                     commands.Add(new RunCncCommand(arguments, (uint)sensor, (uint)value, edgeType));
                 }
                 parsedCommand += "}";
-                Logger.AddMessage(parsedCommand);
+                Logger.Info(parsedCommand);
             }
+
+            Logger.Info($"Программа содержит { commands.Count } команд.");
 
             return commands;
         }

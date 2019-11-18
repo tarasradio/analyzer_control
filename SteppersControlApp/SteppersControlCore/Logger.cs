@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using System.Threading;
 using System.IO;
+using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore
 {
@@ -13,20 +14,28 @@ namespace SteppersControlCore
     {
         public delegate void newMessageHandler(string message);
         public static event newMessageHandler OnNewMessageAdded;
+        public static event newMessageHandler NewInfoMessageAdded;
+        public static event newMessageHandler NewDemoInfoMessageAdded;
+        public static event newMessageHandler NewControllerInfoMessageAdded;
 
-        private static object _syncRoot = new object();
+        private static object locker = new object();
 
         public Logger()
         {
             //Directory.CreateDirectory("logs");
             //fileName = "logs/Log_" + DateTime.Now.ToString("dd_MM_yyyy_#_HH_mm_ss") + ".txt";
         }
-
-        static Mutex mutex = new Mutex();
+        
+        private static string wrapMessage(string message)
+        {
+            
+            string text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()} Info: {message} \n";
+            return text;
+        }
 
         public static void AddMessage(string text)
         {
-            lock(_syncRoot)
+            lock(locker)
             {
                 //StreamWriter writer = new StreamWriter(fileName, true);
 
@@ -36,6 +45,30 @@ namespace SteppersControlCore
                 //writer.WriteLine(line);
                 //writer.Close();
                 OnNewMessageAdded?.Invoke(line);
+            }
+        }
+
+        public static void Info(string message)
+        {
+            lock (locker)
+            {
+                NewInfoMessageAdded?.Invoke(wrapMessage(message));
+            }
+        }
+
+        public static void DemoInfo(string message)
+        {
+            lock(locker)
+            {
+                NewDemoInfoMessageAdded?.Invoke(wrapMessage(message));
+            }
+        }
+
+        public static void ControllerInfo(string message)
+        {
+            lock(locker)
+            {
+                NewControllerInfoMessageAdded?.Invoke(wrapMessage(message));
             }
         }
     }

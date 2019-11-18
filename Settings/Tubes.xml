@@ -16,7 +16,7 @@
           <TimeToPerform>10</TimeToPerform>
         </Stage>
       </Stages>
-      <CurrentStage>0</CurrentStage>
+      <CurrentStage>-1</CurrentStage>
       <TimeToStageComplete>0</TimeToStageComplete>
       <IsFind>false</IsFind>
     </TubeInfo>

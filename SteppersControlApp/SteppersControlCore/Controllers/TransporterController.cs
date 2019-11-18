@@ -40,6 +40,7 @@ namespace SteppersControlCore.Controllers
 
         public void PrepareBeforeScanning()
         {
+            Logger.ControllerInfo($"[Transporter] - Prepare before scanning started");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.TransporterStepper, 100));
@@ -53,6 +54,7 @@ namespace SteppersControlCore.Controllers
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Transporter] - Prepare before scanning finished");
         }
 
         public enum ShiftType
@@ -64,6 +66,7 @@ namespace SteppersControlCore.Controllers
         // Сдвиг
         public void Shift(bool reverse, ShiftType shiftType = ShiftType.OneTube)
         {
+            Logger.ControllerInfo($"[Transporter] - Shift started");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.TransporterStepper, 50));
@@ -77,10 +80,12 @@ namespace SteppersControlCore.Controllers
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Transporter] - Shift finished");
         }
 
-        public void TurnAndScanTube()
+        public void RotateAndScanTube()
         {
+            Logger.ControllerInfo($"[Transporter] - Rotating and scanning tube started");
             List<ICommand> commands = new List<ICommand>();
             
             // Сканирование пробирки
@@ -93,6 +98,7 @@ namespace SteppersControlCore.Controllers
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Transporter] - Rotating and scanning tube finished");
         }
     }
 }

@@ -43,6 +43,7 @@ namespace SteppersControlCore.Controllers
 
         public void CloseValves()
         {
+            Logger.ControllerInfo($"[Pomp] - Close valves");
             List<ICommand> commands = new List<ICommand>();
 
             commands.Add(new OffDeviceCncCommand(new List<int>() { 0 , 1 }));
@@ -52,6 +53,7 @@ namespace SteppersControlCore.Controllers
 
         public void Home()
         {
+            Logger.ControllerInfo($"[Pomp] - Home started");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new OnDeviceCncCommand(new List<int>() { 0 }));
@@ -74,10 +76,12 @@ namespace SteppersControlCore.Controllers
             SmallPistonStepperPosition = 0;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Pomp] - Home finished");
         }
 
         public void Suction(int value)
         {
+            Logger.ControllerInfo($"[Pomp] - Suction started");
             List<ICommand> commands = new List<ICommand>();
 
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
@@ -98,10 +102,12 @@ namespace SteppersControlCore.Controllers
             SmallPistonStepperPosition = Properties.SmallPistonSuctionSteps;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Pomp] - Suction started");
         }
 
         public void Unsuction(int value)
         {
+            Logger.ControllerInfo($"[Pomp] - Unsuction started");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
@@ -122,10 +128,12 @@ namespace SteppersControlCore.Controllers
             SmallPistonStepperPosition = 0;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Pomp] - Unsuction finished");
         }
 
         public void Washing(int cycles)
         {
+            Logger.ControllerInfo($"[Pomp] - Washing ({cycles} cycles) started");
             List<ICommand> commands = new List<ICommand>();
 
             for (int i = 0; i < cycles; i++)
@@ -165,6 +173,7 @@ namespace SteppersControlCore.Controllers
             BigPistonStepperPosition = Properties.SmallPistonWashingSteps;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Pomp] - Washing finished");
         }
     }
 }

@@ -40,7 +40,7 @@ namespace SteppersControlCore.SerialCommunication
             }
             catch (UnauthorizedAccessException)
             {
-                Logger.AddMessage($"Ошибка при открытии порта {portName}");
+                Logger.Info($"[Serial] - Ошибка при открытии порта { portName }.");
             }
 
             return _serialPort.IsOpen;
@@ -54,7 +54,7 @@ namespace SteppersControlCore.SerialCommunication
             }
             catch (System.IO.IOException)
             {
-                Logger.AddMessage($"Ошибка при закрытии порта {_serialPort.PortName}");
+                Logger.Info($"[Serial] - Ошибка при закрытии порта {_serialPort.PortName}.");
             }
         }
 
@@ -86,7 +86,7 @@ namespace SteppersControlCore.SerialCommunication
             }
             catch (Exception)
             {
-                Logger.AddMessage("Ошибка записи в порт");
+                Logger.Info("[Serial] - Ошибка записи в порт.");
             }
         }
 

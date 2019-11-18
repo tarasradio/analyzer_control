@@ -9,95 +9,104 @@ using SteppersControlCore.Interfaces;
 
 namespace SteppersControlCore.Controllers
 {
-    public class LoadController : ControllerBase
+    public class ChargeController : ControllerBase
     {
-        const string filename = "LoadControllerProps";
+        const string filename = "ChargeControllerProps";
 
-        public LoadControllerProperties Properties { get; set; }
+        public ChargeControllerProperties Properties { get; set; }
 
-        public int LoadStepperPosition { get; set; } = 0;
-        public int ShuttleStepperPosition { get; set; } = 0;
+        public int RotatorPosition { get; set; } = 0;
+        public int HookPosition { get; set; } = 0;
 
         public int CurrentCell { get; private set; } = 0;
 
-        public LoadController(ICommandExecutor executor) : base(executor)
+        public ChargeController(ICommandExecutor executor) : base(executor)
         {
-            Properties = new LoadControllerProperties();
+            Properties = new ChargeControllerProperties();
         }
 
         public void WriteXml(string path)
         {
-            XMLSerializeHelper<LoadControllerProperties>.WriteXml(Properties, 
+            XMLSerializeHelper<ChargeControllerProperties>.WriteXml(Properties, 
                 Path.Combine(path, filename) );
         }
 
         //Чтение насроек из файла
         public void ReadXml(string path)
         {
-            Properties = XMLSerializeHelper<LoadControllerProperties>.ReadXML(
+            Properties = XMLSerializeHelper<ChargeControllerProperties>.ReadXML(
                 Path.Combine(path, filename));
             if (Properties == null)
-                Properties = new LoadControllerProperties();
+                Properties = new ChargeControllerProperties();
         }
 
-        public void HomeLoad()
+        public void HomeRotator()
         {
+            Logger.ControllerInfo("[Charger] - Home Rotator started");
+
             List<ICommand> commands = new List<ICommand>();
 
-            steppers = new Dictionary<int, int>() { { Properties.LoadStepper, Properties.LoadStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.RotatorStepper, Properties.RotatorHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Properties.LoadStepper, Properties.LoadStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.RotatorStepper, Properties.RotatorHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
-            LoadStepperPosition = 0;
+            RotatorPosition = 0;
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo("[Charger] - Home Rotator finished");
         }
 
-        public void TurnLoadToCell(int cell)
+        public void TurnToCell(int cell)
         {
+            Logger.ControllerInfo($"[Charger] - Turn to cell[{cell}] started");
+
             List<ICommand> commands = new List<ICommand>();
 
             CurrentCell = cell;
 
             steppers = new Dictionary<int, int>() {
-                { Properties.LoadStepper, 30 } };
+                { Properties.RotatorStepper, 30 } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Properties.LoadStepper, Properties.CellsSteps[cell] - LoadStepperPosition } };
+                { Properties.RotatorStepper, Properties.CellsSteps[cell] - RotatorPosition } };
             commands.Add( new MoveCncCommand(steppers) );
 
-            LoadStepperPosition = Properties.CellsSteps[cell];
+            RotatorPosition = Properties.CellsSteps[cell];
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Charger] - Turn to cell[{cell}] finished");
         }
 
-        public void HomeShuttle()
+        public void HomeHook()
         {
+            Logger.ControllerInfo($"[Charger] - Home hook started");
             List<ICommand> commands = new List<ICommand>();
 
-            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.HookStepper, Properties.HookHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Properties.ShuttleStepper, Properties.ShuttleStepperHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Properties.HookStepper, Properties.HookHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Charger] - Home hook finished");
         }
 
-        public void LoadCartridge()
+        public void ChargeCartridge()
         {
+            Logger.ControllerInfo($"[Charger] - Charge cartridge started");
             List<ICommand> commands = new List<ICommand>();
 
             //Отъезд загрузки, чтобы крюк мог пройти под картриджем
             steppers = new Dictionary<int, int>() {
-                { Properties.LoadStepper, Properties.LoadStepperSpeed } };
+                { Properties.RotatorStepper, Properties.RotatorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                { Properties.LoadStepper, -Properties.StepsTurnToLoad } };
+                { Properties.RotatorStepper, -Properties.RotatorStepsLeaveAtCharge } };
 
             commands.Add(new MoveCncCommand(steppers));
 
@@ -105,11 +114,11 @@ namespace SteppersControlCore.Controllers
 
             // Продвижение крюка до картриджа
             steppers = new Dictionary<int, int>() {
-                { Properties.ShuttleStepper, Properties.ShuttleStepperSpeed } };
+                { Properties.HookStepper, Properties.HookSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                { Properties.ShuttleStepper, Properties.StepsShuttleToCartridge } };
+                { Properties.HookStepper, Properties.HookStepsToCartridge } };
 
             commands.Add(new MoveCncCommand(steppers));
 
@@ -117,15 +126,16 @@ namespace SteppersControlCore.Controllers
 
             // Возврат загрузки, чтобы крюк захватил картридж
             steppers = new Dictionary<int, int>() {
-                { Properties.LoadStepper, Properties.LoadStepperSpeed } };
+                { Properties.RotatorStepper, Properties.RotatorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                { Properties.LoadStepper, Properties.StepsTurnToLoad } };
+                { Properties.RotatorStepper, Properties.RotatorStepsLeaveAtCharge } };
 
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
+            Logger.ControllerInfo($"[Charger] - Charge cartridge finished");
         }
     }
 }

@@ -109,7 +109,7 @@ namespace SteppersControlApp.Forms
                     Core.CheckFirmwareVersion();
 
                     connectionState.Text = "Установленно соединение с " + portName;
-                    Logger.AddMessage(
+                    Logger.Info(
                         "Открытие подключения - подключение к " + portName + " открыто");
                     buttonConnect.Text = resourceManager.GetString("disconnect_text", culture);
 
@@ -122,7 +122,7 @@ namespace SteppersControlApp.Forms
                 }
                 else
                 {
-                    Logger.AddMessage(
+                    Logger.Info(
                         "Открытие подключения - Ошибка при подключении!");
                     connectionState.Text = "Ожидание соединения";
                 }
@@ -145,14 +145,14 @@ namespace SteppersControlApp.Forms
             if(portsNames.Length != 0)
             {
                 selectPort.Items.AddRange(portsNames);
-                Logger.AddMessage( resourceManager.GetString("ports_found", culture));
+                Logger.Info( resourceManager.GetString("ports_found", culture));
                 buttonConnect.Enabled = true;
                 buttonConnect.Visible = true;
                 selectPort.SelectedIndex = 0;
             }
             else
             {
-                Logger.AddMessage(
+                Logger.Info(
                     resourceManager.GetString("no_ports_found", culture));
                 buttonConnect.Enabled = false;
                 buttonConnect.Visible = false;
@@ -229,6 +229,11 @@ namespace SteppersControlApp.Forms
             {
                 Core.Demo.StartDemo();
             }
+        }
+
+        private void steppersGridView_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

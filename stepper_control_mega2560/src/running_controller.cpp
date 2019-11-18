@@ -1,4 +1,5 @@
 #include "system.hpp"
+#include "emulator.hpp"
 #include "running_controller.hpp"
 
 #include "packet_manager.hpp"
@@ -77,9 +78,30 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
 uint8_t RunningController::updateState()
 {
     #ifdef EMULATOR
-        return 0;
-    #endif
-    
+
+    if(Emulator::TaskIsRunning() && countRunSteppers > 0)
+    {
+#ifdef DEBUG
+        {
+            String message = "elapsed time = " + String(Emulator::GetElapsedMilliseconds());
+            Protocol::SendMessage(message.c_str());
+        }
+#endif
+        if(Emulator::GetElapsedMilliseconds() >= RUN_DELAY)
+        {
+#ifdef DEBUG
+        {
+            String message = "Stop task";
+            Protocol::SendMessage(message.c_str());
+        }
+#endif
+            Emulator::StopTask();
+            countRunSteppers = 0;
+        }
+    }
+    return countRunSteppers;
+#endif
+
     if(0 != countRunSteppers)
     {
         uint16_t value = Sensors::getSensorValue(waitSensorNumber);

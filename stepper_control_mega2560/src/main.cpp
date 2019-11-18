@@ -7,10 +7,13 @@
 #include "devices.hpp"
 #include "steppers.hpp"
 
+#include "emulator.hpp"
+
 #define BAUDRATE 115200
 #define POLLING_TIMEOUT 50
 
 BarScanner scanner;
+
 MovingController moveController;
 HomingController homeController;
 RunningController runController;
@@ -37,6 +40,8 @@ void setup()
 
     Serial.begin(BAUDRATE);
 
+    Emulator::Init();
+    
     Devices::initPins();
 
     Steppers::initPins();

@@ -1,4 +1,5 @@
 #include "system.hpp"
+#include "emulator.hpp"
 #include "moving_controller.hpp"
 
 uint8_t countMoveSteppers = 0;
@@ -33,9 +34,31 @@ void MovingController::addStepperForMove(int8_t stepper, int32_t steps)
 
 uint8_t MovingController::updateState()
 {
-    #ifdef EMULATOR
-        return 0;
-    #endif
+
+#ifdef EMULATOR
+
+    if(Emulator::TaskIsRunning() && countMoveSteppers > 0)
+    {
+#ifdef DEBUG
+        {
+            String message = "elapsed time = " + String(Emulator::GetElapsedMilliseconds());
+            Protocol::SendMessage(message.c_str());
+        }
+#endif
+        if(Emulator::GetElapsedMilliseconds() >= MOVE_DELAY)
+        {
+#ifdef DEBUG
+        {
+            String message = "Stop task";
+            Protocol::SendMessage(message.c_str());
+        }
+#endif
+            Emulator::StopTask();
+            countMoveSteppers = 0;
+        }
+    }
+    return countMoveSteppers;
+#endif
     
     if(0 == getSteppersInMoving())
     {
