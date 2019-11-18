@@ -27,6 +27,8 @@ namespace SteppersControlCore
 
         private const string filename = "Tubes";
 
+        // шагов пробирки от точки сканирования до точки с забором 
+        private const int cellsFromScanPlaceToSuctionPlace = 7;
         private const int numberTubeCells = 54;
         private TubeCell[] cells;
         private int currentCell = 0;
@@ -137,12 +139,15 @@ namespace SteppersControlCore
 
                 if (tubeSearchTask(3) == false)
                 {
-                    Logger.DemoInfo($"Пробирка со штрихкодом [{cells[currentCell].BarCode}] не найдена в списке задач!");
+                    Logger.DemoInfo($"Пробирка со штрихкодом [{cells[currentCell].BarCode}] не найдена в списке анализов!");
                 }
-                
-                if(currentCell >= 7 && cells[currentCell - 7].HaveTube == true) // первая пробирка уже под иглой
+
+                int cellUnderNeedle = currentCell - cellsFromScanPlaceToSuctionPlace;
+
+                if (currentCell >= cellsFromScanPlaceToSuctionPlace && 
+                    cells[cellUnderNeedle].HaveTube == true) // первая пробирка уже под иглой
                 {
-                    TubeInfo tube = searchBarcodeInDatabase(cells[currentCell - 7].BarCode);
+                    TubeInfo tube = searchBarcodeInDatabase(cells[cellUnderNeedle].BarCode);
                     
                     if(null != tube)
                     {
@@ -151,6 +156,7 @@ namespace SteppersControlCore
                             tube.IsFind = true;
                         }
 
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{tube.BarCode}] дошла до точки забора!");
                         Logger.DemoInfo($"Пробирка со штрихкодом [{tube.BarCode}] запущена в обработку!");
                         // постановка на выполнение задач и забор из пробирки в белую кювету
 
@@ -304,7 +310,7 @@ namespace SteppersControlCore
                 attempt++;
             }
 
-            Logger.ControllerInfo($"Поиск пробирки (сканирование) завершен.");
+            Logger.DemoInfo($"Поиск пробирки (сканирование) завершен.");
 
             return result;
         }
@@ -325,7 +331,7 @@ namespace SteppersControlCore
         /// <param name="tube">Пробирка</param>
         private void performingIntermediateTask(TubeInfo tube)
         {
-            Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - запущено выполнение {tube.CurrentStage}-я стадии.");
+            Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
 
             Core.Needle.HomeAll();
             needleWashingTask(); // Промывка иглы
@@ -370,7 +376,7 @@ namespace SteppersControlCore
 
             // Конец выполнения подготовительного этапа
 
-            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-я стадии.");
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-й стадии.");
         }
 
         /// <summary>
@@ -381,12 +387,14 @@ namespace SteppersControlCore
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной (0-й) стадии.");
 
+            Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
             // Смещаем пробирку, чтобы она оказалась под иглой
             Core.Transporter.Shift(false, TransporterController.ShiftType.HalfTube);
             
             // Устанавливаем иглу над пробиркой и опускаем ее до контакта с материалом в пробирке
             Core.Needle.TurnToTubeAndWaitTouch();
-            
+
+            Logger.DemoInfo($"Забор материала из пробирки.");
             // Набираем материал из пробирки
             Core.Pomp.Suction(0);
             
@@ -405,6 +413,7 @@ namespace SteppersControlCore
             // Опускаем иглу в кювету
             Core.Needle.GoDownAndBrokeCartridge();
 
+            Logger.DemoInfo($"Слив забранного материала в белую кювету.");
             // Сливаем материал в белую кювету
             Core.Pomp.Unsuction(0); // слив из иглы в картридж
 
@@ -413,6 +422,7 @@ namespace SteppersControlCore
             // Промываем иглу
             needleWashingTask();
 
+            Logger.DemoInfo($"Перенос реагента в белую кювету.");
             // Выполняем перенос реагента из нужной ячейки картриджа в белую кювету
             performingIntermediateTask(tube);
             
