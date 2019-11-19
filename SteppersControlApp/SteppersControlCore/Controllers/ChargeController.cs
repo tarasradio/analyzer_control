@@ -42,7 +42,7 @@ namespace SteppersControlCore.Controllers
 
         public void HomeRotator()
         {
-            Logger.ControllerInfo("[Charger] - Home Rotator started");
+            Logger.ControllerInfo("[Charger] - Start Rotator homing.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -55,12 +55,12 @@ namespace SteppersControlCore.Controllers
             RotatorPosition = 0;
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo("[Charger] - Home Rotator finished");
+            Logger.ControllerInfo("[Charger] - Rotator homing finished.");
         }
 
         public void TurnToCell(int cell)
         {
-            Logger.ControllerInfo($"[Charger] - Turn to cell[{cell}] started");
+            Logger.ControllerInfo($"[Charger] - Start turn to cell[{cell}].");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -77,12 +77,12 @@ namespace SteppersControlCore.Controllers
             RotatorPosition = Properties.CellsSteps[cell];
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Charger] - Turn to cell[{cell}] finished");
+            Logger.ControllerInfo($"[Charger] - Turn to cell[{cell}] finished.");
         }
 
         public void HomeHook()
         {
-            Logger.ControllerInfo($"[Charger] - Home hook started");
+            Logger.ControllerInfo($"[Charger] - Start hook homing.");
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Properties.HookStepper, Properties.HookHomeSpeed } };
@@ -92,12 +92,12 @@ namespace SteppersControlCore.Controllers
             commands.Add( new HomeCncCommand(steppers) );
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Charger] - Home hook finished");
+            Logger.ControllerInfo($"[Charger] - Hook homing finished.");
         }
 
         public void ChargeCartridge()
         {
-            Logger.ControllerInfo($"[Charger] - Charge cartridge started");
+            Logger.ControllerInfo($"[Charger] - Start cartridge charging.");
             List<ICommand> commands = new List<ICommand>();
 
             //Отъезд загрузки, чтобы крюк мог пройти под картриджем
@@ -135,7 +135,7 @@ namespace SteppersControlCore.Controllers
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Charger] - Charge cartridge finished");
+            Logger.ControllerInfo($"[Charger] - Cartridge charging finished.");
         }
     }
 }

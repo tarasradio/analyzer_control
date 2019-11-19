@@ -40,21 +40,21 @@ namespace SteppersControlCore.Controllers
 
         public void PrepareBeforeScanning()
         {
-            Logger.ControllerInfo($"[Transporter] - Prepare before scanning started");
+            Logger.ControllerInfo($"[Transporter] - Start prepare before scanning.");
             List<ICommand> commands = new List<ICommand>();
             
-            commands.Add(new SetSpeedCommand(Properties.TransporterStepper, 100));
+            commands.Add(new SetSpeedCommand(Properties.TransporterStepper, (uint)Properties.TransporterMoveSpeed));
 
             // Обнуление ленты конвеера
-            steppers = new Dictionary<int, int>() { { Properties.TransporterStepper, 50 } };
+            steppers = new Dictionary<int, int>() { { Properties.TransporterStepper, Properties.TransporterHomeSpeed } };
             commands.Add(new HomeCncCommand(steppers));
 
             // Сдвиг на пол пробирки
-            steppers = new Dictionary<int, int>() { { Properties.TransporterStepper, Properties.StepsOneTube / 2 } };
+            steppers = new Dictionary<int, int>() { { Properties.TransporterStepper, Properties.StepsPerTube / 2 } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Transporter] - Prepare before scanning finished");
+            Logger.ControllerInfo($"[Transporter] - Prepare before scanning finished.");
         }
 
         public enum ShiftType
@@ -66,12 +66,12 @@ namespace SteppersControlCore.Controllers
         // Сдвиг
         public void Shift(bool reverse, ShiftType shiftType = ShiftType.OneTube)
         {
-            Logger.ControllerInfo($"[Transporter] - Shift started");
+            Logger.ControllerInfo($"[Transporter] - Start shift.");
             List<ICommand> commands = new List<ICommand>();
             
-            commands.Add(new SetSpeedCommand(Properties.TransporterStepper, 50));
+            commands.Add(new SetSpeedCommand(Properties.TransporterStepper, (uint)Properties.TransporterMoveSpeed));
 
-            int steps = Properties.StepsOneTube;
+            int steps = Properties.StepsPerTube;
 
             if (shiftType == ShiftType.HalfTube) steps /= 2;
             if (reverse) steps *= -1;
@@ -80,25 +80,25 @@ namespace SteppersControlCore.Controllers
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Transporter] - Shift finished");
+            Logger.ControllerInfo($"[Transporter] - Shift finished.");
         }
 
         public void RotateAndScanTube()
         {
-            Logger.ControllerInfo($"[Transporter] - Rotating and scanning tube started");
+            Logger.ControllerInfo($"[Transporter] - Start rotating and scanning tube.");
             List<ICommand> commands = new List<ICommand>();
             
             // Сканирование пробирки
             commands.Add(new BarStartCommand());
 
             // Вращение пробирки
-            commands.Add(new SetSpeedCommand(Properties.TurnTubeStepper, (uint)Properties.SpeedToTurnTube));
+            commands.Add(new SetSpeedCommand(Properties.TurnTubeStepper, (uint)Properties.TurnTubeSpeed));
 
-            steppers = new Dictionary<int, int>() { { Properties.TurnTubeStepper, Properties.StepsToTurnTube } };
+            steppers = new Dictionary<int, int>() { { Properties.TurnTubeStepper, Properties.StepsPerTubeRotate } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Transporter] - Rotating and scanning tube finished");
+            Logger.ControllerInfo($"[Transporter] - Rotating and scanning tube finished.");
         }
     }
 }

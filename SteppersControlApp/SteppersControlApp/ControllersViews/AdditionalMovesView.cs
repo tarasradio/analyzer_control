@@ -32,29 +32,7 @@ namespace SteppersControlApp.ControllersViews
 
         private void moveOnCartridgeButton_Click(object sender, EventArgs e)
         {
-            int cellNumber = (int)editCellNumber.Value;
 
-            CartridgeCell cell = CartridgeCell.WhiteCell;
-
-            if (selectFirstCell.Checked)
-            {
-                cell = CartridgeCell.FirstCell;
-            }
-            else if (selectSecondCell.Checked)
-            {
-                cell = CartridgeCell.SecondCell;
-            }
-            else if (selectThirdCell.Checked)
-            {
-                cell = CartridgeCell.ThirdCell;
-            }
-            
-            Core.Executor.StartTask(
-                () =>
-                {
-                    Core.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorController.CellPosition.CenterCell);
-                    Core.Needle.TurnToCartridge(NeedleController.FromPosition.Home, cell);
-                });
         }
     }
 }

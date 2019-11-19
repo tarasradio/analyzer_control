@@ -35,8 +35,10 @@
             this.tubesList = new ViewLibrary.DoubleBufferedDataGridView();
             this.stageBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonEditTube = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.tubesList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.stageBindingSource)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonAddTube
@@ -64,7 +66,7 @@
             this.buttonRemoveTube.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonRemoveTube.Image = ((System.Drawing.Image)(resources.GetObject("buttonRemoveTube.Image")));
             this.buttonRemoveTube.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonRemoveTube.Location = new System.Drawing.Point(284, 3);
+            this.buttonRemoveTube.Location = new System.Drawing.Point(310, 3);
             this.buttonRemoveTube.Name = "buttonRemoveTube";
             this.buttonRemoveTube.Size = new System.Drawing.Size(127, 36);
             this.buttonRemoveTube.TabIndex = 3;
@@ -80,10 +82,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tubesList.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.tubesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tubesList.Location = new System.Drawing.Point(3, 45);
+            this.tubesList.Location = new System.Drawing.Point(3, 52);
             this.tubesList.Name = "tubesList";
-            this.tubesList.Size = new System.Drawing.Size(817, 379);
+            this.tubesList.Size = new System.Drawing.Size(817, 372);
             this.tubesList.TabIndex = 0;
+            this.tubesList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tubesList_CellDoubleClick);
             this.tubesList.SelectionChanged += new System.EventHandler(this.tubesList_SelectionChanged);
             // 
             // stageBindingSource
@@ -92,6 +95,7 @@
             // 
             // buttonEditTube
             // 
+            this.buttonEditTube.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.buttonEditTube.BackColor = System.Drawing.Color.SteelBlue;
             this.buttonEditTube.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonEditTube.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -100,26 +104,36 @@
             this.buttonEditTube.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonEditTube.Location = new System.Drawing.Point(149, 3);
             this.buttonEditTube.Name = "buttonEditTube";
-            this.buttonEditTube.Size = new System.Drawing.Size(129, 36);
+            this.buttonEditTube.Size = new System.Drawing.Size(155, 36);
             this.buttonEditTube.TabIndex = 14;
-            this.buttonEditTube.Text = "Стадии анализа";
+            this.buttonEditTube.Text = "Параметры анализа";
             this.buttonEditTube.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonEditTube.UseVisualStyleBackColor = false;
             this.buttonEditTube.Click += new System.EventHandler(this.buttonEditTube_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.buttonAddTube);
+            this.flowLayoutPanel1.Controls.Add(this.buttonEditTube);
+            this.flowLayoutPanel1.Controls.Add(this.buttonRemoveTube);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(817, 43);
+            this.flowLayoutPanel1.TabIndex = 15;
+            this.flowLayoutPanel1.WrapContents = false;
             // 
             // DemoExecutorView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.buttonEditTube);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.tubesList);
-            this.Controls.Add(this.buttonRemoveTube);
-            this.Controls.Add(this.buttonAddTube);
             this.Name = "DemoExecutorView";
             this.Size = new System.Drawing.Size(823, 427);
             this.Load += new System.EventHandler(this.DemoExecutorView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tubesList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stageBindingSource)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -130,5 +144,6 @@
         private ViewLibrary.DoubleBufferedDataGridView tubesList;
         private System.Windows.Forms.BindingSource stageBindingSource;
         private System.Windows.Forms.Button buttonEditTube;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

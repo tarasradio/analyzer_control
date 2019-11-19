@@ -2,7 +2,9 @@
 <TransporterControllerProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <TurnTubeStepper>5</TurnTubeStepper>
   <TransporterStepper>6</TransporterStepper>
-  <SpeedToTurnTube>30</SpeedToTurnTube>
-  <StepsOneTube>6400</StepsOneTube>
-  <StepsToTurnTube>10000</StepsToTurnTube>
+  <TurnTubeSpeed>30</TurnTubeSpeed>
+  <TransporterMoveSpeed>50</TransporterMoveSpeed>
+  <TransporterHomeSpeed>100</TransporterHomeSpeed>
+  <StepsPerTube>6400</StepsPerTube>
+  <StepsPerTubeRotate>10000</StepsPerTubeRotate>
 </TransporterControllerProperties>

@@ -177,7 +177,9 @@ namespace SteppersControlCore
         {
             foreach (TubeInfo tube in Properties.Tubes)
             {
-                if(tube.CurrentStage >= 0 && tube.TimeToStageComplete == 0)
+                if( tube.CurrentStage >= 0 &&
+                    tube.CurrentStage < tube.Stages.Count && 
+                    tube.TimeToStageComplete == 0)
                 {
                     tube.CurrentStage++;
                     
@@ -261,9 +263,9 @@ namespace SteppersControlCore
         {
             Logger.DemoInfo($"Запущена промывка иглы");
 
-            Core.Needle.HomeAll();
+            Core.Needle.HomeLift();
             Core.Needle.TurnAndGoDownToWashing();
-            Core.Pomp.Washing(2);
+            Core.Pomp.WashingNeedle(2);
             Core.Pomp.Home();
             Core.Pomp.CloseValves();
 
@@ -326,7 +328,26 @@ namespace SteppersControlCore
         /// <param name="tube">Пробирка</param>
         private void performingFinishTask(TubeInfo tube)
         {
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения завершающей стадии.");
 
+            needleWashingTask();
+
+            Core.Rotor.Home();
+            Core.Rotor.PlaceCellUnderNeedle(
+                tube.Stages[tube.Stages.Count - 1].CartridgePosition, 
+                CartridgeCell.WhiteCell);
+
+            Core.Needle.HomeLift();
+            Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+
+            Core.Needle.GoDownAndPierceCartridge(CartridgeCell.WhiteCell);
+            Core.Pomp.Suction(0);
+
+            Core.Needle.HomeLift();
+
+            // Далее нужно перелить в прозрачную кювету и отправить на анализ.
+            
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - выполнения завершающей стадии завершено.");
         }
 
         /// <summary>
@@ -338,9 +359,7 @@ namespace SteppersControlCore
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
 
             Core.Needle.HomeAll();
-            needleWashingTask(); // Промывка иглы
-
-            // Начало выполнения подготовительного этапа
+            needleWashingTask();
 
             // Подводим нужную ячейку картриджа под иглу
             Core.Rotor.Home();
@@ -350,35 +369,34 @@ namespace SteppersControlCore
                 RotorController.CellPosition.CellLeft);
 
             // Устанавливаем иглу над нужной ячейкой картриджа
-            Core.Needle.TurnToCartridge(
-                NeedleController.FromPosition.Washing,
-                tube.Stages[tube.CurrentStage].Cell);
+            Core.Needle.TurnToCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Прокалываем ячейку картриджа
-            Core.Needle.GoDownAndBrokeCartridge();
+            Core.Needle.GoDownAndPierceCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Забираем реагент из ячейки картриджа
             Core.Pomp.Suction(0);
 
+            // Поднимаемся на безопасную высоту над картриджем
+            Core.Needle.GoToSafeLevel();
+
             // Устанавливаем иглу над белой ячейкой картриджа
-            Core.Needle.TurnToCartridge(
-                NeedleController.FromPosition.FirstCell,
-                CartridgeCell.WhiteCell);
+            Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
 
             // Подводим белую кювету картриджа под иглу
             Core.Rotor.Home();
             Core.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
-                CartridgeCell.WhiteCell,
-                RotorController.CellPosition.CellRight);
+                CartridgeCell.WhiteCell);
 
-            // Опускаем иглу в кювету
-            Core.Needle.GoDownAndBrokeCartridge();
+            // Опускаем иглу в белую кювету
+            Core.Needle.GoDownAndPierceCartridge(CartridgeCell.WhiteCell, false);
 
             // Сливаем реагент в белую кювету
             Core.Pomp.Unsuction(0);
 
-            // Конец выполнения подготовительного этапа
+            // Поднимаем иглу до дома
+            Core.Needle.HomeLift();
 
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-й стадии.");
         }
@@ -389,16 +407,23 @@ namespace SteppersControlCore
         /// <param name="tube">Пробирка</param>
         private void performingPreparatoryTask(TubeInfo tube)
         {
-            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной (0-й) стадии.");
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной стадии.");
 
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
+            
             // Смещаем пробирку, чтобы она оказалась под иглой
             Core.Transporter.Shift(false, TransporterController.ShiftType.HalfTube);
-            
+
+            // Поднимаем иглу вверх до дома
+            Core.Needle.HomeLift();
+
+            Logger.DemoInfo($"Ожидание касания жидкости в пробирке...");
+
             // Устанавливаем иглу над пробиркой и опускаем ее до контакта с материалом в пробирке
             Core.Needle.TurnToTubeAndWaitTouch();
 
             Logger.DemoInfo($"Забор материала из пробирки.");
+
             // Набираем материал из пробирки
             Core.Pomp.Suction(0);
             
@@ -406,27 +431,31 @@ namespace SteppersControlCore
             Core.Rotor.Home();
             Core.Rotor.PlaceCellUnderNeedle( 
                 tube.Stages[0].CartridgePosition,
-                CartridgeCell.WhiteCell,
-                RotorController.CellPosition.CenterCell);
-
-            // Устанавливаем иглу над белой ячейкой картриджа
-            Core.Needle.TurnToCartridge(
-                NeedleController.FromPosition.Tube,
                 CartridgeCell.WhiteCell);
 
+            // Поднимаем иглу вверх до дома
+            Core.Needle.HomeLift();
+
+            // Устанавливаем иглу над белой ячейкой картриджа
+            Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+
             // Опускаем иглу в кювету
-            Core.Needle.GoDownAndBrokeCartridge();
+            Core.Needle.GoDownAndPierceCartridge(CartridgeCell.WhiteCell);
+
 
             Logger.DemoInfo($"Слив забранного материала в белую кювету.");
-            // Сливаем материал в белую кювету
-            Core.Pomp.Unsuction(0); // слив из иглы в картридж
 
-            Core.Needle.HomeAll();
+            // Сливаем материал в белую кювету
+            Core.Pomp.Unsuction(0);
+
+            // Поднимаем иглу вверх до дома
+            Core.Needle.HomeLift();
             
             // Промываем иглу
             needleWashingTask();
 
             Logger.DemoInfo($"Перенос реагента в белую кювету.");
+
             // Выполняем перенос реагента из нужной ячейки картриджа в белую кювету
             performingIntermediateTask(tube);
             
@@ -436,7 +465,7 @@ namespace SteppersControlCore
             // Смещаем пробирку обратно
             Core.Transporter.Shift(true, TransporterController.ShiftType.HalfTube);
 
-            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение подготовительной (0-й) стадии.");
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение подготовительной стадии.");
         }
     }
 }

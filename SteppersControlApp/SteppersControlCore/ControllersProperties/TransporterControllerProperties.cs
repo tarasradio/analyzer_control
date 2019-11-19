@@ -14,14 +14,20 @@ namespace SteppersControlCore.ControllersProperties
 
         [Category("2. Скорость")]
         [DisplayName("Скорость вращения пробирки")]
-        public int SpeedToTurnTube { get; set; } = 30;
+        public int TurnTubeSpeed { get; set; } = 30;
+        [Category("2. Скорость")]
+        [DisplayName("Скорость движения конвейера")]
+        public int TransporterMoveSpeed { get; set; } = 50;
+        [Category("2. Скорость")]
+        [DisplayName("Скорость движения конвейера домой")]
+        public int TransporterHomeSpeed { get; set; } = 100;
 
         [Category("3. Шаги")]
         [DisplayName("Шагов для сдвига на одну пробирку")]
-        public int StepsOneTube { get; set; } = 6400;
+        public int StepsPerTube { get; set; } = 6400;
         [Category("3. Шаги")]
         [DisplayName("Шагов для вращения пробирки")]
-        public int StepsToTurnTube { get; set; } = 10000;
+        public int StepsPerTubeRotate { get; set; } = 10000;
 
         public TransporterControllerProperties()
         {

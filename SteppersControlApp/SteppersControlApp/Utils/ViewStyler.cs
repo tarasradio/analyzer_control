@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.Windows.Forms;
 
-namespace SteppersControlApp.Views
+namespace SteppersControlApp.Utils
 {
     class ViewStyler
     {

@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using SteppersControlCore;
 using SteppersControlCore.CommunicationProtocol.AdditionalCommands;
 using SteppersControlCore.SerialCommunication;
+using SteppersControlApp.Utils;
 
 namespace SteppersControlApp.Views
 {

@@ -84,7 +84,7 @@ namespace SteppersControlApp.ControllersViews
                 () =>
                 {
                     Core.Rotor.Home();
-                    Core.Rotor.PlaceCellUnderWashBuffer();
+                    Core.Rotor.PlaceCellUnderWashBuffer(cellNumber);
                 });
             }
             else if(selectDischargePlace.Checked)
@@ -93,7 +93,7 @@ namespace SteppersControlApp.ControllersViews
                 () =>
                 {
                     Core.Rotor.Home();
-                    Core.Rotor.PlaceCellAtDischarge();
+                    Core.Rotor.PlaceCellAtDischarge(cellNumber);
                 });
             }
         }

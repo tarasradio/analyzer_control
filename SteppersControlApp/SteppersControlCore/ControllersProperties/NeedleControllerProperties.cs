@@ -63,8 +63,8 @@ namespace SteppersControlCore.ControllersProperties
         [DisplayName("Шагов для опускания до белой ячейки (при заборе)")]
         public int LiftStepsGoDownToMixCellAtSuction { get; set; } = 272000;
         [Category("3.2 Шаги двигателя подъема / опускания")]
-        [DisplayName("Шагов не доходя до картриджа")]
-        public int LiftStepsGoDownAtBroke { get; set; } = 70000;
+        [DisplayName("Шагов до безопасной высоты над картриджем")]
+        public int LiftStepsGoDownToSafeLevel { get; set; } = 0;
 
         public NeedleControllerProperties()
         {

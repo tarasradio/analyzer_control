@@ -27,7 +27,7 @@ namespace SteppersControlApp.ControllersViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Pomp.Washing(cycles);
+                    Core.Pomp.WashingNeedle(cycles);
                 });
         }
 

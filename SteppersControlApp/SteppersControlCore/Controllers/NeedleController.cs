@@ -18,6 +18,7 @@ namespace SteppersControlCore.Controllers
 
         public int LiftPosition { get; set; } = 0;
         public int RotatorPosition { get; set; } = 0;
+        public bool LiftPositionUnderfined { get; set; } = true;
 
         public NeedleController(ICommandExecutor executor) : base(executor)
         {
@@ -41,7 +42,7 @@ namespace SteppersControlCore.Controllers
 
         public void TurnToTubeAndWaitTouch()
         {
-            Logger.ControllerInfo($"[Needle] - Turn to tube and wait touch started");
+            Logger.ControllerInfo($"[Needle] - Start turn to tube and waiting touch.");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до пробирки
@@ -49,6 +50,11 @@ namespace SteppersControlCore.Controllers
 
             steppers = new Dictionary<int, int>() { { Properties.RotatorStepper, Properties.RotatorStepsTurnToTube - RotatorPosition} };
             commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+            RotatorPosition = Properties.RotatorStepsTurnToTube;
+
+            commands.Clear();
 
             // Опускание иглы до жидкости в пробирке
             commands.Add(new SetSpeedCommand(Properties.LiftStepper, (uint)Properties.LiftSpeed));
@@ -60,16 +66,16 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.LiftStepper, Properties.LiftStepsGoDownAfterTouch } };
             commands.Add(new MoveCncCommand(steppers));
 
-            RotatorPosition = Properties.RotatorStepsTurnToTube;
-            LiftPosition = -1; // ибо неизвестн, где он будет после касания жидкости в пробирке
-
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Needle] - Turn to tube and wait touch finished");
+            
+            LiftPositionUnderfined = true; // ибо неизвестно, где он будет после касания жидкости в пробирке
+
+            Logger.ControllerInfo($"[Needle] - Turn to tube and waiting touch finished.");
         }
 
         public void HomeRotator()
         {
-            Logger.ControllerInfo($"[Needle] - Home rotator started");
+            Logger.ControllerInfo($"[Needle] - Start rotator going to home.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Properties.RotatorStepper, 1000));
@@ -77,16 +83,16 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.RotatorStepper, 100 } };
             commands.Add(new HomeCncCommand(steppers));
 
-            LiftPosition = 0;
+            executor.WaitExecution(commands);
+            
             RotatorPosition = 0;
 
-            executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Needle] - Home rotator finished");
+            Logger.ControllerInfo($"[Needle] - Rotator goint to home finished.");
         }
 
         public void HomeLift()
         {
-            Logger.ControllerInfo($"[Needle] - Home lift started");
+            Logger.ControllerInfo($"[Needle] - Start lift going to home.");
             List<ICommand> commands = new List<ICommand>();
 
             
@@ -96,7 +102,11 @@ namespace SteppersControlCore.Controllers
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Needle] - Home lift finished");
+
+            LiftPosition = 0;
+            LiftPositionUnderfined = false;
+
+            Logger.ControllerInfo($"[Needle] - Lift going to home finished.");
         }
 
         public void HomeAll()
@@ -109,7 +119,7 @@ namespace SteppersControlCore.Controllers
 
         public void TurnAndGoDownToWashing()
         {
-            Logger.ControllerInfo($"[Needle] - Turn and go down to washing started");
+            Logger.ControllerInfo($"[Needle] - Start turn and going down to washing.");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до промывки
@@ -118,141 +128,113 @@ namespace SteppersControlCore.Controllers
             steppers = new Dictionary<int, int>() { { Properties.RotatorStepper, Properties.RotatorStepsTurnToWashing - RotatorPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
+            executor.WaitExecution(commands);
+            commands.Clear();
+
+            RotatorPosition = Properties.RotatorStepsTurnToWashing;
+
+            if (LiftPositionUnderfined)
+                HomeLift();
+
             // Опускание иглы до промывки
             commands.Add(new SetSpeedCommand(Properties.LiftStepper, 500));
 
             steppers = new Dictionary<int, int>() { { Properties.LiftStepper, Properties.LiftStepsGoDownToWashing - LiftPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
-            RotatorPosition = Properties.RotatorStepsTurnToWashing;
+            executor.WaitExecution(commands);
+
             LiftPosition = Properties.LiftStepsGoDownToWashing;
 
-            executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Needle] - Turn and go down to washing finished");
+            Logger.ControllerInfo($"[Needle] - Turn and going down to washing finished.");
         }
 
-        public enum FromPosition
+        public void GoDownAndPierceCartridge(CartridgeCell cartridgeCell, bool needSuction = true)
         {
-            Home,
-            Tube,
-            Washing,
-            WhiteCell,
-            FirstCell,
-            SecondCell,
-            THirdCell
-        }
+            Logger.ControllerInfo($"[Needle] - Start going down and piercing cartridge.");
 
-        //TODO: выяснить, используем относительное количество шагов или нет!!!
-        public void GoDownAndBrokeCartridge()
-        {
-            Logger.ControllerInfo($"[Needle] - Go down and broke cartridge started");
             List<ICommand> commands = new List<ICommand>();
+
+            int steps = Properties.LiftStepsGoDownToCell;
+
+            if (cartridgeCell == CartridgeCell.WhiteCell)
+            {
+                if (needSuction)
+                    steps = Properties.LiftStepsGoDownToMixCellAtSuction;
+                else
+                    steps = Properties.LiftStepsGoDownToMixCell;
+            }
+
+            if (LiftPositionUnderfined)
+                HomeLift();
 
             // Протыкание
             commands.Add(new SetSpeedCommand(Properties.LiftStepper, (uint)Properties.LiftSpeed));
 
-            steppers = new Dictionary<int, int>() { { Properties.LiftStepper, Properties.LiftStepsGoDownAtBroke } };
+            steppers = new Dictionary<int, int>() { { Properties.LiftStepper, steps - LiftPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
-            //LiftStepperPosition = Props.StepsOnBroke;
-
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Needle] - Go down and broke cartridge finished");
+            LiftPosition = steps;
+
+            Logger.ControllerInfo($"[Needle] - Going down and piercing cartridge finished.");
         }
 
-        //TODO: Доделать, ибо говно, убрать from position
-        public void TurnToCartridge(FromPosition fromPosition, CartridgeCell cell)
+        public void GoToSafeLevel()
         {
-            Logger.ControllerInfo($"[Needle] - Turn to cartridge started");
+            Logger.ControllerInfo($"[Needle] - Start going to safe level.");
+
+            List<ICommand> commands = new List<ICommand>();
+
+            if (LiftPositionUnderfined)
+                HomeLift();
+
+            int steps = Properties.LiftStepsGoDownToSafeLevel;
+
+            commands.Add(new SetSpeedCommand(Properties.LiftStepper, (uint)Properties.LiftSpeed));
+
+            steppers = new Dictionary<int, int>() { { Properties.LiftStepper, steps - LiftPosition } };
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+            LiftPosition = steps;
+
+            Logger.ControllerInfo($"[Needle] - Going to safe level finished.");
+        }
+
+        public void TurnToCartridge(CartridgeCell cell)
+        {
+            Logger.ControllerInfo($"[Needle] - Start turn to cartridge.");
             List<ICommand> commands = new List<ICommand>();
             
             int turnSteps = 0;
-            int upSteps = 0;
-
-            bool fromCartridge = false;
-
-            if(fromPosition == FromPosition.WhiteCell)
-            {
-                fromCartridge = true;
-                upSteps = Properties.LiftStepsGoDownToMixCell;
-            }
-            else if(fromPosition == FromPosition.FirstCell)
-            {
-                fromCartridge = true;
-                upSteps = Properties.LiftStepsGoDownToCell;
-            }
-            else if (fromPosition == FromPosition.SecondCell)
-            {
-                fromCartridge = true;
-                upSteps = Properties.LiftStepsGoDownToCell;
-            }
-            else if (fromPosition == FromPosition.THirdCell)
-            {
-                fromCartridge = true;
-                upSteps = Properties.LiftStepsGoDownToCell;
-            }
-
-            int downSteps = Properties.LiftStepsGoDownToCell;
 
             if(cell == CartridgeCell.WhiteCell)
             {
-                turnSteps = Properties.RotatorStepsTurnToMixCell - RotatorPosition;
-                RotatorPosition = Properties.RotatorStepsTurnToMixCell;
-
-                downSteps = Properties.LiftStepsGoDownToMixCell;
+                turnSteps = Properties.RotatorStepsTurnToMixCell;
             }
             else if(cell == CartridgeCell.FirstCell)
             {
-                turnSteps = Properties.RotatorStepsTurnToFirstCell - RotatorPosition;
-                RotatorPosition = Properties.RotatorStepsTurnToFirstCell;
+                turnSteps = Properties.RotatorStepsTurnToFirstCell;
             }
             else if(cell == CartridgeCell.SecondCell)
             {
-                turnSteps = Properties.RotatorStepsTurnToSecondCell - RotatorPosition;
-                RotatorPosition = Properties.RotatorStepsTurnToSecondCell;
+                turnSteps = Properties.RotatorStepsTurnToSecondCell;
             }
             else if(cell == CartridgeCell.ThirdCell)
             {
-                turnSteps = Properties.RotatorStepsTurnToThirdCell - RotatorPosition;
-                RotatorPosition = Properties.RotatorStepsTurnToThirdCell;
+                turnSteps = Properties.RotatorStepsTurnToThirdCell;
             }
 
-            if(fromCartridge)
-            {
-                // Подъем иглы
-                commands.Add(new SetSpeedCommand(Properties.LiftStepper, (uint)Properties.LiftSpeed));
-
-                steppers = new Dictionary<int, int>() { { Properties.LiftStepper, -Properties.LiftStepsGoDownAtBroke } };
-                commands.Add(new MoveCncCommand(steppers));
-            }
-            else
-            {
-                downSteps = downSteps - Properties.LiftStepsGoDownAtBroke;
-
-                // Подъем иглы
-                commands.Add(new SetSpeedCommand(Properties.LiftStepper, (uint)Properties.LiftSpeed));
-
-                steppers = new Dictionary<int, int>() { { Properties.LiftStepper, -100 } };
-                commands.Add(new HomeCncCommand(steppers));
-            }
-
-            // Поворот иглы до картриджа
             commands.Add(new SetSpeedCommand(Properties.RotatorStepper, 50));
 
-            steppers = new Dictionary<int, int>() { { Properties.RotatorStepper, turnSteps } };
+            steppers = new Dictionary<int, int>() { { Properties.RotatorStepper, turnSteps - RotatorPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
-            if(!fromCartridge)
-            {
-                // Доезд до картриджа (над ним)
-                commands.Add(new SetSpeedCommand(Properties.LiftStepper, (uint)Properties.LiftSpeed));
-
-                steppers = new Dictionary<int, int>() { { Properties.LiftStepper, downSteps } };
-                commands.Add(new MoveCncCommand(steppers));
-            }
-
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Needle] - Turn to cartridge finished");
+            RotatorPosition = turnSteps;
+
+            Logger.ControllerInfo($"[Needle] - Turn to cartridge finished.");
         }
     }
 }

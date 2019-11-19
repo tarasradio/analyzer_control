@@ -1,13 +1,6 @@
-﻿using SteppersControlApp.Views;
+﻿using SteppersControlApp.Utils;
 using SteppersControlCore.Elements;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SteppersControlApp.Forms

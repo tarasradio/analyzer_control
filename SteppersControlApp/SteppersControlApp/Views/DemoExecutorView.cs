@@ -1,5 +1,5 @@
 ﻿using SteppersControlApp.Forms;
-using SteppersControlApp.Views;
+using SteppersControlApp.Utils;
 using SteppersControlCore;
 using SteppersControlCore.Elements;
 using System;
@@ -124,6 +124,17 @@ namespace SteppersControlApp.ControllersViews
             dialogForm.SetTube(selectedTube);
             dialogForm.StartPosition = FormStartPosition.CenterScreen;
             dialogForm.ShowDialog();
+        }
+
+        private void tubesList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(selectedTube != null)
+            {
+                EditTubeDialogForm dialogForm = new EditTubeDialogForm();
+                dialogForm.SetTube(selectedTube);
+                dialogForm.StartPosition = FormStartPosition.CenterScreen;
+                dialogForm.ShowDialog();
+            }
         }
     }
 }

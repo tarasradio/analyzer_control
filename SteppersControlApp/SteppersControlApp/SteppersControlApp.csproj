@@ -188,7 +188,7 @@
     <Compile Include="Views\StepperTurningView.Designer.cs">
       <DependentUpon>StepperTurningView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\ViewStyler.cs" />
+    <Compile Include="Utils\ViewStyler.cs" />
     <EmbeddedResource Include="Forms\EditTubeDialogForm.resx">
       <DependentUpon>EditTubeDialogForm.cs</DependentUpon>
     </EmbeddedResource>

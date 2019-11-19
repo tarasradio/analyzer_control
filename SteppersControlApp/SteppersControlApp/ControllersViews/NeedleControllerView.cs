@@ -62,22 +62,35 @@ namespace SteppersControlApp.ControllersViews
                 cell = CartridgeCell.ThirdCell;
             }
 
-            NeedleController.FromPosition fromPosition = NeedleController.FromPosition.Home;
-
             Core.Executor.StartTask(
                 () =>
                 {
                     Core.Needle.HomeAll();
-                    Core.Needle.TurnToCartridge(fromPosition, cell);
+                    Core.Needle.TurnToCartridge(cell);
                 });
         }
 
         private void buttonGoDownAndBrokeCartridge_Click(object sender, EventArgs e)
         {
+            CartridgeCell cell = CartridgeCell.WhiteCell;
+
+            if (selectFirstCell.Checked)
+            {
+                cell = CartridgeCell.FirstCell;
+            }
+            else if (selectSecondCell.Checked)
+            {
+                cell = CartridgeCell.SecondCell;
+            }
+            else if (selectThirdCell.Checked)
+            {
+                cell = CartridgeCell.ThirdCell;
+            }
+
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Needle.GoDownAndBrokeCartridge();
+                    Core.Needle.GoDownAndPierceCartridge(cell);
                 });
         }
 

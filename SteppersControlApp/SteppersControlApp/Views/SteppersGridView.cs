@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using SteppersControlCore.CommunicationProtocol.Responses;
 using SteppersControlCore;
+using SteppersControlApp.Utils;
 
 namespace SteppersControlApp.Views
 {
