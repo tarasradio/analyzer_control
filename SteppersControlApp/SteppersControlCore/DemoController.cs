@@ -99,10 +99,9 @@ namespace SteppersControlCore
         public void AbortExecution()
         {
             Logger.DemoInfo("Работа демо режима прервана.");
-            if(timer.Enabled)
-                timer.Stop();
-            if(stopWatch.IsRunning)
-                stopWatch.Stop();
+
+            if(timer.Enabled) timer.Stop();
+            if(stopWatch.IsRunning) stopWatch.Stop();
         }
 
         private void DemoTask()
@@ -207,12 +206,17 @@ namespace SteppersControlCore
         /// <returns>Пробирка со штрихкодом или null</returns>
         private TubeInfo searchBarcodeInDatabase(string barCode)
         {
+            TubeInfo result = null;
+
             foreach (TubeInfo tube in Properties.Tubes)
             {
                 if (barCode.Contains(tube.BarCode))
-                    return tube;
+                {
+                    result = tube;
+                    break;
+                }
             }
-            return null;
+            return result;
         }
 
         /// <summary>
@@ -221,12 +225,17 @@ namespace SteppersControlCore
         /// <returns>Наличие невыполненных задач</returns>
         private bool haveOutstandingTasks()
         {
+            bool result = false;
+
             foreach(TubeInfo tube in Properties.Tubes)
             {
                 if (tube.CurrentStage <= tube.Stages.Count)
-                    return true;
+                {
+                    result = true;
+                    break;
+                }
             }
-            return false;
+            return result;
         }
 
         /// <summary>
@@ -283,7 +292,7 @@ namespace SteppersControlCore
                 Core.Transporter.RotateAndScanTube();
                 string barCode = Core.GetLastTubeBarCode();
 
-                if (barCode != null)
+                if ( !String.IsNullOrWhiteSpace(barCode) )
                 {
                     Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barCode}].");
 

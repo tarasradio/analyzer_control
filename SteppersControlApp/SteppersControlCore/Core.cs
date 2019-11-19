@@ -20,6 +20,7 @@ namespace SteppersControlCore
         public static PacketFinder PackFinder { get; private set; } = new PacketFinder();
         public static PackageHandler PackHandler { get; private set; } = new PackageHandler();
         public static SerialHelper Serial { get; private set; }
+
         public static CommandExecutor CmdExecutor { get; private set; }
         public static TaskExecutor Executor { get; private set; }
 
@@ -36,10 +37,10 @@ namespace SteppersControlCore
         private static ushort[] _sensorsValues = null;
         private static ushort[] _steppersStates = null;
 
-        private static string _lastABarCode = null;
-        private static string _lastBBarCode = null;
-        private static string _lastFirmwareVersionResponse = null;
-        private static string path = null;
+        private static string lastTubeBarCode = String.Empty;
+        private static string lastCartridgeBarCode = String.Empty;
+        private static string lastFirmwareVersionResponse = String.Empty;
+        private static string path = String.Empty;
 
         public Core(string configurationFilename)
         {
@@ -59,8 +60,9 @@ namespace SteppersControlCore
 
             Serial = new SerialHelper(PackFinder);
 
-            PackHandler.BarCodeAReceived += PackHandler_BarCodeAReceived;
-            PackHandler.BarCodeBReceived += PackHandler_BarCodeBReceived;
+            PackHandler.TubeBarCodeReceived += PackHandler_TubeBarCodeReceived;
+            PackHandler.CartridgeBarCodeReceived += PackHandler_CartridgeBarCodeReceived;
+
             PackHandler.FirmwareVersionReceived += PackHandler_FirmwareVersionReceived;
             PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived;
             PackHandler.SteppersStatesReceived += PackHandler_SteppersStatesReceived;
@@ -93,19 +95,19 @@ namespace SteppersControlCore
             Logger.Info("Запись работы системы начата");
         }
 
-        private void PackHandler_BarCodeAReceived(string message)
+        private void PackHandler_TubeBarCodeReceived(string message)
         {
             lock (locker)
             {
-                _lastABarCode = message;
+                lastTubeBarCode = message;
             }
         }
 
-        private void PackHandler_BarCodeBReceived(string message)
+        private void PackHandler_CartridgeBarCodeReceived(string message)
         {
             lock (locker)
             {
-                _lastBBarCode = message;
+                lastCartridgeBarCode = message;
             }
         }
 
@@ -136,7 +138,7 @@ namespace SteppersControlCore
 
         private void PackHandler_FirmwareVersionReceived(string message)
         {
-            _lastFirmwareVersionResponse = message;
+            lastFirmwareVersionResponse = message;
         }
 
         public void SaveConfiguration()
@@ -151,7 +153,8 @@ namespace SteppersControlCore
         
         public async static void CheckFirmwareVersion()
         {
-            _lastFirmwareVersionResponse = null;
+            lastFirmwareVersionResponse = String.Empty;
+
             for(int i = 0; i < 3; i++)
             {
                 Serial.SendPacket(new GetFirmwareVersionCommand().GetBytes());
@@ -161,11 +164,11 @@ namespace SteppersControlCore
             await Task.Run( async()=>{
                 await Task.Delay(1000);
 
-                bool received = _lastFirmwareVersionResponse != null;
+                bool received = String.IsNullOrWhiteSpace(lastFirmwareVersionResponse);
 
                 if(received)
                 {
-                    if (String.Equals(FirmwareVersion, _lastFirmwareVersionResponse))
+                    if (String.Equals(FirmwareVersion, lastFirmwareVersionResponse))
                     {
                         Logger.Info("[System] - Версия платы совпадает с требуемой.");
                     }
@@ -231,25 +234,25 @@ namespace SteppersControlCore
         
         public static string GetLastTubeBarCode()
         {
-            string barCode = null;
+            string barCode;
 
             lock(locker)
             {
-                barCode = _lastABarCode;
-                _lastABarCode = null;
+                barCode = lastTubeBarCode;
+                lastTubeBarCode = String.Empty;
             }
 
             return barCode;
         }
 
-        public static string GetLastBBarCode()
+        public static string GetLastCartridgeBarCode()
         {
-            string barCode = null;
+            string barCode;
 
             lock (locker)
             {
-                barCode = _lastBBarCode;
-                _lastBBarCode = null;
+                barCode = lastCartridgeBarCode;
+                lastCartridgeBarCode = String.Empty;
             }
 
             return barCode;
@@ -260,6 +263,7 @@ namespace SteppersControlCore
             Executor.AbortExecution();
             CmdExecutor.AbortExecution();
             Demo.AbortExecution();
+
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }
     }
