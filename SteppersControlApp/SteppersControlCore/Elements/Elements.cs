@@ -15,10 +15,17 @@ namespace SteppersControlCore.Elements
         ThirdCell
     };
 
+    /// <summary>
+    /// Ячейка (с пробиркой) в конвейере
+    /// </summary>
     class TubeCell
     {
         public bool HaveTube { get; set; } = false;
         public string BarCode { get; set; } = "";
+        /// <summary>
+        /// Анализ, закрепелнный за этой пробиркой в ячейке
+        /// </summary>
+        public TubeInfo Tube { get; set; } = null;
 
         public TubeCell()
         {
@@ -62,6 +69,13 @@ namespace SteppersControlCore.Elements
         public TubeInfo()
         {
             
+        }
+
+        public void Clear()
+        {
+            IsFind = false;
+            CurrentStage = -1;
+            TimeToStageComplete = 0;
         }
     }
 }

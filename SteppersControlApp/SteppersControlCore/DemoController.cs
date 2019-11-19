@@ -28,10 +28,12 @@ namespace SteppersControlCore
         private const string filename = "Tubes";
 
         // шагов пробирки от точки сканирования до точки с забором 
-        private const int cellsFromScanPlaceToSuctionPlace = 7;
-        private const int numberTubeCells = 54;
-        private TubeCell[] cells;
-        private int currentCell = 0;
+        private const int tubeCellsCount = 54;
+        private const int cellsBetweenScanAndSuction = 7;
+        
+        private TubeCell[] tubeCells;
+
+        private int currentCellAtScanner = 0;
 
         private Stopwatch stopWatch = new Stopwatch();
         Timer timer = new Timer();
@@ -42,7 +44,7 @@ namespace SteppersControlCore
         {
             Properties = new DemoControllerProperties();
 
-            cells = new TubeCell[numberTubeCells];
+            tubeCells = new TubeCell[tubeCellsCount];
 
             timer.Interval = 1000;
             timer.Elapsed += Timer_Elapsed;
@@ -109,17 +111,12 @@ namespace SteppersControlCore
             {
                 lock(locker)
                 {
-                    tube.IsFind = false;
-                    tube.CurrentStage = -1;
-                    tube.TimeToStageComplete = 0;
+                    tube.Clear();
                 }
             }
-               
+
             initializationTask();
             needleWashingTask();
-
-            //Закрываем клапана
-            Core.Pomp.CloseValves();
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
@@ -128,50 +125,47 @@ namespace SteppersControlCore
 
             Logger.DemoInfo($"Подготовка завершена");
 
-            currentCell = 0;
+            currentCellAtScanner = 0;
 
-            while (haveOutstandingTasks()) // пока есть задачи
+            while (haveOutstandingTasks()) // пока есть невыполненные задачи
             {
-                if (currentCell == numberTubeCells) // прошли полный круг
+                if (currentCellAtScanner == tubeCellsCount) // прошли полный круг
                 {
-                    currentCell = 0;
+                    currentCellAtScanner = 0;
+                    Logger.DemoInfo($"Круг пройден. Запуск повторного сканирования.");
                 }
 
-                if (tubeSearchTask(3) == false)
-                {
-                    Logger.DemoInfo($"Пробирка со штрихкодом [{cells[currentCell].BarCode}] не найдена в списке анализов!");
-                }
+                if (tubeCells[currentCellAtScanner] == null)
+                    tubeCells[currentCellAtScanner] = new TubeCell();
 
-                int cellUnderNeedle = currentCell - cellsFromScanPlaceToSuctionPlace;
+                searchTubeInCell(2);
 
-                if (currentCell >= cellsFromScanPlaceToSuctionPlace && 
-                    cells[cellUnderNeedle].HaveTube == true) // первая пробирка уже под иглой
+                // Получение номера ячейки в точке забора материала из пробирки
+                int cellUnderNeedle = currentCellAtScanner - cellsBetweenScanAndSuction;
+                if (cellUnderNeedle < 0) cellUnderNeedle += tubeCellsCount;
+                // Номер получен
+
+                if (tubeCells[cellUnderNeedle] == null)
+                    tubeCells[cellUnderNeedle] = new TubeCell();
+
+                TubeInfo tube = tubeCells[cellUnderNeedle].Tube;
+
+                if(tube != null)
                 {
-                    TubeInfo tube = searchBarcodeInDatabase(cells[cellUnderNeedle].BarCode);
+                    Logger.DemoInfo($"Пробирка со штрихкодом [{tube.BarCode}] дошла до точки забора материала.");
                     
-                    if(null != tube)
+                    if(tube.CurrentStage == -1)
                     {
-                        lock(locker)
-                        {
-                            tube.IsFind = true;
-                        }
-
-                        Logger.DemoInfo($"Пробирка со штрихкодом [{tube.BarCode}] дошла до точки забора!");
-                        Logger.DemoInfo($"Пробирка со штрихкодом [{tube.BarCode}] запущена в обработку!");
-                        // постановка на выполнение задач и забор из пробирки в белую кювету
+                        Logger.DemoInfo($"Забор материала ранее не производился.");
 
                         tube.CurrentStage = 0;
                         performingPreparatoryTask(tube);
-
-                        lock (locker)
-                        {
-                            tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
-                        }
+                        tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
                     }
                 }
 
                 performingOutstandingTasks();
-                currentCell++;
+                currentCellAtScanner++;
             }
 
             Logger.DemoInfo($"Все пробирки обработаны!");
@@ -184,11 +178,10 @@ namespace SteppersControlCore
         {
             foreach (TubeInfo tube in Properties.Tubes)
             {
-                if (tube.IsFind && tube.TimeToStageComplete == 0)
+                if(tube.CurrentStage >= 0 && tube.TimeToStageComplete == 0)
                 {
                     tube.CurrentStage++;
                     
-
                     if (tube.CurrentStage < tube.Stages.Count)
                     {
                         tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
@@ -202,6 +195,7 @@ namespace SteppersControlCore
 
                         performingFinishTask(tube);
                     }
+
                 }
             }
         }
@@ -262,6 +256,7 @@ namespace SteppersControlCore
             Core.Needle.TurnAndGoDownToWashing();
             Core.Pomp.Washing(2);
             Core.Pomp.Home();
+            Core.Pomp.CloseValves();
 
             Logger.DemoInfo($"Промывка иглы завершена.");
         }
@@ -271,48 +266,48 @@ namespace SteppersControlCore
         /// </summary>
         /// <param name="numberAttempts">Количество попыток (при неудаче)</param>
         /// <returns>Успешность выполнения</returns>
-        private bool tubeSearchTask(int numberAttempts)
+        private void searchTubeInCell(int numberAttempts)
         {
             int attempt = 0;
-            bool result = false;
+            
+            TubeCell tubeCell = tubeCells[currentCellAtScanner];
 
             Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
-            //Закрываем клапана
-            Core.Pomp.CloseValves();
+
             Core.Transporter.Shift(false);
 
             while (attempt < numberAttempts)
             {
-                Core.Transporter.RotateAndScanTube();
-                cells[currentCell] = new TubeCell();
+                Logger.DemoInfo($"Попытка {attempt}.");
 
-                string barCode = Core.GetLastABarCode();
+                Core.Transporter.RotateAndScanTube();
+                string barCode = Core.GetLastTubeBarCode();
 
                 if (barCode != null)
                 {
-                    cells[currentCell].HaveTube = true;
-                    cells[currentCell].BarCode = barCode;
-                    Logger.DemoInfo($"В ячейке под номером {currentCell} найдена пробирка!");
+                    Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barCode}].");
 
-                    TubeInfo tube = searchBarcodeInDatabase(cells[currentCell].BarCode);
+                    tubeCell.Tube = searchBarcodeInDatabase(barCode);
 
-                    if(tube != null)
+                    if(tubeCell.Tube != null)
                     {
-                        lock(locker)
-                        {
-                            tube.IsFind = true;
-                        }
-                        Logger.DemoInfo($"Штрихкод [{tube.BarCode}] найден  списке задач!");
-                        result = true;
-                        break;
-                    } 
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{barCode}] найдена в списке анализов!");
+                        tubeCell.Tube.IsFind = true;
+                    }
+                    else
+                    {
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{barCode}] не найдена в списке анализов!");
+                    }
+                    break;
+                }
+                else
+                {
+                    Logger.DemoInfo($"Пробирка не обнаружена.");
                 }
                 attempt++;
             }
 
             Logger.DemoInfo($"Поиск пробирки (сканирование) завершен.");
-
-            return result;
         }
 
         /// <summary>
@@ -331,7 +326,7 @@ namespace SteppersControlCore
         /// <param name="tube">Пробирка</param>
         private void performingIntermediateTask(TubeInfo tube)
         {
-            Logger.ControllerInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
+            Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
 
             Core.Needle.HomeAll();
             needleWashingTask(); // Промывка иглы

@@ -229,7 +229,7 @@ namespace SteppersControlCore
             return value;
         }
         
-        public static string GetLastABarCode()
+        public static string GetLastTubeBarCode()
         {
             string barCode = null;
 
