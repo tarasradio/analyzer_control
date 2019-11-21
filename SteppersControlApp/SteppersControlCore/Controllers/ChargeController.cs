@@ -112,6 +112,8 @@ namespace SteppersControlCore.Controllers
 
             executor.WaitExecution(commands);
 
+            commands.Clear();
+
             // Продвижение крюка до картриджа
             steppers = new Dictionary<int, int>() {
                 { Properties.HookStepper, Properties.HookSpeed } };
@@ -123,6 +125,8 @@ namespace SteppersControlCore.Controllers
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
+
+            commands.Clear();
 
             // Возврат загрузки, чтобы крюк захватил картридж
             steppers = new Dictionary<int, int>() {
