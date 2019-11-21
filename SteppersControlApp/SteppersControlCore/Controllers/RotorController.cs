@@ -143,18 +143,39 @@ namespace SteppersControlCore.Controllers
             }
             else if (cartridgeCell == CartridgeCell.FirstCell)
             {
-                turnSteps = (cellPosition == CellPosition.CellLeft) ?
-                    Properties.StepsToNeedleLeft1 : Properties.StepsToNeedleRight1;
+                if (cellPosition == CellPosition.CellLeft)
+                    turnSteps = Properties.StepsToNeedleLeft1;
+                else if (cellPosition == CellPosition.CellRight)
+                    turnSteps = Properties.StepsToNeedleRight1;
+                else
+                {
+                    turnSteps = Properties.StepsToNeedleLeft1 +
+                        (Properties.StepsToNeedleRight1 - Properties.StepsToNeedleLeft1) / 2;
+                }
             }
             else if (cartridgeCell == CartridgeCell.SecondCell)
             {
-                turnSteps = (cellPosition == CellPosition.CellLeft) ?
-                    Properties.StepsToNeedleLeft2 : Properties.StepsToNeedleRight2;
+                if (cellPosition == CellPosition.CellLeft)
+                    turnSteps = Properties.StepsToNeedleLeft2;
+                else if (cellPosition == CellPosition.CellRight)
+                    turnSteps = Properties.StepsToNeedleRight2;
+                else
+                {
+                    turnSteps = Properties.StepsToNeedleLeft2 +
+                        (Properties.StepsToNeedleRight2 - Properties.StepsToNeedleLeft2) / 2;
+                }
             }
             else if (cartridgeCell == CartridgeCell.ThirdCell)
             {
-                turnSteps = (cellPosition == CellPosition.CellLeft) ?
-                    Properties.StepsToNeedleLeft3 : Properties.StepsToNeedleRight3;
+                if (cellPosition == CellPosition.CellLeft)
+                    turnSteps = Properties.StepsToNeedleLeft3;
+                else if (cellPosition == CellPosition.CellRight)
+                    turnSteps = Properties.StepsToNeedleRight3;
+                else
+                {
+                    turnSteps = Properties.StepsToNeedleLeft3 +
+                        (Properties.StepsToNeedleRight3 - Properties.StepsToNeedleLeft3) / 2;
+                }
             }
 
             turnSteps += Properties.StepsPerCell * cartridgePosition;

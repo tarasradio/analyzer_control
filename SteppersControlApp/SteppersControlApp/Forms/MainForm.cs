@@ -28,31 +28,30 @@ namespace SteppersControlApp.Forms
         ResourceManager resourceManager;
         CultureInfo culture = Thread.CurrentThread.CurrentCulture;
 
-        private void UpdateState()
+        private void UpdateControlsState()
         {
             if (Core.Serial.IsOpen())
             {
                 buttonConnect.Text = resourceManager.GetString("disconnect_text", Core.Settings.Culture);
-                //buttonConnect.Text = "Отключиться";
-                connectionState.Text = "Подключен";
+                connectionState.Text = $"Установленно соединение с { Core.Serial.PortName }.";
                 connectionState.ForeColor = Color.DarkGreen;
             }
             else
             {
-                resourceManager.GetString("connect_text", Core.Settings.Culture);
-                //buttonConnect.Text = "Подключиться";
-                connectionState.Text = "Не подключен";
+                buttonConnect.Text = resourceManager.GetString("connect_text", Core.Settings.Culture);
+                connectionState.Text = "Соединение не установлено.";
                 connectionState.ForeColor = Color.Brown;
             }
+
+            buttonUpdateList.Visible = !Core.Serial.IsOpen();
+            selectPort.Enabled = !Core.Serial.IsOpen();
+            editBaudrate.Enabled = !Core.Serial.IsOpen();
+            buttonStartDemo.Visible = Core.Serial.IsOpen();
         }
 
         public MainForm()
         {
             InitializeComponent();
-            resourceManager = new ResourceManager("SteppersControlApp.Strings", typeof(Resources).Assembly);
-            culture = new CultureInfo("ru-RU");
-
-            UpdateCurrentLanguage();
         }
 
         private void UpdateCurrentLanguage()
@@ -62,14 +61,6 @@ namespace SteppersControlApp.Forms
             buttonShowControlPanel.Text = resourceManager.GetString("button_show_control_panel_text", Core.Settings.Culture);
             buttonAbortExecution.Text = resourceManager.GetString("button_abort_execution_text", Core.Settings.Culture);
             buttonStartDemo.Text = resourceManager.GetString("button_start_demo_text", Core.Settings.Culture);
-        }
-
-        private void InitializeAll()
-        {
-            editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
-
-            buttonConnect.Enabled = false;
-            buttonConnect.Visible = false;
         }
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
@@ -88,47 +79,31 @@ namespace SteppersControlApp.Forms
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();
 
-                buttonConnect.Text = resourceManager.GetString("connect_text", culture);
-                connectionState.Text = "Ожидание соединения";
-
-                buttonUpdateList.Enabled = true;
-                selectPort.Enabled = true;
-                editBaudrate.Enabled = true;
-
                 rescanOpenPorts();
             }
             else
             {
                 string portName = selectPort.SelectedItem.ToString();
                 int baudrate = int.Parse(editBaudrate.SelectedItem.ToString());
-
-                bool isOK = Core.Serial.Open(portName, baudrate);
-
-                if (isOK)
+                
+                if( Core.Serial.Open(portName, baudrate) )
                 {
-                    Core.CheckFirmwareVersion();
-
-                    connectionState.Text = "Установленно соединение с " + portName;
+                    //Core.CheckFirmwareVersion();
+                    
                     Logger.Info(
                         "Открытие подключения - подключение к " + portName + " открыто");
-                    buttonConnect.Text = resourceManager.GetString("disconnect_text", culture);
 
                     steppersGridView.StartUpdate();
                     sensorsView.StartUpdate();
-
-                    buttonUpdateList.Enabled = false;
-                    selectPort.Enabled = false;
-                    editBaudrate.Enabled = false;
                 }
                 else
                 {
                     Logger.Info(
                         "Открытие подключения - Ошибка при подключении!");
-                    connectionState.Text = "Ожидание соединения";
                 }
             }
 
-            UpdateState();
+            UpdateControlsState();
         }
 
         private void buttonUpdateList_Click(object sender, EventArgs e)
@@ -146,23 +121,28 @@ namespace SteppersControlApp.Forms
             {
                 selectPort.Items.AddRange(portsNames);
                 Logger.Info( resourceManager.GetString("ports_found", culture));
-                buttonConnect.Enabled = true;
-                buttonConnect.Visible = true;
                 selectPort.SelectedIndex = 0;
             }
             else
             {
                 Logger.Info(
                     resourceManager.GetString("no_ports_found", culture));
-                buttonConnect.Enabled = false;
-                buttonConnect.Visible = false;
                 selectPort.SelectedText = "";
             }
+
+            buttonConnect.Visible = (portsNames.Length != 0);
+            editBaudrate.SelectedIndex = editBaudrate.Items.Count - 1;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            InitializeAll();
+            resourceManager = new ResourceManager("SteppersControlApp.Strings", typeof(Resources).Assembly);
+            culture = new CultureInfo("ru-RU");
+
+            UpdateCurrentLanguage();
+            
+            UpdateControlsState();
+            rescanOpenPorts();
 
             Text = $"Управление анализами - версия {Application.ProductVersion}";
 
@@ -229,11 +209,6 @@ namespace SteppersControlApp.Forms
             {
                 Core.Demo.StartDemo();
             }
-        }
-
-        private void steppersGridView_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

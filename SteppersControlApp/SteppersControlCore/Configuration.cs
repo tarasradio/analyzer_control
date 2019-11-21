@@ -31,6 +31,8 @@ namespace SteppersControlCore
         public uint FullSpeed { get; set; } = 1000;
         [XmlIgnore]
         public ushort Status { get; set; } = 0;
+        [XmlIgnore]
+        public int Position { get; set; } = 0;
     }
 
     public class Configuration

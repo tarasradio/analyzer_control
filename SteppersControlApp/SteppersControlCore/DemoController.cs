@@ -374,6 +374,18 @@ namespace SteppersControlCore
             // Прокалываем ячейку картриджа
             Core.Needle.GoDownAndPierceCartridge(tube.Stages[tube.CurrentStage].Cell);
 
+            // Поднимаемся на безопасную высоту над картриджем
+            Core.Needle.GoToSafeLevel();
+
+            // Подводим центр ячейки картриджа под иглу
+            Core.Rotor.PlaceCellUnderNeedle(
+                tube.Stages[tube.CurrentStage].CartridgePosition,
+                tube.Stages[tube.CurrentStage].Cell,
+                RotorController.CellPosition.CellCenter);
+
+            // Прокалываем ячейку картриджа
+            Core.Needle.GoDownAndPierceCartridge(tube.Stages[tube.CurrentStage].Cell);
+
             // Забираем реагент из ячейки картриджа
             Core.Pomp.Suction(0);
 

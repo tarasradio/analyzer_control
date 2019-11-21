@@ -15,6 +15,16 @@ namespace SteppersControlCore.SerialCommunication
         PacketFinder _packageReceiver = null;
         SerialPort _serialPort = null;
 
+        public string PortName {
+            get
+            {
+                return _serialPort.PortName;
+            }
+            set
+            {
+                _serialPort.PortName = value;
+            } }
+
         public SerialHelper(PacketFinder packageReceiver)
         {
             _packageReceiver = packageReceiver;
