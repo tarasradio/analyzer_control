@@ -421,6 +421,7 @@ namespace SteppersControlCore
             Core.Charger.HomeRotator();
             Core.Charger.TurnToCell(5);
             Core.Charger.ChargeCartridge();
+            Core.Charger.HomeHook();
         }
 
 
