@@ -413,6 +413,18 @@ namespace SteppersControlCore
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-й стадии.");
         }
 
+        private void performingChargeTask()
+        {
+            Core.Rotor.Home();
+            Core.Rotor.PlaceCellAtCharge(0, 5);
+            Core.Charger.HomeHook();
+            Core.Charger.HomeRotator();
+            Core.Charger.TurnToCell(5);
+            Core.Charger.ChargeCartridge();
+            Core.Charger.HomeHook();
+        }
+
+
         /// <summary>
         /// Выполнение подготовительной задачи (включает забор материала из пробирки)
         /// </summary>
@@ -428,6 +440,12 @@ namespace SteppersControlCore
 
             // Поднимаем иглу вверх до дома
             Core.Needle.HomeLift();
+
+            Logger.DemoInfo($"Ожидание загрузки картриджа...");
+
+            performingChargeTask();
+
+            Logger.DemoInfo($"Загрузка картриджа завершена.");
 
             Logger.DemoInfo($"Ожидание касания жидкости в пробирке...");
 
