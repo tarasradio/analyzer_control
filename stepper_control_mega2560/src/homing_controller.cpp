@@ -72,23 +72,23 @@ uint8_t HomingController::updateState()
 {
 #ifdef EMULATOR
 
-    if(Emulator::TaskIsRunning() && countHomeSteppers > 0)
+    if(Emulator::taskIsRunning() && countHomeSteppers > 0)
     {
 #ifdef DEBUG
         {
             String message = "elapsed time = " + String(Emulator::GetElapsedMilliseconds());
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
-        if(Emulator::GetElapsedMilliseconds() >= MOVE_DELAY)
+        if(Emulator::getElapsedMilliseconds() >= MOVE_DELAY)
         {
 #ifdef DEBUG
         {
             String message = "Stop task";
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
-            Emulator::StopTask();
+            Emulator::stopTask();
             countHomeSteppers = 0;
         }
     }

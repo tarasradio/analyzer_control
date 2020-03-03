@@ -12,16 +12,16 @@ class Emulator
 private:
 
 public:
-  static void Init();
-  static uint32_t GetElapsedMilliseconds();
+  static void init();
+  static uint32_t getElapsedMilliseconds();
 
-  static bool BarCodeExist();
-  static void NextBarCode();
-  static const char* GetBarCodeMessage();
+  static bool barCodeExist();
+  static void nextBarCode();
+  static const char* getBarCodeMessage();
   
-  static void RunTask();
-  static void StopTask();
-  static bool TaskIsRunning();
+  static void runTask();
+  static void stopTask();
+  static bool taskIsRunning();
 };
 
 #endif

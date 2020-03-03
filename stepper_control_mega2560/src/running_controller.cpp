@@ -50,7 +50,7 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
         message += ", value = " + String(sensorValue);
         message += ", edgeType = ";
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 
@@ -59,7 +59,7 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
 #ifdef DEBUG
         {
             String message = "rising]";
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -68,7 +68,7 @@ void RunningController::setRunParams(int8_t sensor, uint16_t sensorValue, uint8_
 #ifdef DEBUG
         {
             String message = "falling]";
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -79,23 +79,23 @@ uint8_t RunningController::updateState()
 {
     #ifdef EMULATOR
 
-    if(Emulator::TaskIsRunning() && countRunSteppers > 0)
+    if(Emulator::taskIsRunning() && countRunSteppers > 0)
     {
 #ifdef DEBUG
         {
             String message = "elapsed time = " + String(Emulator::GetElapsedMilliseconds());
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
-        if(Emulator::GetElapsedMilliseconds() >= RUN_DELAY)
+        if(Emulator::getElapsedMilliseconds() >= RUN_DELAY)
         {
 #ifdef DEBUG
         {
             String message = "Stop task";
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
-            Emulator::StopTask();
+            Emulator::stopTask();
             countRunSteppers = 0;
         }
     }
@@ -113,7 +113,7 @@ uint8_t RunningController::updateState()
             message += String(value);
             message += ", Filter num = ";
             message += String(acceptedNeedValueCount);
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
             if (RisingEdge == valueEdgeType)

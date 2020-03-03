@@ -1,52 +1,52 @@
 #include "emulator.hpp"
 
-static bool taskIsRunning = false;
+static bool _taskIsRunning = false;
 static uint32_t timer = 0;
 
-static bool barCodeExist = false;
+static bool _barCodeExist = false;
 static const char* barCodeMessages[3] = { "77FG89RT\0", "34QW45AZ\0", "34WE56AD\0" };
 static uint8_t currentMessage = 0;
 
-void Emulator::Init()
+void Emulator::init()
 {
   timer = 0;
   currentMessage = 0;
 }
 
-uint32_t Emulator::GetElapsedMilliseconds()
+uint32_t Emulator::getElapsedMilliseconds()
 {
   return millis() - timer;
 }
 
-void Emulator::RunTask()
+void Emulator::runTask()
 {
   timer = millis();
-  taskIsRunning = true;
+  _taskIsRunning = true;
 }
 
-void Emulator::StopTask()
+void Emulator::stopTask()
 {
-  taskIsRunning = false;
+  _taskIsRunning = false;
 }
 
-bool Emulator::TaskIsRunning()
+bool Emulator::taskIsRunning()
 {
-  return taskIsRunning;
+  return _taskIsRunning;
 }
 
-bool Emulator::BarCodeExist()
+bool Emulator::barCodeExist()
 {
-  return barCodeExist;
+  return _barCodeExist;
 }
 
-void Emulator::NextBarCode()
+void Emulator::nextBarCode()
 {
-  barCodeExist = true;
+  _barCodeExist = true;
 }
 
-const char* Emulator::GetBarCodeMessage()
+const char* Emulator::getBarCodeMessage()
 {
-  barCodeExist = false;
+  _barCodeExist = false;
   if(currentMessage < 3)
     return barCodeMessages[currentMessage++];
   else

@@ -20,15 +20,15 @@ namespace SteppersControlApp
             {
                 Core core = new Core("settings/config.xml");
 
-                StartForm authForm = new StartForm();
+                StartForm startForm = new StartForm();
                 MainForm mainForm = new MainForm();
 
-                authForm.StartPosition = FormStartPosition.CenterScreen;
+                startForm.StartPosition = FormStartPosition.CenterScreen;
                 mainForm.StartPosition = FormStartPosition.CenterScreen;
 
-                Application.Run(authForm);
+                Application.Run(startForm);
 
-                if (authForm.IsAuthenticated)
+                if (startForm.IsAuthenticated)
                 {
                     Application.Run(mainForm);
                 }

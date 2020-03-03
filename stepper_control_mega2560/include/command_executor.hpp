@@ -57,7 +57,7 @@ public:
         MovingController * movingController,
         BarScanner * barScanner);
 
-    void UpdateState();
+    void updateState();
     void listenPacket(uint8_t *packet, uint8_t packetLength);
 };
 

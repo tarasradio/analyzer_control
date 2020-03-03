@@ -15,11 +15,11 @@ private:
     IPacketListener *_listener;
 public:
     PacketManager(IPacketListener * );
-    void ReadPacket();
+    void readPacket();
 
-    static void WritePacketData(uint8_t byte);
-    static void WritePacketData(uint8_t const *bytes, uint8_t bytesNumber);
-    static void WritePacketFlag();
+    static void writePacketData(uint8_t byte);
+    static void writePacketData(uint8_t const *bytes, uint8_t bytesNumber);
+    static void writePacketFlag();
 
     void tryPacketBuild(uint8_t bufferPosition);
     void findByteStuffingPacket();

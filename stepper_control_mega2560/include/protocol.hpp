@@ -52,12 +52,12 @@ enum CncCommands
 class Protocol
 {
 public:
-    static void SendFirmwareVersion(const char* version);
-    static void SendMessage(const char* message);
-    static void SendBarCode(const char* barCode);
-    static void SendSteppersStates(const uint16_t *steppersStates, uint8_t steppersCount);
-    static void SendSensorsValues(const uint16_t *sensorsValues, uint8_t sensorsCount);
-    static void SendCommandState(const uint32_t *commandId, uint8_t commandState);
+    static void sendFirmwareVersion(const char* version);
+    static void sendMessage(const char* message);
+    static void sendBarCode(const char* barCode);
+    static void sendSteppersStates(const uint16_t *steppersStates, uint8_t steppersCount);
+    static void sendSensorsValues(const uint16_t *sensorsValues, uint8_t sensorsCount);
+    static void sendCommandState(const uint32_t *commandId, uint8_t commandState);
 };
 
 #endif

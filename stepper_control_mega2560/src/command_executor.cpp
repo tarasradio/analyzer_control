@@ -37,7 +37,7 @@ CommandExecutor::CommandExecutor(HomingController * homingController,
     this->barScanner = barScanner;
 }
 
-void CommandExecutor::UpdateState()
+void CommandExecutor::updateState()
 {
     sendSteppersStates();
     sendSensorsValues();
@@ -53,7 +53,7 @@ void CommandExecutor::UpdateState()
         {
             lastCommandState = COMMAND_DONE;
             waitForCommandDone = 0;
-            Protocol::SendCommandState(&lastCommandId, lastCommandState);
+            Protocol::sendCommandState(&lastCommandId, lastCommandState);
         }
     }
 }
@@ -144,7 +144,7 @@ void CommandExecutor::listenPacket(uint8_t *packet, uint8_t packetLength)
         {
 #ifdef DEBUG
             String message = "Unknown command!";
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
 #endif
         }
         break;
@@ -157,7 +157,7 @@ bool CommandExecutor::checkStepper(uint8_t stepper)
     if(!result)
     {
         String message = "wrong stepper = " + String(stepper);
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
     else
     {
@@ -182,7 +182,7 @@ bool CommandExecutor::checkRepeatCommand(uint32_t commandId, uint8_t commandType
 #ifdef DEBUG
     {
         String message = "[cmd id = " + String(commandId) + "]";
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 
@@ -193,7 +193,7 @@ bool CommandExecutor::checkRepeatCommand(uint32_t commandId, uint8_t commandType
 #ifdef DEBUG
         {
             String message = "[repeat cmd]";
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -207,14 +207,14 @@ bool CommandExecutor::checkRepeatCommand(uint32_t commandId, uint8_t commandType
             waitForCommandDone = 1;
         }
     }
-    Protocol::SendCommandState(&lastCommandId, lastCommandState);
+    Protocol::sendCommandState(&lastCommandId, lastCommandState);
 
     return isRepeat;
 }
 
 void CommandExecutor::executeGetFirmwareVersionCommand(uint8_t *packet, uint32_t packetId)
 {
-    Protocol::SendFirmwareVersion(VERSION);
+    Protocol::sendFirmwareVersion(VERSION);
 }
 
 void CommandExecutor::executeAbortCommand(uint8_t *packet, uint32_t packetId)
@@ -234,7 +234,7 @@ void CommandExecutor::executeAbortCommand(uint8_t *packet, uint32_t packetId)
 #ifdef DEBUG
     {
         String message = "[Abort]";
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -247,7 +247,7 @@ void CommandExecutor::executeBarStartCommand(uint8_t *packet, uint32_t packetId)
 #ifdef DEBUG
     {
         String message = "[Bar start]";
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -258,7 +258,7 @@ void CommandExecutor::executeHomeCommand(uint8_t *packet, uint32_t packetId)
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
 #ifdef EMULATOR
-    Emulator::RunTask();
+    Emulator::runTask();
 #endif
     
     int8_t stepper = packet[0];
@@ -275,7 +275,7 @@ void CommandExecutor::executeHomeCommand(uint8_t *packet, uint32_t packetId)
         message += "stepper = " + String(stepper);
         message += ", spd = " + String(fullSpeed);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -285,7 +285,7 @@ void CommandExecutor::executeRunCommand(uint8_t *packet, uint32_t packetId)
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
 #ifdef EMULATOR
-    Emulator::RunTask();
+    Emulator::runTask();
 #endif
 
     int8_t stepper = packet[0];
@@ -301,7 +301,7 @@ void CommandExecutor::executeRunCommand(uint8_t *packet, uint32_t packetId)
         message += "stepper = " + String(stepper);
         message += ", speed = " + String(fullSpeed);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -311,7 +311,7 @@ void CommandExecutor::executeMoveCommand(uint8_t *packet, uint32_t packetId)
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
 #ifdef EMULATOR
-    Emulator::RunTask();
+    Emulator::runTask();
 #endif
 
     int8_t stepper = packet[0];
@@ -327,7 +327,7 @@ void CommandExecutor::executeMoveCommand(uint8_t *packet, uint32_t packetId)
         message += "stepper = " + String(stepper);
         message += ", steps = " + String(steps);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -363,7 +363,7 @@ void CommandExecutor::executeStopCommand(uint8_t *packet, uint32_t packetId)
         String message = "[Stop]";
         message += " stepper = " + String(stepper);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -386,7 +386,7 @@ void CommandExecutor::executeSetSpeedCommand(uint8_t *packet, uint32_t packetId)
         message += "stepper = " + String(stepper);
         message += ", spd = " + String(fullSpeed);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -406,7 +406,7 @@ void CommandExecutor::executeSetDeviceStateCommand(uint8_t *packet, uint32_t pac
         message += "dev = " + String(device);
         message += ", state = " + String(state);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 }
@@ -416,7 +416,7 @@ void CommandExecutor::executeCncMoveCommand(uint8_t *packet, uint32_t packetId)
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
 #ifdef EMULATOR
-    Emulator::RunTask();
+    Emulator::runTask();
 #endif
 
     int8_t countOfSteppers = packet[0];
@@ -428,7 +428,7 @@ void CommandExecutor::executeCncMoveCommand(uint8_t *packet, uint32_t packetId)
         String message = "[CNC Move] ";
         message += "steppers = " + String(countOfSteppers);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 
@@ -447,7 +447,7 @@ void CommandExecutor::executeCncMoveCommand(uint8_t *packet, uint32_t packetId)
             String message = "[stepper = " + String(stepper);
             message += ", steps = " + String(steps) + "] ";
 
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -458,7 +458,7 @@ void CommandExecutor::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
 #ifdef EMULATOR
-    Emulator::RunTask();
+    Emulator::runTask();
 #endif
 
     uint8_t countOfSteppers = packet[0];
@@ -470,7 +470,7 @@ void CommandExecutor::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
         String message = "[CNC Home] ";
         message += "steppers = " + String(countOfSteppers);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 
@@ -489,7 +489,7 @@ void CommandExecutor::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
             String message = "[stepper = " + String(stepper);
             message += ", speed = " + String(fullSpeed) + "] ";
 
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -500,7 +500,7 @@ void CommandExecutor::executeCncRunCommand(uint8_t *packet, uint32_t packetId)
     if(checkRepeatCommand(packetId, WAITING_COMMAND)) return;
 
 #ifdef EMULATOR
-    Emulator::RunTask();
+    Emulator::runTask();
 #endif
 
     uint8_t countOfSteppers = packet[0];
@@ -512,7 +512,7 @@ void CommandExecutor::executeCncRunCommand(uint8_t *packet, uint32_t packetId)
         String message = "[CNC Run] ";
         message += "Steppers = " + String(countOfSteppers);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 
@@ -531,7 +531,7 @@ void CommandExecutor::executeCncRunCommand(uint8_t *packet, uint32_t packetId)
             String message = "[stepper = " + String(stepper);
             message += ", speed = " + String(fullSpeed) + "] ";
 
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -554,7 +554,7 @@ void CommandExecutor::executeCncSetSpeedCommand(uint8_t *packet, uint32_t packet
         String message = "[CNC Set speed] ";
         message += "steppers = " + String(countOfSteppers);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 
@@ -574,7 +574,7 @@ void CommandExecutor::executeCncSetSpeedCommand(uint8_t *packet, uint32_t packet
             String message = "[ stepper = " + String(stepper);
             message += ", speed = " + String(fullSpeed) + "] ";
 
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -591,7 +591,7 @@ void CommandExecutor::executeCncSetDeviceStateCommand(uint8_t *packet, uint32_t 
         String message = "[CNC Set dev state] ";
         message += "devs = " + String(countOfDevices);
 
-        Protocol::SendMessage(message.c_str());
+        Protocol::sendMessage(message.c_str());
     }
 #endif
 
@@ -604,7 +604,7 @@ void CommandExecutor::executeCncSetDeviceStateCommand(uint8_t *packet, uint32_t 
         {
             String message = "[ dev = " + String(device) + "] ";
 
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
         }
 #endif
     }
@@ -617,7 +617,7 @@ void CommandExecutor::sendSteppersStates()
     for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
         steppersStates[i] =  Steppers::get(i).getStatus();
 
-    Protocol::SendSteppersStates(steppersStates, STEPPERS_COUNT);
+    Protocol::sendSteppersStates(steppersStates, STEPPERS_COUNT);
 }
 
 void CommandExecutor::sendSensorsValues()
@@ -627,5 +627,5 @@ void CommandExecutor::sendSensorsValues()
     for (uint8_t i = 0; i < 16; i++)
         sensorValues[i] =  Sensors::getSensorValue(i);
 
-    Protocol::SendSensorsValues(sensorValues, 16);
+    Protocol::sendSensorsValues(sensorValues, 16);
 }

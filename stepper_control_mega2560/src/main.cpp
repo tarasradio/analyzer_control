@@ -18,29 +18,20 @@ MovingController moveController;
 HomingController homeController;
 RunningController runController;
 
-CommandExecutor commandExecutor =
-    CommandExecutor(&homeController, &runController, &moveController, &scanner);
+CommandExecutor commandExecutor = CommandExecutor(  &homeController,
+                                                    &runController, 
+                                                    &moveController, 
+                                                    &scanner);
 
 PacketManager packetManager = PacketManager(&commandExecutor);
 
-void initLED()
-{
-    DDRA |= (1 << 5);
-    DDRA |= (1 << 6);
-    DDRA |= (1 << 7);
-
-    PORTA |= (1 << 5);
-    PORTA |= (1 << 6);
-    PORTA |= (1 << 7);
-}
+uint32_t timer;
 
 void setup()
 {
-    initLED();
-
     Serial.begin(BAUDRATE);
 
-    Emulator::Init();
+    Emulator::init();
     
     Devices::initPins();
 
@@ -49,13 +40,18 @@ void setup()
     Steppers::defaultInit();
 
     Steppers::get(15).configStepMode(STEP_FS_32);
+
+    timer = millis();
 }
 
 void loop()
 {
-    packetManager.ReadPacket();
-    packetManager.findByteStuffingPacket();
-    commandExecutor.UpdateState();
+    if (millis() - timer >= POLLING_TIMEOUT) 
+    {
+        timer = millis();
 
-    delay(POLLING_TIMEOUT);
+        packetManager.readPacket();
+        packetManager.findByteStuffingPacket();
+        commandExecutor.updateState();
+    }
 }

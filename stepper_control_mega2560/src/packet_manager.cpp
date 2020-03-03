@@ -1,5 +1,4 @@
 #include "packet_manager.hpp"
-#include "protocol.hpp"
 
 #define PACKET_SIZE 64
 
@@ -20,10 +19,11 @@ PacketManager::PacketManager(IPacketListener * listener)
     _listener = listener;
 }
 
-void PacketManager::ReadPacket()
+void PacketManager::readPacket()
 {
     bufferTail = 0;
     uint8_t countBytes = Serial.available();
+    
     if (countBytes > 0)
     {
         while (countBytes != 0)
@@ -34,25 +34,24 @@ void PacketManager::ReadPacket()
     }
 }
 
-void PacketManager::WritePacketData(uint8_t byte)
+void PacketManager::writePacketData(uint8_t byte)
 {
-    if( (byte == FlagSymbol) || 
-    (byte == EscSymbol) )
+    if( (byte == FlagSymbol) || (byte == EscSymbol) )
     {
         Serial.write(EscSymbol);
     }
     Serial.write(byte);
 }
 
-void PacketManager::WritePacketData(uint8_t const * bytes, uint8_t bytesNumber)
+void PacketManager::writePacketData(uint8_t const * bytes, uint8_t bytesNumber)
 {
     for(uint8_t i = 0; i < bytesNumber; i++)
     {
-        WritePacketData(bytes[i]);
+        writePacketData(bytes[i]);
     }
 }
 
-void PacketManager::WritePacketFlag()
+void PacketManager::writePacketFlag()
 {
     Serial.write(FlagSymbol);
 }
@@ -82,7 +81,8 @@ void PacketManager::findByteStuffingPacket()
             }
             else
             {
-                _listener->listenPacket(packetBuffer, packetTail-1);
+                if(packetTail != 0)
+                    _listener->listenPacket(packetBuffer, packetTail - 1);
                 packetTail = 0;
             }
         }
