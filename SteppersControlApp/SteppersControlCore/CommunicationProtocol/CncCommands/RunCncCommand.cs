@@ -6,45 +6,45 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
 {
     public class RunCncCommand : AbstractCommand, IRemoteCommand
     {
-        private Dictionary<int, int> _steppers;
+        private Dictionary<int, int> steppers;
         const int BytesPerStepper = 5;
 
-        uint _sensor = 0;
-        uint _value = 0;
-        Protocol.ValueEdge _valueEdge = Protocol.ValueEdge.RisingEdge;
+        uint sensor = 0;
+        uint value = 0;
+        Protocol.ValueEdge valueEdge = Protocol.ValueEdge.RisingEdge;
 
         public RunCncCommand(Dictionary<int, int> speeds, uint sensor, uint value, Protocol.ValueEdge edge) : base()
         {
-            _steppers = speeds;
+            steppers = speeds;
 
-            _sensor = sensor;
-            _value = value;
-            _valueEdge = edge;
+            this.sensor = sensor;
+            this.value = value;
+            valueEdge = edge;
         }
 
         public byte[] GetBytes()
         {
-            SendPacket packet = new SendPacket(_steppers.Count * BytesPerStepper + 4 + 2);
-            packet.SetPacketId(_commandId);
+            SendPacket packet = new SendPacket(steppers.Count * BytesPerStepper + 4 + 2);
+            packet.SetPacketId(commandId);
 
             packet.SetData(0, (byte)Protocol.CncCommands.CNC_RUN);
-            packet.SetData(1, (byte)_steppers.Count);
+            packet.SetData(1, (byte)steppers.Count);
 
             int i = 0;
 
-            foreach (var stepper in _steppers.Keys)
+            foreach (var stepper in steppers.Keys)
             {
                 packet.SetData(i * BytesPerStepper + 2, (byte)stepper);
                 
-                byte[] speedBytes = BitConverter.GetBytes(_steppers[stepper]);
+                byte[] speedBytes = BitConverter.GetBytes(steppers[stepper]);
                 packet.SetData(i * BytesPerStepper + 3, speedBytes);
                 i++;
             }
 
-            packet.SetData(_steppers.Count * BytesPerStepper + 2, (byte)_sensor);
-            byte[] valueBytes = BitConverter.GetBytes((ushort)_value);
-            packet.SetData(_steppers.Count * BytesPerStepper + 3, valueBytes);
-            packet.SetData(_steppers.Count * BytesPerStepper + 5, (byte)_valueEdge);
+            packet.SetData(steppers.Count * BytesPerStepper + 2, (byte)sensor);
+            byte[] valueBytes = BitConverter.GetBytes((ushort)value);
+            packet.SetData(steppers.Count * BytesPerStepper + 3, valueBytes);
+            packet.SetData(steppers.Count * BytesPerStepper + 5, (byte)valueEdge);
 
             return packet.GetBytes();
         }

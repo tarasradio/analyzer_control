@@ -5,25 +5,25 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
     public class SetSpeedCommand : AbstractCommand, IRemoteCommand
     {
-        private byte _stepper;
-        uint _speed;
+        private byte stepper;
+        uint speed;
 
         public SetSpeedCommand(int stepper, uint speed) : base()
         {
-            _stepper = (byte)stepper;
-            _speed = speed;
+            this.stepper = (byte)stepper;
+            this.speed = speed;
         }
 
         public byte[] GetBytes()
         {
-            byte[] speedBytes = BitConverter.GetBytes(_speed);
+            byte[] speedBytes = BitConverter.GetBytes(speed);
 
             SendPacket packet = new SendPacket(6);
 
-            packet.SetPacketId(_commandId);
+            packet.SetPacketId(commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.SET_SPEED);
-            packet.SetData(1, _stepper);
+            packet.SetData(1, stepper);
             packet.SetData(2, speedBytes);
 
             return packet.GetBytes();

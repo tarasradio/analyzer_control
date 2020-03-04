@@ -15,7 +15,7 @@ namespace SteppersControlCore.CommunicationProtocol.Responses
 
         public string GetFirmwareVersion()
         {
-            string message = Encoding.UTF8.GetString(_buffer, 0, _buffer.Length);
+            string message = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
             return message;
         }
     }

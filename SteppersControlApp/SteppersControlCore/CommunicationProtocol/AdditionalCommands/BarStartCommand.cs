@@ -12,7 +12,7 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
         public byte[] GetBytes()
         {
             SendPacket packet = new SendPacket(1);
-            packet.SetPacketId(_commandId);
+            packet.SetPacketId(commandId);
 
             packet.SetData(0, (byte)Protocol.AdditionalCommands.BAR_START);
 

@@ -14,7 +14,7 @@ namespace SteppersControlCore
 {
     public class Core
     {
-        private static string FirmwareVersion = "07.11.2019";
+        private static string FirmwareVersion = "04.03.2020";
         public static Configuration Settings { get; private set; }
 
         public static PacketFinder PackFinder { get; private set; } = new PacketFinder();

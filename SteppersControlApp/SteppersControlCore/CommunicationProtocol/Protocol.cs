@@ -9,8 +9,6 @@ namespace SteppersControlCore.CommunicationProtocol
     public class Protocol
     {
         private static uint lastPacketId = 0;
-        public static byte[] PacketHeader = { 0x55, 0x55 };
-        public static byte[] PacketEnd = { 0xAA, 0xAA };
         
         public static uint GetPacketId()
         {

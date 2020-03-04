@@ -15,13 +15,13 @@ namespace SteppersControlCore.CommunicationProtocol.Responses
 
         public uint GetCommandId()
         {
-            uint id = BitConverter.ToUInt32(_buffer, 1);
+            uint id = BitConverter.ToUInt32(buffer, 1);
             return id;
         }
 
         public Protocol.CommandStates GetCommandState()
         {
-            return (Protocol.CommandStates)_buffer[0];
+            return (Protocol.CommandStates)buffer[0];
         }
     }
 }

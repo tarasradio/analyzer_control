@@ -6,16 +6,16 @@ namespace SteppersControlCore.CommunicationProtocol.AdditionalCommands
 {
     public class WaitTimeCommand : AbstractCommand, IHostCommand
     {
-        private uint timeDelay = 0;
+        private uint period = 0;
 
         public WaitTimeCommand(uint period) : base()
         {
-            timeDelay = period;
+            this.period = period;
         }
 
         public void Execute()
         {
-            Thread.Sleep((int)timeDelay);
+            Thread.Sleep((int)period);
         }
     }
 }

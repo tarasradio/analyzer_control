@@ -44,15 +44,15 @@ namespace SteppersControlCore.CommunicationProtocol.Responses
 
         public UInt16[] GetStates()
         {
-            if((_buffer.Length) % 2 != 0)
+            if((buffer.Length) % 2 != 0)
             {
                 return null;
             }
-            UInt16[] states = new UInt16[_buffer.Length / 2];
+            UInt16[] states = new UInt16[buffer.Length / 2];
 
-            for(int  i = 0; i < _buffer.Length; i += 2)
+            for(int  i = 0; i < buffer.Length; i += 2)
             {
-                UInt16 state = BitConverter.ToUInt16(_buffer, i);
+                UInt16 state = BitConverter.ToUInt16(buffer, i);
                 states[i / 2] = state;
             }
 

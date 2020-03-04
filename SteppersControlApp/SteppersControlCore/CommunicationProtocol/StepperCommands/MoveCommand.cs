@@ -5,24 +5,24 @@ namespace SteppersControlCore.CommunicationProtocol.StepperCommands
 {
     public class MoveCommand : AbstractCommand, IRemoteCommand
     {
-        private byte _stepper;
-        private int _countSteps;
+        private byte stepper;
+        private int countSteps;
 
         public MoveCommand(int stepper, int countSteps) : base()
         {
-            _stepper = (byte)stepper;
-            _countSteps = countSteps;
+            this.stepper = (byte)stepper;
+            this.countSteps = countSteps;
         }
 
         public byte[] GetBytes()
         {
-            byte[] stepsBytes = BitConverter.GetBytes(_countSteps);
+            byte[] stepsBytes = BitConverter.GetBytes(countSteps);
 
             SendPacket packet = new SendPacket(6);
-            packet.SetPacketId(_commandId);
+            packet.SetPacketId(commandId);
 
             packet.SetData(0, (byte)Protocol.StepperCommands.MOVE);
-            packet.SetData(1, _stepper);
+            packet.SetData(1, stepper);
             packet.SetData(2, stepsBytes);
 
             return packet.GetBytes();

@@ -6,29 +6,29 @@ namespace SteppersControlCore.CommunicationProtocol.CncCommands
     public class SteppersCncCommand : AbstractCommand
     {
         const int BytesPerStepper = 5;
-        Dictionary<int, int> _steppers;
-        Protocol.CncCommands _commandCode;
+        Dictionary<int, int> steppers;
+        Protocol.CncCommands commandCode;
 
         public SteppersCncCommand(Dictionary<int, int> steppers, Protocol.CncCommands commandCode) : base()
         {
-            _steppers = steppers;
-            _commandCode = commandCode;
+            this.steppers = steppers;
+            this.commandCode = commandCode;
         }
 
         public byte[] GetBytes()
         {
-            SendPacket packet = new SendPacket(_steppers.Count * BytesPerStepper + 2);
-            packet.SetPacketId(_commandId);
+            SendPacket packet = new SendPacket(steppers.Count * BytesPerStepper + 2);
+            packet.SetPacketId(commandId);
 
-            packet.SetData(0, (byte)_commandCode);
-            packet.SetData(1, (byte)_steppers.Count);
+            packet.SetData(0, (byte)commandCode);
+            packet.SetData(1, (byte)steppers.Count);
 
             int i = 0;
 
-            foreach (var stepper in _steppers.Keys)
+            foreach (var stepper in steppers.Keys)
             {
                 packet.SetData(i * BytesPerStepper + 2, (byte)stepper);
-                byte[] speedBytes = BitConverter.GetBytes(_steppers[stepper]);
+                byte[] speedBytes = BitConverter.GetBytes(steppers[stepper]);
                 packet.SetData(i * BytesPerStepper + 3, speedBytes);
                 i++;
             }
