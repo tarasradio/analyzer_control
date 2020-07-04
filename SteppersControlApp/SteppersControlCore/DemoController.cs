@@ -115,7 +115,7 @@ namespace SteppersControlCore
             }
 
             initializationTask();
-            needleWashingTask();
+            //needleWashingTask();
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
@@ -249,6 +249,7 @@ namespace SteppersControlCore
 
             Core.Needle.HomeAll();
             Core.Charger.HomeHook();
+            Core.Charger.HookAfterHome();
             Core.Charger.HomeRotator();
             Core.Rotor.Home();
             Core.Pomp.Home();
@@ -359,7 +360,7 @@ namespace SteppersControlCore
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
 
             Core.Needle.HomeAll();
-            needleWashingTask();
+            //needleWashingTask();
 
             // Подводим нужную ячейку картриджа под иглу
             Core.Rotor.Home();
@@ -418,10 +419,12 @@ namespace SteppersControlCore
             Core.Rotor.Home();
             Core.Rotor.PlaceCellAtCharge(0, 5);
             Core.Charger.HomeHook();
+            Core.Charger.HookAfterHome();
             Core.Charger.HomeRotator();
             Core.Charger.TurnToCell(5);
             Core.Charger.ChargeCartridge();
             Core.Charger.HomeHook();
+            Core.Charger.HookAfterHome();
         }
 
 

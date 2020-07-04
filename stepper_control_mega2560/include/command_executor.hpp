@@ -47,7 +47,8 @@ private:
     HomingController * homingController;
     RunningController * runningController;
     MovingController * movingController;
-    BarScanner * barScanner;
+    BarScanner * tubeScanner;
+    BarScanner * cartridgeScanner;
     
 public:
     CommandExecutor() {}
@@ -55,7 +56,8 @@ public:
         HomingController * homingController,
         RunningController * runningController,
         MovingController * movingController,
-        BarScanner * barScanner);
+        BarScanner * tubeScanner,
+        BarScanner * cartridgeScanner);
 
     void updateState();
     void listenPacket(uint8_t *packet, uint8_t packetLength);

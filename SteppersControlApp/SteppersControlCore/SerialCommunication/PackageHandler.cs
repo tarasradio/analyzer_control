@@ -79,8 +79,13 @@ namespace SteppersControlCore.SerialCommunication
             }
             else if ((byte)Protocol.ResponsesTypes.BAR_CODE == packetType)
             {
+                ///TODO: Fix!!!!
                 string message = new BarCodeResponse(packet).GetDebugMessage();
-                TubeBarCodeReceived(message);
+                byte id = new BarCodeResponse(packet).GetBarScannerId();
+                if (1 == id)
+                    TubeBarCodeReceived(message);
+                else if (2 == id)
+                    CartridgeBarCodeReceived(message);
             }
             else if ((byte)Protocol.ResponsesTypes.FIRMWARE_VERSION == packetType)
             {

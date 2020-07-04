@@ -8,9 +8,11 @@
 byte barBuffer[64];
 uint8_t currentBarByte = 0;
 
-BarScanner::BarScanner()
+BarScanner::BarScanner(HardwareSerial * serialPort, uint8_t id)
 {
-    Serial1.begin(9600);
+    this->id = id;
+    serial = serialPort;
+    serial->begin(9600);
 }
 
 void BarScanner::updateState()
@@ -22,19 +24,19 @@ void BarScanner::updateState()
 #endif
 
     currentBarByte = 0;
-    while(Serial1.available() > 0)
+    while(serial->available() > 0)
     {
-        byte symbol = Serial1.read();
+        byte symbol = serial->read();
         if('\r' == symbol)
         {
             // Обработка приема сообщения
 
             barBuffer[currentBarByte] = '\0';
-#ifdef DUBUG
+#ifndef DUBUG
             String message = "[Bar read] code = " + String((char*)barBuffer);
-            Protocol::SendMessage(message.c_str());
+            Protocol::sendMessage(message.c_str());
 #endif
-            Protocol::sendBarCode(String((char*)barBuffer).c_str());
+            Protocol::sendBarCode(id, String((char*)barBuffer).c_str());
 
             currentBarByte = 0;
         }
@@ -61,5 +63,5 @@ void BarScanner::startScan()
 #ifdef EMULATOR
     Emulator::nextBarCode();
 #endif
-    Serial1.write(scanCommand, 9);
+    serial->write(scanCommand, 9);
 }

@@ -54,6 +54,10 @@ namespace SteppersControlCore.ControllersProperties
         [DisplayName("Шаги движения крюка к картриджу")]
         public int HookStepsToCartridge { get; set; } = -613000;
 
+        [Category("3.2 Шаги двигателя крюка")]
+        [DisplayName("Шаги движения крюка после возврата домой")]
+        public int HookStepsAfterHome { get; set; } = -1000;
+
         public ChargeControllerProperties()
         {
 

@@ -95,6 +95,25 @@ namespace SteppersControlCore.Controllers
             Logger.ControllerInfo($"[Charger] - Hook homing finished.");
         }
 
+        public void HookAfterHome()
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            // Продвижение крюка до картриджа
+            steppers = new Dictionary<int, int>() {
+                { Properties.HookStepper, Properties.HookSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                { Properties.HookStepper, Properties.HookStepsAfterHome } };
+
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            commands.Clear();
+        }
+
         public void ChargeCartridge()
         {
             Logger.ControllerInfo($"[Charger] - Start cartridge charging.");

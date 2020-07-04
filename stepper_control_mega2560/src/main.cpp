@@ -12,7 +12,8 @@
 #define BAUDRATE 115200
 #define POLLING_TIMEOUT 50
 
-BarScanner scanner;
+BarScanner tubeScanner(&Serial1, 1);
+BarScanner cartridgeScanner(&Serial2, 2);
 
 MovingController moveController;
 HomingController homeController;
@@ -21,7 +22,8 @@ RunningController runController;
 CommandExecutor commandExecutor = CommandExecutor(  &homeController,
                                                     &runController, 
                                                     &moveController, 
-                                                    &scanner);
+                                                    &tubeScanner,
+                                                    &cartridgeScanner);
 
 PacketManager packetManager = PacketManager(&commandExecutor);
 

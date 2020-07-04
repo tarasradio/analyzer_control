@@ -12,7 +12,7 @@ namespace SteppersControlCore.SerialCommunication
 {
     public class SerialHelper : ISerial
     {
-        PacketFinder _packageReceiver = null;
+        IPacketFinder _packetFinder = null;
         SerialPort _serialPort = null;
 
         public string PortName {
@@ -25,9 +25,9 @@ namespace SteppersControlCore.SerialCommunication
                 _serialPort.PortName = value;
             } }
 
-        public SerialHelper(PacketFinder packageReceiver)
+        public SerialHelper(IPacketFinder packageReceiver)
         {
-            _packageReceiver = packageReceiver;
+            _packetFinder = packageReceiver;
             _serialPort = new SerialPort();
             _serialPort.DataReceived += Port_DataReceived;
         }
@@ -78,7 +78,7 @@ namespace SteppersControlCore.SerialCommunication
             byte[] buffer = new byte[_serialPort.BytesToRead];
             _serialPort.Read(buffer, 0, buffer.Length);
 
-            _packageReceiver.FindPacket(buffer);
+            _packetFinder.FindPacket(buffer);
         }
 
         public void SendPacket(byte[] packet)

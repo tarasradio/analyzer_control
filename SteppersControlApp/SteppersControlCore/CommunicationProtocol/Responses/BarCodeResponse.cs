@@ -15,8 +15,13 @@ namespace SteppersControlCore.CommunicationProtocol.Responses
 
         public String GetDebugMessage()
         {
-            string message = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+            string message = Encoding.UTF8.GetString(buffer, 1, buffer.Length - 1);
             return message;
+        }
+
+        public byte GetBarScannerId()
+        {
+            return buffer[0];
         }
     }
 }

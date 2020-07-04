@@ -6,9 +6,10 @@
 class BarScanner
 {
 private:
-    
+    HardwareSerial * serial;
+    uint8_t id;
 public:
-    BarScanner();
+    BarScanner(HardwareSerial * serialPort, uint8_t id);
     void updateState();
     void startScan();
 };

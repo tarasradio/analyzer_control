@@ -19,10 +19,11 @@ void Protocol::sendMessage(const char* message)
     PacketManager::writePacketFlag();
 }
 
-void Protocol::sendBarCode(const char* barCode)
+void Protocol::sendBarCode(uint8_t id, const char* barCode)
 {
     PacketManager::writePacketFlag();
     PacketManager::writePacketData(BAR_CODE_MESSAGE);
+    PacketManager::writePacketData(id);
     PacketManager::writePacketData( 
         reinterpret_cast<const uint8_t *> (barCode), strlen(barCode) );
     PacketManager::writePacketFlag();

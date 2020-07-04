@@ -100,6 +100,7 @@ namespace SteppersControlCore
             lock (locker)
             {
                 lastTubeBarCode = message;
+                Logger.AddMessage($"New tube barcode received: {message}");
             }
         }
 
@@ -108,6 +109,7 @@ namespace SteppersControlCore
             lock (locker)
             {
                 lastCartridgeBarCode = message;
+                Logger.AddMessage($"New cartridge barcode received: {message}");
             }
         }
 

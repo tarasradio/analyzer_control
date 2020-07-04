@@ -29,12 +29,14 @@ uint8_t waitForCommandDone = 0;
 CommandExecutor::CommandExecutor(HomingController * homingController,
         RunningController * runningController,
         MovingController * movingController,
-        BarScanner * barScanner)
+        BarScanner * tubeScanner,
+        BarScanner * cartridgeScanner)
 {
     this->homingController = homingController;
     this->runningController = runningController;
     this->homingController = homingController;
-    this->barScanner = barScanner;
+    this->tubeScanner = tubeScanner;
+    this->cartridgeScanner = cartridgeScanner;
 }
 
 void CommandExecutor::updateState()
@@ -42,7 +44,8 @@ void CommandExecutor::updateState()
     sendSteppersStates();
     sendSensorsValues();
 
-    barScanner->updateState();
+    tubeScanner->updateState();
+    cartridgeScanner->updateState();
 
     if (0 != waitForCommandDone) // Есть команды, ожидающие завершения
     {
@@ -243,7 +246,8 @@ void CommandExecutor::executeBarStartCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
-    barScanner->startScan();
+    tubeScanner->startScan();
+    cartridgeScanner->startScan();
 #ifdef DEBUG
     {
         String message = "[Bar start]";
