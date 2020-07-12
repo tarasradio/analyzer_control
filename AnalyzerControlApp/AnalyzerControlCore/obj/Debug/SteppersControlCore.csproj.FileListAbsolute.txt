@@ -1,4 +1,0 @@
-D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\SteppersControlCore\bin\Debug\SteppersControlCore.dll
-D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\SteppersControlCore\bin\Debug\SteppersControlCore.pdb
-D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\SteppersControlCore\obj\Debug\SteppersControlCore.dll
-D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\SteppersControlCore\obj\Debug\SteppersControlCore.pdb
