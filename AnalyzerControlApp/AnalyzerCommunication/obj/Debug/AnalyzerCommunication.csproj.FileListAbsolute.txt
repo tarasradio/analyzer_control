@@ -1,0 +1,10 @@
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\bin\Debug\AnalyzerCommunication.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\bin\Debug\AnalyzerCommunication.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\bin\Debug\Infrastructure.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\bin\Debug\Infrastructure.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\obj\Debug\AnalyzerCommunication.csprojAssemblyReference.cache
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\obj\Debug\AnalyzerCommunication.csproj.CoreCompileInputs.cache
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\obj\Debug\AnalyzerCommunication.csproj.CopyComplete
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\obj\Debug\AnalyzerCommunication.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\obj\Debug\AnalyzerCommunication.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerCommunication\bin\Debug\NLog.config

@@ -1,0 +1,5 @@
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerConfiguration\bin\Debug\AnalyzerConfiguration.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerConfiguration\bin\Debug\AnalyzerConfiguration.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerConfiguration\obj\Debug\AnalyzerConfiguration.csproj.CoreCompileInputs.cache
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerConfiguration\obj\Debug\AnalyzerConfiguration.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\AnalyzerConfiguration\obj\Debug\AnalyzerConfiguration.pdb

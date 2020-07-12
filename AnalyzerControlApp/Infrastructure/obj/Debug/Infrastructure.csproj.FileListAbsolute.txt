@@ -1,0 +1,16 @@
+D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\Infrastructure\bin\Debug\Infrastructure.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\Infrastructure\bin\Debug\Infrastructure.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\Infrastructure\obj\Debug\Infrastructure.csprojAssemblyReference.cache
+D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\Infrastructure\obj\Debug\Infrastructure.csproj.CoreCompileInputs.cache
+D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\Infrastructure\obj\Debug\Infrastructure.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\SteppersControlApp\Infrastructure\obj\Debug\Infrastructure.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\bin\Debug\Infrastructure.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\bin\Debug\Infrastructure.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\obj\Debug\Infrastructure.csproj.CoreCompileInputs.cache
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\obj\Debug\Infrastructure.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\obj\Debug\Infrastructure.pdb
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\bin\Debug\NLog.config
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\bin\Debug\NLog.dll
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\bin\Debug\NLog.xml
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete
+D:\TARASOV_DEV\GIT-HUB\stepper_control\AnalyzerControlApp\Infrastructure\obj\Debug\Infrastructure.csprojAssemblyReference.cache
