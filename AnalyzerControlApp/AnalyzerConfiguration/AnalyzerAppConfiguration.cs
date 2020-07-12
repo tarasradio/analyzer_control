@@ -1,0 +1,43 @@
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Xml;
+using System.Xml.Serialization;
+
+namespace AnalyzerConfiguration
+{
+    public class Device
+    {
+        [XmlAttribute]
+        public int Number { get; set; }
+        [XmlAttribute]
+        public string Name { get; set; }
+    }
+
+    public class Stepper : Device
+    {
+        [XmlElement]
+        public bool Reverse { get; set; } = false;
+        [XmlElement]
+        public uint NumberSteps { get; set; } = 100000;
+        [XmlElement]
+        public uint FullSpeed { get; set; } = 1000;
+        [XmlIgnore]
+        public ushort Status { get; set; } = 0;
+        [XmlIgnore]
+        public int Position { get; set; } = 0;
+    }
+
+    public class AnalyzerAppConfiguration
+    {
+        public List<Stepper> Steppers { get; set; }
+        public List<Device> Devices { get; set; }
+        public List<Device> Sensors { get; set; }
+
+        public AnalyzerAppConfiguration()
+        {
+            Steppers = new List<Stepper>();
+            Devices = new List<Device>();
+            Sensors = new List<Device>();
+        }
+    }
+}
