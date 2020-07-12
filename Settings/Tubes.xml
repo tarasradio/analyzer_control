@@ -16,9 +16,9 @@
           <TimeToPerform>15</TimeToPerform>
         </Stage>
       </Stages>
-      <CurrentStage>-1</CurrentStage>
+      <CurrentStage>0</CurrentStage>
       <TimeToStageComplete>0</TimeToStageComplete>
-      <IsFind>false</IsFind>
+      <IsFind>true</IsFind>
     </TubeInfo>
     <TubeInfo>
       <Position>0</Position>
@@ -54,9 +54,9 @@
           <TimeToPerform>5</TimeToPerform>
         </Stage>
       </Stages>
-      <CurrentStage>1</CurrentStage>
-      <TimeToStageComplete>3</TimeToStageComplete>
-      <IsFind>true</IsFind>
+      <CurrentStage>-1</CurrentStage>
+      <TimeToStageComplete>0</TimeToStageComplete>
+      <IsFind>false</IsFind>
     </TubeInfo>
     <TubeInfo>
       <Position>0</Position>
@@ -73,9 +73,9 @@
           <TimeToPerform>5</TimeToPerform>
         </Stage>
       </Stages>
-      <CurrentStage>1</CurrentStage>
-      <TimeToStageComplete>4</TimeToStageComplete>
-      <IsFind>true</IsFind>
+      <CurrentStage>-1</CurrentStage>
+      <TimeToStageComplete>0</TimeToStageComplete>
+      <IsFind>false</IsFind>
     </TubeInfo>
   </Tubes>
 </DemoControllerProperties>

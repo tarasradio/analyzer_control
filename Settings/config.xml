@@ -25,10 +25,10 @@
     </Stepper>
     <Stepper>
       <Number>3</Number>
-      <Name>Пресс</Name>
-      <Reverse>False</Reverse>
-      <FullSpeed>100</FullSpeed>
-      <NumberSteps>1000</NumberSteps>
+      <Name>3 - Подъем монитора</Name>
+      <Reverse>True</Reverse>
+      <FullSpeed>50</FullSpeed>
+      <NumberSteps>10000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>4</Number>
@@ -55,7 +55,7 @@
       <Number>7</Number>
       <Name>Ротор</Name>
       <Reverse>False</Reverse>
-      <FullSpeed>100</FullSpeed>
+      <FullSpeed>50</FullSpeed>
       <NumberSteps>10000</NumberSteps>
     </Stepper>
     <Stepper>
@@ -75,9 +75,9 @@
     <Stepper>
       <Number>10</Number>
       <Name>Движение загрузки (поворот)</Name>
-      <Reverse>True</Reverse>
+      <Reverse>False</Reverse>
       <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <NumberSteps>1000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>11</Number>
@@ -102,17 +102,17 @@
     </Stepper>
     <Stepper>
       <Number>14</Number>
-      <Name>Выгрузка</Name>
+      <Name>Поворот монитора</Name>
       <Reverse>False</Reverse>
-      <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>50</FullSpeed>
+      <NumberSteps>300000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>15</Number>
-      <Name>Челнок загрузки</Name>
+      <Name>15 - 15 - Челнок загрузки</Name>
       <Reverse>False</Reverse>
-      <FullSpeed>100</FullSpeed>
-      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>350</FullSpeed>
+      <NumberSteps>1000</NumberSteps>
     </Stepper>
     <Stepper>
       <Number>16</Number>

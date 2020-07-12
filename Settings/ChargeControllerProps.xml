@@ -20,5 +20,6 @@
   </CellsSteps>
   <StepsToUnload>-40000</StepsToUnload>
   <RotatorStepsLeaveAtCharge>1000</RotatorStepsLeaveAtCharge>
-  <HookStepsToCartridge>-613000</HookStepsToCartridge>
+  <HookStepsToCartridge>-600000</HookStepsToCartridge>
+  <HookStepsAfterHome>-13000</HookStepsAfterHome>
 </ChargeControllerProperties>
