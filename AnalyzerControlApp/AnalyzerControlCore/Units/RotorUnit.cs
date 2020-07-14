@@ -13,6 +13,7 @@ namespace AnalyzerControlCore.Units
     public class RotorUnit : AbstractUnit
     {
         public RotorControllerConfiguration Config { get; set; }
+        private IConfigurationProvider<RotorControllerConfiguration> provider;
 
         public int Position { get; set; } = 0;
 
@@ -21,14 +22,19 @@ namespace AnalyzerControlCore.Units
             Config = new RotorControllerConfiguration();
         }
 
+        public void SetProvider(IConfigurationProvider<RotorControllerConfiguration> provider)
+        {
+            this.provider = provider;
+        }
+
         public void SaveConfiguration(string path)
         {
-            XmlSerializeHelper<RotorControllerConfiguration>.WriteXml(Config, Path.Combine(path, nameof(RotorControllerConfiguration)) );
+            provider.SaveConfiguration(Config, Path.Combine(path, nameof(RotorControllerConfiguration)) );
         }
 
         public void LoadConfiguration(string path)
         {
-            Config = XmlSerializeHelper<RotorControllerConfiguration>.ReadXml( Path.Combine(path, nameof(RotorControllerConfiguration)) );
+            Config = provider.LoadConfiguration( Path.Combine(path, nameof(RotorControllerConfiguration)) );
 
             if (Config == null)
                 Config = new RotorControllerConfiguration();

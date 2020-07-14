@@ -8,7 +8,7 @@ using Infrastructure;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-
+using AnalyzerConfiguration.ControllersConfiguration;
 
 namespace AnalyzerControlCore
 {
@@ -31,6 +31,16 @@ namespace AnalyzerControlCore
 
         public static DemoController Demo { get; private set; }
 
+        private static IConfigurationProvider<NeedleControllerConfiguration> needleProvider;
+        private static IConfigurationProvider<TransporterControllerConfiguration> transporterProvider;
+        private static IConfigurationProvider<RotorControllerConfiguration> rotorProvider;
+        private static IConfigurationProvider<ChargeControllerConfiguration> chargeProvider;
+        private static IConfigurationProvider<PompControllerConfiguration> pompProvider;
+        
+        private static IConfigurationProvider<DemoControllerConfiguration> demoProvider;
+
+        private static IConfigurationProvider<AnalyzerAppConfiguration> appProvider;
+
         private static object locker = new object();
 
         private static ushort[] sensorsValues = null;
@@ -45,14 +55,14 @@ namespace AnalyzerControlCore
 
         public static void SaveConfiguration(string path)
         {
-            XmlSerializeHelper<AnalyzerAppConfiguration>.WriteXml(AppConfig, Path.Combine(path, nameof(AnalyzerAppConfiguration)));
+            appProvider.SaveConfiguration(AppConfig, Path.Combine(path, nameof(AnalyzerAppConfiguration)));
         }
 
         public static void LoadConfiguration(string path)
         {
             try
             {
-                AppConfig = XmlSerializeHelper<AnalyzerAppConfiguration>.ReadXml(Path.Combine(path, nameof(AnalyzerAppConfiguration)));
+                AppConfig = appProvider.LoadConfiguration(Path.Combine(path, nameof(AnalyzerAppConfiguration)));
             }
             catch(FileNotFoundException)
             {
@@ -63,7 +73,16 @@ namespace AnalyzerControlCore
         public Core(string configurationPath)
         {
             AppConfig = new AnalyzerAppConfiguration();
-            
+
+            // Создаем провайдеры конфигурации для приложения и для всех контроллеров
+            appProvider = new XmlConfigurationProvider<AnalyzerAppConfiguration>();
+            demoProvider = new XmlConfigurationProvider<DemoControllerConfiguration>();
+            needleProvider = new XmlConfigurationProvider<NeedleControllerConfiguration>();
+            transporterProvider = new XmlConfigurationProvider<TransporterControllerConfiguration>();
+            rotorProvider = new XmlConfigurationProvider<RotorControllerConfiguration>();
+            chargeProvider = new XmlConfigurationProvider<ChargeControllerConfiguration>();
+            pompProvider = new XmlConfigurationProvider<PompControllerConfiguration>();
+
             LoadConfiguration(configurationPath);
 
             sensorsValues = new ushort[AppConfig.Sensors.Count];
@@ -87,12 +106,12 @@ namespace AnalyzerControlCore
             CmdExecutor = new CommandExecutor();
             Executor = new TaskExecutor();
 
-            Needle = new NeedleUnit(CmdExecutor);
-            Transporter = new TransporterUnit(CmdExecutor);
-            Charger = new ChargeUnit(CmdExecutor);
-            Rotor = new RotorUnit(CmdExecutor);
-            Pomp = new PompUnit(CmdExecutor);
-            Demo = new DemoController();
+            Needle = new NeedleUnit(CmdExecutor); Needle.SetProvider(needleProvider);
+            Transporter = new TransporterUnit(CmdExecutor); Transporter.SetProvider(transporterProvider);
+            Charger = new ChargeUnit(CmdExecutor); Charger.SetProvider(chargeProvider);
+            Rotor = new RotorUnit(CmdExecutor); Rotor.SetProvider(rotorProvider);
+            Pomp = new PompUnit(CmdExecutor); Pomp.SetProvider(pompProvider);
+            Demo = new DemoController(); Demo.SetProvider(demoProvider);
 
             try
             {

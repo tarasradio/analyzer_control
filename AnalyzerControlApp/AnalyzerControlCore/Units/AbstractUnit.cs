@@ -1,5 +1,7 @@
 ﻿using AnalyzerControlCore.MachineControl;
 using System.Collections.Generic;
+using AnalyzerConfiguration;
+using System.Runtime.CompilerServices;
 
 namespace AnalyzerControlCore.Units
 {

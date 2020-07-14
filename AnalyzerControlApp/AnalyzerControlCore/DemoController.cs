@@ -12,6 +12,7 @@ namespace AnalyzerControlCore
     public class DemoController
     {
         public DemoControllerConfiguration Config;
+        IConfigurationProvider<DemoControllerConfiguration> provider;
 
         // шагов пробирки от точки сканирования до точки с забором
         private const int tubeCellsCount = 54;
@@ -36,14 +37,19 @@ namespace AnalyzerControlCore
             timer.Elapsed += Timer_Elapsed;
         }
 
+        public void SetProvider(IConfigurationProvider<DemoControllerConfiguration> provider)
+        {
+            this.provider = provider;
+        }
+
         public void SaveConfiguration(string path)
         {
-            XmlSerializeHelper<DemoControllerConfiguration>.WriteXml(Config, Path.Combine(path, nameof(DemoControllerConfiguration)) );
+            provider.SaveConfiguration(Config, Path.Combine(path, nameof(DemoControllerConfiguration)) );
         }
 
         public void LoadConfiguration(string path)
         {
-            Config = XmlSerializeHelper<DemoControllerConfiguration>.ReadXml( Path.Combine(path, nameof(DemoControllerConfiguration)) );
+            Config = provider.LoadConfiguration( Path.Combine(path, nameof(DemoControllerConfiguration)) );
 
             if (Config == null)
                 Config = new DemoControllerConfiguration();

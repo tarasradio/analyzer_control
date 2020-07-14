@@ -8,7 +8,7 @@ namespace AnalyzerConfiguration.ControllersConfiguration
         [DisplayName("Двигатель вращения пробирки")]
         public int TurnTubeStepper { get; set; }
         [Category("1. Двигатели")]
-        [DisplayName("Двигатель движения пробирок")]
+        [DisplayName("Двигатель движения конвейера")]
         public int TransporterStepper { get; set; }
 
         [Category("2. Скорость")]

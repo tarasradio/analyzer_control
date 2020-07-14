@@ -44,12 +44,13 @@
     <Compile Include="AnalyzerAppConfiguration.cs" />
     <Compile Include="ControllersConfiguration\ChargeControllerConfiguration.cs" />
     <Compile Include="ControllersConfiguration\DemoControllerConfiguration.cs" />
+    <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="ControllersConfiguration\NeedleControllerConfiguration.cs" />
     <Compile Include="ControllersConfiguration\PompControllerConfiguration.cs" />
     <Compile Include="ControllersConfiguration\RotorControllerConfiguration.cs" />
     <Compile Include="ControllersConfiguration\TransporterControllerConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlSerializeHelper.cs" />
+    <Compile Include="XmlConfigurationProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

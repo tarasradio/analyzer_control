@@ -14,6 +14,7 @@ namespace AnalyzerControlCore.Units
     public class NeedleUnit : AbstractUnit
     {
         public NeedleControllerConfiguration Config { get; set; }
+        private IConfigurationProvider<NeedleControllerConfiguration> provider;
 
         public int LiftPosition { get; set; } = 0;
         public int RotatorPosition { get; set; } = 0;
@@ -24,14 +25,19 @@ namespace AnalyzerControlCore.Units
             Config = new NeedleControllerConfiguration();
         }
 
+        public void SetProvider(IConfigurationProvider<NeedleControllerConfiguration> provider)
+        {
+            this.provider = provider;
+        }
+
         public void SaveConfiguration(string path)
         {
-            XmlSerializeHelper<NeedleControllerConfiguration>.WriteXml(Config, Path.Combine(path, nameof(NeedleControllerConfiguration)) );
+            provider.SaveConfiguration(Config, Path.Combine(path, nameof(NeedleControllerConfiguration)) );
         }
 
         public void LoadConfiguration(string path)
         {
-            Config = XmlSerializeHelper<NeedleControllerConfiguration>.ReadXml( Path.Combine(path, nameof(NeedleControllerConfiguration)) );
+            Config = provider.LoadConfiguration( Path.Combine(path, nameof(NeedleControllerConfiguration)) );
             if (Config == null)
                 Config = new NeedleControllerConfiguration();
         }

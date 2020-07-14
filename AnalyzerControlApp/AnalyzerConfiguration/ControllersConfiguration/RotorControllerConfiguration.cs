@@ -5,7 +5,7 @@ namespace AnalyzerConfiguration.ControllersConfiguration
     public class RotorControllerConfiguration
     {
         [Category("1. Двигатели")]
-        [DisplayName("Двигатель ротора")]
+        [DisplayName("Двигатель вращения ротора")]
         public int RotorStepper { get; set; }
 
         [Category("2. Скорость")]
@@ -32,6 +32,8 @@ namespace AnalyzerConfiguration.ControllersConfiguration
         [DisplayName("Шагов до wash-буфера")]
         public int StepsToWashBuffer { get; set; }
 
+#region StepsToNeedle
+
         [Category("3.2 Шаги до иглы")]
         [DisplayName("Шагов до иглы белой ячейки (центр)")]
         public int StepsToNeedleWhiteCenter { get; set; }
@@ -56,6 +58,8 @@ namespace AnalyzerConfiguration.ControllersConfiguration
         [Category("3.2 Шаги до иглы")]
         [DisplayName("Шагов до иглы 3-й ячейки (право)")]
         public int StepsToNeedleRight3 { get; set; }
+
+#endregion
 
         public RotorControllerConfiguration()
         {

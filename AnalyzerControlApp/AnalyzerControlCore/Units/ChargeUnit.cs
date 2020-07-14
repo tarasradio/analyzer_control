@@ -5,6 +5,7 @@ using AnalyzerConfiguration.ControllersConfiguration;
 using AnalyzerControlCore.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 
 namespace AnalyzerControlCore.Units
@@ -12,11 +13,17 @@ namespace AnalyzerControlCore.Units
     public class ChargeUnit : AbstractUnit
     {
         public ChargeControllerConfiguration Config { get; set; }
+        private IConfigurationProvider<ChargeControllerConfiguration> provider;
 
         public int RotatorPosition { get; set; } = 0;
         public int HookPosition { get; set; } = 0;
 
         public int CurrentCell { get; private set; } = 0;
+
+        public void SetProvider(IConfigurationProvider<ChargeControllerConfiguration> provider)
+        {
+            this.provider = provider;
+        }
 
         public ChargeUnit(ICommandExecutor executor) : base(executor)
         {
@@ -25,12 +32,16 @@ namespace AnalyzerControlCore.Units
 
         public void SaveConfiguration(string path)
         {
-            XmlSerializeHelper<ChargeControllerConfiguration>.WriteXml( Config, Path.Combine(path, nameof(ChargeControllerConfiguration)) );
+            provider.SaveConfiguration(Config, Path.Combine(path, nameof(ChargeControllerConfiguration)));
+
+            //XmlConfigurationProvider<ChargeControllerConfiguration>.SaveConfiguration( Config, Path.Combine(path, nameof(ChargeControllerConfiguration)) );
         }
 
         public void LoadConfiguration(string path)
         {
-            Config = XmlSerializeHelper<ChargeControllerConfiguration>.ReadXml( Path.Combine(path, nameof(ChargeControllerConfiguration)) );
+            Config = provider.LoadConfiguration( Path.Combine(path, nameof(ChargeControllerConfiguration)) ); 
+            
+            //XmlConfigurationProvider<ChargeControllerConfiguration>.LoadConfiguration( Path.Combine(path, nameof(ChargeControllerConfiguration)) );
             
             if (Config == null)
                 Config = new ChargeControllerConfiguration();

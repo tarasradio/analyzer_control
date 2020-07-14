@@ -15,6 +15,7 @@ namespace AnalyzerControlCore.Units
     public class TransporterUnit : AbstractUnit
     {
         public TransporterControllerConfiguration Config { get; set; }
+        private IConfigurationProvider<TransporterControllerConfiguration> provider;
 
         public int TransporterStepperPosition { get; set; } = 0;
 
@@ -23,15 +24,20 @@ namespace AnalyzerControlCore.Units
             Config = new TransporterControllerConfiguration();
         }
 
+        public void SetProvider(IConfigurationProvider<TransporterControllerConfiguration> provider)
+        {
+            this.provider = provider;
+        }
+
         public void SaveConfiguration(string path)
         {
-            XmlSerializeHelper<TransporterControllerConfiguration>.WriteXml(Config, Path.Combine(path, nameof(TransporterControllerConfiguration)) );
+            provider.SaveConfiguration(Config, Path.Combine(path, nameof(TransporterControllerConfiguration)) );
         }
 
         //Чтение насроек из файла
         public void LoadConfiguration(string path)
         {
-            Config = XmlSerializeHelper<TransporterControllerConfiguration>.ReadXml( Path.Combine(path, nameof(TransporterControllerConfiguration)) );
+            Config = provider.LoadConfiguration( Path.Combine(path, nameof(TransporterControllerConfiguration)) );
 
             if (Config == null)
                 Config = new TransporterControllerConfiguration();

@@ -14,20 +14,26 @@ namespace AnalyzerControlCore.Units
         const string filename = "PompControllerProps";
 
         public PompControllerConfiguration Config { get; set; }
+        private IConfigurationProvider<PompControllerConfiguration> provider;
 
         public PompUnit(ICommandExecutor executor) : base(executor)
         {
             Config = new PompControllerConfiguration();
         }
 
+        public void SetProvider(IConfigurationProvider<PompControllerConfiguration> provider)
+        {
+            this.provider = provider;
+        }
+
         public void SaveConfiguration(string path)
         {
-            XmlSerializeHelper<PompControllerConfiguration>.WriteXml(Config, Path.Combine(path, nameof(PompControllerConfiguration)) );
+            provider.SaveConfiguration(Config, Path.Combine(path, nameof(PompControllerConfiguration)) );
         }
 
         public void LoadConfiguration(string path)
         {
-            Config = XmlSerializeHelper<PompControllerConfiguration>.ReadXml( Path.Combine(path, nameof(PompControllerConfiguration)) );
+            Config = provider.LoadConfiguration( Path.Combine(path, nameof(PompControllerConfiguration)) );
 
             if (Config == null)
                 Config = new PompControllerConfiguration();

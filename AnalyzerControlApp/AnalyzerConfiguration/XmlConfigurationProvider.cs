@@ -4,15 +4,15 @@ using System.Xml.Serialization;
 
 namespace AnalyzerConfiguration
 {
-    public class XmlSerializeHelper<T>
+    public class XmlConfigurationProvider<T> : IConfigurationProvider<T>
     {
         const string backupDir = "ConfigurationBackup";
 
-        public static void WriteXml(T data, string filename)
+        public void SaveConfiguration(T configuration, string filename)
         {
-            XmlSerializer ser = new XmlSerializer(data.GetType());
+            XmlSerializer ser = new XmlSerializer(configuration.GetType());
 
-            string dir = $"{backupDir}/{DateTime.Now.ToString("dd_MM_yyyy_#_HH_mm_ss")}/";
+            string dir = $"{backupDir}/{DateTime.Now:dd_MM_yyyy_#_HH_mm_ss}/";
 
             Directory.CreateDirectory(backupDir);
             Directory.CreateDirectory(dir);
@@ -25,11 +25,11 @@ namespace AnalyzerConfiguration
             }
 
             TextWriter writer = new StreamWriter($"{filename}.xml");
-            ser.Serialize(writer, data);
+            ser.Serialize(writer, configuration);
             writer.Close();
         }
 
-        public static T ReadXml(string filename)
+        public T LoadConfiguration(string filename)
         {
             T data;
 
