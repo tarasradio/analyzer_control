@@ -10,6 +10,12 @@ namespace PresentationWinForms.Views
 {
     public partial class StepperTurningView : UserControl
     {
+        public enum Direction
+        {
+            Inverce,
+            Forward
+        }
+
         private Stepper stepperParams = null;
         bool isLoading = false;
 
@@ -79,21 +85,20 @@ namespace PresentationWinForms.Views
         {
             int countSteps = (int)editNumberSteps.Value;
             if (setNumberSteps.Checked)
-                move(Protocol.Direction.REV, countSteps);
+                move(Direction.Inverce, countSteps);
             else
-                run(Protocol.Direction.REV);
+                run(Direction.Inverce);
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            StopCommand.StopType type = StopCommand.StopType.SOFT_STOP;
-            Core.Serial.SendPacket(new StopCommand(stepperParams.Number, type).GetBytes());
+            Core.Serial.SendPacket(new StopCommand(stepperParams.Number, StopCommand.StopType.SOFT_STOP).GetBytes());
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
             bool isReverse = stepperParams.Reverse;
-            Protocol.Direction direction = isReverse ? Protocol.Direction.REV : Protocol.Direction.FWD;
+            Direction direction = isReverse ? Direction.Inverce : Direction.Forward;
             goHome(direction);
         }
 
@@ -101,36 +106,39 @@ namespace PresentationWinForms.Views
         {
             int countSteps = (int)editNumberSteps.Value;
             if (setNumberSteps.Checked)
-                move(Protocol.Direction.FWD, countSteps);
+                move(Direction.Forward, countSteps);
             else
-                run(Protocol.Direction.FWD);
+                run(Direction.Forward);
         }
 
-        private void move(Protocol.Direction direction, int countSteps)
+        private void move(Direction direction, int countSteps)
         {
             int speed = (int)editFullSpeed.Value;
             int stepper = stepperParams.Number;
+
             Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
             Core.Serial.SendPacket(new SetSpeedCommand(stepper, (uint)speed).GetBytes());
-            countSteps = direction == Protocol.Direction.FWD ? countSteps : -countSteps;
+
+            countSteps = direction == Direction.Forward ? countSteps : -countSteps;
+
             Core.Serial.SendPacket(new MoveCommand(stepper, countSteps).GetBytes());
         }
 
-        private void run(Protocol.Direction direction)
+        private void run(Direction direction)
         {
             int speed = (int)editFullSpeed.Value;
             int stepper = stepperParams.Number;
             Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            speed = direction == Protocol.Direction.FWD ? speed : -speed;
+            speed = direction == Direction.Forward ? speed : -speed;
             Core.Serial.SendPacket(new RunCommand(stepper, speed).GetBytes());
         }
 
-        private void goHome(Protocol.Direction direction)
+        private void goHome(Direction direction)
         {
             int speed = (int)editFullSpeed.Value;
             int stepper = stepperParams.Number;
             Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            speed = direction == Protocol.Direction.FWD ? speed : -speed;
+            speed = direction == Direction.Forward ? speed : -speed;
             Core.Serial.SendPacket(new HomeCommand(stepper, speed).GetBytes());
         }
 

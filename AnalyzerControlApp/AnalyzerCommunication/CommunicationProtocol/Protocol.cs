@@ -15,13 +15,6 @@ namespace AnalyzerCommunication.CommunicationProtocol
             return lastPacketId++;
         }
 
-        public enum CommandStates
-        {
-            COMMAND_RECEIVED,
-            COMMAND_BAD_FORMAT,
-            COMMAND_EXECUTED
-        }
-
         public enum ResponsesTypes
         {
             FIRMWARE_VERSION_RESPONSE = 0x0F,
@@ -59,18 +52,6 @@ namespace AnalyzerCommunication.CommunicationProtocol
             CNC_ON_DEVICE,
             CNC_OFF_DEVICE,
             CNC_RUN
-        }
-
-        public enum Direction
-        {
-            REV = 0x00,
-            FWD = 0x01
-        }
-
-        public enum ValueEdge
-        {
-            RisingEdge,
-            FallingEdge
         }
 
         public enum CommandTypes

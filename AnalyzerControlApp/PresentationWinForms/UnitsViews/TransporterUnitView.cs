@@ -9,8 +9,8 @@ namespace PresentationWinForms.UnitsViews
         public TransporterUnitView()
         {
             InitializeComponent();
-            if(Core.Transporter != null)
-                propertyGrid.SelectedObject = Core.Transporter.Config;
+            if(Core.Conveyor != null)
+                propertyGrid.SelectedObject = Core.Conveyor.Options;
         }
 
         private void buttonPrepare_Click(object sender, EventArgs e)
@@ -18,7 +18,7 @@ namespace PresentationWinForms.UnitsViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Transporter.PrepareBeforeScanning();
+                    Core.Conveyor.PrepareBeforeScanning();
                 });
         }
 
@@ -27,7 +27,7 @@ namespace PresentationWinForms.UnitsViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Transporter.RotateAndScanTube();
+                    Core.Conveyor.RotateAndScanTube();
                 });
         }
     }

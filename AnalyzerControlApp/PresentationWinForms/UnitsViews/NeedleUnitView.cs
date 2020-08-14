@@ -1,4 +1,4 @@
-﻿using AnalyzerConfiguration.ControllersConfiguration;
+﻿using AnalyzerConfiguration;
 using AnalyzerControlCore;
 using System;
 using System.Windows.Forms;
@@ -11,7 +11,7 @@ namespace PresentationWinForms.UnitsViews
         {
             InitializeComponent();
             if(Core.Needle != null)
-                propertyGrid.SelectedObject = Core.Needle.Config;
+                propertyGrid.SelectedObject = Core.Needle.Options;
         }
 
         private void buttonHomeRotator_Click(object sender, EventArgs e)
@@ -28,7 +28,7 @@ namespace PresentationWinForms.UnitsViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Needle.HomeAll();
+                    Core.Needle.HomeLifterAndRotator();
                     Core.Needle.TurnToTubeAndWaitTouch();
                 });
         }
@@ -38,7 +38,7 @@ namespace PresentationWinForms.UnitsViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Needle.HomeAll();
+                    Core.Needle.HomeLifterAndRotator();
                     Core.Needle.TurnAndGoDownToWashing();
                 });
         }
@@ -63,7 +63,7 @@ namespace PresentationWinForms.UnitsViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Needle.HomeAll();
+                    Core.Needle.HomeLifterAndRotator();
                     Core.Needle.TurnToCartridge(cell);
                 });
         }
@@ -88,7 +88,7 @@ namespace PresentationWinForms.UnitsViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Needle.GoDownAndPierceCartridge(cell);
+                    Core.Needle.GoDownAndPerforateCartridge(cell);
                 });
         }
 
@@ -97,7 +97,7 @@ namespace PresentationWinForms.UnitsViews
             Core.Executor.StartTask(
                 () =>
                 {
-                    Core.Needle.HomeLift();
+                    Core.Needle.HomeLifter();
                 });
         }
     }

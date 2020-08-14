@@ -1,5 +1,6 @@
 ﻿using AnalyzerCommunication;
 using AnalyzerCommunication.CommunicationProtocol;
+using AnalyzerCommunication.CommunicationProtocol.Responses;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -19,7 +20,7 @@ namespace AnalyzerControlCore.MachineControl
         private Thread executionThread;
 
         private static uint executedCommandId;
-        private static Protocol.CommandStates executedCommandState;
+        private static CommandStateResponse.CommandStates executedCommandState;
 
         Stopwatch timer = new Stopwatch();
 
@@ -28,7 +29,7 @@ namespace AnalyzerControlCore.MachineControl
 
         }
 
-        public void UpdateExecutedCommandState(uint commandId, Protocol.CommandStates state)
+        public void UpdateExecutedCommandState(uint commandId, CommandStateResponse.CommandStates state)
         {
             setExecutedCommandId(commandId);
             setExecutedCommandState(state);
@@ -42,7 +43,7 @@ namespace AnalyzerControlCore.MachineControl
             }
         }
 
-        private static void setExecutedCommandState(Protocol.CommandStates state)
+        private static void setExecutedCommandState(CommandStateResponse.CommandStates state)
         {
             lock(locker)
             {
@@ -62,9 +63,9 @@ namespace AnalyzerControlCore.MachineControl
             return commandId;
         }
 
-        private static Protocol.CommandStates getExecutedCommandState()
+        private static CommandStateResponse.CommandStates getExecutedCommandState()
         {
-            Protocol.CommandStates commandState;
+            CommandStateResponse.CommandStates commandState;
 
             lock (locker)
             {
@@ -153,14 +154,16 @@ namespace AnalyzerControlCore.MachineControl
 
                 if (Protocol.CommandTypes.SIMPLE_COMMAND == command.GetType())
                 {
-                    if (getExecutedCommandId() == command.GetId() && getExecutedCommandState() == Protocol.CommandStates.COMMAND_RECEIVED)
+                    if (getExecutedCommandId() == command.GetId() && 
+                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_RECEIVED)
                     {
                         break;
                     }
                 }
                 else if(Protocol.CommandTypes.WAITING_COMMAND == command.GetType())
                 {
-                    if (getExecutedCommandId() == command.GetId() && getExecutedCommandState() == Protocol.CommandStates.COMMAND_EXECUTED)
+                    if (getExecutedCommandId() == command.GetId() && 
+                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_EXECUTED)
                     {
                         break; 
                     }

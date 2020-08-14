@@ -79,7 +79,9 @@
     <Compile Include="SerialCommunication\PacketHandler.cs" />
     <Compile Include="SerialCommunication\SerialAdapter.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="CommunicationClassDiagram.cd" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{6dcff691-ffbb-45b4-90a9-36806ae27d02}</Project>

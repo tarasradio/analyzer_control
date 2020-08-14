@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace AnalyzerControlCore.Utils
 {
-    public class RegexHelper
+    public static class RegexHelper
     {
         const string blockComments = @"/\*(.*?)\*/";
         const string lineComments = @"//(.*?)\r?\n";

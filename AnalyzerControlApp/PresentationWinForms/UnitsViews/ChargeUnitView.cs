@@ -11,7 +11,7 @@ namespace PresentationWinForms.UnitsViews
             InitializeComponent();
 
             if (Core.Charger != null)
-                propertyGrid.SelectedObject = Core.Charger.Config;
+                propertyGrid.SelectedObject = Core.Charger.GetConfiguration();
         }
 
         private void buttonHookHome_Click(object sender, EventArgs e)

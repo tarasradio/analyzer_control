@@ -14,7 +14,7 @@ namespace PresentationWinForms.Views
 {
     public partial class CNCView : UserControl
     {
-        List<ICommand> commands;
+        private List<ICommand> commands;
 
         public CNCView()
         {
@@ -38,7 +38,7 @@ namespace PresentationWinForms.Views
 
         Style digitStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
 
-        private void ProgramTextBox_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        private void ProgramTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             e.ChangedRange.ClearStyle(motorCommandNameStyle);
             e.ChangedRange.ClearStyle(deviceNumberStyle);
@@ -61,14 +61,14 @@ namespace PresentationWinForms.Views
             e.ChangedRange.SetStyle(commentsStyle, @"//.*$", RegexOptions.Multiline);
         }
 
-        private void ParseProgram()
+        private void ParseProgram(string programText)
         {
-            commands = new CommandParser().Parse(programTextBox.Text);
+            commands = CommandParser.Parse(programText);
         }
 
         private void buttonTestProgram_Click(object sender, EventArgs e)
         {
-            ParseProgram();
+            ParseProgram(programTextBox.Text);
         }
 
         private void buttonOpenFile_Click(object sender, EventArgs e)
@@ -94,6 +94,7 @@ namespace PresentationWinForms.Views
         {
             SaveFileDialog fileDialog = new SaveFileDialog();
             fileDialog.Filter = "txt files (*.txt)|*.txt";
+
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -109,7 +110,7 @@ namespace PresentationWinForms.Views
         
         private void buttonRunProgram_Click(object sender, EventArgs e)
         {
-            ParseProgram();
+            ParseProgram(programTextBox.Text);
 
             if(commands.Count > 0)
             {

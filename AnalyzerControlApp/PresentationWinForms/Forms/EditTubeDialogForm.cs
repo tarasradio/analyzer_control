@@ -1,4 +1,4 @@
-﻿using AnalyzerConfiguration.ControllersConfiguration;
+﻿using AnalyzerConfiguration;
 using PresentationWinForms.Utils;
 using System;
 using System.Windows.Forms;

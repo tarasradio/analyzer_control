@@ -3,7 +3,7 @@ using AnalyzerCommunication.CommunicationProtocol;
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
-using AnalyzerConfiguration.ControllersConfiguration;
+using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
@@ -11,232 +11,211 @@ using System.IO;
 
 namespace AnalyzerControlCore.Units
 {
-    public class NeedleUnit : AbstractUnit
+    public class NeedleUnit : UnitBase<NeedleConfiguration>
     {
-        public NeedleControllerConfiguration Config { get; set; }
-        private IConfigurationProvider<NeedleControllerConfiguration> provider;
-
-        public int LiftPosition { get; set; } = 0;
+        public int LifterPosition { get; set; } = 0;
         public int RotatorPosition { get; set; } = 0;
-        public bool LiftPositionUnderfined { get; set; } = true;
+        public bool LifterPositionUnderfined { get; set; } = true;
 
-        public NeedleUnit(ICommandExecutor executor) : base(executor)
+        public NeedleUnit(ICommandExecutor executor, IConfigurationProvider provider) : base(executor, provider)
         {
-            Config = new NeedleControllerConfiguration();
-        }
 
-        public void SetProvider(IConfigurationProvider<NeedleControllerConfiguration> provider)
-        {
-            this.provider = provider;
-        }
-
-        public void SaveConfiguration(string path)
-        {
-            provider.SaveConfiguration(Config, Path.Combine(path, nameof(NeedleControllerConfiguration)) );
-        }
-
-        public void LoadConfiguration(string path)
-        {
-            Config = provider.LoadConfiguration( Path.Combine(path, nameof(NeedleControllerConfiguration)) );
-            if (Config == null)
-                Config = new NeedleControllerConfiguration();
         }
 
         public void TurnToTubeAndWaitTouch()
         {
-            Logger.ControllerInfo($"[Needle] - Start turn to tube and waiting touch.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start turn to tube and waiting touch.");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до пробирки
-            commands.Add(new SetSpeedCommand(Config.RotatorStepper, (uint)Config.RotatorSpeed));
+            commands.Add(new SetSpeedCommand(Options.RotatorStepper, (uint)Options.RotatorSpeed));
 
-            steppers = new Dictionary<int, int>() { { Config.RotatorStepper, Config.RotatorStepsTurnToTube - RotatorPosition} };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, Options.RotatorStepsToTube - RotatorPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            RotatorPosition = Config.RotatorStepsTurnToTube;
+            RotatorPosition = Options.RotatorStepsToTube;
 
             commands.Clear();
 
             // Опускание иглы до жидкости в пробирке
-            commands.Add(new SetSpeedCommand(Config.LiftStepper, (uint)Config.LiftSpeed));
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, (uint)Options.LifterSpeed));
 
-            steppers = new Dictionary<int, int>() { { Config.LiftStepper, Config.LiftSpeed } };
-            commands.Add(new RunCncCommand(steppers, 0, 500, Protocol.ValueEdge.RisingEdge));
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, Options.LifterSpeed } };
+            commands.Add(new RunCncCommand(steppers, 0, 500, ValueEdge.RisingEdge));
 
             // Дополнительное опускание иглы в жидкости
-            steppers = new Dictionary<int, int>() { { Config.LiftStepper, Config.LiftStepsGoDownAfterTouch } };
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, Options.LifterStepsAfterTouch } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             
-            LiftPositionUnderfined = true; // ибо неизвестно, где он будет после касания жидкости в пробирке
+            LifterPositionUnderfined = true; // ибо неизвестно, где он будет после касания жидкости в пробирке
 
-            Logger.ControllerInfo($"[Needle] - Turn to tube and waiting touch finished.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Turn to tube and waiting touch finished.");
         }
 
         public void HomeRotator()
         {
-            Logger.ControllerInfo($"[Needle] - Start rotator going to home.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start rotator going to home.");
             List<ICommand> commands = new List<ICommand>();
             
-            commands.Add(new SetSpeedCommand(Config.RotatorStepper, 1000));
+            commands.Add(new SetSpeedCommand(Options.RotatorStepper, 1000));
 
-            steppers = new Dictionary<int, int>() { { Config.RotatorStepper, 100 } };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, 100 } };
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
             
             RotatorPosition = 0;
 
-            Logger.ControllerInfo($"[Needle] - Rotator goint to home finished.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Rotator goint to home finished.");
         }
 
-        public void HomeLift()
+        public void HomeLifter()
         {
-            Logger.ControllerInfo($"[Needle] - Start lift going to home.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start lift going to home.");
             List<ICommand> commands = new List<ICommand>();
 
             
-            commands.Add(new SetSpeedCommand(Config.LiftStepper, 1000));
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, 1000));
 
-            steppers = new Dictionary<int, int>() { { Config.LiftStepper, -200 } };
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, -200 } };
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
 
-            LiftPosition = 0;
-            LiftPositionUnderfined = false;
+            LifterPosition = 0;
+            LifterPositionUnderfined = false;
 
-            Logger.ControllerInfo($"[Needle] - Lift going to home finished.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Lift going to home finished.");
         }
 
-        public void HomeAll()
+        public void HomeLifterAndRotator()
         {
-            // Поднятие иглы
-            HomeLift();
-            // Поворот иглы
+            HomeLifter();
             HomeRotator();
         }
 
         public void TurnAndGoDownToWashing()
         {
-            Logger.ControllerInfo($"[Needle] - Start turn and going down to washing.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start turn and going down to washing.");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до промывки
-            commands.Add(new SetSpeedCommand(Config.RotatorStepper, 50));
+            commands.Add(new SetSpeedCommand(Options.RotatorStepper, 50));
 
-            steppers = new Dictionary<int, int>() { { Config.RotatorStepper, Config.RotatorStepsTurnToWashing - RotatorPosition} };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, Options.RotatorStepsToWashing - RotatorPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             commands.Clear();
 
-            RotatorPosition = Config.RotatorStepsTurnToWashing;
+            RotatorPosition = Options.RotatorStepsToWashing;
 
-            if (LiftPositionUnderfined)
-                HomeLift();
+            if (LifterPositionUnderfined)
+                HomeLifter();
 
             // Опускание иглы до промывки
-            commands.Add(new SetSpeedCommand(Config.LiftStepper, 500));
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, 500));
 
-            steppers = new Dictionary<int, int>() { { Config.LiftStepper, Config.LiftStepsGoDownToWashing - LiftPosition } };
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, Options.LifterStepsToWashing - LifterPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
 
-            LiftPosition = Config.LiftStepsGoDownToWashing;
+            LifterPosition = Options.LifterStepsToWashing;
 
-            Logger.ControllerInfo($"[Needle] - Turn and going down to washing finished.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Turning and going down to washing finished.");
         }
 
-        public void GoDownAndPierceCartridge(CartridgeCell cartridgeCell, bool needSuction = true)
+        public void GoDownAndPerforateCartridge(CartridgeCell cartridgeCell, bool needSuction = true)
         {
-            Logger.ControllerInfo($"[Needle] - Start going down and piercing cartridge.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start going down and perforating cartridge.");
 
             List<ICommand> commands = new List<ICommand>();
 
-            int steps = Config.LiftStepsGoDownToCell;
+            int steps = Options.LifterStepsToCell;
 
             if (cartridgeCell == CartridgeCell.WhiteCell)
             {
                 if (needSuction)
-                    steps = Config.LiftStepsGoDownToMixCellAtSuction;
+                    steps = Options.LifterStepsToMixCellAtSuction;
                 else
-                    steps = Config.LiftStepsGoDownToMixCell;
+                    steps = Options.LifterStepsToMixCell;
             }
 
-            if (LiftPositionUnderfined)
-                HomeLift();
+            if (LifterPositionUnderfined)
+                HomeLifter();
 
             // Протыкание
-            commands.Add(new SetSpeedCommand(Config.LiftStepper, (uint)Config.LiftSpeed));
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, (uint)Options.LifterSpeed));
 
-            steppers = new Dictionary<int, int>() { { Config.LiftStepper, steps - LiftPosition } };
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, steps - LifterPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            LiftPosition = steps;
+            LifterPosition = steps;
 
-            Logger.ControllerInfo($"[Needle] - Going down and piercing cartridge finished.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Going down and piercing cartridge finished.");
         }
 
         public void GoToSafeLevel()
         {
-            Logger.ControllerInfo($"[Needle] - Start going to safe level.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start going to safe level.");
 
             List<ICommand> commands = new List<ICommand>();
 
-            if (LiftPositionUnderfined)
-                HomeLift();
+            if (LifterPositionUnderfined)
+                HomeLifter();
 
-            int steps = Config.LiftStepsGoDownToSafeLevel;
+            int steps = Options.LifterStepsToSafeLevel;
 
-            commands.Add(new SetSpeedCommand(Config.LiftStepper, (uint)Config.LiftSpeed));
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, (uint)Options.LifterSpeed));
 
-            steppers = new Dictionary<int, int>() { { Config.LiftStepper, steps - LiftPosition } };
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, steps - LifterPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            LiftPosition = steps;
+            LifterPosition = steps;
 
-            Logger.ControllerInfo($"[Needle] - Going to safe level finished.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Going to safe level finished.");
         }
 
         public void TurnToCartridge(CartridgeCell cell)
         {
-            Logger.ControllerInfo($"[Needle] - Start turn to cartridge.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start turn to cartridge.");
             List<ICommand> commands = new List<ICommand>();
             
             int turnSteps = 0;
 
+            //TODO: Что то тут не так (if-else)
             if(cell == CartridgeCell.WhiteCell)
             {
-                turnSteps = Config.RotatorStepsTurnToMixCell;
+                turnSteps = Options.RotatorStepsToMixCell;
             }
             else if(cell == CartridgeCell.FirstCell)
             {
-                turnSteps = Config.RotatorStepsTurnToFirstCell;
+                turnSteps = Options.RotatorStepsToFirstCell;
             }
             else if(cell == CartridgeCell.SecondCell)
             {
-                turnSteps = Config.RotatorStepsTurnToSecondCell;
+                turnSteps = Options.RotatorStepsToSecondCell;
             }
             else if(cell == CartridgeCell.ThirdCell)
             {
-                turnSteps = Config.RotatorStepsTurnToThirdCell;
+                turnSteps = Options.RotatorStepsToThirdCell;
             }
 
-            commands.Add(new SetSpeedCommand(Config.RotatorStepper, 50));
+            commands.Add(new SetSpeedCommand(Options.RotatorStepper, 50));
 
-            steppers = new Dictionary<int, int>() { { Config.RotatorStepper, turnSteps - RotatorPosition } };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, turnSteps - RotatorPosition } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             RotatorPosition = turnSteps;
 
-            Logger.ControllerInfo($"[Needle] - Turn to cartridge finished.");
+            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Turn to cartridge finished.");
         }
     }
 }

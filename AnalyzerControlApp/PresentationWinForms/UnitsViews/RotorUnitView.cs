@@ -1,4 +1,4 @@
-﻿using AnalyzerConfiguration.ControllersConfiguration;
+﻿using AnalyzerConfiguration;
 using AnalyzerControlCore;
 using AnalyzerControlCore.Units;
 using System;
@@ -12,7 +12,7 @@ namespace PresentationWinForms.UnitsViews
         {
             InitializeComponent();
             if (Core.Rotor != null)
-                propertyGrid.SelectedObject = Core.Rotor.Config;
+                propertyGrid.SelectedObject = Core.Rotor.Options;
         }
 
         private void buttonHome_Click(object sender, EventArgs e)

@@ -24,18 +24,6 @@ namespace AnalyzerCommunication.SerialCommunication
 
         }
 
-        private void TryPacketBuild(byte bufferByte)
-        {
-            packetBuffer[packetTail++] = bufferByte;
-
-            if (packetTail == maxPacketLength)
-            {
-                Logger.Info($"[Packet finder] - Превышен размер пакета.");
-                packetTail = 0;
-            }
-            escapeFlag = false;
-        }
-
         public void FindPacket(byte[] buffer)
         {
             int currentBufferByte = 0;
@@ -73,6 +61,18 @@ namespace AnalyzerCommunication.SerialCommunication
                 }
                 currentBufferByte++;
             }
+        }
+
+        private void TryPacketBuild(byte bufferByte)
+        {
+            packetBuffer[packetTail++] = bufferByte;
+
+            if (packetTail == maxPacketLength)
+            {
+                Logger.Info($"[Packet finder] - Превышен размер пакета.");
+                packetTail = 0;
+            }
+            escapeFlag = false;
         }
     }
 }

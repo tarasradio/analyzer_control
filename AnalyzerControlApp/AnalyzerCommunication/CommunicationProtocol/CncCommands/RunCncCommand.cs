@@ -3,16 +3,24 @@ using System.Collections.Generic;
 
 namespace AnalyzerCommunication.CommunicationProtocol.CncCommands
 {
+    public enum ValueEdge
+    {
+        RisingEdge,
+        FallingEdge
+    }
+
     public class RunCncCommand : AbstractCommand, IRemoteCommand
     {
+        
+
         private Dictionary<int, int> steppers;
         const int BytesPerStepper = 5;
 
         uint sensor = 0;
         uint value = 0;
-        Protocol.ValueEdge valueEdge = Protocol.ValueEdge.RisingEdge;
+        ValueEdge valueEdge = ValueEdge.RisingEdge;
 
-        public RunCncCommand(Dictionary<int, int> speeds, uint sensor, uint value, Protocol.ValueEdge edge) : base()
+        public RunCncCommand(Dictionary<int, int> speeds, uint sensor, uint value, ValueEdge edge) : base()
         {
             steppers = speeds;
 

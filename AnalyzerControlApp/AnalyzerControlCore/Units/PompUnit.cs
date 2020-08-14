@@ -1,7 +1,7 @@
 ﻿using AnalyzerCommunication;
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerConfiguration;
-using AnalyzerConfiguration.ControllersConfiguration;
+using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
@@ -9,39 +9,16 @@ using System.IO;
 
 namespace AnalyzerControlCore.Units
 {
-    public class PompUnit : AbstractUnit
+    public class PompUnit : UnitBase<PompConfiguration>
     {
-        const string filename = "PompControllerProps";
-
-        public PompControllerConfiguration Config { get; set; }
-        private IConfigurationProvider<PompControllerConfiguration> provider;
-
-        public PompUnit(ICommandExecutor executor) : base(executor)
+        public PompUnit(ICommandExecutor executor, IConfigurationProvider provider) : base(executor, provider)
         {
-            Config = new PompControllerConfiguration();
-        }
 
-        public void SetProvider(IConfigurationProvider<PompControllerConfiguration> provider)
-        {
-            this.provider = provider;
-        }
-
-        public void SaveConfiguration(string path)
-        {
-            provider.SaveConfiguration(Config, Path.Combine(path, nameof(PompControllerConfiguration)) );
-        }
-
-        public void LoadConfiguration(string path)
-        {
-            Config = provider.LoadConfiguration( Path.Combine(path, nameof(PompControllerConfiguration)) );
-
-            if (Config == null)
-                Config = new PompControllerConfiguration();
         }
 
         public void CloseValves()
         {
-            Logger.ControllerInfo($"[Pomp] - Close valves.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Close valves.");
             List<ICommand> commands = new List<ICommand>();
 
             commands.Add(new OffDeviceCncCommand(new List<int>() { 0 , 1 }));
@@ -51,7 +28,7 @@ namespace AnalyzerControlCore.Units
 
         public void Home()
         {
-            Logger.ControllerInfo($"[Pomp] - Start homing.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start homing.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new OnDeviceCncCommand(new List<int>() { 0 }));
@@ -59,78 +36,78 @@ namespace AnalyzerControlCore.Units
             commands.Add(new OffDeviceCncCommand(new List<int>() { 1 }));
 
             steppers = new Dictionary<int, int>() {
-                { Config.BigPistonStepper, Config.BigPistonHomeSpeed },
-                { Config.SmallPistonStepper, Config.SmallPistonHomeSpeed }
+                { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
             };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                { Config.BigPistonStepper, Config.BigPistonHomeSpeed },
-                { Config.SmallPistonStepper, Config.SmallPistonHomeSpeed }
+                { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
             };
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Pomp] - Homing finished.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Homing finished.");
         }
 
         public void Suction(int value)
         {
-            Logger.ControllerInfo($"[Pomp] - Start suction.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start suction.");
             List<ICommand> commands = new List<ICommand>();
 
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
             commands.Add( new OffDeviceCncCommand(new List<int>() { 1 }) );
             
             steppers = new Dictionary<int, int>() {
-                { Config.SmallPistonStepper, Config.SmallPistonSuctionSpeed }
+                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtSuction }
             };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Config.SmallPistonStepper, Config.SmallPistonSuctionSteps }
+                { Options.SmallPistonStepper, Options.SmallPistonStepsAtSuction }
             };
             commands.Add( new MoveCncCommand(steppers) );
             
             commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Pomp] - Suction finished.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Suction finished.");
         }
 
         public void Unsuction(int value)
         {
-            Logger.ControllerInfo($"[Pomp] - Start unsuction.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start unsuction.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
             commands.Add( new OffDeviceCncCommand(new List<int>() { 1 }) );
 
             steppers = new Dictionary<int, int>() {
-                { Config.SmallPistonStepper, Config.SmallPistonSuctionSpeed }
+                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtSuction }
             };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Config.SmallPistonStepper, Config.SmallPistonSuctionSpeed }
+                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtSuction }
             };
             commands.Add( new HomeCncCommand(steppers) );
             
             commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[Pomp] - Unsuction finished.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Unsuction finished.");
         }
 
         public void WashingNeedle(int cycles)
         {
-            Logger.ControllerInfo($"[Pomp] - Start washing ({cycles} cycles).");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start washing ({cycles} cycles).");
             
             for (int i = 0; i < cycles; i++)
             {
                 WashingCycle();
             }
-            Logger.ControllerInfo($"[Pomp] - Washing finished.");
+            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Washing finished.");
         }
 
         private void WashingCycle()
@@ -141,14 +118,14 @@ namespace AnalyzerControlCore.Units
             commands.Add(new OffDeviceCncCommand(new List<int>() { 1 }));
 
             steppers = new Dictionary<int, int>() {
-                    { Config.BigPistonStepper, Config.BigPistonHomeSpeed },
-                    { Config.SmallPistonStepper, Config.SmallPistonHomeSpeed }
+                    { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
                 };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                    { Config.BigPistonStepper, Config.BigPistonHomeSpeed },
-                    { Config.SmallPistonStepper, Config.SmallPistonHomeSpeed }
+                    { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
                 };
             commands.Add(new HomeCncCommand(steppers));
 
@@ -156,14 +133,14 @@ namespace AnalyzerControlCore.Units
             commands.Add(new OnDeviceCncCommand(new List<int>() { 1 }));
 
             steppers = new Dictionary<int, int>() {
-                    { Config.BigPistonStepper, Config.BigPistonWashingSpeed },
-                    { Config.SmallPistonStepper, Config.SmallPistonWashingSpeed }
+                    { Options.BigPistonStepper, Options.BigPistonSpeedAtWashing },
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtWashing }
                 };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                    { Config.BigPistonStepper, Config.BigPistonWashingSteps },
-                    { Config.SmallPistonStepper, Config.SmallPistonWashingSteps }
+                    { Options.BigPistonStepper, Options.BigPistonStepsAtWashing },
+                    { Options.SmallPistonStepper, Options.SmallPistonStepsAtWashing }
                 };
             commands.Add(new MoveCncCommand(steppers));
 

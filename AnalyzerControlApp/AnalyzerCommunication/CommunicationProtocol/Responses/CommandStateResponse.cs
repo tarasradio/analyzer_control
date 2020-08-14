@@ -4,6 +4,13 @@ namespace AnalyzerCommunication.CommunicationProtocol.Responses
 {
     public class CommandStateResponse : AbstaractResponse
     {
+        public enum CommandStates
+        {
+            COMMAND_RECEIVED,
+            COMMAND_BAD_FORMAT,
+            COMMAND_EXECUTED
+        }
+
         public CommandStateResponse(byte[] buffer) : base(buffer) { }
 
         public uint GetCommandId()
@@ -12,9 +19,9 @@ namespace AnalyzerCommunication.CommunicationProtocol.Responses
             return id;
         }
 
-        public Protocol.CommandStates GetCommandState()
+        public CommandStates GetCommandState()
         {
-            return (Protocol.CommandStates)buffer[0];
+            return (CommandStates)buffer[0];
         }
     }
 }

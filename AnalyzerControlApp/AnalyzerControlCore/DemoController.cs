@@ -1,5 +1,5 @@
 ﻿using AnalyzerConfiguration;
-using AnalyzerConfiguration.ControllersConfiguration;
+using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.Units;
 using Infrastructure;
 using System;
@@ -9,11 +9,8 @@ using System.Timers;
 
 namespace AnalyzerControlCore
 {
-    public class DemoController
+    public class DemoController : UnitBase<DemoControllerConfiguration>
     {
-        public DemoControllerConfiguration Config;
-        IConfigurationProvider<DemoControllerConfiguration> provider;
-
         // шагов пробирки от точки сканирования до точки с забором
         private const int tubeCellsCount = 54;
         private const int cellsBetweenScanAndSuction = 7;
@@ -27,32 +24,12 @@ namespace AnalyzerControlCore
 
         private static object locker = new object();
 
-        public DemoController()
+        public DemoController(IConfigurationProvider provider) : base(null, provider)
         {
-            Config = new DemoControllerConfiguration();
-
             tubeCells = new TubeCell[tubeCellsCount];
 
             timer.Interval = 1000;
             timer.Elapsed += Timer_Elapsed;
-        }
-
-        public void SetProvider(IConfigurationProvider<DemoControllerConfiguration> provider)
-        {
-            this.provider = provider;
-        }
-
-        public void SaveConfiguration(string path)
-        {
-            provider.SaveConfiguration(Config, Path.Combine(path, nameof(DemoControllerConfiguration)) );
-        }
-
-        public void LoadConfiguration(string path)
-        {
-            Config = provider.LoadConfiguration( Path.Combine(path, nameof(DemoControllerConfiguration)) );
-
-            if (Config == null)
-                Config = new DemoControllerConfiguration();
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -63,7 +40,7 @@ namespace AnalyzerControlCore
                 Logger.DemoInfo("Прошла минута");
                 
                 // уменьшаем оставшееся время инкубации
-                foreach (TubeInfo tube in Config.Tubes)
+                foreach (TubeInfo tube in Options.Tubes)
                 {
                     lock (locker)
                     {
@@ -96,7 +73,7 @@ namespace AnalyzerControlCore
 
         private void DemoTask()
         {
-            foreach (TubeInfo tube in Config.Tubes)
+            foreach (TubeInfo tube in Options.Tubes)
             {
                 lock(locker)
                 {
@@ -109,8 +86,8 @@ namespace AnalyzerControlCore
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
-            Core.Needle.HomeAll();
-            Core.Transporter.PrepareBeforeScanning();
+            Core.Needle.HomeLifterAndRotator();
+            Core.Conveyor.PrepareBeforeScanning();
 
             Logger.DemoInfo($"Подготовка завершена");
 
@@ -165,7 +142,7 @@ namespace AnalyzerControlCore
         /// </summary>
         private void performingOutstandingTasks()
         {
-            foreach (TubeInfo tube in Config.Tubes)
+            foreach (TubeInfo tube in Options.Tubes)
             {
                 if( tube.CurrentStage >= 0 &&
                     tube.CurrentStage < tube.Stages.Count && 
@@ -200,7 +177,7 @@ namespace AnalyzerControlCore
         {
             TubeInfo result = null;
 
-            foreach (TubeInfo tube in Config.Tubes)
+            foreach (TubeInfo tube in Options.Tubes)
             {
                 if (barCode.Contains(tube.BarCode))
                 {
@@ -219,7 +196,7 @@ namespace AnalyzerControlCore
         {
             bool result = false;
 
-            foreach(TubeInfo tube in Config.Tubes)
+            foreach(TubeInfo tube in Options.Tubes)
             {
                 if (tube.CurrentStage <= tube.Stages.Count)
                 {
@@ -237,9 +214,9 @@ namespace AnalyzerControlCore
         {
             Logger.DemoInfo($"Запущена инициализация всех устройств");
 
-            Core.Needle.HomeAll();
+            Core.Needle.HomeLifterAndRotator();
             Core.Charger.HomeHook();
-            Core.Charger.HookAfterHome();
+            Core.Charger.MoveHookAfterHome();
             Core.Charger.HomeRotator();
             Core.Rotor.Home();
             Core.Pomp.Home();
@@ -254,7 +231,7 @@ namespace AnalyzerControlCore
         {
             Logger.DemoInfo($"Запущена промывка иглы");
 
-            Core.Needle.HomeLift();
+            Core.Needle.HomeLifter();
             Core.Needle.TurnAndGoDownToWashing();
             Core.Pomp.WashingNeedle(2);
             Core.Pomp.Home();
@@ -276,13 +253,13 @@ namespace AnalyzerControlCore
 
             Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
 
-            Core.Transporter.Shift(false);
+            Core.Conveyor.Shift(false);
 
             while (attempt < numberAttempts)
             {
                 Logger.DemoInfo($"Попытка {attempt}.");
 
-                Core.Transporter.RotateAndScanTube();
+                Core.Conveyor.RotateAndScanTube();
                 string barCode = Core.GetLastTubeBarCode();
 
                 if ( !String.IsNullOrWhiteSpace(barCode) )
@@ -328,13 +305,13 @@ namespace AnalyzerControlCore
                 tube.Stages[tube.Stages.Count - 1].CartridgePosition, 
                 CartridgeCell.WhiteCell);
 
-            Core.Needle.HomeLift();
+            Core.Needle.HomeLifter();
             Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
 
-            Core.Needle.GoDownAndPierceCartridge(CartridgeCell.WhiteCell);
+            Core.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
             Core.Pomp.Suction(0);
 
-            Core.Needle.HomeLift();
+            Core.Needle.HomeLifter();
 
             // Далее нужно перелить в прозрачную кювету и отправить на анализ.
             
@@ -349,7 +326,7 @@ namespace AnalyzerControlCore
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
 
-            Core.Needle.HomeAll();
+            Core.Needle.HomeLifterAndRotator();
             //needleWashingTask();
 
             // Подводим нужную ячейку картриджа под иглу
@@ -363,7 +340,7 @@ namespace AnalyzerControlCore
             Core.Needle.TurnToCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Прокалываем ячейку картриджа
-            Core.Needle.GoDownAndPierceCartridge(tube.Stages[tube.CurrentStage].Cell);
+            Core.Needle.GoDownAndPerforateCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Поднимаемся на безопасную высоту над картриджем
             Core.Needle.GoToSafeLevel();
@@ -375,7 +352,7 @@ namespace AnalyzerControlCore
                 RotorUnit.CellPosition.CellCenter);
 
             // Прокалываем ячейку картриджа
-            Core.Needle.GoDownAndPierceCartridge(tube.Stages[tube.CurrentStage].Cell);
+            Core.Needle.GoDownAndPerforateCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Забираем реагент из ячейки картриджа
             Core.Pomp.Suction(0);
@@ -393,13 +370,13 @@ namespace AnalyzerControlCore
                 CartridgeCell.WhiteCell);
 
             // Опускаем иглу в белую кювету
-            Core.Needle.GoDownAndPierceCartridge(CartridgeCell.WhiteCell, false);
+            Core.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell, false);
 
             // Сливаем реагент в белую кювету
             Core.Pomp.Unsuction(0);
 
             // Поднимаем иглу до дома
-            Core.Needle.HomeLift();
+            Core.Needle.HomeLifter();
 
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-й стадии.");
         }
@@ -409,12 +386,12 @@ namespace AnalyzerControlCore
             Core.Rotor.Home();
             Core.Rotor.PlaceCellAtCharge(0, 5);
             Core.Charger.HomeHook();
-            Core.Charger.HookAfterHome();
+            Core.Charger.MoveHookAfterHome();
             Core.Charger.HomeRotator();
             Core.Charger.TurnToCell(5);
             Core.Charger.ChargeCartridge();
             Core.Charger.HomeHook();
-            Core.Charger.HookAfterHome();
+            Core.Charger.MoveHookAfterHome();
         }
 
 
@@ -429,10 +406,10 @@ namespace AnalyzerControlCore
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
             
             // Смещаем пробирку, чтобы она оказалась под иглой
-            Core.Transporter.Shift(false, TransporterUnit.ShiftType.HalfTube);
+            Core.Conveyor.Shift(false, ConveyorUnit.ShiftType.HalfTube);
 
             // Поднимаем иглу вверх до дома
-            Core.Needle.HomeLift();
+            Core.Needle.HomeLifter();
 
             Logger.DemoInfo($"Ожидание загрузки картриджа...");
 
@@ -457,13 +434,13 @@ namespace AnalyzerControlCore
                 CartridgeCell.WhiteCell);
 
             // Поднимаем иглу вверх до дома
-            Core.Needle.HomeLift();
+            Core.Needle.HomeLifter();
 
             // Устанавливаем иглу над белой ячейкой картриджа
             Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
 
             // Опускаем иглу в кювету
-            Core.Needle.GoDownAndPierceCartridge(CartridgeCell.WhiteCell);
+            Core.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
 
 
             Logger.DemoInfo($"Слив забранного материала в белую кювету.");
@@ -472,7 +449,7 @@ namespace AnalyzerControlCore
             Core.Pomp.Unsuction(0);
 
             // Поднимаем иглу вверх до дома
-            Core.Needle.HomeLift();
+            Core.Needle.HomeLifter();
             
             // Промываем иглу
             needleWashingTask();
@@ -483,10 +460,10 @@ namespace AnalyzerControlCore
             performingIntermediateTask(tube);
             
             // Устанавливаем иглу в домашнюю позицию
-            Core.Needle.HomeAll();
+            Core.Needle.HomeLifterAndRotator();
 
             // Смещаем пробирку обратно
-            Core.Transporter.Shift(true, TransporterUnit.ShiftType.HalfTube);
+            Core.Conveyor.Shift(true, ConveyorUnit.ShiftType.HalfTube);
 
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение подготовительной стадии.");
         }

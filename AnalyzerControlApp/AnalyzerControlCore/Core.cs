@@ -8,7 +8,7 @@ using Infrastructure;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using AnalyzerConfiguration.ControllersConfiguration;
+using AnalyzerConfiguration.UnitsConfiguration;
 
 namespace AnalyzerControlCore
 {
@@ -24,22 +24,14 @@ namespace AnalyzerControlCore
         public static TaskExecutor Executor { get; private set; }
 
         public static NeedleUnit Needle { get; private set; }
-        public static TransporterUnit Transporter { get; private set; }
+        public static ConveyorUnit Conveyor { get; private set; }
         public static RotorUnit Rotor { get; private set; }
-        public static ChargeUnit Charger { get; private set; }
+        public static ChargerUnit Charger { get; private set; }
         public static PompUnit Pomp { get; private set; }
 
         public static DemoController Demo { get; private set; }
 
-        private static IConfigurationProvider<NeedleControllerConfiguration> needleProvider;
-        private static IConfigurationProvider<TransporterControllerConfiguration> transporterProvider;
-        private static IConfigurationProvider<RotorControllerConfiguration> rotorProvider;
-        private static IConfigurationProvider<ChargeControllerConfiguration> chargeProvider;
-        private static IConfigurationProvider<PompControllerConfiguration> pompProvider;
-        
-        private static IConfigurationProvider<DemoControllerConfiguration> demoProvider;
-
-        private static IConfigurationProvider<AnalyzerAppConfiguration> appProvider;
+        private static IConfigurationProvider provider;
 
         private static object locker = new object();
 
@@ -53,43 +45,37 @@ namespace AnalyzerControlCore
         
         public static AnalyzerAppConfiguration AppConfig { get; private set; }
 
-        public static void SaveConfiguration(string path)
-        {
-            appProvider.SaveConfiguration(AppConfig, Path.Combine(path, nameof(AnalyzerAppConfiguration)));
-        }
-
-        public static void LoadConfiguration(string path)
-        {
-            try
-            {
-                AppConfig = appProvider.LoadConfiguration(Path.Combine(path, nameof(AnalyzerAppConfiguration)));
-            }
-            catch(FileNotFoundException)
-            {
-                AppConfig = new AnalyzerAppConfiguration();
-            }
-        }
-
         public Core(string configurationPath)
         {
+            provider = new XmlConfigurationProvider();
+            
+            CmdExecutor = new CommandExecutor();
+            Executor = new TaskExecutor();
+            
+            Needle = new NeedleUnit(CmdExecutor, provider);
+            Conveyor = new ConveyorUnit(CmdExecutor, provider);
+            Charger = new ChargerUnit(CmdExecutor, provider);
+            Rotor = new RotorUnit(CmdExecutor, provider);
+            Pomp = new PompUnit(CmdExecutor, provider);
+
+            Demo = new DemoController(provider);
+            
+            Core.configurationPath = configurationPath;
             AppConfig = new AnalyzerAppConfiguration();
 
-            // Создаем провайдеры конфигурации для приложения и для всех контроллеров
-            appProvider = new XmlConfigurationProvider<AnalyzerAppConfiguration>();
-            demoProvider = new XmlConfigurationProvider<DemoControllerConfiguration>();
-            needleProvider = new XmlConfigurationProvider<NeedleControllerConfiguration>();
-            transporterProvider = new XmlConfigurationProvider<TransporterControllerConfiguration>();
-            rotorProvider = new XmlConfigurationProvider<RotorControllerConfiguration>();
-            chargeProvider = new XmlConfigurationProvider<ChargeControllerConfiguration>();
-            pompProvider = new XmlConfigurationProvider<PompControllerConfiguration>();
-
-            LoadConfiguration(configurationPath);
+            LoadAppConfiguration();
+            LoadUnitsConfiguration();
 
             sensorsValues = new ushort[AppConfig.Sensors.Count];
             steppersStates = new ushort[AppConfig.Steppers.Count];
 
-            Core.configurationPath = Path.GetDirectoryName(configurationPath);
-            
+            SerialCommunicationInit();
+
+            Logger.Info("Запись работы системы начата");
+        }
+
+        private void SerialCommunicationInit()
+        {
             PackFinder.PacketReceived += PackHandler.ProcessPacket;
 
             Serial = new SerialAdapter(PackFinder);
@@ -102,34 +88,31 @@ namespace AnalyzerControlCore
             PackHandler.SteppersStatesReceived += PackHandler_SteppersStatesReceived;
 
             PackHandler.DebugMessageReceived += Logger.Info;
+            PackHandler.CommandStateReceived += CmdExecutor.UpdateExecutedCommandState;
+        }
 
-            CmdExecutor = new CommandExecutor();
-            Executor = new TaskExecutor();
-
-            Needle = new NeedleUnit(CmdExecutor); Needle.SetProvider(needleProvider);
-            Transporter = new TransporterUnit(CmdExecutor); Transporter.SetProvider(transporterProvider);
-            Charger = new ChargeUnit(CmdExecutor); Charger.SetProvider(chargeProvider);
-            Rotor = new RotorUnit(CmdExecutor); Rotor.SetProvider(rotorProvider);
-            Pomp = new PompUnit(CmdExecutor); Pomp.SetProvider(pompProvider);
-            Demo = new DemoController(); Demo.SetProvider(demoProvider);
-
+        public static void SaveAppConfiguration()
+        {
             try
             {
-                Needle.LoadConfiguration(configurationPath);
-                Transporter.LoadConfiguration(configurationPath);
-                Charger.LoadConfiguration(configurationPath);
-                Rotor.LoadConfiguration(configurationPath);
-                Pomp.LoadConfiguration(configurationPath);
-                Demo.LoadConfiguration(configurationPath);
+                provider.SaveConfiguration(AppConfig, "AppConfiguration");
             }
-            catch(FileNotFoundException)
+            catch (Exception exeption)
             {
-                throw new FileLoadException();
+                throw new IOException("Ошибка при сохранении файла конфигурации.", innerException: exeption);
             }
+        }
 
-            PackHandler.CommandStateReceived += CmdExecutor.UpdateExecutedCommandState;
-            
-            Logger.Info("Запись работы системы начата");
+        public static void LoadAppConfiguration()
+        {
+            try
+            {
+                AppConfig = provider.LoadConfiguration<AnalyzerAppConfiguration>("AppConfiguration");
+            }
+            catch
+            {
+                Logger.Info($"Ошибка при загрузке файла конфигурации. Используется конфигурация по умолчанию.");
+            }
         }
 
         private void PackHandler_TubeBarCodeReceived(string message)
@@ -175,14 +158,26 @@ namespace AnalyzerControlCore
             lastFirmwareVersionResponse = message;
         }
 
-        public void SaveConfiguration()
+        public void LoadUnitsConfiguration()
         {
-            Needle.SaveConfiguration(configurationPath);
-            Transporter.SaveConfiguration(configurationPath);
-            Charger.SaveConfiguration(configurationPath);
-            Rotor.SaveConfiguration(configurationPath);
-            Pomp.SaveConfiguration(configurationPath);
-            Demo.SaveConfiguration(configurationPath);
+            Needle.LoadConfiguration("NeedleConfiguration");
+            Conveyor.LoadConfiguration("ConveyorConfiguration");
+            Charger.LoadConfiguration("ChargerConfiguration");
+            Rotor.LoadConfiguration("RotorConfiguration");
+            Pomp.LoadConfiguration("PompConfiguration");
+
+            Demo.LoadConfiguration("DemoConfiguration");
+        }
+
+        public void SaveUnitsConfiguration()
+        {
+            Needle.SaveConfiguration("NeedleConfiguration");
+            Conveyor.SaveConfiguration("ConveyorConfiguration");
+            Charger.SaveConfiguration("ChargerConfiguration");
+            Rotor.SaveConfiguration("RotorConfiguration");
+            Pomp.SaveConfiguration("PompConfiguration");
+
+            Demo.SaveConfiguration("DemoConfiguration");
         }
         
         public async static void CheckFirmwareVersion()

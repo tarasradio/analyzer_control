@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AnalyzerConfiguration
 {
-    public interface IConfigurationProvider<T>
+    public interface IConfigurationProvider
     {
-        void SaveConfiguration(T configuration, string filename);
-        T LoadConfiguration(string filename);
+        void SaveConfiguration<T>(T configuration, string filename);
+        T LoadConfiguration<T>(string filename);
     }
 }

@@ -4,49 +4,34 @@ using System.Xml.Serialization;
 
 namespace AnalyzerConfiguration
 {
-    public class XmlConfigurationProvider<T> : IConfigurationProvider<T>
+    public class XmlConfigurationProvider : IConfigurationProvider
     {
-        const string backupDir = "ConfigurationBackup";
-
-        public void SaveConfiguration(T configuration, string filename)
+        public T LoadConfiguration<T>(string filename)
         {
-            XmlSerializer ser = new XmlSerializer(configuration.GetType());
+            T result;
 
-            string dir = $"{backupDir}/{DateTime.Now:dd_MM_yyyy_#_HH_mm_ss}/";
+            var fullPath = ConfigurationHelper.GetConfigurationPath($"{filename}.xml");
 
-            Directory.CreateDirectory(backupDir);
-            Directory.CreateDirectory(dir);
-            
-            if(File.Exists($"{filename}.xml"))
-            {
-                string fileNameForBackup = $"{dir}{Path.GetFileName(filename)}.xml";
-                File.Copy($"{filename}.xml", fileNameForBackup);
-                File.Delete($"{filename}.xml");
-            }
+            XmlSerializer ser = new XmlSerializer(typeof(T), "");
+            TextReader reader = new StreamReader(fullPath);
 
-            TextWriter writer = new StreamWriter($"{filename}.xml");
-            ser.Serialize(writer, configuration);
-            writer.Close();
+            result = (T)ser.Deserialize(reader);
+            reader.Close();
+
+            return result;
         }
 
-        public T LoadConfiguration(string filename)
+        public void SaveConfiguration<T>(T configuration, string filename)
         {
-            T data;
+            ConfigurationHelper.SaveBackup($"{filename}.xml");
 
-            if (File.Exists($"{filename}.xml"))
-            {
-                XmlSerializer ser = new XmlSerializer(typeof(T));
-                TextReader reader = new StreamReader($"{filename}.xml");
+            var fullPath = ConfigurationHelper.GetConfigurationPath($"{filename}.xml");
 
-                data = (T)ser.Deserialize(reader);
-                reader.Close();
-            }
-            else
-            {
-                throw new FileNotFoundException($"Файл {filename}.xml не найден.", filename);
-            }
+            XmlSerializer serializer = new XmlSerializer(configuration.GetType(), "");
+            TextWriter writer = new StreamWriter(fullPath);
 
-            return data;
+            serializer.Serialize(writer, configuration);
+            writer.Close();
         }
     }
 }

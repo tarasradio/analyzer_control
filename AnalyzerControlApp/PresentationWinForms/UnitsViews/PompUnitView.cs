@@ -10,7 +10,7 @@ namespace PresentationWinForms.UnitsViews
         {
             InitializeComponent();
             if (Core.Pomp != null)
-                propertyGrid.SelectedObject = Core.Pomp.Config;
+                propertyGrid.SelectedObject = Core.Pomp.Options;
         }
 
         private void buttonNeedleWashing_Click(object sender, EventArgs e)

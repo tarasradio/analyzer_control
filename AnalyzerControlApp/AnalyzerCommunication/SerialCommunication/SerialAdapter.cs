@@ -28,6 +28,16 @@ namespace AnalyzerCommunication.SerialCommunication
             serialPort.DataReceived += Port_DataReceived;
         }
 
+        public string[] GetAvailablePorts()
+        {
+            return SerialPort.GetPortNames();
+        }
+
+        public bool IsOpen()
+        {
+            return serialPort.IsOpen;
+        }
+
         public bool Open(string portName, int baudrate)
         {
             serialPort = new SerialPort(portName);
@@ -64,11 +74,6 @@ namespace AnalyzerCommunication.SerialCommunication
             }
         }
 
-        public bool IsOpen()
-        {
-            return serialPort.IsOpen;
-        }
-
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             byte[] buffer = new byte[serialPort.BytesToRead];
@@ -94,11 +99,6 @@ namespace AnalyzerCommunication.SerialCommunication
             {
                 Logger.Info("[Serial] - Ошибка записи в порт.");
             }
-        }
-
-        public string[] GetAvailablePorts()
-        {
-            return SerialPort.GetPortNames();
         }
     }
 }

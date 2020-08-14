@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConveyorConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TubeRotatorStepper>5</TubeRotatorStepper>
+  <ConveyorStepper>6</ConveyorStepper>
+  <TubeRotatorSpeed>30</TubeRotatorSpeed>
+  <ConveyorSpeed>50</ConveyorSpeed>
+  <ConveyorSpeedAtHoming>100</ConveyorSpeedAtHoming>
+  <RotatorStepsPerTubeRotate>10000</RotatorStepsPerTubeRotate>
+  <ConveyorStepsPerSingleTube>6400</ConveyorStepsPerSingleTube>
+</ConveyorConfiguration>

@@ -2,7 +2,7 @@
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
-using AnalyzerConfiguration.ControllersConfiguration;
+using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
@@ -10,111 +10,90 @@ using System.IO;
 
 namespace AnalyzerControlCore.Units
 {
-    public class RotorUnit : AbstractUnit
+    public class RotorUnit : UnitBase<RotorConfiguration>
     {
-        public RotorControllerConfiguration Config { get; set; }
-        private IConfigurationProvider<RotorControllerConfiguration> provider;
-
         public int Position { get; set; } = 0;
 
-        public RotorUnit(ICommandExecutor executor) : base(executor)
+        public RotorUnit(ICommandExecutor executor, IConfigurationProvider provider) : base(executor, provider)
         {
-            Config = new RotorControllerConfiguration();
-        }
 
-        public void SetProvider(IConfigurationProvider<RotorControllerConfiguration> provider)
-        {
-            this.provider = provider;
-        }
-
-        public void SaveConfiguration(string path)
-        {
-            provider.SaveConfiguration(Config, Path.Combine(path, nameof(RotorControllerConfiguration)) );
-        }
-
-        public void LoadConfiguration(string path)
-        {
-            Config = provider.LoadConfiguration( Path.Combine(path, nameof(RotorControllerConfiguration)) );
-
-            if (Config == null)
-                Config = new RotorControllerConfiguration();
         }
 
         public void Home()
         {
-            Logger.ControllerInfo($"[Rotor] - Start homing.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start homing.");
             List<ICommand> commands = new List<ICommand>();
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, Config.RotorHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, Options.RotorHomeSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, -Config.RotorHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, -Options.RotorHomeSpeed } };
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
             Position = 0;
 
-            Logger.ControllerInfo($"[Rotor] - Homing finished.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Homing finished.");
         }
 
         public void PlaceCellUnderWashBuffer(int cartridgePosition)
         {
-            Logger.ControllerInfo($"[Rotor] - Start placing cell under washing buffer.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell under washing buffer.");
             List<ICommand> commands = new List<ICommand>();
 
-            int turnSteps = Config.StepsToWashBuffer;
-            turnSteps += Config.StepsPerCell * cartridgePosition;
+            int turnSteps = Options.StepsToWashBuffer;
+            turnSteps += Options.StepsPerCell * cartridgePosition;
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, Config.RotorSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, Options.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, turnSteps - Position} };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, turnSteps - Position} };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[Rotor] - Placing cell under washing buffer finished.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell under washing buffer finished.");
         }
 
         public void PlaceCellAtDischarge(int cartridgePosition)
         {
-            Logger.ControllerInfo($"[Rotor] - Start placing cell at discharger.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell at discharger.");
             List<ICommand> commands = new List<ICommand>();
 
-            int turnSteps = Config.StepsToUnload;
-            turnSteps += Config.StepsPerCell * cartridgePosition;
+            int turnSteps = Options.StepsToUnload;
+            turnSteps += Options.StepsPerCell * cartridgePosition;
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, Config.RotorSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, Options.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, turnSteps - Position} };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, turnSteps - Position} };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[Rotor] - Placing cell at discharger finished.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell at discharger finished.");
         }
         
         public void PlaceCellAtCharge(int cartridgePosition, int chargePosition)
         {
-            Logger.ControllerInfo($"[Rotor] - Start placing cell at charger.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell at charger.");
             List<ICommand> commands = new List<ICommand>();
 
-            int turnSteps = Config.StepsToLoad[chargePosition];
-            turnSteps += Config.StepsPerCell * cartridgePosition;
+            int turnSteps = Options.StepsToLoad[chargePosition];
+            turnSteps += Options.StepsPerCell * cartridgePosition;
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, Config.RotorSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, Options.RotorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, turnSteps - Position} };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, turnSteps - Position} };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[Rotor] - Placing cell at charger finished.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell at charger finished.");
         }
         
         public enum CellPosition
@@ -132,63 +111,63 @@ namespace AnalyzerControlCore.Units
         /// <param name="cellPosition">Позиция ячейки картриджа</param>
         public void PlaceCellUnderNeedle(int cartridgePosition, CartridgeCell cartridgeCell, CellPosition cellPosition = CellPosition.CellCenter)
         {
-            Logger.ControllerInfo($"[Rotor] - Start placing cell under needle.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell under needle.");
             List<ICommand> commands = new List<ICommand>();
             
-            commands.Add(new SetSpeedCommand(Config.RotorStepper, (uint)Config.RotorSpeed));
+            commands.Add(new SetSpeedCommand(Options.RotorStepper, (uint)Options.RotorSpeed));
 
             int turnSteps = 0;
 
             if (cartridgeCell == CartridgeCell.WhiteCell)
             {
-                turnSteps = Config.StepsToNeedleWhiteCenter;
+                turnSteps = Options.StepsToNeedleWhiteCenter;
             }
             else if (cartridgeCell == CartridgeCell.FirstCell)
             {
                 if (cellPosition == CellPosition.CellLeft)
-                    turnSteps = Config.StepsToNeedleLeft1;
+                    turnSteps = Options.StepsToNeedleLeft1;
                 else if (cellPosition == CellPosition.CellRight)
-                    turnSteps = Config.StepsToNeedleRight1;
+                    turnSteps = Options.StepsToNeedleRight1;
                 else
                 {
-                    turnSteps = Config.StepsToNeedleLeft1 +
-                        (Config.StepsToNeedleRight1 - Config.StepsToNeedleLeft1) / 2;
+                    turnSteps = Options.StepsToNeedleLeft1 +
+                        (Options.StepsToNeedleRight1 - Options.StepsToNeedleLeft1) / 2;
                 }
             }
             else if (cartridgeCell == CartridgeCell.SecondCell)
             {
                 if (cellPosition == CellPosition.CellLeft)
-                    turnSteps = Config.StepsToNeedleLeft2;
+                    turnSteps = Options.StepsToNeedleLeft2;
                 else if (cellPosition == CellPosition.CellRight)
-                    turnSteps = Config.StepsToNeedleRight2;
+                    turnSteps = Options.StepsToNeedleRight2;
                 else
                 {
-                    turnSteps = Config.StepsToNeedleLeft2 +
-                        (Config.StepsToNeedleRight2 - Config.StepsToNeedleLeft2) / 2;
+                    turnSteps = Options.StepsToNeedleLeft2 +
+                        (Options.StepsToNeedleRight2 - Options.StepsToNeedleLeft2) / 2;
                 }
             }
             else if (cartridgeCell == CartridgeCell.ThirdCell)
             {
                 if (cellPosition == CellPosition.CellLeft)
-                    turnSteps = Config.StepsToNeedleLeft3;
+                    turnSteps = Options.StepsToNeedleLeft3;
                 else if (cellPosition == CellPosition.CellRight)
-                    turnSteps = Config.StepsToNeedleRight3;
+                    turnSteps = Options.StepsToNeedleRight3;
                 else
                 {
-                    turnSteps = Config.StepsToNeedleLeft3 +
-                        (Config.StepsToNeedleRight3 - Config.StepsToNeedleLeft3) / 2;
+                    turnSteps = Options.StepsToNeedleLeft3 +
+                        (Options.StepsToNeedleRight3 - Options.StepsToNeedleLeft3) / 2;
                 }
             }
 
-            turnSteps += Config.StepsPerCell * cartridgePosition;
+            turnSteps += Options.StepsPerCell * cartridgePosition;
 
-            steppers = new Dictionary<int, int>() { { Config.RotorStepper, turnSteps - Position } };
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, turnSteps - Position } };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[Rotor] - Placing cell under needle finished.");
+            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell under needle finished.");
         }
     }
 }

@@ -33,7 +33,7 @@ namespace PresentationWinForms
                     Application.Run(mainForm);
                 //}
 
-                core.SaveConfiguration();
+                core.SaveUnitsConfiguration();
             }
             catch(System.IO.FileLoadException)
             {

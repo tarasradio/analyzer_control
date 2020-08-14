@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace AnalyzerConfiguration.ControllersConfiguration
+namespace AnalyzerConfiguration
 {
     public enum CartridgeCell
     {

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NeedleConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LifterStepper>17</LifterStepper>
+  <RotatorStepper>8</RotatorStepper>
+  <LifterSpeed>200</LifterSpeed>
+  <RotatorSpeed>50</RotatorSpeed>
+  <RotatorStepsToTube>-9500</RotatorStepsToTube>
+  <RotatorStepsToWashing>-50400</RotatorStepsToWashing>
+  <RotatorStepsToMixCell>-41000</RotatorStepsToMixCell>
+  <RotatorStepsToFirstCell>-42100</RotatorStepsToFirstCell>
+  <RotatorStepsToSecondCell>-42700</RotatorStepsToSecondCell>
+  <RotatorStepsToThirdCell>-43700</RotatorStepsToThirdCell>
+  <LifterStepsAfterTouch>500</LifterStepsAfterTouch>
+  <LifterStepsToWashing>40500</LifterStepsToWashing>
+  <LifterStepsToCell>310000</LifterStepsToCell>
+  <LifterStepsToMixCell>300000</LifterStepsToMixCell>
+  <LifterStepsToMixCellAtSuction>310000</LifterStepsToMixCellAtSuction>
+  <LifterStepsToSafeLevel>260000</LifterStepsToSafeLevel>
+</NeedleConfiguration>

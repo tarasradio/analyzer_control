@@ -132,7 +132,7 @@ namespace PresentationWinForms.Forms
 
             if(dialogResult == DialogResult.Yes)
             {
-                Core.SaveConfiguration("Configuration");
+                Core.SaveAppConfiguration();
             }
             else if(dialogResult == DialogResult.Cancel ||
                 dialogResult == DialogResult.Abort)

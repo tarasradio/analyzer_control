@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ChargerConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <RotatorStepper>10</RotatorStepper>
+  <HookStepper>15</HookStepper>
+  <RotatorSpeed>50</RotatorSpeed>
+  <RotatorHomeSpeed>50</RotatorHomeSpeed>
+  <HookSpeed>200</HookSpeed>
+  <HookHomeSpeed>500</HookHomeSpeed>
+  <RotatorStepsToCells>
+    <int>-2000</int>
+    <int>-5000</int>
+    <int>-8000</int>
+    <int>-11100</int>
+    <int>-14300</int>
+    <int>-17400</int>
+    <int>-20500</int>
+    <int>-23550</int>
+    <int>-26500</int>
+    <int>-29500</int>
+  </RotatorStepsToCells>
+  <RotatorStepsToUnload>-40000</RotatorStepsToUnload>
+  <RotatorStepsToOffsetAtCharging>1000</RotatorStepsToOffsetAtCharging>
+  <HookStepsToCartridge>-600000</HookStepsToCartridge>
+  <HookStepsToOffsetAfterHoming>-13000</HookStepsToOffsetAfterHoming>
+</ChargerConfiguration>

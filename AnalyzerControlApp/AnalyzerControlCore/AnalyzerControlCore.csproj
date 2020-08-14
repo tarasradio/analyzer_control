@@ -43,18 +43,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoController.cs" />
+    <Compile Include="MachineControl\ParserRegexes.cs" />
     <Compile Include="MachineControl\ICommandExecutor.cs" />
     <Compile Include="MachineControl\CommandExecutor.cs" />
     <Compile Include="MachineControl\CommandParser.cs" />
     <Compile Include="MachineControl\TaskExecutor.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Units\AbstractUnit.cs" />
+    <Compile Include="Units\UnitBase.cs" />
     <Compile Include="Units\NeedleUnit.cs" />
-    <Compile Include="Units\ChargeUnit.cs" />
+    <Compile Include="Units\ChargerUnit.cs" />
     <Compile Include="Units\PompUnit.cs" />
     <Compile Include="Units\RotorUnit.cs" />
-    <Compile Include="Units\TransporterUnit.cs" />
+    <Compile Include="Units\ConveyorUnit.cs" />
     <Compile Include="Utils\RegexHelper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,30 +1,20 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace AnalyzerControlCore.MachineControl
 {
     public class TaskExecutor
     {
-        public delegate void TaskDelegate();
         private static object locker = new object();
+
         private Thread executionThread;
 
-        public TaskExecutor() { }
+        public TaskExecutor() 
+        { 
 
-        public void AbortExecution()
-        {
-            lock(locker)
-            {
-                if (executionThread != null && executionThread.IsAlive)
-                    executionThread.Abort();
-            }
         }
-
-        public ThreadState GetState()
-        {
-            return executionThread.ThreadState;
-        }
-
-        public void StartTask(TaskDelegate task)
+        
+        public void StartTask(Action task)
         {
             AbortExecution();
 
@@ -35,6 +25,20 @@ namespace AnalyzerControlCore.MachineControl
             };
 
             executionThread.Start();
+        }
+        
+        public ThreadState GetState()
+        {
+            return executionThread.ThreadState;
+        }
+
+        public void AbortExecution()
+        {
+            lock(locker)
+            {
+                if (executionThread != null && executionThread.IsAlive)
+                    executionThread.Abort();
+            }
         }
     }
 }
