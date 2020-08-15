@@ -2,7 +2,7 @@
 
 namespace AnalyzerCommunication.CommunicationProtocol.Responses
 {
-    public class DebugResponse : AbstaractResponse
+    public class DebugResponse : ResponseBase
     {
         public DebugResponse(byte[] buffer) : base(buffer) { }
 

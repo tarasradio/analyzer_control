@@ -3,7 +3,7 @@ using System.Text;
 
 namespace AnalyzerCommunication.CommunicationProtocol.Responses
 {
-    public class BarCodeResponse : AbstaractResponse
+    public class BarCodeResponse : ResponseBase
     {
         public enum ScannerTypes
         {

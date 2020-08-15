@@ -155,7 +155,7 @@ namespace AnalyzerControlCore.MachineControl
                 if (Protocol.CommandTypes.SIMPLE_COMMAND == command.GetType())
                 {
                     if (getExecutedCommandId() == command.GetId() && 
-                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_RECEIVED)
+                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_EXECUTE_STARTED)
                     {
                         break;
                     }
@@ -163,7 +163,7 @@ namespace AnalyzerControlCore.MachineControl
                 else if(Protocol.CommandTypes.WAITING_COMMAND == command.GetType())
                 {
                     if (getExecutedCommandId() == command.GetId() && 
-                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_EXECUTED)
+                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_EXECUTE_FINISHED)
                     {
                         break; 
                     }

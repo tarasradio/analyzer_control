@@ -2,7 +2,7 @@
 
 namespace AnalyzerCommunication.CommunicationProtocol.Responses
 {
-    public class SensorsValuesResponse : AbstaractResponse
+    public class SensorsValuesResponse : ResponseBase
     {
         public SensorsValuesResponse(byte[] buffer) : base(buffer) { }
 

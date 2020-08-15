@@ -2,7 +2,7 @@
 
 namespace AnalyzerCommunication.CommunicationProtocol.Responses
 {
-    public class FirmwareVersionResponse : AbstaractResponse
+    public class FirmwareVersionResponse : ResponseBase
     {
         public FirmwareVersionResponse(byte[] buffer) : base(buffer) { }
 

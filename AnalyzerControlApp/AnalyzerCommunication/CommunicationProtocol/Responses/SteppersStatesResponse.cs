@@ -31,7 +31,7 @@ namespace AnalyzerCommunication.CommunicationProtocol.Responses
         STATUS_MOT_STATUS = 0x0060      // field mask
     }
 
-    public class SteppersStatesResponse : AbstaractResponse
+    public class SteppersStatesResponse : ResponseBase
     {
         public SteppersStatesResponse(byte[] buffer) : base(buffer) { }
 

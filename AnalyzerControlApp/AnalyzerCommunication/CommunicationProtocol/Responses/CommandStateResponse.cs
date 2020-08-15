@@ -2,16 +2,19 @@
 
 namespace AnalyzerCommunication.CommunicationProtocol.Responses
 {
-    public class CommandStateResponse : AbstaractResponse
+    public class CommandStateResponse : ResponseBase
     {
         public enum CommandStates
         {
-            COMMAND_RECEIVED,
+            COMMAND_EXECUTE_STARTED,
             COMMAND_BAD_FORMAT,
-            COMMAND_EXECUTED
+            COMMAND_EXECUTE_FINISHED
         }
 
-        public CommandStateResponse(byte[] buffer) : base(buffer) { }
+        public CommandStateResponse(byte[] buffer) : base(buffer) 
+        { 
+
+        }
 
         public uint GetCommandId()
         {

@@ -1,6 +1,8 @@
 ﻿using AnalyzerCommunication.CommunicationProtocol;
 using AnalyzerCommunication.CommunicationProtocol.Responses;
+using Infrastructure;
 using System;
+using System.Collections.Generic;
 
 namespace AnalyzerCommunication.SerialCommunication
 {
@@ -18,42 +20,35 @@ namespace AnalyzerCommunication.SerialCommunication
         public event MessageReceivedDelegate FirmwareVersionReceived;
         public event CommandStateReceivedDelegate CommandStateReceived;
 
-        public PacketHandler() 
-        { 
+        private Dictionary<Protocol.ResponsesTypes, Action<byte[]>> responsesHandlers;
 
+        public PacketHandler()
+        { 
+            responsesHandlers = new Dictionary<Protocol.ResponsesTypes, Action<byte[]>>()
+            {
+                { Protocol.ResponsesTypes.BAR_CODE_RESPONSE, new Action<byte[]>(ProcessBarCodeResponse) },
+                { Protocol.ResponsesTypes.COMMAND_STATE_RESPONSE, new Action<byte[]>(ProcessCommandStateResponse) },
+                { Protocol.ResponsesTypes.DEBUG_MESSAGE_RESPONSE, new Action<byte[]>(ProcessDebugMessageResponse) },
+                { Protocol.ResponsesTypes.FIRMWARE_VERSION_RESPONSE, new Action<byte[]>(ProcessFirmwareVersionResponse) },
+                { Protocol.ResponsesTypes.SENSORS_VALUES_RESPONSE, new Action<byte[]>(ProcessSensorsValuesResponse) },
+                { Protocol.ResponsesTypes.STEPPERS_STATES_RESPONSE, new Action<byte[]>(ProcessSteppersStatesResponse) }
+            };
         }
 
         public void ProcessPacket(byte[] packet)
         {
-            if (packet.Length == 0)
+            if (packet.Length > 0)
             {
-                return;
-            }
+                byte responseType = packet[0];
 
-            byte packetType = packet[0];
-
-            switch ((Protocol.ResponsesTypes)packetType)
-            {
-                case Protocol.ResponsesTypes.BAR_CODE_RESPONSE:
-                    ProcessBarCodeResponse(packet);
-                    break;
-                case Protocol.ResponsesTypes.COMMAND_STATE_RESPONSE:
-                    ProcessCommandStateResponse(packet);
-                    break;
-                case Protocol.ResponsesTypes.STEPPERS_STATES_RESPONSE:
-                    ProcessSteppersStatesResponse(packet);
-                    break;
-                case Protocol.ResponsesTypes.FIRMWARE_VERSION_RESPONSE:
-                    ProcessFirmwareVersionResponse(packet);
-                    break;
-                case Protocol.ResponsesTypes.SENSORS_VALUES_RESPONSE:
-                    ProcessSensorsValuesResponse(packet);
-                    break;
-                case Protocol.ResponsesTypes.DEBUG_MESSAGE_RESPONSE:
-                    ProcessDebugMessageResponse(packet);
-                    break;
-                default:
-                    break;
+                try
+                {
+                    responsesHandlers[(Protocol.ResponsesTypes)responseType].Invoke(packet);
+                }
+                catch(KeyNotFoundException)
+                {
+                    Logger.Info($"[{nameof(PacketHandler)}] - Uncknown response with code: {responseType} has been received.");
+                }
             }
         }
 
@@ -92,7 +87,7 @@ namespace AnalyzerCommunication.SerialCommunication
 
             if (states != null)
             {
-                //TODO: (Проверять в Core число двишателей)
+                //TODO: (Проверять в Core число двигателей)
                 SteppersStatesReceived(states);
             }
         }

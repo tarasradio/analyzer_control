@@ -1,14 +1,12 @@
-﻿using AnalyzerCommunication.CommunicationProtocol;
-using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
+﻿using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.SerialCommunication;
 using AnalyzerConfiguration;
-using AnalyzerControlCore.Units;
 using AnalyzerControlCore.MachineControl;
+using AnalyzerControlCore.Units;
 using Infrastructure;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using AnalyzerConfiguration.UnitsConfiguration;
 
 namespace AnalyzerControlCore
 {
