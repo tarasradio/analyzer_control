@@ -6,19 +6,15 @@ using System.Collections.Generic;
 
 namespace AnalyzerCommunication.SerialCommunication
 {
-    public class PacketHandler
+    public class PacketHandler : IPacketHandler
     {
-        public delegate void DeviseStatesReceivedDelegate(UInt16[] states);
-        public delegate void MessageReceivedDelegate(string message);
-        public delegate void CommandStateReceivedDelegate(uint commandId, CommandStateResponse.CommandStates state);
-
-        public event DeviseStatesReceivedDelegate SteppersStatesReceived;
-        public event DeviseStatesReceivedDelegate SensorsValuesReceived;
-        public event MessageReceivedDelegate DebugMessageReceived;
-        public event MessageReceivedDelegate TubeBarCodeReceived;
-        public event MessageReceivedDelegate CartridgeBarCodeReceived;
-        public event MessageReceivedDelegate FirmwareVersionReceived;
-        public event CommandStateReceivedDelegate CommandStateReceived;
+        public event Action<UInt16[]> SteppersStatesReceived;
+        public event Action<UInt16[]> SensorsValuesReceived;
+        public event Action<string> DebugMessageReceived;
+        public event Action<string> TubeBarCodeReceived;
+        public event Action<string> CartridgeBarCodeReceived;
+        public event Action<string> FirmwareVersionReceived;
+        public event Action<uint, CommandStateResponse.CommandStates> CommandStateReceived;
 
         private Dictionary<Protocol.ResponsesTypes, Action<byte[]>> responsesHandlers;
 
@@ -87,7 +83,6 @@ namespace AnalyzerCommunication.SerialCommunication
 
             if (states != null)
             {
-                //TODO: (Проверять в Core число двигателей)
                 SteppersStatesReceived(states);
             }
         }
@@ -97,7 +92,6 @@ namespace AnalyzerCommunication.SerialCommunication
 
             if (null != values)
             {
-                //TODO: (Ароверять в Core число двигателей)
                 SensorsValuesReceived(values);
             }
         }

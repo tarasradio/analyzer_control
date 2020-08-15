@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Infrastructure;
+﻿using Infrastructure;
+using System;
 
 namespace AnalyzerCommunication.SerialCommunication
 {
     public class PacketFinder : IPacketFinder
     {
-        public delegate void PackageReceivedDelegate(byte[] packet);
-        public event PackageReceivedDelegate PacketReceived;
+        private IPacketHandler packetHandler;
 
         private const uint maxPacketLength = 128;
 
@@ -19,9 +14,9 @@ namespace AnalyzerCommunication.SerialCommunication
 
         static bool escapeFlag = false;
 
-        public PacketFinder()
+        public PacketFinder(IPacketHandler handler)
         {
-
+            this.packetHandler = handler;
         }
 
         public void FindPacket(byte[] buffer)
@@ -40,7 +35,9 @@ namespace AnalyzerCommunication.SerialCommunication
                     {
                         byte[] recvPacket = new byte[packetTail];
                         Array.Copy(packetBuffer, recvPacket, packetTail);
-                        PacketReceived(recvPacket);
+
+                        packetHandler.ProcessPacket(recvPacket);
+
                         packetTail = 0;
                     }
                 }
@@ -69,7 +66,7 @@ namespace AnalyzerCommunication.SerialCommunication
 
             if (packetTail == maxPacketLength)
             {
-                Logger.Info($"[Packet finder] - Превышен размер пакета.");
+                Logger.Info($"[{nameof(PacketFinder)}] - Превышен размер пакета.");
                 packetTail = 0;
             }
             escapeFlag = false;

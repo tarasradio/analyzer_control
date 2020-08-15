@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AnalyzerCommunication.SerialCommunication
+﻿namespace AnalyzerCommunication.SerialCommunication
 {
     public interface ISerialAdapter
     {
+        string PortName { get; set; }
+
         bool Open(string portName, int baudrate);
         void Close();
         bool IsOpen();

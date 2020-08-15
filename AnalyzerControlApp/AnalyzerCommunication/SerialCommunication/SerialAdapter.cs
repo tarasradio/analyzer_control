@@ -4,7 +4,7 @@ using Infrastructure;
 
 namespace AnalyzerCommunication.SerialCommunication
 {
-    public class SerialAdapter
+    public class SerialAdapter : ISerialAdapter
     {
         private IPacketFinder packetFinder = null;
         private SerialPort serialPort = null;
@@ -56,7 +56,7 @@ namespace AnalyzerCommunication.SerialCommunication
             }
             catch (UnauthorizedAccessException)
             {
-                Logger.Info($"[Serial] - Ошибка при открытии порта { portName }.");
+                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при открытии порта { portName }.");
             }
 
             return serialPort.IsOpen;
@@ -70,7 +70,7 @@ namespace AnalyzerCommunication.SerialCommunication
             }
             catch (System.IO.IOException)
             {
-                Logger.Info($"[Serial] - Ошибка при закрытии порта {serialPort.PortName}.");
+                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при закрытии порта {serialPort.PortName}.");
             }
         }
 
@@ -97,7 +97,7 @@ namespace AnalyzerCommunication.SerialCommunication
             }
             catch (Exception)
             {
-                Logger.Info("[Serial] - Ошибка записи в порт.");
+                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка записи в порт.");
             }
         }
     }

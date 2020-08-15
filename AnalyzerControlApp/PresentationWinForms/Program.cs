@@ -16,9 +16,11 @@ namespace PresentationWinForms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            bool useAuthentication = false;
+
             try
             {
-                Core core = new Core("Configuration");
+                Core core = new Core();
 
                 StartForm startForm = new StartForm();
                 MainForm mainForm = new MainForm();
@@ -26,12 +28,19 @@ namespace PresentationWinForms
                 startForm.StartPosition = FormStartPosition.CenterScreen;
                 mainForm.StartPosition = FormStartPosition.CenterScreen;
 
-                //Application.Run(startForm);
+                if(useAuthentication)
+                {
+                    Application.Run(startForm);
 
-                //if (startForm.IsAuthenticated)
-                //{
+                    if (startForm.IsAuthenticated)
+                    {
+                        Application.Run(mainForm);
+                    }
+                }
+                else
+                {
                     Application.Run(mainForm);
-                //}
+                }
 
                 core.SaveUnitsConfiguration();
             }

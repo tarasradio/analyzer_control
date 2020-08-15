@@ -14,9 +14,9 @@ namespace AnalyzerControlCore
     {
         private static string FirmwareVersion = "04.03.2020";
         
-        public static PacketFinder PackFinder { get; private set; } = new PacketFinder();
-        public static PacketHandler PackHandler { get; private set; } = new PacketHandler();
-        public static SerialAdapter Serial { get; private set; }
+        public static IPacketFinder PackFinder { get; private set; }
+        public static IPacketHandler PackHandler { get; private set; }
+        public static ISerialAdapter Serial { get; private set; }
 
         public static CommandExecutor CmdExecutor { get; private set; }
         public static TaskExecutor Executor { get; private set; }
@@ -39,11 +39,10 @@ namespace AnalyzerControlCore
         private static string lastTubeBarCode = String.Empty;
         private static string lastCartridgeBarCode = String.Empty;
         private static string lastFirmwareVersionResponse = String.Empty;
-        private static string configurationPath = String.Empty;
         
         public static AnalyzerAppConfiguration AppConfig { get; private set; }
 
-        public Core(string configurationPath)
+        public Core()
         {
             provider = new XmlConfigurationProvider();
             
@@ -58,7 +57,6 @@ namespace AnalyzerControlCore
 
             Demo = new DemoController(provider);
             
-            Core.configurationPath = configurationPath;
             AppConfig = new AnalyzerAppConfiguration();
 
             LoadAppConfiguration();
@@ -74,8 +72,8 @@ namespace AnalyzerControlCore
 
         private void SerialCommunicationInit()
         {
-            PackFinder.PacketReceived += PackHandler.ProcessPacket;
-
+            PackHandler = new PacketHandler();
+            PackFinder = new PacketFinder(PackHandler);
             Serial = new SerialAdapter(PackFinder);
 
             PackHandler.TubeBarCodeReceived += PackHandler_TubeBarCodeReceived;
