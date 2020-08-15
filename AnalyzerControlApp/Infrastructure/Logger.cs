@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
     public static class Logger
     {
-        public delegate void newMessageHandler(string message);
-        public static event newMessageHandler NewInfoMessageAdded;
-        public static event newMessageHandler NewDemoInfoMessageAdded;
-        public static event newMessageHandler NewControllerInfoMessageAdded;
+        public static event Action<string> NewInfoMessageAdded;
+        public static event Action<string> NewDemoInfoMessageAdded;
+        public static event Action<string> NewControllerInfoMessageAdded;
 
         private static object locker = new object();
-
-        //Directory.CreateDirectory("logs");
-        //fileName = "logs/Log_" + DateTime.Now.ToString("dd_MM_yyyy_#_HH_mm_ss") + ".txt";
 
         private static string WrapMessage(string message)
         {

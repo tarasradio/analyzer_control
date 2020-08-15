@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace PresentationWinForms.UnitsViews
 {
-    public partial class TransporterUnitView : UserControl
+    public partial class ConveyorUnitView : UserControl
     {
-        public TransporterUnitView()
+        public ConveyorUnitView()
         {
             InitializeComponent();
             if(Core.Conveyor != null)

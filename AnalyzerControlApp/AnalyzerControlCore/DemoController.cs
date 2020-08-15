@@ -260,22 +260,23 @@ namespace AnalyzerControlCore
                 Logger.DemoInfo($"Попытка {attempt}.");
 
                 Core.Conveyor.RotateAndScanTube();
-                string barCode = Core.GetLastTubeBarCode();
 
-                if ( !String.IsNullOrWhiteSpace(barCode) )
+                string tubeBarcode = Core.Context.TubeBarcode;
+
+                if ( !String.IsNullOrWhiteSpace(tubeBarcode) )
                 {
-                    Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barCode}].");
+                    Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{tubeBarcode}].");
 
-                    tubeCell.Tube = searchBarcodeInDatabase(barCode);
+                    tubeCell.Tube = searchBarcodeInDatabase(tubeBarcode);
 
                     if(tubeCell.Tube != null)
                     {
-                        Logger.DemoInfo($"Пробирка со штрихкодом [{barCode}] найдена в списке анализов!");
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{tubeBarcode}] найдена в списке анализов!");
                         tubeCell.Tube.IsFind = true;
                     }
                     else
                     {
-                        Logger.DemoInfo($"Пробирка со штрихкодом [{barCode}] не найдена в списке анализов!");
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{tubeBarcode}] не найдена в списке анализов!");
                     }
                     break;
                 }

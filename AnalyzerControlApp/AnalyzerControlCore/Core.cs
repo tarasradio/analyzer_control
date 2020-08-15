@@ -1,4 +1,5 @@
-﻿using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
+﻿using AnalyzerCommunication;
+using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.SerialCommunication;
 using AnalyzerConfiguration;
 using AnalyzerControlCore.MachineControl;
@@ -18,7 +19,7 @@ namespace AnalyzerControlCore
         public static IPacketHandler PackHandler { get; private set; }
         public static ISerialAdapter Serial { get; private set; }
 
-        public static CommandExecutor CmdExecutor { get; private set; }
+        public static ICommandExecutor CmdExecutor { get; private set; }
         public static TaskExecutor Executor { get; private set; }
 
         public static NeedleUnit Needle { get; private set; }
@@ -31,15 +32,8 @@ namespace AnalyzerControlCore
 
         private static IConfigurationProvider provider;
 
-        private static object locker = new object();
+        public static IAnalyzerContext Context { get; private set; }
 
-        private static ushort[] sensorsValues = null;
-        private static ushort[] steppersStates = null;
-
-        private static string lastTubeBarCode = String.Empty;
-        private static string lastCartridgeBarCode = String.Empty;
-        private static string lastFirmwareVersionResponse = String.Empty;
-        
         public static AnalyzerAppConfiguration AppConfig { get; private set; }
 
         public Core()
@@ -61,10 +55,7 @@ namespace AnalyzerControlCore
 
             LoadAppConfiguration();
             LoadUnitsConfiguration();
-
-            sensorsValues = new ushort[AppConfig.Sensors.Count];
-            steppersStates = new ushort[AppConfig.Steppers.Count];
-
+            
             SerialCommunicationInit();
 
             Logger.Info("Запись работы системы начата");
@@ -72,16 +63,11 @@ namespace AnalyzerControlCore
 
         private void SerialCommunicationInit()
         {
-            PackHandler = new PacketHandler();
+            Context = new AnalyzerContext(AppConfig.Sensors.Count, AppConfig.Steppers.Count);
+
+            PackHandler = new PacketHandler(Context);
             PackFinder = new PacketFinder(PackHandler);
             Serial = new SerialAdapter(PackFinder);
-
-            PackHandler.TubeBarCodeReceived += PackHandler_TubeBarCodeReceived;
-            PackHandler.CartridgeBarCodeReceived += PackHandler_CartridgeBarCodeReceived;
-
-            PackHandler.FirmwareVersionReceived += PackHandler_FirmwareVersionReceived;
-            PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived;
-            PackHandler.SteppersStatesReceived += PackHandler_SteppersStatesReceived;
 
             PackHandler.DebugMessageReceived += Logger.Info;
             PackHandler.CommandStateReceived += CmdExecutor.UpdateExecutedCommandState;
@@ -111,49 +97,6 @@ namespace AnalyzerControlCore
             }
         }
 
-        private void PackHandler_TubeBarCodeReceived(string message)
-        {
-            lock (locker)
-            {
-                lastTubeBarCode = message;
-                Logger.Info($"New tube barcode received: {message}");
-            }
-        }
-
-        private void PackHandler_CartridgeBarCodeReceived(string message)
-        {
-            lock (locker)
-            {
-                lastCartridgeBarCode = message;
-                Logger.Info($"New cartridge barcode received: {message}");
-            }
-        }
-
-        private void PackHandler_SteppersStatesReceived(ushort[] states)
-        {
-            if (states.Length != AppConfig.Steppers.Count)
-                return;
-            lock (locker)
-            {
-                Array.Copy(states, steppersStates, states.Length);
-            }
-        }
-
-        private void PackHandler_SensorsValuesReceived(ushort[] states)
-        {
-            if (states.Length != AppConfig.Sensors.Count)
-                return;
-            lock (locker)
-            {
-                Array.Copy(states, sensorsValues, states.Length);
-            }
-        }
-
-        private void PackHandler_FirmwareVersionReceived(string message)
-        {
-            lastFirmwareVersionResponse = message;
-        }
-
         public void LoadUnitsConfiguration()
         {
             Needle.LoadConfiguration("NeedleConfiguration");
@@ -176,10 +119,8 @@ namespace AnalyzerControlCore
             Demo.SaveConfiguration("DemoConfiguration");
         }
         
-        public async static void CheckFirmwareVersion()
+        public async static void CheckFirmwareVersion(string firmwareVersion)
         {
-            lastFirmwareVersionResponse = String.Empty;
-
             for(int i = 0; i < 3; i++)
             {
                 Serial.SendPacket(new GetFirmwareVersionCommand().GetBytes());
@@ -189,11 +130,11 @@ namespace AnalyzerControlCore
             await Task.Run( async()=>{
                 await Task.Delay(1000);
 
-                bool received = string.IsNullOrWhiteSpace(lastFirmwareVersionResponse);
+                bool received = string.IsNullOrWhiteSpace(firmwareVersion);
 
                 if(received)
                 {
-                    if (string.Equals(FirmwareVersion, lastFirmwareVersionResponse))
+                    if (string.Equals(FirmwareVersion, firmwareVersion))
                     {
                         Logger.Info("[System] - Версия платы совпадает с требуемой.");
                     }
@@ -209,78 +150,6 @@ namespace AnalyzerControlCore
                             "Подключено несовместимое устройство или требуется обновить прошивку. ");
                 }
             });
-        }
-
-        public static void UpdateSensorsValues(ushort[] values)
-        {
-            if (values.Length != AppConfig.Sensors.Count)
-                return;
-            lock(locker)
-            {
-                Array.Copy(values, sensorsValues, values.Length);
-            }
-        }
-
-        public static ushort[] GetSteppersStates()
-        {
-            ushort[] states = new ushort[AppConfig.Steppers.Count];
-
-            lock (locker)
-            {
-                Array.Copy(steppersStates, states, steppersStates.Length);
-            }
-
-            return states;
-        }
-
-        public static ushort[] GetSensorsValues()
-        {
-            ushort[] values = new ushort[AppConfig.Sensors.Count];
-
-            lock(locker)
-            {
-                Array.Copy(sensorsValues, values, sensorsValues.Length);
-            }
-
-            return values;
-        }
-
-        public static ushort GetSensorValue(uint sensor)
-        {
-            ushort value = 0;
-
-            lock(locker)
-            {
-                value = sensorsValues[sensor];
-            }
-
-            return value;
-        }
-        
-        public static string GetLastTubeBarCode()
-        {
-            string barCode;
-
-            lock(locker)
-            {
-                barCode = lastTubeBarCode;
-                lastTubeBarCode = String.Empty;
-            }
-
-            return barCode;
-        }
-
-        public static string GetLastCartridgeBarCode()
-        {
-            string barCode;
-
-            lock (locker)
-            {
-                barCode = lastCartridgeBarCode;
-                lastCartridgeBarCode = String.Empty;
-            }
-
-            return barCode;
         }
 
         public static void AbortExecution()

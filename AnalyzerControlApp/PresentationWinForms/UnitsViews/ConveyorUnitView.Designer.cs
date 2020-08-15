@@ -1,6 +1,6 @@
 ﻿namespace PresentationWinForms.UnitsViews
 {
-    partial class TransporterUnitView
+    partial class ConveyorUnitView
     {
         /// <summary> 
         /// Обязательная переменная конструктора.

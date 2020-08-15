@@ -39,7 +39,7 @@ namespace PresentationWPF
         {
             InitializeComponent();
 
-            core = new Core("Configuration/AnalyzerConfiguration.xml");
+            core = new Core();
             steppersModel = new SteppersModel(Core.AppConfig.Steppers);
             Core.PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived; ;
 

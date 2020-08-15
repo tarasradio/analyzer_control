@@ -1,22 +1,21 @@
 ﻿using AnalyzerCommunication;
 using AnalyzerCommunication.CommunicationProtocol;
 using AnalyzerCommunication.CommunicationProtocol.Responses;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
 namespace AnalyzerControlCore.MachineControl
 {
-    public delegate void CommandExecutedDelegate(int executedCommandNumber);
-
     public class CommandExecutor : ICommandExecutor
     {
-        public event CommandExecutedDelegate CommandExecuted;
+        public event Action<int> CommandExecuted;
 
         private const int timeToWait = 2000;
         private static object locker = new object();
 
-        private static List<ICommand> _commands = new List<ICommand>();
+        private List<ICommand> commands = new List<ICommand>();
         private Thread executionThread;
 
         private static uint executedCommandId;
@@ -27,6 +26,37 @@ namespace AnalyzerControlCore.MachineControl
         public CommandExecutor()
         {
 
+        }
+
+        public void WaitExecution(List<ICommand> commands)
+        {
+            RunExecution(commands);
+
+            while (executionThread.IsAlive)
+            {
+
+            }
+        }
+
+        public void RunExecution(List<ICommand> commands)
+        {
+            this.commands = commands;
+
+            AbortExecution();
+
+            executionThread = new Thread(commandsExecution)
+            {
+                Priority = ThreadPriority.Lowest,
+                IsBackground = true
+            };
+
+            executionThread.Start();
+        }
+
+        public void AbortExecution()
+        {
+            if (executionThread != null && executionThread.IsAlive)
+                executionThread.Abort();
         }
 
         public void UpdateExecutedCommandState(uint commandId, CommandStateResponse.CommandStates state)
@@ -74,42 +104,11 @@ namespace AnalyzerControlCore.MachineControl
 
             return commandState;
         }
-        
-        public void WaitExecution(List<ICommand> commands)
-        {
-            RunExecution(commands);
-
-            while (executionThread.IsAlive)
-            {
-
-            }
-        }
-
-        public void RunExecution(List<ICommand> commands)
-        {
-            _commands = commands;
-
-            AbortExecution();
-
-            executionThread = new Thread(commandsExecution)
-            {
-                Priority = ThreadPriority.Lowest,
-                IsBackground = true
-            };
-
-            executionThread.Start();
-        }
-
-        public void AbortExecution()
-        {
-            if (executionThread != null && executionThread.IsAlive)
-                executionThread.Abort();
-        }
 
         private void commandsExecution()
         {
             int commandNumber = 0;
-            foreach (ICommand command in _commands)
+            foreach (ICommand command in commands)
             {
                 //Logger.Info("[Command executor] - Команда " + commandNumber + " запущена !");
 

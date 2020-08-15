@@ -10,13 +10,13 @@ namespace PresentationWinForms.Views
     public partial class DevicesView : UserControl
     {
         string[] columnHeaders = { "#", "Название"};
-        
+
         public DevicesView()
         {
             InitializeComponent();
             DrawGrid();
         }
-        
+
         private void DrawGrid()
         {
             DataGridViewButtonColumn column = new DataGridViewButtonColumn();

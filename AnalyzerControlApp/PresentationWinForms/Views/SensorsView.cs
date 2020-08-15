@@ -26,13 +26,14 @@ namespace PresentationWinForms.Views
         
         private void UpdateValues(object sender, EventArgs e)
         {
-            ushort[] newValues = Core.GetSensorsValues();
+            ushort[] newValues = Core.Context.SensorsValues;
+
             lock(locker)
             {
-                for (int i = 0; i < Core.AppConfig.Sensors.Count; i++)
+                for (int i = 0; i < newValues.Length; i++)
                 {
                     if(i == 15)
-                        SensorsGridView[2, i].Value = (double)newValues[i] * 0.00488281;
+                        SensorsGridView[2, i].Value = newValues[i] * 0.00488281;
                     else
                         SensorsGridView[2, i].Value = newValues[i];
                 }

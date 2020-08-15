@@ -16,10 +16,18 @@ namespace AnalyzerCommunication.SerialCommunication
         public event Action<string> FirmwareVersionReceived;
         public event Action<uint, CommandStateResponse.CommandStates> CommandStateReceived;
 
+        IAnalyzerContext analyzerContext;
+
         private Dictionary<Protocol.ResponsesTypes, Action<byte[]>> responsesHandlers;
 
-        public PacketHandler()
-        { 
+        public PacketHandler(IAnalyzerContext analyzerContext)
+        {
+            this.analyzerContext = analyzerContext;
+            buildHandlers();
+        }
+
+        private void buildHandlers()
+        {
             responsesHandlers = new Dictionary<Protocol.ResponsesTypes, Action<byte[]>>()
             {
                 { Protocol.ResponsesTypes.BAR_CODE_RESPONSE, new Action<byte[]>(ProcessBarCodeResponse) },
@@ -59,9 +67,11 @@ namespace AnalyzerCommunication.SerialCommunication
             {
                 case BarCodeResponse.ScannerTypes.TUBE_SCANNER:
                     TubeBarCodeReceived(barCode);
+                    analyzerContext.TubeBarcode = barCode;
                     break;
                 case BarCodeResponse.ScannerTypes.CARTRIDGE_SCANNER:
                     CartridgeBarCodeReceived(barCode);
+                    analyzerContext.CartridgeBarcode = barCode;
                     break;
                 default:
                     break;
@@ -84,6 +94,7 @@ namespace AnalyzerCommunication.SerialCommunication
             if (states != null)
             {
                 SteppersStatesReceived(states);
+                analyzerContext.SteppersStates = states;
             }
         }
         private void ProcessSensorsValuesResponse(byte[] packet)
@@ -93,6 +104,7 @@ namespace AnalyzerCommunication.SerialCommunication
             if (null != values)
             {
                 SensorsValuesReceived(values);
+                analyzerContext.SensorsValues = values;
             }
         }
 
@@ -108,6 +120,7 @@ namespace AnalyzerCommunication.SerialCommunication
             string message = new FirmwareVersionResponse(packet).GetFirmwareVersion();
 
             FirmwareVersionReceived(message);
+            analyzerContext.FirmwareVersion = message;
         }
     }
 }

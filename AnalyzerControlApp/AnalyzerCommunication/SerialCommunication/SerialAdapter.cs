@@ -11,31 +11,18 @@ namespace AnalyzerCommunication.SerialCommunication
 
         public string PortName
         {
-            get
-            {
-                return serialPort.PortName;
-            }
-            set
-            {
-                serialPort.PortName = value;
-            }
+            get => serialPort.PortName;
+            set => serialPort.PortName = value;
         }
+
+        public string[] GetAvailablePorts() => SerialPort.GetPortNames();
+        public bool IsOpen() => serialPort.IsOpen;
 
         public SerialAdapter(IPacketFinder packetFinder)
         {
             this.packetFinder = packetFinder;
             serialPort = new SerialPort();
             serialPort.DataReceived += Port_DataReceived;
-        }
-
-        public string[] GetAvailablePorts()
-        {
-            return SerialPort.GetPortNames();
-        }
-
-        public bool IsOpen()
-        {
-            return serialPort.IsOpen;
         }
 
         public bool Open(string portName, int baudrate)

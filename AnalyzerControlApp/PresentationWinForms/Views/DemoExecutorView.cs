@@ -11,7 +11,7 @@ namespace PresentationWinForms.UnitsViews
     {
         TubeInfo selectedTube = null;
 
-        string[] analisesColumnHeaders = { "#", "Штихкод", "Состояние", "Осталось"};
+        private readonly string[] analisesColumnHeaders = { "#", "Штихкод", "Состояние", "Осталось"};
 
         Timer updateTimer = new Timer();
 

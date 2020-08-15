@@ -120,11 +120,11 @@
     <Compile Include="UnitsViews\RotorUnitView.Designer.cs">
       <DependentUpon>RotorUnitView.cs</DependentUpon>
     </Compile>
-    <Compile Include="UnitsViews\TransporterUnitView.cs">
+    <Compile Include="UnitsViews\ConveyorUnitView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UnitsViews\TransporterUnitView.Designer.cs">
-      <DependentUpon>TransporterUnitView.cs</DependentUpon>
+    <Compile Include="UnitsViews\ConveyorUnitView.Designer.cs">
+      <DependentUpon>ConveyorUnitView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ControlPanelForm.cs">
       <SubType>Form</SubType>
@@ -199,8 +199,8 @@
     <EmbeddedResource Include="UnitsViews\RotorUnitView.resx">
       <DependentUpon>RotorUnitView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UnitsViews\TransporterUnitView.resx">
-      <DependentUpon>TransporterUnitView.cs</DependentUpon>
+    <EmbeddedResource Include="UnitsViews\ConveyorUnitView.resx">
+      <DependentUpon>ConveyorUnitView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ControlPanelForm.resx">
       <DependentUpon>ControlPanelForm.cs</DependentUpon>

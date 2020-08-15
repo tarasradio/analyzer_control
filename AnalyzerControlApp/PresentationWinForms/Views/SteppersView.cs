@@ -91,7 +91,7 @@ namespace PresentationWinForms.Views
 
         public void ShowStates()
         {
-            ushort[] states = Core.GetSteppersStates();
+            ushort[] states = Core.Context.SteppersStates;
 
             for (int i = 0; i < 18; i++)
             {

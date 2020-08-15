@@ -53,7 +53,7 @@
             this.armTabPage = new System.Windows.Forms.TabPage();
             this.armControllerView = new PresentationWinForms.UnitsViews.NeedleUnitView();
             this.tranporterTabPage = new System.Windows.Forms.TabPage();
-            this.transporterControllerView = new PresentationWinForms.UnitsViews.TransporterUnitView();
+            this.transporterControllerView = new PresentationWinForms.UnitsViews.ConveyorUnitView();
             this.rotorTabPage = new System.Windows.Forms.TabPage();
             this.rotorControllerView = new PresentationWinForms.UnitsViews.RotorUnitView();
             this.loadTabPage = new System.Windows.Forms.TabPage();
@@ -541,7 +541,7 @@
         private System.Windows.Forms.TabPage pompTabPage;
         private UnitsViews.NeedleUnitView armControllerView;
         private System.Windows.Forms.ToolStripButton buttonAbortExecution;
-        private UnitsViews.TransporterUnitView transporterControllerView;
+        private UnitsViews.ConveyorUnitView transporterControllerView;
         private UnitsViews.RotorUnitView rotorControllerView;
         private UnitsViews.ChargeUnitView loadControllerView;
         private UnitsViews.PompUnitView pompControllerView;
