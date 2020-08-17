@@ -14,7 +14,7 @@ namespace PresentationWPF
     /// </summary>
     public partial class MainWindow : MaterialWindow
     {
-        Core core;
+        AnalyzerGateway core;
         SteppersModel steppersModel;
 
         private List<INavigationItem> m_navigationItems;
@@ -39,9 +39,9 @@ namespace PresentationWPF
         {
             InitializeComponent();
 
-            core = new Core();
-            steppersModel = new SteppersModel(Core.AppConfig.Steppers);
-            Core.PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived; ;
+            core = new AnalyzerGateway();
+            steppersModel = new SteppersModel(AnalyzerGateway.AppConfig.Steppers);
+            AnalyzerGateway.PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived; ;
 
             m_navigationItems = new List<INavigationItem>()
             {

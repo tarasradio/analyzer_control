@@ -12,10 +12,10 @@ namespace PresentationWinForms.Forms
 
         private void UpdateControlsState()
         {
-            if (Core.Serial.IsOpen())
+            if (AnalyzerGateway.Serial.IsOpen())
             {
                 buttonConnect.Text = "Отключение";
-                connectionState.Text = $"Установленно соединение с { Core.Serial.PortName }.";
+                connectionState.Text = $"Установленно соединение с { AnalyzerGateway.Serial.PortName }.";
                 connectionState.ForeColor = Color.DarkGreen;
             }
             else
@@ -25,10 +25,10 @@ namespace PresentationWinForms.Forms
                 connectionState.ForeColor = Color.Brown;
             }
 
-            buttonUpdateList.Visible = !Core.Serial.IsOpen();
-            selectPort.Enabled = !Core.Serial.IsOpen();
-            editBaudrate.Enabled = !Core.Serial.IsOpen();
-            buttonStartDemo.Visible = Core.Serial.IsOpen();
+            buttonUpdateList.Visible = !AnalyzerGateway.Serial.IsOpen();
+            selectPort.Enabled = !AnalyzerGateway.Serial.IsOpen();
+            editBaudrate.Enabled = !AnalyzerGateway.Serial.IsOpen();
+            buttonStartDemo.Visible = AnalyzerGateway.Serial.IsOpen();
         }
 
         public MainForm()
@@ -38,16 +38,16 @@ namespace PresentationWinForms.Forms
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
         {
-            controlPanel = new ControlPanelForm(Core.AppConfig.Steppers);
+            controlPanel = new ControlPanelForm(AnalyzerGateway.AppConfig.Steppers);
             controlPanel.StartPosition = FormStartPosition.CenterScreen;
             controlPanel.Show();
         }
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            if (Core.Serial.IsOpen())
+            if (AnalyzerGateway.Serial.IsOpen())
             {
-                Core.Serial.Close();
+                AnalyzerGateway.Serial.Close();
 
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();
@@ -59,7 +59,7 @@ namespace PresentationWinForms.Forms
                 string portName = selectPort.SelectedItem.ToString();
                 int baudrate = int.Parse(editBaudrate.SelectedItem.ToString());
                 
-                if( Core.Serial.Open(portName, baudrate) )
+                if( AnalyzerGateway.Serial.Open(portName, baudrate) )
                 {
                     //Core.CheckFirmwareVersion();
                     
@@ -88,7 +88,7 @@ namespace PresentationWinForms.Forms
         {
             selectPort.Items.Clear();
 
-            String[] portsNames = Core.Serial.GetAvailablePorts();
+            String[] portsNames = AnalyzerGateway.Serial.GetAvailablePorts();
 
             if(portsNames.Length != 0)
             {
@@ -132,7 +132,7 @@ namespace PresentationWinForms.Forms
 
             if(dialogResult == DialogResult.Yes)
             {
-                Core.SaveAppConfiguration();
+                AnalyzerGateway.SaveAppConfiguration();
             }
             else if(dialogResult == DialogResult.Cancel ||
                 dialogResult == DialogResult.Abort)
@@ -143,9 +143,9 @@ namespace PresentationWinForms.Forms
 
             demoExecutorView.StopUpdate();
 
-            if (Core.Serial.IsOpen())
+            if (AnalyzerGateway.Serial.IsOpen())
             {
-                Core.Serial.Close();
+                AnalyzerGateway.Serial.Close();
 
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();
@@ -154,19 +154,19 @@ namespace PresentationWinForms.Forms
 
         private void abortExecutionButton_Click(object sender, EventArgs e)
         {
-            Core.AbortExecution();
+            AnalyzerGateway.AbortExecution();
         }
 
         private void buttonStartDemo_Click(object sender, EventArgs e)
         {
-            Core.Demo.StartDemo();
+            AnalyzerGateway.Demo.StartWork();
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.F8)
             {
-                Core.AbortExecution();
+                AnalyzerGateway.AbortExecution();
             }
             if(e.KeyCode == Keys.F5)
             {
@@ -174,7 +174,7 @@ namespace PresentationWinForms.Forms
             }
             if(e.KeyCode == Keys.F7)
             {
-                Core.Demo.StartDemo();
+                AnalyzerGateway.Demo.StartWork();
             }
         }
     }

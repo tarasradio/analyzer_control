@@ -47,8 +47,7 @@ namespace AnalyzerControlCore.Units
 
             CurrentCell = cell;
 
-            steppers = new Dictionary<int, int>() {
-                { Options.RotatorStepper, 30 } };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, 30 } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
@@ -58,12 +57,14 @@ namespace AnalyzerControlCore.Units
             RotatorPosition = Options.RotatorStepsToCells[cell];
 
             executor.WaitExecution(commands);
+
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Turn to cell[{cell}] finished.");
         }
 
         public void HomeHook()
         {
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start hook homing.");
+
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Options.HookStepper, Options.HookHomeSpeed } };
@@ -73,6 +74,7 @@ namespace AnalyzerControlCore.Units
             commands.Add( new HomeCncCommand(steppers) );
 
             executor.WaitExecution(commands);
+
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Hook homing finished.");
         }
 
@@ -98,6 +100,7 @@ namespace AnalyzerControlCore.Units
         public void ChargeCartridge()
         {
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start cartridge charging.");
+
             List<ICommand> commands = new List<ICommand>();
 
             //Отъезд загрузки, чтобы крюк мог пройти под картриджем
@@ -139,6 +142,7 @@ namespace AnalyzerControlCore.Units
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
+
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
         }
     }

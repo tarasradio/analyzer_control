@@ -70,15 +70,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (Core.AppConfig == null)
+            if (AnalyzerGateway.AppConfig == null)
                 return;
 
-            SteppersGridView.RowCount = Core.AppConfig.Steppers.Count;
+            SteppersGridView.RowCount = AnalyzerGateway.AppConfig.Steppers.Count;
 
-            for(int i = 0; i < Core.AppConfig.Steppers.Count; i++)
+            for(int i = 0; i < AnalyzerGateway.AppConfig.Steppers.Count; i++)
             {
-                SteppersGridView[0, i].Value = Core.AppConfig.Steppers[i].Number;
-                SteppersGridView[1, i].Value = Core.AppConfig.Steppers[i].Name;
+                SteppersGridView[0, i].Value = AnalyzerGateway.AppConfig.Steppers[i].Number;
+                SteppersGridView[1, i].Value = AnalyzerGateway.AppConfig.Steppers[i].Name;
             }
 
             gridFilled = true;
@@ -91,7 +91,7 @@ namespace PresentationWinForms.Views
 
         public void ShowStates()
         {
-            ushort[] states = Core.Context.SteppersStates;
+            ushort[] states = AnalyzerGateway.Context.SteppersStates;
 
             for (int i = 0; i < 18; i++)
             {

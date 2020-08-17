@@ -13,6 +13,6 @@ namespace AnalyzerControlCore.MachineControl
         void RunExecution(List<ICommand> commands);
         void AbortExecution();
 
-        void UpdateExecutedCommandState(uint commandId, CommandStateResponse.CommandStates state);
+        void UpdateExecutedCommandInfo(uint commandId, CommandStateResponse.CommandStates state);
     }
 }

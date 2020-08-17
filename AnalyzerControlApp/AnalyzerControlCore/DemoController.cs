@@ -5,28 +5,51 @@ using Infrastructure;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Timers;
 
 namespace AnalyzerControlCore
 {
+    public class ConveyorCell
+    {
+        public bool HaveTube { get; set; }
+        public string BarCode { get; set; }
+        public Tube Tube { get; set; }
+
+        public ConveyorCell()
+        {
+            Tube = null;
+            HaveTube = false;
+            BarCode = string.Empty;
+        }
+    };
+
     public class DemoController : UnitBase<DemoControllerConfiguration>
     {
-        // шагов пробирки от точки сканирования до точки с забором
-        private const int tubeCellsCount = 54;
-        private const int cellsBetweenScanAndSuction = 7;
-        
-        private TubeCell[] tubeCells;
+        // Ячейки конвейера
+        private const int ConveyorCellsNumber = 54;
+        private ConveyorCell[] ConveyorCells;
+        private const int CellsNumberBetweenScanAndSuction = 7;
+        private int CurrentCellAtScanner = 0;
 
-        private int currentCellAtScanner = 0;
+        // Ячейки ротора
+        private const int RotorCellsNumber = 40; // !!! Нужно уточнить этот параметр
+        private Tube[] RotorCells;
 
-        private Stopwatch stopWatch = new Stopwatch();
-        Timer timer = new Timer();
+        private Stopwatch stopwatch;
+        Timer timer;
 
         private static object locker = new object();
 
         public DemoController(IConfigurationProvider provider) : base(null, provider)
         {
-            tubeCells = new TubeCell[tubeCellsCount];
+            ConveyorCells = new ConveyorCell[ConveyorCellsNumber];
+            ConveyorCells.Initialize();
+
+            RotorCells = new Tube[RotorCellsNumber];
+
+            stopwatch = new Stopwatch();
+            timer = new Timer();
 
             timer.Interval = 1000;
             timer.Elapsed += Timer_Elapsed;
@@ -34,13 +57,13 @@ namespace AnalyzerControlCore
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if(stopWatch.ElapsedMilliseconds >= 60000)
+            if( stopwatch.ElapsedMilliseconds >= (60 * 1e3) )
             {
-                stopWatch.Restart();
+                stopwatch.Restart();
                 Logger.DemoInfo("Прошла минута");
                 
                 // уменьшаем оставшееся время инкубации
-                foreach (TubeInfo tube in Options.Tubes)
+                foreach (Tube tube in Options.Tubes)
                 {
                     lock (locker)
                     {
@@ -50,153 +73,162 @@ namespace AnalyzerControlCore
                 }
             }
         }
-        
-        public void StartDemo()
-        {
-            timer.Start();
-            stopWatch.Reset();
-            stopWatch.Start();
 
-            Core.Executor.StartTask(() =>
-            {
-                DemoTask();
-            });
-        }
-
-        public void AbortExecution()
+        public void AbortWork()
         {
             Logger.DemoInfo("Работа демо режима прервана.");
 
-            if(timer.Enabled) timer.Stop();
-            if(stopWatch.IsRunning) stopWatch.Stop();
+            if (timer.Enabled) timer.Stop();
+            if (stopwatch.IsRunning) stopwatch.Stop();
         }
 
-        private void DemoTask()
+        public void StartWork()
         {
-            foreach (TubeInfo tube in Options.Tubes)
+            timer.Start();
+            stopwatch.Reset();
+            stopwatch.Start();
+
+            //TODO: ПИЗДЕЦ (Надо что то сделать, убрать зависимость...)
+            AnalyzerGateway.Executor.StartTask(() =>
+            {
+                AnalyzerWorkTask();
+            });
+        }
+
+        private void AnalyzerWorkTask()
+        {
+            foreach (Tube tube in Options.Tubes)
             {
                 lock(locker)
                 {
-                    tube.Clear();
+                    tube.Clear(); // А надо ли это делать? А что, если нужно продолжить работу, если паробирки были поставленны ранее?
                 }
             }
 
-            initializationTask();
-            //needleWashingTask();
+            InitializationTask();
+            NeedleWashing();
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
-            Core.Needle.HomeLifterAndRotator();
-            Core.Conveyor.PrepareBeforeScanning();
+            AnalyzerGateway.Needle.HomeLifterAndRotator();
+            AnalyzerGateway.Conveyor.PrepareBeforeScanning();
 
             Logger.DemoInfo($"Подготовка завершена");
 
-            currentCellAtScanner = 0;
+            CurrentCellAtScanner = 0;
 
-            while (haveOutstandingTasks()) // пока есть невыполненные задачи
+            while ( ExistUnhandledTubes() ) // пока есть невыполненные задачи
             {
-                if (currentCellAtScanner == tubeCellsCount) // прошли полный круг
+                if (CurrentCellAtScanner == ConveyorCellsNumber) // прошли полный круг (и чо???)
                 {
-                    currentCellAtScanner = 0;
+                    CurrentCellAtScanner = 0;
                     Logger.DemoInfo($"Круг пройден. Запуск повторного сканирования.");
                 }
 
-                if (tubeCells[currentCellAtScanner] == null)
-                    tubeCells[currentCellAtScanner] = new TubeCell();
+                SearchTubeInConveyorCell(2);
 
-                searchTubeInCell(2);
-
+                //TODO: А че, нельзя как то нормально посчитать??? Че за ебаная магия тут???
                 // Получение номера ячейки в точке забора материала из пробирки
-                int cellUnderNeedle = currentCellAtScanner - cellsBetweenScanAndSuction;
-                if (cellUnderNeedle < 0) cellUnderNeedle += tubeCellsCount;
+                int cellUnderNeedle = CurrentCellAtScanner - CellsNumberBetweenScanAndSuction;
+                if (cellUnderNeedle < 0) cellUnderNeedle += ConveyorCellsNumber;
                 // Номер получен
 
-                if (tubeCells[cellUnderNeedle] == null)
-                    tubeCells[cellUnderNeedle] = new TubeCell();
+                Tube tubeUnderNeedle = ConveyorCells[cellUnderNeedle].Tube;
 
-                TubeInfo tube = tubeCells[cellUnderNeedle].Tube;
-
-                if(tube != null)
+                if(tubeUnderNeedle != null)
                 {
-                    Logger.DemoInfo($"Пробирка со штрихкодом [{tube.BarCode}] дошла до точки забора материала.");
+                    Logger.DemoInfo($"Пробирка со штрихкодом [{tubeUnderNeedle.BarCode}] дошла до точки забора материала.");
                     
-                    if(tube.CurrentStage == -1)
+                    if(tubeUnderNeedle.CurrentStage == -1) //TODO: ПИЗДЕЦ!!!! Заменить на enum
                     {
                         Logger.DemoInfo($"Забор материала ранее не производился.");
 
-                        tube.CurrentStage = 0;
-                        performingPreparatoryTask(tube);
-                        tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
+                        tubeUnderNeedle.CurrentStage = 0; //TODO: ПИЗДЕЦ!!!! Заменить на enum
+
+                        TubeFirstStageHandle(tubeUnderNeedle);
+
+                        // Жесть!
+                        tubeUnderNeedle.TimeToStageComplete = 
+                            tubeUnderNeedle.Stages[tubeUnderNeedle.CurrentStage].TimeToPerform;
                     }
                 }
 
-                performingOutstandingTasks();
-                currentCellAtScanner++;
+                PerformingOutstandingTasks();
+
+                CurrentCellAtScanner++;
             }
 
-            Logger.DemoInfo($"Все пробирки обработаны!");
+            Logger.DemoInfo($"Все пробирки обработаны!"); // Точно? Ты уверен?
+        }
+
+        private void InitializationTask()
+        {
+            Logger.DemoInfo($"Запущена инициализация всех устройств");
+
+            AnalyzerGateway.Needle.HomeLifterAndRotator();
+            AnalyzerGateway.Charger.HomeHook();
+            AnalyzerGateway.Charger.MoveHookAfterHome();
+            AnalyzerGateway.Charger.HomeRotator();
+            AnalyzerGateway.Rotor.Home();
+            AnalyzerGateway.Pomp.Home();
+
+            Logger.DemoInfo($"Инициализация завершена");
         }
 
         /// <summary>
         /// Выполнение запланированных задач
         /// </summary>
-        private void performingOutstandingTasks()
+        private void PerformingOutstandingTasks()
         {
-            foreach (TubeInfo tube in Options.Tubes)
+            foreach (Tube tube in Options.Tubes)
             {
+                // Как бы эту логику вынести в саму пробирку?
                 if( tube.CurrentStage >= 0 &&
                     tube.CurrentStage < tube.Stages.Count && 
                     tube.TimeToStageComplete == 0)
                 {
                     tube.CurrentStage++;
                     
+                    // И эту тоже => IsLastStage(tube.CurrentStage)
                     if (tube.CurrentStage < tube.Stages.Count)
                     {
                         tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
+
                         Logger.DemoInfo($"Завершена инкубация для пробирки [{tube.BarCode}]!");
 
-                        performingIntermediateTask(tube);
+                        TubeIntermediateStageHandle(tube);
                     }
                     else
                     {
                         Logger.DemoInfo($"Завершены все стадии анализа для пробирки [{tube.BarCode}]!");
 
-                        performingFinishTask(tube);
+                        TubeFinishStageHandle(tube);
                     }
-
                 }
             }
         }
 
-        /// <summary>
-        /// Поиск пробирки с заданным штрихкодом
-        /// </summary>
-        /// <param name="barCode">Искомый штрихкод</param>
-        /// <returns>Пробирка со штрихкодом или null</returns>
-        private TubeInfo searchBarcodeInDatabase(string barCode)
+        private Tube SearchBarcodeInDatabase(string barcode)
         {
-            TubeInfo result = null;
+            Tube result = Options.Tubes.Where( tube => barcode.Contains(tube.BarCode)).FirstOrDefault();
 
-            foreach (TubeInfo tube in Options.Tubes)
-            {
-                if (barCode.Contains(tube.BarCode))
-                {
-                    result = tube;
-                    break;
-                }
-            }
+            //foreach (Tube tube in Options.Tubes)
+            //{
+            //    if (barcode.Contains(tube.BarCode))
+            //    {
+            //        result = tube;
+            //        break;
+            //    }
+            //}
+
             return result;
         }
 
-        /// <summary>
-        /// Проверка наличия невыполненных задач
-        /// </summary>
-        /// <returns>Наличие невыполненных задач</returns>
-        private bool haveOutstandingTasks()
+        private bool ExistUnhandledTubes()
         {
             bool result = false;
 
-            foreach(TubeInfo tube in Options.Tubes)
+            foreach(Tube tube in Options.Tubes)
             {
                 if (tube.CurrentStage <= tube.Stages.Count)
                 {
@@ -204,79 +236,55 @@ namespace AnalyzerControlCore
                     break;
                 }
             }
+
             return result;
         }
 
-        /// <summary>
-        /// Инициализация
-        /// </summary>
-        private void initializationTask()
-        {
-            Logger.DemoInfo($"Запущена инициализация всех устройств");
-
-            Core.Needle.HomeLifterAndRotator();
-            Core.Charger.HomeHook();
-            Core.Charger.MoveHookAfterHome();
-            Core.Charger.HomeRotator();
-            Core.Rotor.Home();
-            Core.Pomp.Home();
-
-            Logger.DemoInfo($"Инициализация завершена");
-        }
-
-        /// <summary>
-        /// Промывка иглы
-        /// </summary>
-        private void needleWashingTask()
+        private void NeedleWashing()
         {
             Logger.DemoInfo($"Запущена промывка иглы");
 
-            Core.Needle.HomeLifter();
-            Core.Needle.TurnAndGoDownToWashing();
-            Core.Pomp.WashingNeedle(2);
-            Core.Pomp.Home();
-            Core.Pomp.CloseValves();
+            AnalyzerGateway.Needle.HomeLifter();
+            AnalyzerGateway.Needle.TurnAndGoDownToWashing();
+            AnalyzerGateway.Pomp.WashingNeedle(2);
+            AnalyzerGateway.Pomp.Home();
+            AnalyzerGateway.Pomp.CloseValves();
 
             Logger.DemoInfo($"Промывка иглы завершена.");
         }
         
-        /// <summary>
-        /// Поиск пробирки в конвейере (поиск штрихкода)
-        /// </summary>
-        /// <param name="numberAttempts">Количество попыток (при неудаче)</param>
-        /// <returns>Успешность выполнения</returns>
-        private void searchTubeInCell(int numberAttempts)
+        private void SearchTubeInConveyorCell(int numberAttempts)
         {
             int attempt = 0;
             
-            TubeCell tubeCell = tubeCells[currentCellAtScanner];
+            ConveyorCell cell = ConveyorCells[CurrentCellAtScanner];
 
             Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
 
-            Core.Conveyor.Shift(false);
+            AnalyzerGateway.Conveyor.Shift(reverse:false);
 
             while (attempt < numberAttempts)
             {
                 Logger.DemoInfo($"Попытка {attempt}.");
 
-                Core.Conveyor.RotateAndScanTube();
+                AnalyzerGateway.Conveyor.RotateAndScanTube();
 
-                string tubeBarcode = Core.Context.TubeBarcode;
+                string foundBarcode = AnalyzerGateway.Context.TubeBarcode;
 
-                if ( !String.IsNullOrWhiteSpace(tubeBarcode) )
+                if ( !string.IsNullOrWhiteSpace(foundBarcode) )
                 {
-                    Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{tubeBarcode}].");
+                    Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{foundBarcode}].");
 
-                    tubeCell.Tube = searchBarcodeInDatabase(tubeBarcode);
+                    cell.Tube = SearchBarcodeInDatabase(foundBarcode);
 
-                    if(tubeCell.Tube != null)
+                    if(cell.Tube != null)
                     {
-                        Logger.DemoInfo($"Пробирка со штрихкодом [{tubeBarcode}] найдена в списке анализов!");
-                        tubeCell.Tube.IsFind = true;
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{foundBarcode}] найдена в списке анализов!");
+                        cell.Tube.IsFind = true;
                     }
                     else
                     {
-                        Logger.DemoInfo($"Пробирка со штрихкодом [{tubeBarcode}] не найдена в списке анализов!");
+                        Logger.DemoInfo($"Пробирка со штрихкодом [{foundBarcode}] не найдена в списке анализов!");
                     }
                     break;
                 }
@@ -290,181 +298,175 @@ namespace AnalyzerControlCore
             Logger.DemoInfo($"Поиск пробирки (сканирование) завершен.");
         }
 
-        /// <summary>
-        /// Выполнение завершающей задачи 
-        /// (перенос материала из белой кюветы в прозрачную кювету и снятие показаний с датчика)
-        /// </summary>
-        /// <param name="tube">Пробирка</param>
-        private void performingFinishTask(TubeInfo tube)
+        private void TubeFinishStageHandle(Tube tube)
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения завершающей стадии.");
 
-            needleWashingTask();
+            NeedleWashing();
 
-            Core.Rotor.Home();
-            Core.Rotor.PlaceCellUnderNeedle(
+            AnalyzerGateway.Rotor.Home();
+            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.Stages.Count - 1].CartridgePosition, 
                 CartridgeCell.WhiteCell);
 
-            Core.Needle.HomeLifter();
-            Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.HomeLifter();
+            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
 
-            Core.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
-            Core.Pomp.Suction(0);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
 
-            Core.Needle.HomeLifter();
+            AnalyzerGateway.Pomp.Suction(0);
+
+            AnalyzerGateway.Needle.HomeLifter();
 
             // Далее нужно перелить в прозрачную кювету и отправить на анализ.
+
+            // TODO: Эта задача не реализована до конца!!!
             
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - выполнения завершающей стадии завершено.");
         }
 
-        /// <summary>
-        /// Выполнение промежуточной задачи (добавление реагентов из ячейки в белую кювету)
-        /// </summary>
-        /// <param name="tube">Пробирка</param>
-        private void performingIntermediateTask(TubeInfo tube)
+        private void TubeIntermediateStageHandle(Tube tube)
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
 
-            Core.Needle.HomeLifterAndRotator();
-            //needleWashingTask();
+            AnalyzerGateway.Needle.HomeLifterAndRotator();
+
+            NeedleWashing();
 
             // Подводим нужную ячейку картриджа под иглу
-            Core.Rotor.Home();
-            Core.Rotor.PlaceCellUnderNeedle(
+            AnalyzerGateway.Rotor.Home();
+            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
                 tube.Stages[tube.CurrentStage].Cell,
                 RotorUnit.CellPosition.CellLeft);
 
             // Устанавливаем иглу над нужной ячейкой картриджа
-            Core.Needle.TurnToCartridge(tube.Stages[tube.CurrentStage].Cell);
+            AnalyzerGateway.Needle.TurnToCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Прокалываем ячейку картриджа
-            Core.Needle.GoDownAndPerforateCartridge(tube.Stages[tube.CurrentStage].Cell);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Поднимаемся на безопасную высоту над картриджем
-            Core.Needle.GoToSafeLevel();
+            AnalyzerGateway.Needle.GoToSafeLevel();
 
             // Подводим центр ячейки картриджа под иглу
-            Core.Rotor.PlaceCellUnderNeedle(
+            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
                 tube.Stages[tube.CurrentStage].Cell,
                 RotorUnit.CellPosition.CellCenter);
 
             // Прокалываем ячейку картриджа
-            Core.Needle.GoDownAndPerforateCartridge(tube.Stages[tube.CurrentStage].Cell);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(tube.Stages[tube.CurrentStage].Cell);
 
             // Забираем реагент из ячейки картриджа
-            Core.Pomp.Suction(0);
+            AnalyzerGateway.Pomp.Suction(0);
 
             // Поднимаемся на безопасную высоту над картриджем
-            Core.Needle.GoToSafeLevel();
+            AnalyzerGateway.Needle.GoToSafeLevel();
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
 
             // Подводим белую кювету картриджа под иглу
-            Core.Rotor.Home();
-            Core.Rotor.PlaceCellUnderNeedle(
+            AnalyzerGateway.Rotor.Home();
+            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
                 CartridgeCell.WhiteCell);
 
             // Опускаем иглу в белую кювету
-            Core.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell, false);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell, false);
 
             // Сливаем реагент в белую кювету
-            Core.Pomp.Unsuction(0);
+            AnalyzerGateway.Pomp.Unsuction(0);
 
             // Поднимаем иглу до дома
-            Core.Needle.HomeLifter();
+            AnalyzerGateway.Needle.HomeLifter();
 
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение {tube.CurrentStage}-й стадии.");
         }
 
-        private void performingChargeTask()
+        private void ChargeCartridge(int cartirdgePosition, int cellNumber)
         {
-            Core.Rotor.Home();
-            Core.Rotor.PlaceCellAtCharge(0, 5);
-            Core.Charger.HomeHook();
-            Core.Charger.MoveHookAfterHome();
-            Core.Charger.HomeRotator();
-            Core.Charger.TurnToCell(5);
-            Core.Charger.ChargeCartridge();
-            Core.Charger.HomeHook();
-            Core.Charger.MoveHookAfterHome();
+            AnalyzerGateway.Rotor.Home();
+
+            AnalyzerGateway.Rotor.PlaceCellAtCharge(cartirdgePosition, cellNumber);
+
+            AnalyzerGateway.Charger.HomeHook();
+            AnalyzerGateway.Charger.MoveHookAfterHome();
+            AnalyzerGateway.Charger.HomeRotator();
+
+            AnalyzerGateway.Charger.TurnToCell(cellNumber);
+
+            AnalyzerGateway.Charger.ChargeCartridge();
+            AnalyzerGateway.Charger.HomeHook();
+            AnalyzerGateway.Charger.MoveHookAfterHome();
         }
 
-
-        /// <summary>
-        /// Выполнение подготовительной задачи (включает забор материала из пробирки)
-        /// </summary>
-        /// <param name="tube">Пробирка</param>
-        private void performingPreparatoryTask(TubeInfo tube)
+        private void TubeFirstStageHandle(Tube tube)
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной стадии.");
 
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
             
             // Смещаем пробирку, чтобы она оказалась под иглой
-            Core.Conveyor.Shift(false, ConveyorUnit.ShiftType.HalfTube);
+            AnalyzerGateway.Conveyor.Shift(false, ConveyorUnit.ShiftType.HalfTube);
 
             // Поднимаем иглу вверх до дома
-            Core.Needle.HomeLifter();
+            AnalyzerGateway.Needle.HomeLifter();
 
             Logger.DemoInfo($"Ожидание загрузки картриджа...");
 
-            performingChargeTask();
+            ChargeCartridge(cartirdgePosition: 0, cellNumber: 5);
 
             Logger.DemoInfo($"Загрузка картриджа завершена.");
 
             Logger.DemoInfo($"Ожидание касания жидкости в пробирке...");
 
             // Устанавливаем иглу над пробиркой и опускаем ее до контакта с материалом в пробирке
-            Core.Needle.TurnToTubeAndWaitTouch();
+            AnalyzerGateway.Needle.TurnToTubeAndWaitTouch();
 
             Logger.DemoInfo($"Забор материала из пробирки.");
 
             // Набираем материал из пробирки
-            Core.Pomp.Suction(0);
+            AnalyzerGateway.Pomp.Suction(0);
             
             // Подводим белую кювету картриджа под иглу
-            Core.Rotor.Home();
-            Core.Rotor.PlaceCellUnderNeedle( 
+            AnalyzerGateway.Rotor.Home();
+            AnalyzerGateway.Rotor.PlaceCellUnderNeedle( 
                 tube.Stages[0].CartridgePosition,
                 CartridgeCell.WhiteCell);
 
             // Поднимаем иглу вверх до дома
-            Core.Needle.HomeLifter();
+            AnalyzerGateway.Needle.HomeLifter();
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            Core.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
 
             // Опускаем иглу в кювету
-            Core.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
 
 
             Logger.DemoInfo($"Слив забранного материала в белую кювету.");
 
             // Сливаем материал в белую кювету
-            Core.Pomp.Unsuction(0);
+            AnalyzerGateway.Pomp.Unsuction(0);
 
             // Поднимаем иглу вверх до дома
-            Core.Needle.HomeLifter();
+            AnalyzerGateway.Needle.HomeLifter();
             
             // Промываем иглу
-            needleWashingTask();
+            NeedleWashing();
 
             Logger.DemoInfo($"Перенос реагента в белую кювету.");
 
             // Выполняем перенос реагента из нужной ячейки картриджа в белую кювету
-            performingIntermediateTask(tube);
+            TubeIntermediateStageHandle(tube);
             
             // Устанавливаем иглу в домашнюю позицию
-            Core.Needle.HomeLifterAndRotator();
+            AnalyzerGateway.Needle.HomeLifterAndRotator();
 
             // Смещаем пробирку обратно
-            Core.Conveyor.Shift(true, ConveyorUnit.ShiftType.HalfTube);
+            AnalyzerGateway.Conveyor.Shift(reverse: true, ConveyorUnit.ShiftType.HalfTube);
 
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - завершено выполнение подготовительной стадии.");
         }

@@ -9,27 +9,27 @@ namespace PresentationWinForms.UnitsViews
         public PompUnitView()
         {
             InitializeComponent();
-            if (Core.Pomp != null)
-                propertyGrid.SelectedObject = Core.Pomp.Options;
+            if (AnalyzerGateway.Pomp != null)
+                propertyGrid.SelectedObject = AnalyzerGateway.Pomp.Options;
         }
 
         private void buttonNeedleWashing_Click(object sender, EventArgs e)
         {
             int cycles = (int)editNumberCycles.Value;
 
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Pomp.WashingNeedle(cycles);
+                    AnalyzerGateway.Pomp.WashingNeedle(cycles);
                 });
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Pomp.Home();
+                    AnalyzerGateway.Pomp.Home();
                 });
         }
 
@@ -37,10 +37,10 @@ namespace PresentationWinForms.UnitsViews
         {
             int value = (int)editSuctionValue.Value;
 
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Pomp.Suction(value);
+                    AnalyzerGateway.Pomp.Suction(value);
                 });
         }
 
@@ -48,10 +48,10 @@ namespace PresentationWinForms.UnitsViews
         {
             int value = (int)editSuctionValue.Value;
 
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Pomp.Unsuction(value);
+                    AnalyzerGateway.Pomp.Unsuction(value);
                 });
         }
     }

@@ -12,24 +12,6 @@ namespace AnalyzerConfiguration
         ThirdCell
     };
 
-    /// <summary>
-    /// Ячейка (с пробиркой) в конвейере
-    /// </summary>
-    public class TubeCell
-    {
-        public bool HaveTube { get; set; } = false;
-        public string BarCode { get; set; } = "";
-        /// <summary>
-        /// Анализ, закрепелнный за этой пробиркой в ячейке
-        /// </summary>
-        public TubeInfo Tube { get; set; } = null;
-
-        public TubeCell()
-        {
-
-        }
-    };
-
     public class Stage
     {
         [DisplayName("Номер картриджа")]
@@ -41,14 +23,16 @@ namespace AnalyzerConfiguration
 
         public Stage()
         {
-
+            Cell = CartridgeCell.WhiteCell;
         }
     }
 
-    public class TubeInfo
+    public class Tube
     {
-        [DisplayName("Позиция в транспортере")]
-        public int Position { get; set; } = 0;
+        [DisplayName("Позиция в конвейере")]
+        public int PositionInConveyor { get; set; } = 0;
+        [DisplayName("Позиция в роторе")]
+        public int PositionInRotor { get; set; } = 0;
         [DisplayName("Штрихкод")]
         public string BarCode { get; set; } = "";
         [DisplayName("Список стадий")]
@@ -63,7 +47,7 @@ namespace AnalyzerConfiguration
         /// </summary>
         public bool IsFind { get; set; } = false;
 
-        public TubeInfo()
+        public Tube()
         {
 
         }
@@ -79,8 +63,11 @@ namespace AnalyzerConfiguration
     [Serializable]
     public class DemoControllerConfiguration
     {
-        public List<TubeInfo> Tubes { get; set; } = new List<TubeInfo>();
+        public List<Tube> Tubes { get; set; }
 
-        public DemoControllerConfiguration() { }
+        public DemoControllerConfiguration() 
+        {
+            Tubes = new List<Tube>();
+        }
     }
 }

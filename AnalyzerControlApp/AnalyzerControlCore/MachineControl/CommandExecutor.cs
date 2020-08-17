@@ -12,20 +12,63 @@ namespace AnalyzerControlCore.MachineControl
     {
         public event Action<int> CommandExecuted;
 
-        private const int timeToWait = 2000;
-        private static object locker = new object();
-
-        private List<ICommand> commands = new List<ICommand>();
+        private const int timeToWaitResponse = 2000;
+        
         private Thread executionThread;
+        private static object locker;
+        Stopwatch timer;
 
-        private static uint executedCommandId;
-        private static CommandStateResponse.CommandStates executedCommandState;
+        private List<ICommand> commands;
 
-        Stopwatch timer = new Stopwatch();
+        private static uint ExecutedCommandId 
+        { 
+            get
+            {
+                uint state;
+
+                lock (locker)
+                {
+                    state = ExecutedCommandId;
+                }
+
+                return state;
+            }
+            set
+            {
+                lock (locker)
+                {
+                    ExecutedCommandId = value;
+                }
+            }
+        }
+
+        private static CommandStateResponse.CommandStates ExecutedCommandState
+        {
+            get
+            {
+                CommandStateResponse.CommandStates state;
+
+                lock (locker)
+                {
+                    state = ExecutedCommandState;
+                }
+
+                return state;
+            }
+            set
+            {
+                lock (locker)
+                {
+                    ExecutedCommandState = value;
+                }
+            }
+        }
 
         public CommandExecutor()
         {
-
+            commands = new List<ICommand>();
+            locker = new object();
+            timer = new Stopwatch();
         }
 
         public void WaitExecution(List<ICommand> commands)
@@ -44,7 +87,7 @@ namespace AnalyzerControlCore.MachineControl
 
             AbortExecution();
 
-            executionThread = new Thread(commandsExecution)
+            executionThread = new Thread(ExecutionCommandsCycle)
             {
                 Priority = ThreadPriority.Lowest,
                 IsBackground = true
@@ -59,122 +102,81 @@ namespace AnalyzerControlCore.MachineControl
                 executionThread.Abort();
         }
 
-        public void UpdateExecutedCommandState(uint commandId, CommandStateResponse.CommandStates state)
+        public void UpdateExecutedCommandInfo(uint id, CommandStateResponse.CommandStates state)
         {
-            setExecutedCommandId(commandId);
-            setExecutedCommandState(state);
+            ExecutedCommandId = id;
+            ExecutedCommandState = state;
         }
 
-        private static void setExecutedCommandId(uint commandId)
-        {
-            lock(locker)
-            {
-                executedCommandId = commandId;
-            }
-        }
-
-        private static void setExecutedCommandState(CommandStateResponse.CommandStates state)
-        {
-            lock(locker)
-            {
-                executedCommandState = state;
-            }
-        }
-
-        private static uint getExecutedCommandId()
-        {
-            uint commandId;
-
-            lock (locker)
-            {
-                commandId = executedCommandId;
-            }
-
-            return commandId;
-        }
-
-        private static CommandStateResponse.CommandStates getExecutedCommandState()
-        {
-            CommandStateResponse.CommandStates commandState;
-
-            lock (locker)
-            {
-                commandState = executedCommandState;
-            }
-
-            return commandState;
-        }
-
-        private void commandsExecution()
+        private void ExecutionCommandsCycle()
         {
             int commandNumber = 0;
+
             foreach (ICommand command in commands)
             {
-                //Logger.Info("[Command executor] - Команда " + commandNumber + " запущена !");
-
-                executeCommand(command);
-
-                //Logger.Info("[Command executor] - Команда " + commandNumber + " выполнена успешно !");
+                ExecuteCommand(command);
                 commandNumber++;
+
                 CommandExecuted?.Invoke(commandNumber);
             }
         }
         
-        private void executeCommand(ICommand command)
+        private void ExecuteCommand(ICommand command)
         {
-            setExecutedCommandId(0);
+            ExecutedCommandId = 0;
 
             if(command is IHostCommand)
             {
-                executeHostCommand((IHostCommand)command);
+                ExecuteHostCommand((IHostCommand)command);
             }
             else if(command is IRemoteCommand)
             {
-                executeRemoteCommand((IRemoteCommand)command);
+                ExecuteRemoteCommand((IRemoteCommand)command);
             }
         }
 
-        private void executeRemoteCommand(IRemoteCommand command)
+        private void ExecuteHostCommand(IHostCommand command)
         {
-            Core.Serial.SendPacket(command.GetBytes());
+            (command).Execute();
+        }
+
+        private void ExecuteRemoteCommand(IRemoteCommand command)
+        {
+            AnalyzerGateway.Serial.SendPacket(command.GetBytes());
 
             timer.Restart();
 
-            while (true)
+            bool commandExecuted = false;
+
+            while (!commandExecuted)
             {
-                if(timer.ElapsedMilliseconds >= timeToWait)
+                if(timer.ElapsedMilliseconds >= timeToWaitResponse)
                 {
                     //Logger.Info("[Command executor] - Слишком долгое ожидание ответа от устройства.");
 
-                    Core.Serial.SendPacket(command.GetBytes());
+                    AnalyzerGateway.Serial.SendPacket(command.GetBytes());
 
                     timer.Restart();
                 }
 
                 if (Protocol.CommandTypes.SIMPLE_COMMAND == command.GetType())
                 {
-                    if (getExecutedCommandId() == command.GetId() && 
-                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_EXECUTE_STARTED)
-                    {
-                        break;
-                    }
+                    commandExecuted = CheckCommandStatus(command, 
+                        CommandStateResponse.CommandStates.COMMAND_EXECUTE_STARTED);
                 }
                 else if(Protocol.CommandTypes.WAITING_COMMAND == command.GetType())
                 {
-                    if (getExecutedCommandId() == command.GetId() && 
-                        getExecutedCommandState() == CommandStateResponse.CommandStates.COMMAND_EXECUTE_FINISHED)
-                    {
-                        break; 
-                    }
+                    commandExecuted = CheckCommandStatus(command,
+                        CommandStateResponse.CommandStates.COMMAND_EXECUTE_FINISHED);
                 }
             }
 
             timer.Stop();
         }
 
-        private void executeHostCommand(IHostCommand command)
+        private static bool CheckCommandStatus(IRemoteCommand command, CommandStateResponse.CommandStates expectedState)
         {
-            (command).Execute();
+            return ExecutedCommandId == command.GetId() && ExecutedCommandState == expectedState;
         }
     }
 }

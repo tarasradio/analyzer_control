@@ -20,7 +20,7 @@ namespace PresentationWinForms
 
             try
             {
-                Core core = new Core();
+                AnalyzerGateway core = new AnalyzerGateway();
 
                 StartForm startForm = new StartForm();
                 MainForm mainForm = new MainForm();

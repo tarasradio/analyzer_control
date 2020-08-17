@@ -9,7 +9,7 @@ namespace PresentationWinForms.UnitsViews
 {
     public partial class DemoExecutorView : UserControl
     {
-        TubeInfo selectedTube = null;
+        Tube selectedTube = null;
 
         private readonly string[] analisesColumnHeaders = { "#", "Штихкод", "Состояние", "Осталось"};
 
@@ -47,16 +47,16 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonAddTube_Click(object sender, EventArgs e)
         {
-            Core.Demo.Options.Tubes.Add(new TubeInfo());
+            AnalyzerGateway.Demo.Options.Tubes.Add(new Tube());
 
             buttonRemoveTube.Visible = true;
         }
 
         private void buttonRemoveTube_Click(object sender, EventArgs e)
         {
-            Core.Demo.Options.Tubes.Remove(selectedTube);
+            AnalyzerGateway.Demo.Options.Tubes.Remove(selectedTube);
 
-            if (Core.Demo.Options.Tubes.Count == 0)
+            if (AnalyzerGateway.Demo.Options.Tubes.Count == 0)
             {
                 buttonRemoveTube.Visible = false;
                 selectedTube = null;
@@ -65,33 +65,33 @@ namespace PresentationWinForms.UnitsViews
 
         private void tubesList_SelectionChanged(object sender, EventArgs e)
         {
-            if (Core.Demo.Options.Tubes.Count == 0)
+            if (AnalyzerGateway.Demo.Options.Tubes.Count == 0)
                 return;
-            selectedTube = Core.Demo.Options.Tubes[tubesList.CurrentRow.Index];
+            selectedTube = AnalyzerGateway.Demo.Options.Tubes[tubesList.CurrentRow.Index];
 
             buttonRemoveTube.Visible = true;
         }
 
         private void UpdateTubesGrid()
         {
-            if (Core.Demo.Options.Tubes == null)
+            if (AnalyzerGateway.Demo.Options.Tubes == null)
                 return;
-            tubesList.RowCount = Core.Demo.Options.Tubes.Count;
+            tubesList.RowCount = AnalyzerGateway.Demo.Options.Tubes.Count;
 
-            for (int i = 0; i < Core.Demo.Options.Tubes.Count; i++)
+            for (int i = 0; i < AnalyzerGateway.Demo.Options.Tubes.Count; i++)
             {
                 tubesList[0, i].Value = i + 1;
-                tubesList[1, i].Value = $"{Core.Demo.Options.Tubes[i].BarCode}";
+                tubesList[1, i].Value = $"{AnalyzerGateway.Demo.Options.Tubes[i].BarCode}";
 
                 string state = "Не найдена";
 
-                if(Core.Demo.Options.Tubes[i].IsFind)
+                if(AnalyzerGateway.Demo.Options.Tubes[i].IsFind)
                 {
-                    state = $"{Core.Demo.Options.Tubes[i].CurrentStage} из {Core.Demo.Options.Tubes[i].Stages.Count}";
+                    state = $"{AnalyzerGateway.Demo.Options.Tubes[i].CurrentStage} из {AnalyzerGateway.Demo.Options.Tubes[i].Stages.Count}";
                 }
 
                 tubesList[2, i].Value = state;
-                tubesList[3, i].Value = Core.Demo.Options.Tubes[i].TimeToStageComplete + " мин.";
+                tubesList[3, i].Value = AnalyzerGateway.Demo.Options.Tubes[i].TimeToStageComplete + " мин.";
             }
         }
 

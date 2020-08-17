@@ -7,7 +7,7 @@ namespace PresentationWinForms.Forms
 {
     public partial class EditTubeDialogForm : Form
     {
-        TubeInfo tube;
+        Tube tube;
 
         string[] stagesColumnHeaders = { "#", "Ячейка", "Время выполнения" };
         string[] cartridgeCellTitles = { "Белая", "Первая", "Вторая", "Третья" };
@@ -17,7 +17,7 @@ namespace PresentationWinForms.Forms
             InitializeComponent();
         }
 
-        public void SetTube(TubeInfo tube)
+        public void SetTube(Tube tube)
         {
             this.tube = tube;
         }

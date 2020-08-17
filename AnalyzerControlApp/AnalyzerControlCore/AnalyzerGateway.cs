@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AnalyzerControlCore
 {
-    public class Core
+    public class AnalyzerGateway
     {
         private static string FirmwareVersion = "04.03.2020";
         
@@ -36,7 +36,7 @@ namespace AnalyzerControlCore
 
         public static AnalyzerAppConfiguration AppConfig { get; private set; }
 
-        public Core()
+        public AnalyzerGateway()
         {
             provider = new XmlConfigurationProvider();
             
@@ -70,7 +70,7 @@ namespace AnalyzerControlCore
             Serial = new SerialAdapter(PackFinder);
 
             PackHandler.DebugMessageReceived += Logger.Info;
-            PackHandler.CommandStateReceived += CmdExecutor.UpdateExecutedCommandState;
+            PackHandler.CommandStateReceived += CmdExecutor.UpdateExecutedCommandInfo;
         }
 
         public static void SaveAppConfiguration()
@@ -156,7 +156,7 @@ namespace AnalyzerControlCore
         {
             Executor.AbortExecution();
             CmdExecutor.AbortExecution();
-            Demo.AbortExecution();
+            Demo.AbortWork();
 
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }

@@ -67,15 +67,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (Core.AppConfig == null)
+            if (AnalyzerGateway.AppConfig == null)
                 return;
 
-            DevicesGridView.RowCount = Core.AppConfig.Devices.Count;
+            DevicesGridView.RowCount = AnalyzerGateway.AppConfig.Devices.Count;
 
-            for (int i = 0; i < Core.AppConfig.Devices.Count; i++)
+            for (int i = 0; i < AnalyzerGateway.AppConfig.Devices.Count; i++)
             {
-                DevicesGridView[0, i].Value = Core.AppConfig.Devices[i].Number;
-                DevicesGridView[1, i].Value = Core.AppConfig.Devices[i].Name;
+                DevicesGridView[0, i].Value = AnalyzerGateway.AppConfig.Devices[i].Number;
+                DevicesGridView[1, i].Value = AnalyzerGateway.AppConfig.Devices[i].Name;
                 DevicesGridView[2, i].Value = "Включить";
             }
         }
@@ -102,7 +102,7 @@ namespace PresentationWinForms.Views
                     state = SetDeviceStateCommand.DeviseState.DEVICE_OFF;
                 }
 
-                Core.Serial.SendPacket(new SetDeviceStateCommand(device, state).GetBytes());
+                AnalyzerGateway.Serial.SendPacket(new SetDeviceStateCommand(device, state).GetBytes());
             }
         }
     }

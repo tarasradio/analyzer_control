@@ -40,7 +40,7 @@ namespace PresentationWinForms.Views
         {
             if (isLoading)
                 return;
-            if (Core.AppConfig == null)
+            if (AnalyzerGateway.AppConfig == null)
                 return;
 
             stepperParams.Reverse = checkReverse.Checked;
@@ -52,7 +52,7 @@ namespace PresentationWinForms.Views
         public void UpdateInformation()
         {
             isLoading = true;
-            if (Core.AppConfig == null)
+            if (AnalyzerGateway.AppConfig == null)
                 return;
 
             bool isReverse = stepperParams.Reverse;
@@ -92,7 +92,7 @@ namespace PresentationWinForms.Views
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            Core.Serial.SendPacket(new StopCommand(stepperParams.Number, StopCommand.StopType.SOFT_STOP).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new StopCommand(stepperParams.Number, StopCommand.StopType.SOFT_STOP).GetBytes());
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -116,30 +116,30 @@ namespace PresentationWinForms.Views
             int speed = (int)editFullSpeed.Value;
             int stepper = stepperParams.Number;
 
-            Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
-            Core.Serial.SendPacket(new SetSpeedCommand(stepper, (uint)speed).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new SetSpeedCommand(stepper, (uint)speed).GetBytes());
 
             countSteps = direction == Direction.Forward ? countSteps : -countSteps;
 
-            Core.Serial.SendPacket(new MoveCommand(stepper, countSteps).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new MoveCommand(stepper, countSteps).GetBytes());
         }
 
         private void run(Direction direction)
         {
             int speed = (int)editFullSpeed.Value;
             int stepper = stepperParams.Number;
-            Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
             speed = direction == Direction.Forward ? speed : -speed;
-            Core.Serial.SendPacket(new RunCommand(stepper, speed).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new RunCommand(stepper, speed).GetBytes());
         }
 
         private void goHome(Direction direction)
         {
             int speed = (int)editFullSpeed.Value;
             int stepper = stepperParams.Number;
-            Core.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new StopCommand(stepper, StopCommand.StopType.SOFT_STOP).GetBytes());
             speed = direction == Direction.Forward ? speed : -speed;
-            Core.Serial.SendPacket(new HomeCommand(stepper, speed).GetBytes());
+            AnalyzerGateway.Serial.SendPacket(new HomeCommand(stepper, speed).GetBytes());
         }
 
         private void editNumberSteps_ValueChanged(object sender, EventArgs e)

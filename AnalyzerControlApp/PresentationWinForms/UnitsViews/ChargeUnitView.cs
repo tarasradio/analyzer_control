@@ -10,25 +10,25 @@ namespace PresentationWinForms.UnitsViews
         {
             InitializeComponent();
 
-            if (Core.Charger != null)
-                propertyGrid.SelectedObject = Core.Charger.GetConfiguration();
+            if (AnalyzerGateway.Charger != null)
+                propertyGrid.SelectedObject = AnalyzerGateway.Charger.GetConfiguration();
         }
 
         private void buttonHookHome_Click(object sender, EventArgs e)
         {
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Charger.HomeHook();
+                    AnalyzerGateway.Charger.HomeHook();
                 });
         }
 
         private void buttonRotatorHome_Click(object sender, EventArgs e)
         {
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Charger.HomeRotator();
+                    AnalyzerGateway.Charger.HomeRotator();
                 });
         }
 
@@ -36,22 +36,22 @@ namespace PresentationWinForms.UnitsViews
         {
             int cell = (int)editCellNumber.Value;
 
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Charger.HomeRotator();
-                    Core.Charger.TurnToCell(cell);
+                    AnalyzerGateway.Charger.HomeRotator();
+                    AnalyzerGateway.Charger.TurnToCell(cell);
                 });
         }
 
         private void buttonChargeCartridge_Click(object sender, EventArgs e)
         {
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Charger.HomeHook();
-                    Core.Charger.ChargeCartridge();
-                    Core.Charger.HomeHook();
+                    AnalyzerGateway.Charger.HomeHook();
+                    AnalyzerGateway.Charger.ChargeCartridge();
+                    AnalyzerGateway.Charger.HomeHook();
                 });
         }
 

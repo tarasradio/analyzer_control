@@ -9,25 +9,25 @@ namespace PresentationWinForms.UnitsViews
         public ConveyorUnitView()
         {
             InitializeComponent();
-            if(Core.Conveyor != null)
-                propertyGrid.SelectedObject = Core.Conveyor.Options;
+            if(AnalyzerGateway.Conveyor != null)
+                propertyGrid.SelectedObject = AnalyzerGateway.Conveyor.Options;
         }
 
         private void buttonPrepare_Click(object sender, EventArgs e)
         {
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Conveyor.PrepareBeforeScanning();
+                    AnalyzerGateway.Conveyor.PrepareBeforeScanning();
                 });
         }
 
         private void buttonScanAndTurn_Click(object sender, EventArgs e)
         {
-            Core.Executor.StartTask(
+            AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    Core.Conveyor.RotateAndScanTube();
+                    AnalyzerGateway.Conveyor.RotateAndScanTube();
                 });
         }
     }

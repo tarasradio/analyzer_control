@@ -118,7 +118,7 @@ namespace PresentationWinForms.Views
                 executionProgressLabel.Text = $"Выполнено команд: {0} из {commands.Count}";
                 executionProgressBar.Value = 0;
 
-                Core.CmdExecutor.RunExecution(commands);
+                AnalyzerGateway.CmdExecutor.RunExecution(commands);
             }
         }
 
@@ -127,7 +127,7 @@ namespace PresentationWinForms.Views
             double progress = 0;
             int commandsCount = 0;
 
-            if (Core.Executor.GetState() == ThreadState.Running)
+            if (AnalyzerGateway.Executor.GetState() == ThreadState.Running)
             {
                 //commandsCount = _taskExecutor.GetCommandsCount();
             }
@@ -149,7 +149,7 @@ namespace PresentationWinForms.Views
 
         private void buttonAbortExecution_Click(object sender, EventArgs e)
         {
-            Core.AbortExecution();
+            AnalyzerGateway.AbortExecution();
 
             executionStatusLabel.Text = "Выполнение программы было прерванно";
         }
