@@ -30,5 +30,15 @@ namespace PresentationWinForms.UnitsViews
                     AnalyzerGateway.Conveyor.RotateAndScanTube();
                 });
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            AnalyzerGateway.Executor.StartTask(
+               () =>
+               {
+                   AnalyzerGateway.Conveyor.Shift(reverse: false, 
+                       shiftType: AnalyzerControlCore.Units.ConveyorUnit.ShiftType.OneTube);
+               });
+        }
     }
 }

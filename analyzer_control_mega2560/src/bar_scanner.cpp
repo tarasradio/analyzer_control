@@ -4,7 +4,6 @@
 
 #include "protocol.hpp"
 
-
 byte barBuffer[64];
 uint8_t currentBarByte = 0;
 
@@ -19,7 +18,7 @@ void BarScanner::updateState()
 {
 #ifdef EMULATOR
     if(Emulator::barCodeExist())
-        Protocol::sendBarCode(Emulator::getBarCodeMessage());
+        Protocol::sendBarCode(id, Emulator::getBarCodeMessage());
     return;
 #endif
 
@@ -32,7 +31,7 @@ void BarScanner::updateState()
             // Обработка приема сообщения
 
             barBuffer[currentBarByte] = '\0';
-#ifndef DUBUG
+#ifdef DUBUG
             String message = "[Bar read] code = " + String((char*)barBuffer);
             Protocol::sendMessage(message.c_str());
 #endif

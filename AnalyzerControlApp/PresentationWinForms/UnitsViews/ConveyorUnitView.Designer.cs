@@ -84,8 +84,9 @@
             this.button1.TabIndex = 4;
             this.button1.Text = "Сдвиг";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // TransporterControllerView
+            // ConveyorUnitView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -93,7 +94,7 @@
             this.Controls.Add(this.buttonScanAndTurn);
             this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.buttonPrepare);
-            this.Name = "TransporterControllerView";
+            this.Name = "ConveyorUnitView";
             this.Size = new System.Drawing.Size(642, 286);
             this.ResumeLayout(false);
 

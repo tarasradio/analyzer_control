@@ -20,49 +20,9 @@ namespace AnalyzerControlCore.MachineControl
 
         private List<ICommand> commands;
 
-        private static uint ExecutedCommandId 
-        { 
-            get
-            {
-                uint state;
+        private uint ExecutedCommandId { get; set; }
 
-                lock (locker)
-                {
-                    state = ExecutedCommandId;
-                }
-
-                return state;
-            }
-            set
-            {
-                lock (locker)
-                {
-                    ExecutedCommandId = value;
-                }
-            }
-        }
-
-        private static CommandStateResponse.CommandStates ExecutedCommandState
-        {
-            get
-            {
-                CommandStateResponse.CommandStates state;
-
-                lock (locker)
-                {
-                    state = ExecutedCommandState;
-                }
-
-                return state;
-            }
-            set
-            {
-                lock (locker)
-                {
-                    ExecutedCommandState = value;
-                }
-            }
-        }
+        private CommandStateResponse.CommandStates ExecutedCommandState { get; set; }
 
         public CommandExecutor()
         {
@@ -87,7 +47,7 @@ namespace AnalyzerControlCore.MachineControl
 
             AbortExecution();
 
-            executionThread = new Thread(ExecutionCommandsCycle)
+            executionThread = new Thread(CommandExecutionLoop)
             {
                 Priority = ThreadPriority.Lowest,
                 IsBackground = true
@@ -108,7 +68,7 @@ namespace AnalyzerControlCore.MachineControl
             ExecutedCommandState = state;
         }
 
-        private void ExecutionCommandsCycle()
+        private void CommandExecutionLoop()
         {
             int commandNumber = 0;
 
@@ -174,7 +134,7 @@ namespace AnalyzerControlCore.MachineControl
             timer.Stop();
         }
 
-        private static bool CheckCommandStatus(IRemoteCommand command, CommandStateResponse.CommandStates expectedState)
+        private bool CheckCommandStatus(IRemoteCommand command, CommandStateResponse.CommandStates expectedState)
         {
             return ExecutedCommandId == command.GetId() && ExecutedCommandState == expectedState;
         }

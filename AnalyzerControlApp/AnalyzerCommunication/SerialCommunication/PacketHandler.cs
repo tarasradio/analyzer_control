@@ -66,11 +66,11 @@ namespace AnalyzerCommunication.SerialCommunication
             switch (type)
             {
                 case BarCodeResponse.ScannerTypes.TUBE_SCANNER:
-                    TubeBarCodeReceived(barCode);
+                    TubeBarCodeReceived?.Invoke(barCode);
                     analyzerContext.TubeBarcode = barCode;
                     break;
                 case BarCodeResponse.ScannerTypes.CARTRIDGE_SCANNER:
-                    CartridgeBarCodeReceived(barCode);
+                    CartridgeBarCodeReceived?.Invoke(barCode);
                     analyzerContext.CartridgeBarcode = barCode;
                     break;
                 default:
@@ -84,7 +84,7 @@ namespace AnalyzerCommunication.SerialCommunication
             UInt32 commandId = response.GetCommandId();
             CommandStateResponse.CommandStates commandState = response.GetCommandState();
 
-            CommandStateReceived(commandId, commandState);
+            CommandStateReceived?.Invoke(commandId, commandState);
         }
 
         private void ProcessSteppersStatesResponse(byte[] packet)
@@ -93,7 +93,7 @@ namespace AnalyzerCommunication.SerialCommunication
 
             if (states != null)
             {
-                SteppersStatesReceived(states);
+                SteppersStatesReceived?.Invoke(states);
                 analyzerContext.SteppersStates = states;
             }
         }
@@ -103,7 +103,7 @@ namespace AnalyzerCommunication.SerialCommunication
 
             if (null != values)
             {
-                SensorsValuesReceived(values);
+                SensorsValuesReceived?.Invoke(values);
                 analyzerContext.SensorsValues = values;
             }
         }
@@ -112,14 +112,14 @@ namespace AnalyzerCommunication.SerialCommunication
         {
             string message = new DebugResponse(packet).GetDebugMessage();
 
-            DebugMessageReceived(message);
+            DebugMessageReceived?.Invoke(message);
         }
 
         private void ProcessFirmwareVersionResponse(byte[] packet)
         {
             string message = new FirmwareVersionResponse(packet).GetFirmwareVersion();
 
-            FirmwareVersionReceived(message);
+            FirmwareVersionReceived?.Invoke(message);
             analyzerContext.FirmwareVersion = message;
         }
     }

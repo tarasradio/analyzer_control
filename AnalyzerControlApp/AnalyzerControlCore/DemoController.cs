@@ -43,8 +43,7 @@ namespace AnalyzerControlCore
 
         public DemoController(IConfigurationProvider provider) : base(null, provider)
         {
-            ConveyorCells = new ConveyorCell[ConveyorCellsNumber];
-            ConveyorCells.Initialize();
+            ConveyorCells = Enumerable.Repeat(new ConveyorCell(), ConveyorCellsNumber).ToArray();
 
             RotorCells = new Tube[RotorCellsNumber];
 
