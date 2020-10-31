@@ -1,5 +1,4 @@
-﻿
-namespace AnalyzerCommunication.CommunicationProtocol.AdditionalCommands
+﻿namespace AnalyzerCommunication.CommunicationProtocol.AdditionalCommands
 {
     public class AbortExecutionCommand : AbstractCommand, IRemoteCommand
     {

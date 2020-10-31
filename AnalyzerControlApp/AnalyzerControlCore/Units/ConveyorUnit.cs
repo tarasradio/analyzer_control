@@ -7,7 +7,6 @@ using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
-using System.IO;
 
 namespace AnalyzerControlCore.Units
 {

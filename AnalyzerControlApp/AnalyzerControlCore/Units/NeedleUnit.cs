@@ -1,5 +1,4 @@
 ﻿using AnalyzerCommunication;
-using AnalyzerCommunication.CommunicationProtocol;
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
@@ -7,7 +6,6 @@ using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
-using System.IO;
 
 namespace AnalyzerControlCore.Units
 {

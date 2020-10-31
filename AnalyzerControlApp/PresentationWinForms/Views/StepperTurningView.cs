@@ -1,5 +1,4 @@
-﻿using AnalyzerCommunication.CommunicationProtocol;
-using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
+﻿using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
 using AnalyzerControlCore;
 using System;

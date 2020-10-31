@@ -1,10 +1,7 @@
 ﻿using AnalyzerConfiguration;
-using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.Units;
 using Infrastructure;
-using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Timers;
 

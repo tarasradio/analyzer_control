@@ -1,9 +1,8 @@
-﻿using AnalyzerControlCore.MachineControl;
-using System.Collections.Generic;
-using AnalyzerConfiguration;
-using System.Runtime.CompilerServices;
-using System;
+﻿using AnalyzerConfiguration;
+using AnalyzerControlCore.MachineControl;
 using Infrastructure;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AnalyzerControlCore.Units
