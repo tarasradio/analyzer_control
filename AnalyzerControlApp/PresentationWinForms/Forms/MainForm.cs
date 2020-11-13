@@ -34,6 +34,10 @@ namespace PresentationWinForms.Forms
         public MainForm()
         {
             InitializeComponent();
+
+            PresentationWPF.EditAnalisysWindow editAnalisysWindow = new PresentationWPF.EditAnalisysWindow();
+            editAnalisysWindow.InitializeComponent();
+            editAnalisysWindow.Show();
         }
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)

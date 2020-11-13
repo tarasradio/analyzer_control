@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTubeDialogForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.stagesList = new CustomControls.DoubleBufferedDataGridView();
+            this.stagesList = new PresentationWinForms.CustomControls.DoubleBufferedDataGridView();
             this.removeStageButton = new System.Windows.Forms.Button();
             this.addStageButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
