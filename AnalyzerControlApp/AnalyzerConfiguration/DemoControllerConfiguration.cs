@@ -6,10 +6,11 @@ namespace AnalyzerConfiguration
 {
     public enum CartridgeCell
     {
-        WhiteCell,
-        FirstCell,
-        SecondCell,
-        ThirdCell
+        FirstCell, // Ячейка с первым реагентом
+        SecondCell, // Ячейка со вторым реагентом
+        ThirdCell, // Ячейка с третьим реагентом
+        MixCell, // Белая ячейка, в которой происходит смешивание реагентов
+        ResultCell // Прозрачная ячейка, куда помещается конечный результат
     };
 
     public class Stage
@@ -17,13 +18,13 @@ namespace AnalyzerConfiguration
         [DisplayName("Номер картриджа")]
         public int CartridgePosition { get; set; } = 0;
         [DisplayName("Номер ячейки в картридже")]
-        public CartridgeCell Cell { get; set; } = CartridgeCell.WhiteCell;
+        public CartridgeCell Cell { get; set; } = CartridgeCell.MixCell;
         [DisplayName("Время выполнения (минут)")]
         public int TimeToPerform { get; set; } = 0;
 
         public Stage()
         {
-            Cell = CartridgeCell.WhiteCell;
+            Cell = CartridgeCell.MixCell;
         }
     }
 

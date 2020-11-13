@@ -117,7 +117,11 @@ namespace AnalyzerControlCore.Units
 
             int turnSteps = 0;
 
-            if (cartridgeCell == CartridgeCell.WhiteCell)
+            if (cartridgeCell == CartridgeCell.ResultCell)
+            {
+                turnSteps = Options.StepsToNeedleResultCenter;
+            }
+            else if (cartridgeCell == CartridgeCell.MixCell)
             {
                 turnSteps = Options.StepsToNeedleWhiteCenter;
             }

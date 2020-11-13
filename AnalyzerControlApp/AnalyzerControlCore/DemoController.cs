@@ -322,16 +322,16 @@ namespace AnalyzerControlCore
             AnalyzerGateway.Rotor.Home();
             AnalyzerGateway.Rotor.PlaceCellUnderNeedle( 
                 tube.Stages[0].CartridgePosition,
-                CartridgeCell.WhiteCell);
+                CartridgeCell.MixCell);
 
             // Поднимаем иглу вверх до дома
             AnalyzerGateway.Needle.HomeLifter();
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
             // Опускаем иглу в кювету
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
 
             Logger.DemoInfo($"Слив забранного материала в белую кювету.");
 
@@ -415,16 +415,16 @@ namespace AnalyzerControlCore
             AnalyzerGateway.Needle.GoToSafeLevel();
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
             // Подводим белую кювету картриджа под иглу
             AnalyzerGateway.Rotor.Home();
             AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.CurrentStage].CartridgePosition,
-                CartridgeCell.WhiteCell);
+                CartridgeCell.MixCell);
 
             // Опускаем иглу в белую кювету
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell, false);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell, false);
 
             // Сливаем реагент в белую кювету
             AnalyzerGateway.Pomp.Push(0);
@@ -445,16 +445,26 @@ namespace AnalyzerControlCore
             AnalyzerGateway.Rotor.Home();
             AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
                 tube.Stages[tube.Stages.Count - 1].CartridgePosition,
-                CartridgeCell.WhiteCell);
+                CartridgeCell.MixCell);
 
             AnalyzerGateway.Needle.HomeLifter();
-            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.WhiteCell);
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
 
             AnalyzerGateway.Pomp.Pull(0);
 
-            AnalyzerGateway.Needle.HomeLifter();
+            AnalyzerGateway.Needle.GoToSafeLevel();
+
+            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(tube.Stages[tube.Stages.Count - 1].CartridgePosition,
+                CartridgeCell.ResultCell);
+
+            // Устанавливаем иглу над белой ячейкой картриджа
+            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.ResultCell);
+
+            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.ResultCell); // TODO: Добавить реализацию в NeedleUnit
+
+            AnalyzerGateway.Pomp.Push(0);
 
             // Далее нужно перелить в прозрачную кювету и отправить на анализ.
 

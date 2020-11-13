@@ -135,7 +135,7 @@ namespace AnalyzerControlCore.Units
 
             int steps = Options.LifterStepsToCell;
 
-            if (cartridgeCell == CartridgeCell.WhiteCell)
+            if (cartridgeCell == CartridgeCell.MixCell)
             {
                 if (needSuction)
                     steps = Options.LifterStepsToMixCellAtSuction;
@@ -188,7 +188,11 @@ namespace AnalyzerControlCore.Units
             int turnSteps = 0;
 
             //TODO: Что то тут не так (if-else)
-            if(cell == CartridgeCell.WhiteCell)
+            if(cell == CartridgeCell.ResultCell)
+            {
+                turnSteps = Options.RotatorStepsToResultCell;
+            }
+            if(cell == CartridgeCell.MixCell)
             {
                 turnSteps = Options.RotatorStepsToMixCell;
             }

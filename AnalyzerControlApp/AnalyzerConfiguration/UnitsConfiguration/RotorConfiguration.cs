@@ -21,6 +21,8 @@ namespace AnalyzerConfiguration.UnitsConfiguration
         [DisplayName("Шагов до wash-буфера"), Category("3.1 Шаги (общие задачи)")]
         public int StepsToWashBuffer { get; set; } = 0;
 
+        [DisplayName("Шагов до иглы прозрачной ячейки (центр)"), Category("3.2 Шаги (работа с иглой)")]
+        public int StepsToNeedleResultCenter { get; set; } = 0;
         [DisplayName("Шагов до иглы белой ячейки (центр)"), Category("3.2 Шаги (работа с иглой)")]
         public int StepsToNeedleWhiteCenter { get; set; } = 0;
         [DisplayName("Шагов до иглы 1-й ячейки (лево)"), Category("3.2 Шаги (работа с иглой)")]

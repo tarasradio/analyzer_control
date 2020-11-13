@@ -23,6 +23,8 @@ namespace AnalyzerConfiguration.UnitsConfiguration
         public int RotatorStepsToTube { get; set; } = 0;
         [DisplayName("Шагов до промывки"), Category("3.1 Шаги (поворот)")]
         public int RotatorStepsToWashing { get; set; } = 0;
+        [DisplayName("Шагов до прозрачной ячейки"), Category("3.1 Шаги (поворот)")]
+        public int RotatorStepsToResultCell { get; set; } = 0;
         [DisplayName("Шагов до белой ячейки"), Category("3.1 Шаги (поворот)")]
         public int RotatorStepsToMixCell { get; set; } = 0;
         [DisplayName("Шагов до 1-й ячейки"), Category("3.1 Шаги (поворот)")]
@@ -38,6 +40,8 @@ namespace AnalyzerConfiguration.UnitsConfiguration
         public int LifterStepsToWashing { get; set; } = 0;
         [DisplayName("Шагов для опускания до 1-3-й ячеек"), Category("3.2 Шаги (подъем / опускание)")]
         public int LifterStepsToCell { get; set; } = 0;
+        [DisplayName("Шагов для опускания до прозрачной ячейки"), Category("3.2 Шаги (подъем / опускание)")]
+        public int LifterStepsToResultCell { get; set; } = 0;
         [DisplayName("Шагов для опускания до белой ячейки"), Category("3.2 Шаги (подъем / опускание)")]
         public int LifterStepsToMixCell { get; set; } = 0;
         [DisplayName("Шагов для опускания до белой ячейки (при заборе)"), Category("3.2 Шаги (подъем / опускание)")]
