@@ -50,7 +50,7 @@ namespace AnalyzerControlCore.Units
             Logger.ControllerInfo($"[{nameof(PompUnit)}] - Homing finished.");
         }
 
-        public void Suction(int value)
+        public void Pull(int value)
         {
             Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start suction.");
             List<ICommand> commands = new List<ICommand>();
@@ -74,7 +74,7 @@ namespace AnalyzerControlCore.Units
             Logger.ControllerInfo($"[{nameof(PompUnit)}] - Suction finished.");
         }
 
-        public void Unsuction(int value)
+        public void Push(int value)
         {
             Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start unsuction.");
             List<ICommand> commands = new List<ICommand>();

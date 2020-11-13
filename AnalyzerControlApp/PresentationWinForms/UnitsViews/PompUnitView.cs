@@ -40,7 +40,7 @@ namespace PresentationWinForms.UnitsViews
             AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Pomp.Suction(value);
+                    AnalyzerGateway.Pomp.Pull(value);
                 });
         }
 
@@ -51,7 +51,7 @@ namespace PresentationWinForms.UnitsViews
             AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Pomp.Unsuction(value);
+                    AnalyzerGateway.Pomp.Push(value);
                 });
         }
     }
