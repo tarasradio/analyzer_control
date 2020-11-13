@@ -45,7 +45,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonTurnToCartridge_Click(object sender, EventArgs e)
         {
-            CartridgeCell cell = CartridgeCell.WhiteCell;
+            CartridgeCell cell = CartridgeCell.MixCell;
 
             if(selectFirstCell.Checked)
             {
@@ -70,7 +70,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonGoDownAndBrokeCartridge_Click(object sender, EventArgs e)
         {
-            CartridgeCell cell = CartridgeCell.WhiteCell;
+            CartridgeCell cell = CartridgeCell.MixCell;
 
             if (selectFirstCell.Checked)
             {

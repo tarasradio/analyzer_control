@@ -29,7 +29,7 @@ namespace PresentationWinForms.UnitsViews
             int cellNumber = (int)editCellNumber.Value;
             int chargePosition = (int)editChargePosition.Value;
 
-            CartridgeCell cell = CartridgeCell.WhiteCell;
+            CartridgeCell cell = CartridgeCell.MixCell;
 
             if (selectFirstCell.Checked)
             {
