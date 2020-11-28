@@ -98,7 +98,7 @@ namespace AnalyzerControlCore.Units
             Logger.ControllerInfo($"[{nameof(PompUnit)}] - Unsuction finished.");
         }
 
-        public void WashingNeedle(int cycles)
+        public void WashTheNeedle(int cycles)
         {
             Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start washing ({cycles} cycles).");
             

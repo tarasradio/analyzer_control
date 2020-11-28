@@ -103,7 +103,7 @@ namespace AnalyzerControlCore
             }
 
             InitializationTask(); // Вызываем задачу из задачи...
-            NeedleWashing(); // Опять это делаем
+            WashTheNeedle(); // Опять это делаем
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
@@ -142,13 +142,13 @@ namespace AnalyzerControlCore
 
                         tubeUnderNeedle.CurrentStage = 0; //TODO: ПИЗДЕЦ!!!! Заменить на enum
 
-                        ProcessingAnalisysInitialStage(tubeUnderNeedle);
+                        ProcessAnalisysInitialStage(tubeUnderNeedle);
 
                         tubeUnderNeedle.SetNewIncubationTime();
                     }
                 }
 
-                ProcessingScheduledAnalizes();
+                ProcessScheduledAnalizes();
 
                 CurrentCellAtScanner++;
             }
@@ -178,7 +178,7 @@ namespace AnalyzerControlCore
         /// <summary>
         /// Обработка запланированных (оставшихся) анализов
         /// </summary>
-        private void ProcessingScheduledAnalizes()
+        private void ProcessScheduledAnalizes()
         {
             foreach (AnalysisInfo analysis in Options.Analyzes)
             {
@@ -192,13 +192,13 @@ namespace AnalyzerControlCore
 
                         Logger.DemoInfo($"Завершена инкубация для пробирки [{analysis.BarCode}]!");
 
-                        ProcessingAnalisysStage(analysis);
+                        ProcessAnalisysStage(analysis);
                     }
                     else
                     {
                         Logger.DemoInfo($"Завершены все стадии анализа для пробирки [{analysis.BarCode}]!");
 
-                        ProcessingAnalisysFinishStage(analysis);
+                        ProcessAnalisysFinishStage(analysis);
                     }
                 }
             }
@@ -270,12 +270,10 @@ namespace AnalyzerControlCore
         private AnalysisInfo SearchBarcodeInDatabase(string barcode)
         {
             // Значение по умолчанию для ссылочных и допускающих значения NULL типов равно null .
-            AnalysisInfo result = Options.Analyzes.Where(tube => barcode.Contains(tube.BarCode)).FirstOrDefault();
-
-            return result;
+            return Options.Analyzes.Where(analysis => barcode.Contains(analysis.BarCode)).FirstOrDefault();
         }
 
-        private void ProcessingAnalisysInitialStage(AnalysisInfo analysis)
+        private void ProcessAnalisysInitialStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - запущено выполнение подготовительной стадии.");
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
@@ -288,7 +286,7 @@ namespace AnalyzerControlCore
 
             Logger.DemoInfo($"Ожидание загрузки картриджа...");
 
-            CartridgeCharging(cartirdgePosition: 0, cellNumber: 5);
+            ChargeTheCartridge(cartirdgePosition: 0, cellNumber: 5);
 
             Logger.DemoInfo($"Загрузка картриджа завершена.");
             Logger.DemoInfo($"Ожидание касания жидкости в пробирке...");
@@ -325,12 +323,12 @@ namespace AnalyzerControlCore
             AnalyzerGateway.Needle.HomeLifter();
             
             // Промываем иглу
-            NeedleWashing();
+            WashTheNeedle();
 
             Logger.DemoInfo($"Перенос реагента в белую кювету.");
 
             // Выполняем перенос реагента из нужной ячейки картриджа в белую кювету
-            ProcessingAnalisysStage(analysis);
+            ProcessAnalisysStage(analysis);
             
             // Устанавливаем иглу в домашнюю позицию
             AnalyzerGateway.Needle.HomeLifterAndRotator();
@@ -341,7 +339,7 @@ namespace AnalyzerControlCore
             Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - завершено выполнение подготовительной стадии.");
         }
 
-        private void CartridgeCharging(int cartirdgePosition, int cellNumber)
+        private void ChargeTheCartridge(int cartirdgePosition, int cellNumber)
         {
             AnalyzerGateway.Rotor.Home();
 
@@ -358,13 +356,13 @@ namespace AnalyzerControlCore
             AnalyzerGateway.Charger.MoveHookAfterHome();
         }
 
-        private void ProcessingAnalisysStage(AnalysisInfo analysis)
+        private void ProcessAnalisysStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
 
             AnalyzerGateway.Needle.HomeLifterAndRotator();
 
-            NeedleWashing();
+            WashTheNeedle();
 
             // Подводим нужную ячейку картриджа под иглу
             AnalyzerGateway.Rotor.Home();
@@ -419,11 +417,11 @@ namespace AnalyzerControlCore
         }
 
         // TODO: Эта задача не реализована до конца!!!
-        private void ProcessingAnalisysFinishStage(AnalysisInfo analysis)
+        private void ProcessAnalisysFinishStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - запуск выполнения завершающей стадии.");
 
-            NeedleWashing();
+            WashTheNeedle();
 
             AnalyzerGateway.Rotor.Home();
             AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
@@ -456,13 +454,13 @@ namespace AnalyzerControlCore
             Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - выполнения завершающей стадии завершено.");
         }
 
-        private void NeedleWashing()
+        private void WashTheNeedle()
         {
             Logger.DemoInfo($"Запущена промывка иглы");
 
             AnalyzerGateway.Needle.HomeLifter();
             AnalyzerGateway.Needle.TurnAndGoDownToWashing();
-            AnalyzerGateway.Pomp.WashingNeedle(2);
+            AnalyzerGateway.Pomp.WashTheNeedle(2);
             AnalyzerGateway.Pomp.Home();
             AnalyzerGateway.Pomp.CloseValves();
 

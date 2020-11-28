@@ -20,7 +20,7 @@ namespace PresentationWinForms.UnitsViews
             AnalyzerGateway.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Pomp.WashingNeedle(cycles);
+                    AnalyzerGateway.Pomp.WashTheNeedle(cycles);
                 });
         }
 
