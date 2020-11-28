@@ -11,7 +11,7 @@ namespace AnalyzerControlCore
     {
         public bool HaveTube { get; set; }
         public string BarCode { get; set; }
-        public Tube Tube { get; set; }
+        public AnalysisInfo Tube { get; set; }
 
         public ConveyorCell()
         {
@@ -31,7 +31,7 @@ namespace AnalyzerControlCore
 
         // Ячейки ротора
         private const int RotorCellsNumber = 40; // !!! Нужно уточнить этот параметр
-        private Tube[] RotorCells;
+        private AnalysisInfo[] RotorCells;
 
         private Stopwatch stopwatch;
         Timer timer;
@@ -42,7 +42,7 @@ namespace AnalyzerControlCore
         {
             ConveyorCells = Enumerable.Repeat(new ConveyorCell(), ConveyorCellsNumber).ToArray();
 
-            RotorCells = new Tube[RotorCellsNumber];
+            RotorCells = new AnalysisInfo[RotorCellsNumber];
 
             stopwatch = new Stopwatch();
             timer = new Timer();
@@ -59,7 +59,7 @@ namespace AnalyzerControlCore
                 Logger.DemoInfo("Прошла минута");
                 
                 // уменьшаем оставшееся время инкубации
-                foreach (Tube tube in Options.Tubes)
+                foreach (AnalysisInfo tube in Options.AnalysisList)
                 {
                     lock (locker)
                     {
@@ -95,7 +95,7 @@ namespace AnalyzerControlCore
         // - Вопрос - что будет, если мы прервем задачу и затем запустим ее заного?? Состояние куда то сохраняется?
         private void AnalyzerWorkTask()
         {
-            foreach (Tube tube in Options.Tubes)
+            foreach (AnalysisInfo tube in Options.AnalysisList)
             {
                 lock(locker)
                 {
@@ -131,7 +131,7 @@ namespace AnalyzerControlCore
                 int cellUnderNeedle = CurrentCellAtScanner - CellsNumberBetweenScanAndSuction;
                 if (cellUnderNeedle < 0) cellUnderNeedle += ConveyorCellsNumber;
 
-                Tube tubeUnderNeedle = ConveyorCells[cellUnderNeedle].Tube;
+                AnalysisInfo tubeUnderNeedle = ConveyorCells[cellUnderNeedle].Tube;
 
                 if(tubeUnderNeedle != null)
                 {
@@ -145,8 +145,7 @@ namespace AnalyzerControlCore
 
                         ProcessingAnalisysInitialStage(tubeUnderNeedle);
 
-                        // Жесть!
-                        SetTubeNewTime(tubeUnderNeedle);
+                        tubeUnderNeedle.SetNewIncubationTime();
                     }
                 }
 
@@ -158,7 +157,7 @@ namespace AnalyzerControlCore
             Logger.DemoInfo($"Все пробирки обработаны!"); // Точно? Ты уверен?
         }
 
-        private static bool NoSampleWasTaken(Tube tubeUnderNeedle)
+        private static bool NoSampleWasTaken(AnalysisInfo tubeUnderNeedle)
         {
             return tubeUnderNeedle.CurrentStage == -1; //TODO: ПИЗДЕЦ!!!! Заменить на enum
         }
@@ -182,15 +181,15 @@ namespace AnalyzerControlCore
         /// </summary>
         private void ProcessingScheduledAnalizes()
         {
-            foreach (Tube tube in Options.Tubes)
+            foreach (AnalysisInfo tube in Options.AnalysisList)
             {
-                if (ProcessingNotFinished(tube))
+                if ( tube.ProcessingNotFinished() )
                 {
                     tube.CurrentStage++;
 
-                    if (IsNotFinishStage(tube))
+                    if ( tube.IsNotFinishStage() )
                     {
-                        SetTubeNewTime(tube);
+                        tube.SetNewIncubationTime();
 
                         Logger.DemoInfo($"Завершена инкубация для пробирки [{tube.BarCode}]!");
 
@@ -206,30 +205,11 @@ namespace AnalyzerControlCore
             }
         }
 
-        private static void SetTubeNewTime(Tube tube)
-        {
-            tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
-        }
-
-        // И эту тоже => IsLastStage(tube.CurrentStage)
-        private static bool IsNotFinishStage(Tube tube)
-        {
-            return tube.CurrentStage < tube.Stages.Count;
-        }
-
-        // Как бы эту логику вынести в саму пробирку?
-        private static bool ProcessingNotFinished(Tube tube)
-        {
-            return tube.CurrentStage >= 0 &&
-                IsNotFinishStage(tube) &&
-                tube.TimeToStageComplete == 0;
-        }
-
         private bool ExistUnhandledTubes()
         {
             bool result = false;
 
-            foreach(Tube tube in Options.Tubes)
+            foreach(AnalysisInfo tube in Options.AnalysisList)
             {
                 if (tube.CurrentStage <= tube.Stages.Count) // Это еще почему ???
                 {
@@ -288,15 +268,15 @@ namespace AnalyzerControlCore
             Logger.DemoInfo($"Поиск пробирки (сканирование) завершен.");
         }
 
-        private Tube SearchBarcodeInDatabase(string barcode)
+        private AnalysisInfo SearchBarcodeInDatabase(string barcode)
         {
             // Значение по умолчанию для ссылочных и допускающих значения NULL типов равно null .
-            Tube result = Options.Tubes.Where(tube => barcode.Contains(tube.BarCode)).FirstOrDefault();
+            AnalysisInfo result = Options.AnalysisList.Where(tube => barcode.Contains(tube.BarCode)).FirstOrDefault();
 
             return result;
         }
 
-        private void ProcessingAnalisysInitialStage(Tube tube)
+        private void ProcessingAnalisysInitialStage(AnalysisInfo tube)
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запущено выполнение подготовительной стадии.");
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
@@ -379,7 +359,7 @@ namespace AnalyzerControlCore
             AnalyzerGateway.Charger.MoveHookAfterHome();
         }
 
-        private void ProcessingAnalisysStage(Tube tube)
+        private void ProcessingAnalisysStage(AnalysisInfo tube)
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения {tube.CurrentStage}-й стадии.");
 
@@ -440,7 +420,7 @@ namespace AnalyzerControlCore
         }
 
         // TODO: Эта задача не реализована до конца!!!
-        private void ProcessingAnalisysFinishStage(Tube tube)
+        private void ProcessingAnalisysFinishStage(AnalysisInfo tube)
         {
             Logger.DemoInfo($"Пробирка [{tube.BarCode}] - запуск выполнения завершающей стадии.");
 

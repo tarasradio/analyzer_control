@@ -28,7 +28,7 @@ namespace AnalyzerConfiguration
         }
     }
 
-    public class Tube
+    public class AnalysisInfo
     {
         [DisplayName("Позиция в конвейере")]
         public int PositionInConveyor { get; set; } = 0;
@@ -48,7 +48,7 @@ namespace AnalyzerConfiguration
         /// </summary>
         public bool IsFind { get; set; } = false;
 
-        public Tube()
+        public AnalysisInfo()
         {
 
         }
@@ -59,16 +59,31 @@ namespace AnalyzerConfiguration
             CurrentStage = -1;
             TimeToStageComplete = 0;
         }
+
+        public void SetNewIncubationTime()
+        {
+            TimeToStageComplete = Stages[CurrentStage].TimeToPerform;
+        }
+
+        public bool IsNotFinishStage()
+        {
+            return CurrentStage < Stages.Count;
+        }
+
+        public bool ProcessingNotFinished()
+        {
+            return CurrentStage >= 0 && IsNotFinishStage() && TimeToStageComplete == 0;
+        }
     }
 
     [Serializable]
     public class DemoControllerConfiguration
     {
-        public List<Tube> Tubes { get; set; }
+        public List<AnalysisInfo> AnalysisList { get; set; }
 
         public DemoControllerConfiguration() 
         {
-            Tubes = new List<Tube>();
+            AnalysisList = new List<AnalysisInfo>();
         }
     }
 }
