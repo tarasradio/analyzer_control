@@ -74,6 +74,16 @@ namespace AnalyzerConfiguration
         {
             return CurrentStage >= 0 && IsNotFinishStage() && TimeToStageComplete == 0;
         }
+
+        public bool InProgress()
+        {
+            return IsFind && TimeToStageComplete != 0;
+        }
+
+        public void DecrementRemainingTime()
+        {
+            TimeToStageComplete -= 1;
+        }
     }
 
     [Serializable]

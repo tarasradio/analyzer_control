@@ -11,11 +11,11 @@ namespace AnalyzerControlCore
     {
         public bool HaveTube { get; set; }
         public string BarCode { get; set; }
-        public AnalysisInfo Tube { get; set; }
+        public AnalysisInfo AnalysisInfo { get; set; }
 
         public ConveyorCell()
         {
-            Tube = null;
+            AnalysisInfo = null;
             HaveTube = false;
             BarCode = string.Empty;
         }
@@ -58,13 +58,12 @@ namespace AnalyzerControlCore
                 stopwatch.Restart();
                 Logger.DemoInfo("Прошла минута");
                 
-                // уменьшаем оставшееся время инкубации
-                foreach (AnalysisInfo tube in Options.AnalysisList)
+                foreach (AnalysisInfo analysis in Options.AnalysisList)
                 {
                     lock (locker)
                     {
-                        if(tube.IsFind && tube.TimeToStageComplete != 0)
-                            tube.TimeToStageComplete -= 1;
+                        if (analysis.InProgress())
+                            analysis.DecrementRemainingTime();
                     }
                 }
             }
@@ -131,7 +130,7 @@ namespace AnalyzerControlCore
                 int cellUnderNeedle = CurrentCellAtScanner - CellsNumberBetweenScanAndSuction;
                 if (cellUnderNeedle < 0) cellUnderNeedle += ConveyorCellsNumber;
 
-                AnalysisInfo tubeUnderNeedle = ConveyorCells[cellUnderNeedle].Tube;
+                AnalysisInfo tubeUnderNeedle = ConveyorCells[cellUnderNeedle].AnalysisInfo;
 
                 if(tubeUnderNeedle != null)
                 {
@@ -245,12 +244,12 @@ namespace AnalyzerControlCore
                 {
                     Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barcode}].");
 
-                    cell.Tube = SearchBarcodeInDatabase(barcode);
+                    cell.AnalysisInfo = SearchBarcodeInDatabase(barcode);
 
-                    if(cell.Tube != null)
+                    if(cell.AnalysisInfo != null)
                     {
                         Logger.DemoInfo($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
-                        cell.Tube.IsFind = true;
+                        cell.AnalysisInfo.IsFind = true;
                     }
                     else
                     {
