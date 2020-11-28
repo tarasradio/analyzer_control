@@ -1,9 +1,9 @@
-﻿using PresentationWinForms.Forms;
+﻿using AnalyzerControlCore;
+using AnalyzerDomain.Entyties;
+using PresentationWinForms.Forms;
 using PresentationWinForms.Utils;
-using AnalyzerControlCore;
 using System;
 using System.Windows.Forms;
-using AnalyzerConfiguration;
 
 namespace PresentationWinForms.UnitsViews
 {

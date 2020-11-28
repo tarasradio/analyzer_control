@@ -1,5 +1,5 @@
-﻿using AnalyzerConfiguration;
-using AnalyzerControlCore;
+﻿using AnalyzerControlCore;
+using AnalyzerDomain.Entyties;
 using System;
 using System.Windows.Forms;
 

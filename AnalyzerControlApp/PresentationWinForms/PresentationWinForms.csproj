@@ -271,6 +271,10 @@
       <Project>{c75697ab-d456-44eb-86a4-a1c23bc776ec}</Project>
       <Name>AnalyzerControlCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
+      <Project>{17d7a05e-c6d1-4892-b92a-fb3741ab588f}</Project>
+      <Name>AnalyzerDomain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{6dcff691-ffbb-45b4-90a9-36806ae27d02}</Project>
       <Name>Infrastructure</Name>

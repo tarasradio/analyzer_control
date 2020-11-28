@@ -4,6 +4,7 @@ using Infrastructure;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
+using AnalyzerDomain.Entyties;
 
 namespace AnalyzerControlCore
 {
@@ -190,13 +191,13 @@ namespace AnalyzerControlCore
                     {
                         analysis.SetNewIncubationTime();
 
-                        Logger.DemoInfo($"Завершена инкубация для пробирки [{analysis.BarCode}]!");
+                        Logger.DemoInfo($"Завершена инкубация для анализа [{analysis.BarCode}]!");
 
                         ProcessAnalisysStage(analysis);
                     }
                     else
                     {
-                        Logger.DemoInfo($"Завершены все стадии анализа для пробирки [{analysis.BarCode}]!");
+                        Logger.DemoInfo($"Завершены все стадии анализа для анализа [{analysis.BarCode}]!");
 
                         ProcessAnalisysFinishStage(analysis);
                     }
@@ -275,7 +276,7 @@ namespace AnalyzerControlCore
 
         private void ProcessAnalisysInitialStage(AnalysisInfo analysis)
         {
-            Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - запущено выполнение подготовительной стадии.");
+            Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запущено выполнение подготовительной стадии.");
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
             
             // Смещаем пробирку, чтобы она оказалась под иглой
@@ -336,7 +337,7 @@ namespace AnalyzerControlCore
             // Смещаем пробирку обратно
             AnalyzerGateway.Conveyor.Shift(reverse: true, ConveyorUnit.ShiftType.HalfTube);
 
-            Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - завершено выполнение подготовительной стадии.");
+            Logger.DemoInfo($"Анализ [{analysis.BarCode}] - завершено выполнение подготовительной стадии.");
         }
 
         private void ChargeTheCartridge(int cartirdgePosition, int cellNumber)
@@ -358,7 +359,7 @@ namespace AnalyzerControlCore
 
         private void ProcessAnalisysStage(AnalysisInfo analysis)
         {
-            Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
+            Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
 
             AnalyzerGateway.Needle.HomeLifterAndRotator();
 
@@ -413,13 +414,13 @@ namespace AnalyzerControlCore
             // Поднимаем иглу до дома
             AnalyzerGateway.Needle.HomeLifter();
 
-            Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - завершено выполнение {analysis.CurrentStage}-й стадии.");
+            Logger.DemoInfo($"Анализ [{analysis.BarCode}] - завершено выполнение {analysis.CurrentStage}-й стадии.");
         }
 
         // TODO: Эта задача не реализована до конца!!!
         private void ProcessAnalisysFinishStage(AnalysisInfo analysis)
         {
-            Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - запуск выполнения завершающей стадии.");
+            Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запуск выполнения завершающей стадии.");
 
             WashTheNeedle();
 
@@ -451,7 +452,7 @@ namespace AnalyzerControlCore
 
             // TODO: Эта задача не реализована до конца!!!
 
-            Logger.DemoInfo($"Пробирка [{analysis.BarCode}] - выполнения завершающей стадии завершено.");
+            Logger.DemoInfo($"Анализ [{analysis.BarCode}] - выполнения завершающей стадии завершено.");
         }
 
         private void WashTheNeedle()

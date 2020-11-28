@@ -70,10 +70,17 @@
       <Project>{33e1fe15-0dde-4efb-8359-cd035c95e16d}</Project>
       <Name>AnalyzerConfiguration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
+      <Project>{17d7a05e-c6d1-4892-b92a-fb3741ab588f}</Project>
+      <Name>AnalyzerDomain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{6dcff691-ffbb-45b4-90a9-36806ae27d02}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entyties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

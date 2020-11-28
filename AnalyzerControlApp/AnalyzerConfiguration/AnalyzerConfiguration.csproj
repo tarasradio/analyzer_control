@@ -64,5 +64,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
+      <Project>{17d7a05e-c6d1-4892-b92a-fb3741ab588f}</Project>
+      <Name>AnalyzerDomain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

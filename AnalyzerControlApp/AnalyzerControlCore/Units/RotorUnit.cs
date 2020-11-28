@@ -4,6 +4,7 @@ using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerControlCore.MachineControl;
+using AnalyzerDomain.Entyties;
 using Infrastructure;
 using System.Collections.Generic;
 

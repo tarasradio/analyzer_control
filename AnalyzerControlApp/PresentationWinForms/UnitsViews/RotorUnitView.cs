@@ -1,6 +1,6 @@
-﻿using AnalyzerConfiguration;
-using AnalyzerControlCore;
+﻿using AnalyzerControlCore;
 using AnalyzerControlCore.Units;
+using AnalyzerDomain.Entyties;
 using System;
 using System.Windows.Forms;
 

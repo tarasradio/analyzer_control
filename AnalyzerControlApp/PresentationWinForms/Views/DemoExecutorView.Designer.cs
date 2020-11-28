@@ -91,7 +91,7 @@
             // 
             // stageBindingSource
             // 
-            this.stageBindingSource.DataSource = typeof(AnalyzerConfiguration.Stage);
+            this.stageBindingSource.DataSource = typeof(AnalyzerDomain.Entyties.Stage);
             // 
             // buttonEditTube
             // 

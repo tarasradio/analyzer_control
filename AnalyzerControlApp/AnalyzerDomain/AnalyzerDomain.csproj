@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entyties\AnalysisInfo.cs" />
+    <Compile Include="Entyties\CartridgeCell.cs" />
+    <Compile Include="Entyties\Stage.cs" />
     <Compile Include="Models\Analysis.cs" />
     <Compile Include="Models\AnalysisStage.cs" />
     <Compile Include="Models\AnalysisType.cs" />

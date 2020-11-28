@@ -1,4 +1,4 @@
-﻿using AnalyzerConfiguration;
+﻿using AnalyzerDomain.Entyties;
 using PresentationWinForms.Utils;
 using System;
 using System.Windows.Forms;
