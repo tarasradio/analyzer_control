@@ -7,12 +7,16 @@
         mc:Ignorable="d"
         Title="EditAnalisysWindow" Height="551.758" Width="701.633">
     <Window.Resources>
-        <ResourceDictionary>
-            <Style x:Key="TitleTextBlock" TargetType="TextBlock">
-                <Setter Property="Background" Value="DarkGray"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Style>
-        </ResourceDictionary>
+        <ControlTemplate x:Key="TitleTextBlock" TargetType="Label">
+            <Border
+                BorderThickness="1" 
+                BorderBrush="Black">
+                <TextBlock Text="123"
+                    TextAlignment="Center"
+                           FontWeight="Bold"
+                           Background="LightGray"/>
+            </Border>
+        </ControlTemplate>
     </Window.Resources>
     <Grid ShowGridLines="False" Background="White">
         <Grid.ColumnDefinitions>
@@ -44,13 +48,17 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Reagents" 
-                   Grid.Row="0" 
-                   Grid.Column="1"
-                   TextAlignment="Center"
-                   FontWeight="Bold"
-                   Background="LightGray"/>
-        
+
+        <Border Grid.Row="0"
+                Grid.Column="1"
+                BorderThickness="1" 
+                BorderBrush="Black">
+            <TextBlock Text="Reagents"
+                       TextAlignment="Center"
+                       FontWeight="Bold"
+                       Background="LightGray"/>
+        </Border>
+
         <TextBlock Text="Volume" 
                    Grid.Row="0" 
                    Grid.Column="2"  

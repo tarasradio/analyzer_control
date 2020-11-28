@@ -146,8 +146,7 @@ namespace AnalyzerControlCore
                         ProcessingAnalisysInitialStage(tubeUnderNeedle);
 
                         // Жесть!
-                        tubeUnderNeedle.TimeToStageComplete =
-                            tubeUnderNeedle.Stages[tubeUnderNeedle.CurrentStage].TimeToPerform;
+                        SetTubeNewTime(tubeUnderNeedle);
                     }
                 }
 
@@ -191,7 +190,7 @@ namespace AnalyzerControlCore
 
                     if (IsNotFinishStage(tube))
                     {
-                        tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
+                        SetTubeNewTime(tube);
 
                         Logger.DemoInfo($"Завершена инкубация для пробирки [{tube.BarCode}]!");
 
@@ -205,6 +204,11 @@ namespace AnalyzerControlCore
                     }
                 }
             }
+        }
+
+        private static void SetTubeNewTime(Tube tube)
+        {
+            tube.TimeToStageComplete = tube.Stages[tube.CurrentStage].TimeToPerform;
         }
 
         // И эту тоже => IsLastStage(tube.CurrentStage)

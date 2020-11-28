@@ -91,7 +91,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="EditAnalisysWindow.xaml">
+    <Page Include="EditAnalysisTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -104,8 +104,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataBinding\StepperStateConverter.cs" />
-    <Compile Include="EditAnalisysWindow.xaml.cs">
-      <DependentUpon>EditAnalisysWindow.xaml</DependentUpon>
+    <Compile Include="EditAnalysisTypeWindow.xaml.cs">
+      <DependentUpon>EditAnalysisTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -124,6 +124,7 @@
     <Compile Include="Models\StepperModel.cs" />
     <Compile Include="Models\SteppersModel.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
+    <Compile Include="ViewModels\EditAnalysisTypeViewModel.cs" />
     <Compile Include="ViewModels\SteppersControlViewModel.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="NavigationItem.cs" />

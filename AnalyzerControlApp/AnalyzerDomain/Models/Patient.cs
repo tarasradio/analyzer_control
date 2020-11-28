@@ -5,7 +5,7 @@ namespace AnalyzerDomain.Models
 {
     public class Patient
     {
-        public Guid Guid { get; set; }
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public string MiddleName { get; set; }
@@ -14,8 +14,6 @@ namespace AnalyzerDomain.Models
 
         public Patient()
         {
-            Guid = Guid.Empty;
-
             FirstName = string.Empty;
             SecondName = string.Empty;
             MiddleName = string.Empty;
