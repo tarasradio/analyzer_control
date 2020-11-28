@@ -47,16 +47,16 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonAddTube_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Demo.Options.AnalysisList.Add(new AnalysisInfo());
+            AnalyzerGateway.Demo.Options.Analyzes.Add(new AnalysisInfo());
 
             buttonRemoveTube.Visible = true;
         }
 
         private void buttonRemoveTube_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Demo.Options.AnalysisList.Remove(selectedTube);
+            AnalyzerGateway.Demo.Options.Analyzes.Remove(selectedTube);
 
-            if (AnalyzerGateway.Demo.Options.AnalysisList.Count == 0)
+            if (AnalyzerGateway.Demo.Options.Analyzes.Count == 0)
             {
                 buttonRemoveTube.Visible = false;
                 selectedTube = null;
@@ -65,33 +65,33 @@ namespace PresentationWinForms.UnitsViews
 
         private void tubesList_SelectionChanged(object sender, EventArgs e)
         {
-            if (AnalyzerGateway.Demo.Options.AnalysisList.Count == 0)
+            if (AnalyzerGateway.Demo.Options.Analyzes.Count == 0)
                 return;
-            selectedTube = AnalyzerGateway.Demo.Options.AnalysisList[tubesList.CurrentRow.Index];
+            selectedTube = AnalyzerGateway.Demo.Options.Analyzes[tubesList.CurrentRow.Index];
 
             buttonRemoveTube.Visible = true;
         }
 
         private void UpdateTubesGrid()
         {
-            if (AnalyzerGateway.Demo.Options.AnalysisList == null)
+            if (AnalyzerGateway.Demo.Options.Analyzes == null)
                 return;
-            tubesList.RowCount = AnalyzerGateway.Demo.Options.AnalysisList.Count;
+            tubesList.RowCount = AnalyzerGateway.Demo.Options.Analyzes.Count;
 
-            for (int i = 0; i < AnalyzerGateway.Demo.Options.AnalysisList.Count; i++)
+            for (int i = 0; i < AnalyzerGateway.Demo.Options.Analyzes.Count; i++)
             {
                 tubesList[0, i].Value = i + 1;
-                tubesList[1, i].Value = $"{AnalyzerGateway.Demo.Options.AnalysisList[i].BarCode}";
+                tubesList[1, i].Value = $"{AnalyzerGateway.Demo.Options.Analyzes[i].BarCode}";
 
                 string state = "Не найдена";
 
-                if(AnalyzerGateway.Demo.Options.AnalysisList[i].IsFind)
+                if(AnalyzerGateway.Demo.Options.Analyzes[i].IsFind)
                 {
-                    state = $"{AnalyzerGateway.Demo.Options.AnalysisList[i].CurrentStage} из {AnalyzerGateway.Demo.Options.AnalysisList[i].Stages.Count}";
+                    state = $"{AnalyzerGateway.Demo.Options.Analyzes[i].CurrentStage} из {AnalyzerGateway.Demo.Options.Analyzes[i].Stages.Count}";
                 }
 
                 tubesList[2, i].Value = state;
-                tubesList[3, i].Value = AnalyzerGateway.Demo.Options.AnalysisList[i].TimeToStageComplete + " мин.";
+                tubesList[3, i].Value = AnalyzerGateway.Demo.Options.Analyzes[i].TimeToStageComplete + " мин.";
             }
         }
 

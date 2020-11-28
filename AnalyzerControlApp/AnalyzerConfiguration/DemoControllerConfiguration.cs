@@ -70,6 +70,11 @@ namespace AnalyzerConfiguration
             return CurrentStage < Stages.Count;
         }
 
+        public bool Finished() // Это еще почему ???
+        {
+            return CurrentStage <= Stages.Count;
+        }
+
         public bool ProcessingNotFinished()
         {
             return CurrentStage >= 0 && IsNotFinishStage() && TimeToStageComplete == 0;
@@ -84,16 +89,21 @@ namespace AnalyzerConfiguration
         {
             TimeToStageComplete -= 1;
         }
+
+        public void NextStage()
+        {
+            CurrentStage++;
+        }
     }
 
     [Serializable]
     public class DemoControllerConfiguration
     {
-        public List<AnalysisInfo> AnalysisList { get; set; }
+        public List<AnalysisInfo> Analyzes { get; set; }
 
         public DemoControllerConfiguration() 
         {
-            AnalysisList = new List<AnalysisInfo>();
+            Analyzes = new List<AnalysisInfo>();
         }
     }
 }
