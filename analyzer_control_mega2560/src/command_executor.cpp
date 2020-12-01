@@ -26,11 +26,12 @@ uint32_t lastCommandId = 0;
 uint8_t lastCommandState = COMMAND_DONE;
 uint8_t waitForCommandDone = 0;
 
-CommandExecutor::CommandExecutor(HomingController * homingController,
-        RunningController * runningController,
-        MovingController * movingController,
-        BarScanner * tubeScanner,
-        BarScanner * cartridgeScanner)
+CommandExecutor::CommandExecutor(
+    HomingController * homingController,
+    RunningController * runningController,
+    MovingController * movingController,
+    BarScanner * tubeScanner,
+    BarScanner * cartridgeScanner)
 {
     this->homingController = homingController;
     this->runningController = runningController;

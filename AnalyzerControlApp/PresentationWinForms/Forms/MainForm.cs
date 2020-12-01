@@ -36,9 +36,9 @@ namespace PresentationWinForms.Forms
             InitializeComponent();
 
             //------------------------------------------------------------------------------------------------
-            PresentationWPF.EditAnalisysWindow editAnalisysWindow = new PresentationWPF.EditAnalisysWindow();
-            editAnalisysWindow.InitializeComponent();
-            editAnalisysWindow.Show();
+            //PresentationWPF.EditAnalisysWindow editAnalisysWindow = new PresentationWPF.EditAnalisysWindow();
+            //editAnalisysWindow.InitializeComponent();
+            //editAnalisysWindow.Show();
             //------------------------------------------------------------------------------------------------
         }
 

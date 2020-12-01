@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using AnalyzerDomain.Entyties;
+using System;
 
 namespace AnalyzerControlCore
 {
@@ -448,11 +449,36 @@ namespace AnalyzerControlCore
 
             AnalyzerGateway.Pomp.Push(0);
 
+            AnalyzerGateway.Needle.HomeLifter();
+
+            AnalyzerGateway.Rotor.PlaceCellUnderWashBuffer(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
+
+            //AnalyzerGateway.Rotor.PlaceCellAtDischarge(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
+
+            DischargeCartridge(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
+
             // Далее нужно перелить в прозрачную кювету и отправить на анализ.
 
             // TODO: Эта задача не реализована до конца!!!
 
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - выполнения завершающей стадии завершено.");
+        }
+
+        private void DischargeCartridge(int cartridgePosition)
+        {
+            AnalyzerGateway.Rotor.Home();
+
+            AnalyzerGateway.Rotor.PlaceCellAtDischarge(cartridgePosition);
+
+            AnalyzerGateway.Charger.HomeHook();
+            AnalyzerGateway.Charger.MoveHookAfterHome();
+            AnalyzerGateway.Charger.HomeRotator();
+
+            AnalyzerGateway.Charger.TurnToDischarge();
+
+            //AnalyzerGateway.Charger.ChargeCartridge();
+            //AnalyzerGateway.Charger.HomeHook();
+            //AnalyzerGateway.Charger.MoveHookAfterHome();
         }
 
         private void WashTheNeedle()

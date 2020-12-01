@@ -59,6 +59,26 @@ namespace AnalyzerControlCore.Units
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Turn to cell[{cell}] finished.");
         }
 
+        public void TurnToDischarge()
+        {
+            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start turn to discharge.");
+
+            List<ICommand> commands = new List<ICommand>();
+
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, 30 } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                { Options.RotatorStepper, Options.RotatorStepsToUnload - RotatorPosition } };
+            commands.Add(new MoveCncCommand(steppers));
+
+            RotatorPosition = Options.RotatorStepsToUnload;
+
+            executor.WaitExecution(commands);
+
+            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Turn to discharge finished.");
+        }
+
         public void HomeHook()
         {
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start hook homing.");

@@ -57,7 +57,12 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonTurnChargeToDischarge_Click(object sender, EventArgs e)
         {
-
+            AnalyzerGateway.Executor.StartTask(
+                () =>
+                {
+                    AnalyzerGateway.Charger.HomeRotator();
+                    AnalyzerGateway.Charger.TurnToDischarge();
+                });
         }
     }
 }

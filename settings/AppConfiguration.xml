@@ -11,14 +11,14 @@
       <NumberSteps>1000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
-    <Stepper Number="2" Name="Трясучка">
+    <Stepper Number="2" Name="2 - Трясучка">
       <Reverse>false</Reverse>
-      <NumberSteps>100000</NumberSteps>
-      <FullSpeed>200</FullSpeed>
+      <NumberSteps>256000</NumberSteps>
+      <FullSpeed>205</FullSpeed>
     </Stepper>
-    <Stepper Number="3" Name="Пресс">
+    <Stepper Number="3" Name="3 - Поворот экрана 1">
       <Reverse>false</Reverse>
-      <NumberSteps>1000</NumberSteps>
+      <NumberSteps>10000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
     <Stepper Number="4" Name="Нажимание картриджа">
@@ -36,34 +36,34 @@
       <NumberSteps>3000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
-    <Stepper Number="7" Name="Ротор">
+    <Stepper Number="7" Name="7 - Ротор">
       <Reverse>false</Reverse>
-      <NumberSteps>10000</NumberSteps>
+      <NumberSteps>1000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
-    <Stepper Number="8" Name="Игла 1 (вращение)">
+    <Stepper Number="8" Name="8 - 8 - Игла 1 (вращение)">
       <Reverse>false</Reverse>
       <NumberSteps>1000</NumberSteps>
       <FullSpeed>50</FullSpeed>
     </Stepper>
-    <Stepper Number="9" Name="Игла 2 (вращение)">
-      <Reverse>false</Reverse>
-      <NumberSteps>10000</NumberSteps>
-      <FullSpeed>100</FullSpeed>
-    </Stepper>
-    <Stepper Number="10" Name="Движение загрузки (поворот)">
+    <Stepper Number="9" Name="9 - Игла 2 (вращение)">
       <Reverse>true</Reverse>
       <NumberSteps>10000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
-    <Stepper Number="11" Name="Шприц (большой плунжер)">
+    <Stepper Number="10" Name="10 - 10 - Движение загрузки (поворот)">
       <Reverse>false</Reverse>
       <NumberSteps>10000</NumberSteps>
+      <FullSpeed>30</FullSpeed>
+    </Stepper>
+    <Stepper Number="11" Name="11 - Шприц (большой плунжер)">
+      <Reverse>false</Reverse>
+      <NumberSteps>1000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
-    <Stepper Number="12" Name="Шприц (малый плунжер)">
+    <Stepper Number="12" Name="12 - Шприц (малый плунжер)">
       <Reverse>false</Reverse>
-      <NumberSteps>10000</NumberSteps>
+      <NumberSteps>1000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
     <Stepper Number="13" Name="Wash буфер">
@@ -71,10 +71,10 @@
       <NumberSteps>10000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
-    <Stepper Number="14" Name="Выгрузка">
+    <Stepper Number="14" Name="14 - 14 - 14 - Поворот экрана 2">
       <Reverse>false</Reverse>
-      <NumberSteps>10000</NumberSteps>
-      <FullSpeed>100</FullSpeed>
+      <NumberSteps>30000</NumberSteps>
+      <FullSpeed>200</FullSpeed>
     </Stepper>
     <Stepper Number="15" Name="Челнок загрузки">
       <Reverse>false</Reverse>
@@ -86,9 +86,9 @@
       <NumberSteps>50000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
-    <Stepper Number="17" Name="Игла 1 (Подъем)">
+    <Stepper Number="17" Name="17 - Игла 1 (Подъем)">
       <Reverse>true</Reverse>
-      <NumberSteps>1000</NumberSteps>
+      <NumberSteps>10000</NumberSteps>
       <FullSpeed>100</FullSpeed>
     </Stepper>
   </Steppers>

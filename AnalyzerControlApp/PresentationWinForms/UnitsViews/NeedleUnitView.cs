@@ -59,6 +59,10 @@ namespace PresentationWinForms.UnitsViews
             {
                 cell = CartridgeCell.ThirdCell;
             }
+            else if(selectResultCell.Checked)
+            {
+                cell = CartridgeCell.ResultCell;
+            }
 
             AnalyzerGateway.Executor.StartTask(
                 () =>
@@ -83,6 +87,10 @@ namespace PresentationWinForms.UnitsViews
             else if (selectThirdCell.Checked)
             {
                 cell = CartridgeCell.ThirdCell;
+            }
+            else if (selectResultCell.Checked)
+            {
+                cell = CartridgeCell.ResultCell;
             }
 
             AnalyzerGateway.Executor.StartTask(
