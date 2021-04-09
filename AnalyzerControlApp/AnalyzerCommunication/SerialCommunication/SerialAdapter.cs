@@ -9,6 +9,8 @@ namespace AnalyzerCommunication.SerialCommunication
         private IPacketFinder packetFinder = null;
         private SerialPort serialPort = null;
 
+        public event Action<bool> ConnectionChanged;
+
         public string PortName
         {
             get => serialPort.PortName;
@@ -46,6 +48,8 @@ namespace AnalyzerCommunication.SerialCommunication
                 Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при открытии порта { portName }.");
             }
 
+            ConnectionChanged(true);
+
             return serialPort.IsOpen;
         }
 
@@ -59,6 +63,8 @@ namespace AnalyzerCommunication.SerialCommunication
             {
                 Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при закрытии порта {serialPort.PortName}.");
             }
+
+            ConnectionChanged(false);
         }
 
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)

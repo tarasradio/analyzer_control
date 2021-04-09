@@ -22,24 +22,24 @@ namespace PresentationWinForms
             {
                 AnalyzerGateway core = new AnalyzerGateway();
 
-                StartForm startForm = new StartForm();
-                MainForm mainForm = new MainForm();
+                StartWindow startWindow = new StartWindow();
+                MainWindow mainWindow = new MainWindow();
 
-                startForm.StartPosition = FormStartPosition.CenterScreen;
-                mainForm.StartPosition = FormStartPosition.CenterScreen;
+                startWindow.StartPosition = FormStartPosition.CenterScreen;
+                mainWindow.StartPosition = FormStartPosition.CenterScreen;
 
                 if(useAuthentication)
                 {
-                    Application.Run(startForm);
+                    Application.Run(startWindow);
 
-                    if (startForm.IsAuthenticated)
+                    if (startWindow.IsAuthenticated)
                     {
-                        Application.Run(mainForm);
+                        Application.Run(mainWindow);
                     }
                 }
                 else
                 {
-                    Application.Run(mainForm);
+                    Application.Run(mainWindow);
                 }
 
                 core.SaveUnitsConfiguration();

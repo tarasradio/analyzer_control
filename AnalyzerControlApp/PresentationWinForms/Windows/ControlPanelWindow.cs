@@ -4,10 +4,10 @@ using System.Windows.Forms;
 
 namespace PresentationWinForms.Forms
 {
-    public partial class ControlPanelForm : Form
+    public partial class ControlPanelWindow : Form
     {
         IList<Stepper> _stepperParams;
-        public ControlPanelForm(IList<Stepper> stepperParams)
+        public ControlPanelWindow(IList<Stepper> stepperParams)
         {
             _stepperParams = stepperParams;
             InitializeComponent();

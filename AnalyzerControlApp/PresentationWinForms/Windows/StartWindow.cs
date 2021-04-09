@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 namespace PresentationWinForms.Forms
 {
-    public partial class StartForm : Form
+    public partial class StartWindow : Form
     {
         public bool IsAuthenticated { get; private set; }
 
-        public StartForm()
+        public StartWindow()
         {
             InitializeComponent();
             AutoUpdater.ReportErrors = true;

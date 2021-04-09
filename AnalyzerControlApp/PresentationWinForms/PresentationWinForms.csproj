@@ -86,17 +86,23 @@
     <Compile Include="CustomControls\DoubleBufferedDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\EditTubeDialogForm.cs">
+    <Compile Include="Windows\ConnectionSettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EditTubeDialogForm.Designer.cs">
+    <Compile Include="Windows\ConnectionSettingsWindow.Designer.cs">
+      <DependentUpon>ConnectionSettingsWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditTubeDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\EditTubeDialogForm.Designer.cs">
       <DependentUpon>EditTubeDialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\StartForm.cs">
+    <Compile Include="Windows\StartWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\StartForm.Designer.cs">
-      <DependentUpon>StartForm.cs</DependentUpon>
+    <Compile Include="Windows\StartWindow.Designer.cs">
+      <DependentUpon>StartWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="UnitsViews\NeedleUnitView.cs">
       <SubType>UserControl</SubType>
@@ -134,17 +140,17 @@
     <Compile Include="UnitsViews\ConveyorUnitView.Designer.cs">
       <DependentUpon>ConveyorUnitView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ControlPanelForm.cs">
+    <Compile Include="Windows\ControlPanelWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ControlPanelForm.Designer.cs">
-      <DependentUpon>ControlPanelForm.cs</DependentUpon>
+    <Compile Include="Windows\ControlPanelWindow.Designer.cs">
+      <DependentUpon>ControlPanelWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MainForm.cs">
+    <Compile Include="Windows\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="Windows\MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -186,11 +192,14 @@
       <DependentUpon>StepperTurningView.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\DataGridViewStyler.cs" />
-    <EmbeddedResource Include="Forms\EditTubeDialogForm.resx">
+    <EmbeddedResource Include="Windows\ConnectionSettingsWindow.resx">
+      <DependentUpon>ConnectionSettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\EditTubeDialogForm.resx">
       <DependentUpon>EditTubeDialogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\StartForm.resx">
-      <DependentUpon>StartForm.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\StartWindow.resx">
+      <DependentUpon>StartWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UnitsViews\NeedleUnitView.resx">
       <DependentUpon>NeedleUnitView.cs</DependentUpon>
@@ -210,11 +219,11 @@
     <EmbeddedResource Include="UnitsViews\ConveyorUnitView.resx">
       <DependentUpon>ConveyorUnitView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ControlPanelForm.resx">
-      <DependentUpon>ControlPanelForm.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\ControlPanelWindow.resx">
+      <DependentUpon>ControlPanelWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
