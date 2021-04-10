@@ -28,12 +28,18 @@ namespace AnalyzerConfiguration
 
     public class AnalyzerAppConfiguration
     {
+        public string PortName { get; set; }
+        public uint Baudrate { get; set; }
+
         public List<Stepper> Steppers { get; set; }
         public List<Device> Devices { get; set; }
         public List<Device> Sensors { get; set; }
 
         public AnalyzerAppConfiguration()
         {
+            PortName = "COM1";
+            Baudrate = 115200;
+
             Steppers = new List<Stepper>();
             Devices = new List<Device>();
             Sensors = new List<Device>();
