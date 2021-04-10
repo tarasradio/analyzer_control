@@ -60,20 +60,22 @@
         '\"',
         '\'',
         '\''};
-            this.programTextBox.AutoScrollMinSize = new System.Drawing.Size(267, 14);
+            this.programTextBox.AutoScrollMinSize = new System.Drawing.Size(331, 18);
             this.programTextBox.BackBrush = null;
             this.programTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.programTextBox.CharHeight = 14;
-            this.programTextBox.CharWidth = 8;
+            this.programTextBox.CharHeight = 18;
+            this.programTextBox.CharWidth = 10;
             this.programTextBox.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.programTextBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.programTextBox.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.programTextBox.IsReplaceMode = false;
-            this.programTextBox.Location = new System.Drawing.Point(3, 53);
+            this.programTextBox.Location = new System.Drawing.Point(4, 65);
+            this.programTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.programTextBox.Name = "programTextBox";
             this.programTextBox.Paddings = new System.Windows.Forms.Padding(0);
             this.programTextBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.programTextBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("programTextBox.ServiceColors")));
-            this.programTextBox.Size = new System.Drawing.Size(855, 329);
+            this.programTextBox.Size = new System.Drawing.Size(1139, 404);
             this.programTextBox.TabIndex = 5;
             this.programTextBox.Text = "// ВВЕДИТЕ КОД ПРОГРАММЫ ЗДЕСЬ";
             this.programTextBox.Zoom = 100;
@@ -85,10 +87,10 @@
             this.buttonAbortExecution.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonAbortExecution.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonAbortExecution.Image = ((System.Drawing.Image)(resources.GetObject("buttonAbortExecution.Image")));
-            this.buttonAbortExecution.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonAbortExecution.Location = new System.Drawing.Point(814, 3);
+            this.buttonAbortExecution.Location = new System.Drawing.Point(1085, 4);
+            this.buttonAbortExecution.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonAbortExecution.Name = "buttonAbortExecution";
-            this.buttonAbortExecution.Size = new System.Drawing.Size(44, 44);
+            this.buttonAbortExecution.Size = new System.Drawing.Size(59, 54);
             this.buttonAbortExecution.TabIndex = 38;
             this.CNCViewToolTip.SetToolTip(this.buttonAbortExecution, "Прервать выполнение");
             this.buttonAbortExecution.UseVisualStyleBackColor = false;
@@ -100,10 +102,10 @@
             this.buttonRunExecution.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonRunExecution.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonRunExecution.Image = ((System.Drawing.Image)(resources.GetObject("buttonRunExecution.Image")));
-            this.buttonRunExecution.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonRunExecution.Location = new System.Drawing.Point(764, 3);
+            this.buttonRunExecution.Location = new System.Drawing.Point(1019, 4);
+            this.buttonRunExecution.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonRunExecution.Name = "buttonRunExecution";
-            this.buttonRunExecution.Size = new System.Drawing.Size(44, 44);
+            this.buttonRunExecution.Size = new System.Drawing.Size(59, 54);
             this.buttonRunExecution.TabIndex = 39;
             this.CNCViewToolTip.SetToolTip(this.buttonRunExecution, "Запуск программы");
             this.buttonRunExecution.UseVisualStyleBackColor = false;
@@ -114,10 +116,10 @@
             this.buttonOpenFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonOpenFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonOpenFile.Image")));
-            this.buttonOpenFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonOpenFile.Location = new System.Drawing.Point(53, 3);
+            this.buttonOpenFile.Location = new System.Drawing.Point(71, 4);
+            this.buttonOpenFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonOpenFile.Name = "buttonOpenFile";
-            this.buttonOpenFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonOpenFile.Size = new System.Drawing.Size(59, 54);
             this.buttonOpenFile.TabIndex = 40;
             this.CNCViewToolTip.SetToolTip(this.buttonOpenFile, "Открыть файл");
             this.buttonOpenFile.UseVisualStyleBackColor = false;
@@ -128,10 +130,10 @@
             this.buttonSaveFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonSaveFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSaveFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonSaveFile.Image")));
-            this.buttonSaveFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonSaveFile.Location = new System.Drawing.Point(103, 3);
+            this.buttonSaveFile.Location = new System.Drawing.Point(137, 4);
+            this.buttonSaveFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonSaveFile.Name = "buttonSaveFile";
-            this.buttonSaveFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonSaveFile.Size = new System.Drawing.Size(59, 54);
             this.buttonSaveFile.TabIndex = 41;
             this.CNCViewToolTip.SetToolTip(this.buttonSaveFile, "Сохранить файл");
             this.buttonSaveFile.UseVisualStyleBackColor = false;
@@ -142,10 +144,10 @@
             this.buttonClearFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonClearFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClearFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonClearFile.Image")));
-            this.buttonClearFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonClearFile.Location = new System.Drawing.Point(3, 3);
+            this.buttonClearFile.Location = new System.Drawing.Point(4, 4);
+            this.buttonClearFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonClearFile.Name = "buttonClearFile";
-            this.buttonClearFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonClearFile.Size = new System.Drawing.Size(59, 54);
             this.buttonClearFile.TabIndex = 42;
             this.CNCViewToolTip.SetToolTip(this.buttonClearFile, "Очистить файл");
             this.buttonClearFile.UseVisualStyleBackColor = false;
@@ -156,10 +158,10 @@
             this.buttonTestFile.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonTestFile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTestFile.Image = ((System.Drawing.Image)(resources.GetObject("buttonTestFile.Image")));
-            this.buttonTestFile.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonTestFile.Location = new System.Drawing.Point(153, 3);
+            this.buttonTestFile.Location = new System.Drawing.Point(204, 4);
+            this.buttonTestFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonTestFile.Name = "buttonTestFile";
-            this.buttonTestFile.Size = new System.Drawing.Size(44, 44);
+            this.buttonTestFile.Size = new System.Drawing.Size(59, 54);
             this.buttonTestFile.TabIndex = 43;
             this.CNCViewToolTip.SetToolTip(this.buttonTestFile, "Проверить программу");
             this.buttonTestFile.UseVisualStyleBackColor = false;
@@ -169,9 +171,10 @@
             // 
             this.executionProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.executionProgressBar.Location = new System.Drawing.Point(3, 401);
+            this.executionProgressBar.Location = new System.Drawing.Point(4, 494);
+            this.executionProgressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.executionProgressBar.Name = "executionProgressBar";
-            this.executionProgressBar.Size = new System.Drawing.Size(855, 23);
+            this.executionProgressBar.Size = new System.Drawing.Size(1140, 28);
             this.executionProgressBar.Step = 1;
             this.executionProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.executionProgressBar.TabIndex = 44;
@@ -180,25 +183,27 @@
             // 
             this.executionStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.executionStatusLabel.AutoSize = true;
-            this.executionStatusLabel.Location = new System.Drawing.Point(3, 385);
+            this.executionStatusLabel.Location = new System.Drawing.Point(4, 474);
+            this.executionStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.executionStatusLabel.Name = "executionStatusLabel";
-            this.executionStatusLabel.Size = new System.Drawing.Size(168, 13);
+            this.executionStatusLabel.Size = new System.Drawing.Size(215, 17);
             this.executionStatusLabel.TabIndex = 45;
             this.executionStatusLabel.Text = "Статус выполнения программы";
             // 
             // executionProgressLabel
             // 
             this.executionProgressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.executionProgressLabel.Location = new System.Drawing.Point(557, 385);
+            this.executionProgressLabel.Location = new System.Drawing.Point(743, 474);
+            this.executionProgressLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.executionProgressLabel.Name = "executionProgressLabel";
-            this.executionProgressLabel.Size = new System.Drawing.Size(301, 13);
+            this.executionProgressLabel.Size = new System.Drawing.Size(401, 16);
             this.executionProgressLabel.TabIndex = 46;
             this.executionProgressLabel.Text = "Сколько выполнено команд";
             this.executionProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // CNCView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.executionProgressLabel);
             this.Controls.Add(this.executionStatusLabel);
@@ -210,8 +215,9 @@
             this.Controls.Add(this.buttonRunExecution);
             this.Controls.Add(this.buttonAbortExecution);
             this.Controls.Add(this.programTextBox);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "CNCView";
-            this.Size = new System.Drawing.Size(861, 427);
+            this.Size = new System.Drawing.Size(1148, 526);
             ((System.ComponentModel.ISupportInitialize)(this.programTextBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
