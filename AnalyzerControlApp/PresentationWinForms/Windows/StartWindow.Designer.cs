@@ -1,6 +1,6 @@
 ﻿namespace PresentationWinForms.Forms
 {
-    partial class StartForm
+    partial class StartWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartWindow));
             this.buttonServiceMode = new System.Windows.Forms.Button();
             this.buttonWorkMode = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();

@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DemoControllerConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Tubes>
-    <TubeInfo>
-      <Position>0</Position>
+  <Analyzes>
+    <AnalysisInfo>
+      <PositionInConveyor>0</PositionInConveyor>
+      <PositionInRotor>0</PositionInRotor>
       <BarCode>RedMary4590</BarCode>
       <Stages>
-        <Stage>
-          <CartridgePosition>0</CartridgePosition>
-          <Cell>FirstCell</Cell>
-          <TimeToPerform>5</TimeToPerform>
-        </Stage>
         <Stage>
           <CartridgePosition>0</CartridgePosition>
           <Cell>SecondCell</Cell>
           <TimeToPerform>5</TimeToPerform>
         </Stage>
       </Stages>
-      <CurrentStage>-1</CurrentStage>
+      <CurrentStage>1</CurrentStage>
       <TimeToStageComplete>0</TimeToStageComplete>
-      <IsFind>false</IsFind>
-    </TubeInfo>
-  </Tubes>
+      <IsFind>true</IsFind>
+    </AnalysisInfo>
+  </Analyzes>
 </DemoControllerConfiguration>

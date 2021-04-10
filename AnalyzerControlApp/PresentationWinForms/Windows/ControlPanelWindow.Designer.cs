@@ -1,6 +1,6 @@
 ﻿namespace PresentationWinForms.Forms
 {
-    partial class ControlPanelForm
+    partial class ControlPanelWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlPanelForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlPanelWindow));
             this.stepperTurningView17 = new PresentationWinForms.Views.StepperTurningView();
             this.stepperTurningView16 = new PresentationWinForms.Views.StepperTurningView();
             this.stepperTurningView15 = new PresentationWinForms.Views.StepperTurningView();

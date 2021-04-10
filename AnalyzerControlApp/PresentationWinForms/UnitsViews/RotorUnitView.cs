@@ -43,6 +43,11 @@ namespace PresentationWinForms.UnitsViews
             {
                 cell = CartridgeCell.ThirdCell;
             }
+            else if (selectResultCell.Checked)
+            {
+                cell = CartridgeCell.ResultCell;
+            }
+
 
             if (selectChargePlace.Checked)
             {

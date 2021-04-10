@@ -6,6 +6,7 @@
   <RotatorSpeed>50</RotatorSpeed>
   <RotatorStepsToTube>-9500</RotatorStepsToTube>
   <RotatorStepsToWashing>-50400</RotatorStepsToWashing>
+  <RotatorStepsToResultCell>-46500</RotatorStepsToResultCell>
   <RotatorStepsToMixCell>-41000</RotatorStepsToMixCell>
   <RotatorStepsToFirstCell>-42100</RotatorStepsToFirstCell>
   <RotatorStepsToSecondCell>-42700</RotatorStepsToSecondCell>
@@ -13,6 +14,7 @@
   <LifterStepsAfterTouch>500</LifterStepsAfterTouch>
   <LifterStepsToWashing>40500</LifterStepsToWashing>
   <LifterStepsToCell>310000</LifterStepsToCell>
+  <LifterStepsToResultCell>300000</LifterStepsToResultCell>
   <LifterStepsToMixCell>300000</LifterStepsToMixCell>
   <LifterStepsToMixCellAtSuction>310000</LifterStepsToMixCellAtSuction>
   <LifterStepsToSafeLevel>260000</LifterStepsToSafeLevel>

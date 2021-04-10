@@ -41,6 +41,7 @@
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.buttonGoDownAndBrokeCartridge = new System.Windows.Forms.Button();
             this.buttonHomeLift = new System.Windows.Forms.Button();
+            this.selectResultCell = new System.Windows.Forms.RadioButton();
             this.groupBoxSelectCell.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,9 +53,10 @@
             this.buttonHomeRotator.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonHomeRotator.Image = ((System.Drawing.Image)(resources.GetObject("buttonHomeRotator.Image")));
             this.buttonHomeRotator.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonHomeRotator.Location = new System.Drawing.Point(3, 3);
+            this.buttonHomeRotator.Location = new System.Drawing.Point(4, 5);
+            this.buttonHomeRotator.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonHomeRotator.Name = "buttonHomeRotator";
-            this.buttonHomeRotator.Size = new System.Drawing.Size(140, 32);
+            this.buttonHomeRotator.Size = new System.Drawing.Size(210, 49);
             this.buttonHomeRotator.TabIndex = 0;
             this.buttonHomeRotator.Text = "Вращатель";
             this.buttonHomeRotator.UseVisualStyleBackColor = false;
@@ -66,9 +68,10 @@
             this.turnOnTubeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.turnOnTubeButton.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.turnOnTubeButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.turnOnTubeButton.Location = new System.Drawing.Point(3, 79);
+            this.turnOnTubeButton.Location = new System.Drawing.Point(4, 122);
+            this.turnOnTubeButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.turnOnTubeButton.Name = "turnOnTubeButton";
-            this.turnOnTubeButton.Size = new System.Drawing.Size(140, 25);
+            this.turnOnTubeButton.Size = new System.Drawing.Size(210, 38);
             this.turnOnTubeButton.TabIndex = 1;
             this.turnOnTubeButton.Text = "К пробирке";
             this.turnOnTubeButton.UseVisualStyleBackColor = false;
@@ -80,9 +83,10 @@
             this.buttonTurnAndGoDownToWashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTurnAndGoDownToWashing.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonTurnAndGoDownToWashing.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonTurnAndGoDownToWashing.Location = new System.Drawing.Point(3, 110);
+            this.buttonTurnAndGoDownToWashing.Location = new System.Drawing.Point(4, 169);
+            this.buttonTurnAndGoDownToWashing.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonTurnAndGoDownToWashing.Name = "buttonTurnAndGoDownToWashing";
-            this.buttonTurnAndGoDownToWashing.Size = new System.Drawing.Size(140, 25);
+            this.buttonTurnAndGoDownToWashing.Size = new System.Drawing.Size(210, 38);
             this.buttonTurnAndGoDownToWashing.TabIndex = 2;
             this.buttonTurnAndGoDownToWashing.Text = "К промывке";
             this.buttonTurnAndGoDownToWashing.UseVisualStyleBackColor = false;
@@ -94,9 +98,10 @@
             this.buttonTurnToCartridge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTurnToCartridge.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonTurnToCartridge.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonTurnToCartridge.Location = new System.Drawing.Point(3, 141);
+            this.buttonTurnToCartridge.Location = new System.Drawing.Point(4, 217);
+            this.buttonTurnToCartridge.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonTurnToCartridge.Name = "buttonTurnToCartridge";
-            this.buttonTurnToCartridge.Size = new System.Drawing.Size(140, 25);
+            this.buttonTurnToCartridge.Size = new System.Drawing.Size(210, 38);
             this.buttonTurnToCartridge.TabIndex = 3;
             this.buttonTurnToCartridge.Text = "К картриджу";
             this.buttonTurnToCartridge.UseVisualStyleBackColor = false;
@@ -106,9 +111,10 @@
             // 
             this.selectWhiteCell.AutoSize = true;
             this.selectWhiteCell.Checked = true;
-            this.selectWhiteCell.Location = new System.Drawing.Point(6, 19);
+            this.selectWhiteCell.Location = new System.Drawing.Point(9, 29);
+            this.selectWhiteCell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.selectWhiteCell.Name = "selectWhiteCell";
-            this.selectWhiteCell.Size = new System.Drawing.Size(57, 19);
+            this.selectWhiteCell.Size = new System.Drawing.Size(83, 29);
             this.selectWhiteCell.TabIndex = 4;
             this.selectWhiteCell.TabStop = true;
             this.selectWhiteCell.Text = "Белая";
@@ -117,9 +123,10 @@
             // selectFirstCell
             // 
             this.selectFirstCell.AutoSize = true;
-            this.selectFirstCell.Location = new System.Drawing.Point(6, 44);
+            this.selectFirstCell.Location = new System.Drawing.Point(9, 68);
+            this.selectFirstCell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.selectFirstCell.Name = "selectFirstCell";
-            this.selectFirstCell.Size = new System.Drawing.Size(65, 19);
+            this.selectFirstCell.Size = new System.Drawing.Size(98, 29);
             this.selectFirstCell.TabIndex = 5;
             this.selectFirstCell.Text = "Первая";
             this.selectFirstCell.UseVisualStyleBackColor = true;
@@ -127,9 +134,10 @@
             // selectSecondCell
             // 
             this.selectSecondCell.AutoSize = true;
-            this.selectSecondCell.Location = new System.Drawing.Point(6, 69);
+            this.selectSecondCell.Location = new System.Drawing.Point(9, 106);
+            this.selectSecondCell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.selectSecondCell.Name = "selectSecondCell";
-            this.selectSecondCell.Size = new System.Drawing.Size(63, 19);
+            this.selectSecondCell.Size = new System.Drawing.Size(94, 29);
             this.selectSecondCell.TabIndex = 6;
             this.selectSecondCell.Text = "Вторая";
             this.selectSecondCell.UseVisualStyleBackColor = true;
@@ -137,24 +145,28 @@
             // selectThirdCell
             // 
             this.selectThirdCell.AutoSize = true;
-            this.selectThirdCell.Location = new System.Drawing.Point(6, 94);
+            this.selectThirdCell.Location = new System.Drawing.Point(9, 145);
+            this.selectThirdCell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.selectThirdCell.Name = "selectThirdCell";
-            this.selectThirdCell.Size = new System.Drawing.Size(61, 19);
+            this.selectThirdCell.Size = new System.Drawing.Size(91, 29);
             this.selectThirdCell.TabIndex = 7;
             this.selectThirdCell.Text = "Третья";
             this.selectThirdCell.UseVisualStyleBackColor = true;
             // 
             // groupBoxSelectCell
             // 
+            this.groupBoxSelectCell.Controls.Add(this.selectResultCell);
             this.groupBoxSelectCell.Controls.Add(this.selectWhiteCell);
             this.groupBoxSelectCell.Controls.Add(this.selectThirdCell);
             this.groupBoxSelectCell.Controls.Add(this.selectFirstCell);
             this.groupBoxSelectCell.Controls.Add(this.selectSecondCell);
             this.groupBoxSelectCell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBoxSelectCell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBoxSelectCell.Location = new System.Drawing.Point(3, 203);
+            this.groupBoxSelectCell.Location = new System.Drawing.Point(4, 312);
+            this.groupBoxSelectCell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBoxSelectCell.Name = "groupBoxSelectCell";
-            this.groupBoxSelectCell.Size = new System.Drawing.Size(140, 118);
+            this.groupBoxSelectCell.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxSelectCell.Size = new System.Drawing.Size(210, 218);
             this.groupBoxSelectCell.TabIndex = 8;
             this.groupBoxSelectCell.TabStop = false;
             this.groupBoxSelectCell.Text = "Выбор ячейки";
@@ -164,9 +176,10 @@
             this.propertyGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid.Location = new System.Drawing.Point(149, 3);
+            this.propertyGrid.Location = new System.Drawing.Point(224, 5);
+            this.propertyGrid.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(595, 457);
+            this.propertyGrid.Size = new System.Drawing.Size(892, 703);
             this.propertyGrid.TabIndex = 9;
             // 
             // buttonGoDownAndBrokeCartridge
@@ -175,9 +188,10 @@
             this.buttonGoDownAndBrokeCartridge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonGoDownAndBrokeCartridge.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonGoDownAndBrokeCartridge.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonGoDownAndBrokeCartridge.Location = new System.Drawing.Point(3, 172);
+            this.buttonGoDownAndBrokeCartridge.Location = new System.Drawing.Point(4, 265);
+            this.buttonGoDownAndBrokeCartridge.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonGoDownAndBrokeCartridge.Name = "buttonGoDownAndBrokeCartridge";
-            this.buttonGoDownAndBrokeCartridge.Size = new System.Drawing.Size(140, 25);
+            this.buttonGoDownAndBrokeCartridge.Size = new System.Drawing.Size(210, 38);
             this.buttonGoDownAndBrokeCartridge.TabIndex = 10;
             this.buttonGoDownAndBrokeCartridge.Text = "Проколоть картридж";
             this.buttonGoDownAndBrokeCartridge.UseVisualStyleBackColor = false;
@@ -191,17 +205,29 @@
             this.buttonHomeLift.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonHomeLift.Image = ((System.Drawing.Image)(resources.GetObject("buttonHomeLift.Image")));
             this.buttonHomeLift.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonHomeLift.Location = new System.Drawing.Point(3, 41);
+            this.buttonHomeLift.Location = new System.Drawing.Point(4, 63);
+            this.buttonHomeLift.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonHomeLift.Name = "buttonHomeLift";
-            this.buttonHomeLift.Size = new System.Drawing.Size(140, 32);
+            this.buttonHomeLift.Size = new System.Drawing.Size(210, 49);
             this.buttonHomeLift.TabIndex = 11;
             this.buttonHomeLift.Text = "Подъемник";
             this.buttonHomeLift.UseVisualStyleBackColor = false;
             this.buttonHomeLift.Click += new System.EventHandler(this.buttonHomeLift_Click);
             // 
-            // NeedleControllerView
+            // selectResultCell
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.selectResultCell.AutoSize = true;
+            this.selectResultCell.Location = new System.Drawing.Point(9, 179);
+            this.selectResultCell.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.selectResultCell.Name = "selectResultCell";
+            this.selectResultCell.Size = new System.Drawing.Size(207, 44);
+            this.selectResultCell.TabIndex = 8;
+            this.selectResultCell.Text = "Прозрачная";
+            this.selectResultCell.UseVisualStyleBackColor = true;
+            // 
+            // NeedleUnitView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.buttonHomeLift);
             this.Controls.Add(this.buttonGoDownAndBrokeCartridge);
@@ -211,8 +237,9 @@
             this.Controls.Add(this.buttonTurnAndGoDownToWashing);
             this.Controls.Add(this.turnOnTubeButton);
             this.Controls.Add(this.buttonHomeRotator);
-            this.Name = "NeedleControllerView";
-            this.Size = new System.Drawing.Size(747, 463);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Name = "NeedleUnitView";
+            this.Size = new System.Drawing.Size(1120, 712);
             this.groupBoxSelectCell.ResumeLayout(false);
             this.groupBoxSelectCell.PerformLayout();
             this.ResumeLayout(false);
@@ -233,5 +260,6 @@
         private System.Windows.Forms.PropertyGrid propertyGrid;
         private System.Windows.Forms.Button buttonGoDownAndBrokeCartridge;
         private System.Windows.Forms.Button buttonHomeLift;
+        private System.Windows.Forms.RadioButton selectResultCell;
     }
 }

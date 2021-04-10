@@ -16,8 +16,9 @@
     <int>58600</int>
     <int>61900</int>
   </StepsToLoad>
-  <StepsToUnload>-17500</StepsToUnload>
+  <StepsToUnload>-60500</StepsToUnload>
   <StepsToWashBuffer>11400</StepsToWashBuffer>
+  <StepsToNeedleResultCenter>-27500</StepsToNeedleResultCenter>
   <StepsToNeedleWhiteCenter>-25000</StepsToNeedleWhiteCenter>
   <StepsToNeedleLeft1>-26000</StepsToNeedleLeft1>
   <StepsToNeedleRight1>-25700</StepsToNeedleRight1>
