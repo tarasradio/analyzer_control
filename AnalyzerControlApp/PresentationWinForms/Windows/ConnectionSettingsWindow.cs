@@ -19,6 +19,7 @@ namespace PresentationWinForms.Forms
             InitializeComponent();
 
             updateControlsState();
+            updateFromSavedPreferences();
             rescanOpenPorts();
         }
 
@@ -100,6 +101,21 @@ namespace PresentationWinForms.Forms
         private void buttonSavePreferences_Click(object sender, EventArgs e)
         {
             // Здесь нужно выполнить сохранение выбранных настроек подключения
+            string portName = selectPort.SelectedItem.ToString();
+            int baudrate = int.Parse(selectBaudrate.SelectedItem.ToString());
+
+            AnalyzerGateway.AppConfig.PortName = portName;
+            AnalyzerGateway.AppConfig.Baudrate = (uint)baudrate;
+
+            AnalyzerGateway.SaveAppConfiguration();
+
+            updateFromSavedPreferences();
+        }
+
+        private void updateFromSavedPreferences()
+        {
+            savedPort.Text = AnalyzerGateway.AppConfig.PortName;
+            savedBaudrate.Text = AnalyzerGateway.AppConfig.Baudrate.ToString();
         }
     }
 }
