@@ -53,9 +53,9 @@ namespace PresentationWinForms.Forms
             this.buttonConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConnect.ForeColor = System.Drawing.Color.White;
             this.buttonConnect.Image = ((System.Drawing.Image)(resources.GetObject("buttonConnect.Image")));
-            this.buttonConnect.Location = new System.Drawing.Point(152, 12);
+            this.buttonConnect.Location = new System.Drawing.Point(159, 12);
             this.buttonConnect.Name = "buttonConnect";
-            this.buttonConnect.Size = new System.Drawing.Size(134, 40);
+            this.buttonConnect.Size = new System.Drawing.Size(149, 40);
             this.buttonConnect.TabIndex = 0;
             this.buttonConnect.Text = "Подключиться";
             this.buttonConnect.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -68,17 +68,17 @@ namespace PresentationWinForms.Forms
             this.selectPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.selectPort.FormattingEnabled = true;
-            this.selectPort.Location = new System.Drawing.Point(83, 58);
+            this.selectPort.Location = new System.Drawing.Point(98, 58);
             this.selectPort.Name = "selectPort";
-            this.selectPort.Size = new System.Drawing.Size(167, 23);
+            this.selectPort.Size = new System.Drawing.Size(210, 26);
             this.selectPort.TabIndex = 1;
             // 
             // enableAutoConnect
             // 
             this.enableAutoConnect.AutoSize = true;
-            this.enableAutoConnect.Location = new System.Drawing.Point(12, 119);
+            this.enableAutoConnect.Location = new System.Drawing.Point(12, 122);
             this.enableAutoConnect.Name = "enableAutoConnect";
-            this.enableAutoConnect.Size = new System.Drawing.Size(204, 19);
+            this.enableAutoConnect.Size = new System.Drawing.Size(244, 22);
             this.enableAutoConnect.TabIndex = 2;
             this.enableAutoConnect.Text = "Подключаться автоматически";
             this.enableAutoConnect.UseVisualStyleBackColor = true;
@@ -94,7 +94,7 @@ namespace PresentationWinForms.Forms
             this.buttonUpdatePorts.Image = ((System.Drawing.Image)(resources.GetObject("buttonUpdatePorts.Image")));
             this.buttonUpdatePorts.Location = new System.Drawing.Point(12, 12);
             this.buttonUpdatePorts.Name = "buttonUpdatePorts";
-            this.buttonUpdatePorts.Size = new System.Drawing.Size(134, 40);
+            this.buttonUpdatePorts.Size = new System.Drawing.Size(141, 40);
             this.buttonUpdatePorts.TabIndex = 4;
             this.buttonUpdatePorts.Text = "Поиск портов";
             this.buttonUpdatePorts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -110,9 +110,9 @@ namespace PresentationWinForms.Forms
             this.selectBaudrate.Items.AddRange(new object[] {
             "9600",
             "115200"});
-            this.selectBaudrate.Location = new System.Drawing.Point(83, 90);
+            this.selectBaudrate.Location = new System.Drawing.Point(98, 90);
             this.selectBaudrate.Name = "selectBaudrate";
-            this.selectBaudrate.Size = new System.Drawing.Size(167, 23);
+            this.selectBaudrate.Size = new System.Drawing.Size(210, 26);
             this.selectBaudrate.TabIndex = 5;
             // 
             // buttonSavePreferences
@@ -122,9 +122,9 @@ namespace PresentationWinForms.Forms
             this.buttonSavePreferences.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSavePreferences.ForeColor = System.Drawing.Color.White;
             this.buttonSavePreferences.Image = ((System.Drawing.Image)(resources.GetObject("buttonSavePreferences.Image")));
-            this.buttonSavePreferences.Location = new System.Drawing.Point(292, 12);
+            this.buttonSavePreferences.Location = new System.Drawing.Point(314, 12);
             this.buttonSavePreferences.Name = "buttonSavePreferences";
-            this.buttonSavePreferences.Size = new System.Drawing.Size(118, 40);
+            this.buttonSavePreferences.Size = new System.Drawing.Size(154, 40);
             this.buttonSavePreferences.TabIndex = 6;
             this.buttonSavePreferences.Text = "Запомнить";
             this.buttonSavePreferences.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -135,9 +135,9 @@ namespace PresentationWinForms.Forms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(37, 61);
+            this.label1.Location = new System.Drawing.Point(45, 61);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 15);
+            this.label1.Size = new System.Drawing.Size(47, 18);
             this.label1.TabIndex = 7;
             this.label1.Text = "Порт:";
             // 
@@ -146,7 +146,7 @@ namespace PresentationWinForms.Forms
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 93);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 15);
+            this.label2.Size = new System.Drawing.Size(80, 18);
             this.label2.TabIndex = 8;
             this.label2.Text = "Скорость:";
             // 
@@ -155,9 +155,9 @@ namespace PresentationWinForms.Forms
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.connectionStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 143);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 149);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(422, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(480, 26);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip";
@@ -166,15 +166,15 @@ namespace PresentationWinForms.Forms
             // 
             this.connectionStatus.ForeColor = System.Drawing.Color.Green;
             this.connectionStatus.Name = "connectionStatus";
-            this.connectionStatus.Size = new System.Drawing.Size(158, 17);
+            this.connectionStatus.Size = new System.Drawing.Size(198, 20);
             this.connectionStatus.Text = "Подключение установлено";
             // 
             // savedPort
             // 
             this.savedPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.savedPort.Location = new System.Drawing.Point(256, 58);
+            this.savedPort.Location = new System.Drawing.Point(314, 58);
             this.savedPort.Name = "savedPort";
-            this.savedPort.Size = new System.Drawing.Size(154, 23);
+            this.savedPort.Size = new System.Drawing.Size(154, 26);
             this.savedPort.TabIndex = 10;
             this.savedPort.Text = "COM1";
             this.savedPort.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -182,18 +182,18 @@ namespace PresentationWinForms.Forms
             // savedBaudrate
             // 
             this.savedBaudrate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.savedBaudrate.Location = new System.Drawing.Point(256, 90);
+            this.savedBaudrate.Location = new System.Drawing.Point(314, 90);
             this.savedBaudrate.Name = "savedBaudrate";
-            this.savedBaudrate.Size = new System.Drawing.Size(154, 23);
+            this.savedBaudrate.Size = new System.Drawing.Size(154, 26);
             this.savedBaudrate.TabIndex = 11;
             this.savedBaudrate.Text = "115200";
             this.savedBaudrate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ConnectionSettingsWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(422, 165);
+            this.ClientSize = new System.Drawing.Size(480, 175);
             this.Controls.Add(this.savedBaudrate);
             this.Controls.Add(this.savedPort);
             this.Controls.Add(this.statusStrip1);
