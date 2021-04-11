@@ -46,6 +46,7 @@
             this.steppersGridView = new PresentationWinForms.Views.SteppersView();
             this.devicesControlView = new PresentationWinForms.Views.DevicesView();
             this.cncTabPage = new System.Windows.Forms.TabPage();
+            this.cncView = new PresentationWinForms.Views.CNCView();
             this.armTabPage = new System.Windows.Forms.TabPage();
             this.armControllerView = new PresentationWinForms.UnitsViews.NeedleUnitView();
             this.tranporterTabPage = new System.Windows.Forms.TabPage();
@@ -65,6 +66,7 @@
             this.mainTabControl.SuspendLayout();
             this.devicesTabPage.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.cncTabPage.SuspendLayout();
             this.armTabPage.SuspendLayout();
             this.tranporterTabPage.SuspendLayout();
             this.rotorTabPage.SuspendLayout();
@@ -271,13 +273,25 @@
             // 
             // cncTabPage
             // 
+            this.cncTabPage.Controls.Add(this.cncView);
             this.cncTabPage.Location = new System.Drawing.Point(4, 22);
             this.cncTabPage.Name = "cncTabPage";
             this.cncTabPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.cncTabPage.Size = new System.Drawing.Size(875, 421);
+            this.cncTabPage.Size = new System.Drawing.Size(875, 414);
             this.cncTabPage.TabIndex = 1;
             this.cncTabPage.Text = "Программное управление";
             this.cncTabPage.UseVisualStyleBackColor = true;
+            // 
+            // cncView
+            // 
+            this.cncView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cncView.Location = new System.Drawing.Point(6, 6);
+            this.cncView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cncView.Name = "cncView";
+            this.cncView.Size = new System.Drawing.Size(863, 401);
+            this.cncView.TabIndex = 0;
             // 
             // armTabPage
             // 
@@ -462,6 +476,7 @@
             this.mainTabControl.ResumeLayout(false);
             this.devicesTabPage.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.cncTabPage.ResumeLayout(false);
             this.armTabPage.ResumeLayout(false);
             this.tranporterTabPage.ResumeLayout(false);
             this.rotorTabPage.ResumeLayout(false);
