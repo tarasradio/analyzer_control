@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationWinForms", "Pre
 		{C75697AB-D456-44EB-86A4-A1C23BC776EC} = {C75697AB-D456-44EB-86A4-A1C23BC776EC}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerControlCore", "AnalyzerControlCore\AnalyzerControlCore.csproj", "{C75697AB-D456-44EB-86A4-A1C23BC776EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerService", "AnalyzerControlCore\AnalyzerService.csproj", "{C75697AB-D456-44EB-86A4-A1C23BC776EC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE} = {995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE}
 		{6DCFF691-FFBB-45B4-90A9-36806AE27D02} = {6DCFF691-FFBB-45B4-90A9-36806AE27D02}
@@ -33,6 +33,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerConfiguration", "AnalyzerConfiguration\AnalyzerConfiguration.csproj", "{33E1FE15-0DDE-4EFB-8359-CD035C95E16D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerDomain", "AnalyzerDomain\AnalyzerDomain.csproj", "{17D7A05E-C6D1-4892-B92A-FB3741AB588F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerControl", "AnalyzerControl\AnalyzerControl.csproj", "{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerCncControl", "AnalyzerCncControl\AnalyzerCncControl.csproj", "{98E63E4E-12CE-4F4E-B016-38FBD49AECAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +76,14 @@ Global
 		{17D7A05E-C6D1-4892-B92A-FB3741AB588F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17D7A05E-C6D1-4892-B92A-FB3741AB588F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17D7A05E-C6D1-4892-B92A-FB3741AB588F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98E63E4E-12CE-4F4E-B016-38FBD49AECAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98E63E4E-12CE-4F4E-B016-38FBD49AECAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98E63E4E-12CE-4F4E-B016-38FBD49AECAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98E63E4E-12CE-4F4E-B016-38FBD49AECAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

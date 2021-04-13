@@ -4,11 +4,11 @@ using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
-using AnalyzerControlCore.MachineControl;
+using AnalyzerService.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
 
-namespace AnalyzerControlCore.Units
+namespace AnalyzerService.Units
 {
     //TODO: а тут видимо вообще нахер не надо отслеживание
     public class ConveyorUnit : UnitBase<ConveyorConfiguration>

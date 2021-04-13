@@ -1,5 +1,5 @@
 ﻿using AnalyzerCommunication.CommunicationProtocol.Responses;
-using AnalyzerControlCore;
+using AnalyzerService;
 using PresentationWinForms.Utils;
 using System;
 using System.Drawing;
@@ -70,15 +70,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (AnalyzerGateway.AppConfig == null)
+            if (Analyzer.AppConfig == null)
                 return;
 
-            SteppersGridView.RowCount = AnalyzerGateway.AppConfig.Steppers.Count;
+            SteppersGridView.RowCount = Analyzer.AppConfig.Steppers.Count;
 
-            for(int i = 0; i < AnalyzerGateway.AppConfig.Steppers.Count; i++)
+            for(int i = 0; i < Analyzer.AppConfig.Steppers.Count; i++)
             {
-                SteppersGridView[0, i].Value = AnalyzerGateway.AppConfig.Steppers[i].Number;
-                SteppersGridView[1, i].Value = AnalyzerGateway.AppConfig.Steppers[i].Name;
+                SteppersGridView[0, i].Value = Analyzer.AppConfig.Steppers[i].Number;
+                SteppersGridView[1, i].Value = Analyzer.AppConfig.Steppers[i].Name;
             }
 
             gridFilled = true;
@@ -91,7 +91,7 @@ namespace PresentationWinForms.Views
 
         public void ShowStates()
         {
-            ushort[] states = AnalyzerGateway.Context.SteppersStates;
+            ushort[] states = Analyzer.Context.SteppersStates;
 
             for (int i = 0; i < 18; i++)
             {

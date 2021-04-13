@@ -1,11 +1,11 @@
 ﻿using AnalyzerConfiguration;
-using AnalyzerControlCore.MachineControl;
+using AnalyzerService.MachineControl;
 using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AnalyzerControlCore.Units
+namespace AnalyzerService.Units
 {
     // Calculation of necessary steps using the target and current position (in steps)
     // The target position is determined by the absolute number of steps from the starting position (0)

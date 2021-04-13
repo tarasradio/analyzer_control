@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace AnalyzerControlCore.MachineControl
+namespace AnalyzerService.MachineControl
 {
     public class CommandExecutor : ICommandExecutor
     {
@@ -102,7 +102,7 @@ namespace AnalyzerControlCore.MachineControl
 
         private void ExecuteRemoteCommand(IRemoteCommand command)
         {
-            AnalyzerGateway.Serial.SendPacket(command.GetBytes());
+            Analyzer.Serial.SendPacket(command.GetBytes());
 
             timer.Restart();
 
@@ -114,7 +114,7 @@ namespace AnalyzerControlCore.MachineControl
                 {
                     //Logger.Info("[Command executor] - Слишком долгое ожидание ответа от устройства.");
 
-                    AnalyzerGateway.Serial.SendPacket(command.GetBytes());
+                    Analyzer.Serial.SendPacket(command.GetBytes());
 
                     timer.Restart();
                 }

@@ -2,11 +2,11 @@
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
-using AnalyzerControlCore.MachineControl;
+using AnalyzerService.MachineControl;
 using Infrastructure;
 using System.Collections.Generic;
 
-namespace AnalyzerControlCore.Units
+namespace AnalyzerService.Units
 {
     public class PompUnit : UnitBase<PompConfiguration>
     {

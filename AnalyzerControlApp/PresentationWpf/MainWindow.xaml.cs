@@ -1,4 +1,4 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using MaterialDesignExtensions.Controls;
 using MaterialDesignExtensions.Model;
 using MaterialDesignThemes.Wpf;
@@ -14,7 +14,7 @@ namespace PresentationWPF
     /// </summary>
     public partial class MainWindow : MaterialWindow
     {
-        AnalyzerGateway core;
+        Analyzer core;
         SteppersModel steppersModel;
 
         private List<INavigationItem> m_navigationItems;
@@ -39,9 +39,9 @@ namespace PresentationWPF
         {
             InitializeComponent();
 
-            core = new AnalyzerGateway();
-            steppersModel = new SteppersModel(AnalyzerGateway.AppConfig.Steppers);
-            AnalyzerGateway.PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived; ;
+            core = new Analyzer();
+            steppersModel = new SteppersModel(Analyzer.AppConfig.Steppers);
+            Analyzer.PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived; ;
 
             m_navigationItems = new List<INavigationItem>()
             {

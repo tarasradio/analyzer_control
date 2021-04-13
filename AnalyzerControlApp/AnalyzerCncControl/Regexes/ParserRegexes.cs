@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace AnalyzerControlCore.MachineControl
+namespace AnalyzerCncControl.Regexes
 {
     public static class ParserRegexes
     {

@@ -1,4 +1,4 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using PresentationWinForms.Utils;
 using System;
 using System.Drawing;
@@ -26,7 +26,7 @@ namespace PresentationWinForms.Views
         
         private void UpdateValues(object sender, EventArgs e)
         {
-            ushort[] newValues = AnalyzerGateway.Context.SensorsValues;
+            ushort[] newValues = Analyzer.Context.SensorsValues;
 
             lock(locker)
             {
@@ -77,15 +77,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (AnalyzerGateway.AppConfig == null)
+            if (Analyzer.AppConfig == null)
                 return;
 
-            SensorsGridView.RowCount = AnalyzerGateway.AppConfig.Sensors.Count;
+            SensorsGridView.RowCount = Analyzer.AppConfig.Sensors.Count;
 
-            for (int i = 0; i < AnalyzerGateway.AppConfig.Sensors.Count; i++)
+            for (int i = 0; i < Analyzer.AppConfig.Sensors.Count; i++)
             {
-                SensorsGridView[0, i].Value = AnalyzerGateway.AppConfig.Sensors[i].Number;
-                SensorsGridView[1, i].Value = AnalyzerGateway.AppConfig.Sensors[i].Name;
+                SensorsGridView[0, i].Value = Analyzer.AppConfig.Sensors[i].Number;
+                SensorsGridView[1, i].Value = Analyzer.AppConfig.Sensors[i].Name;
                 SensorsGridView[2, i].Value = "Не задано";
             }
         }

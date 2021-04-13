@@ -1,14 +1,18 @@
-﻿using AnalyzerCommunication;
+﻿using AnalyzerCncControl.Regexes;
+using AnalyzerCommunication;
 using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
-using AnalyzerControlCore.Utils;
 using Infrastructure;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace AnalyzerControlCore.MachineControl
+namespace AnalyzerCncControl
 {
-    public static class CommandParser
+    public static class CommandsParser
     {
         public static List<ICommand> Parse(string programText)
         {

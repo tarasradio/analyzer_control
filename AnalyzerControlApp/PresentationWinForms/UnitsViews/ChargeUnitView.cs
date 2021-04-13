@@ -1,4 +1,4 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using System;
 using System.Windows.Forms;
 
@@ -10,25 +10,25 @@ namespace PresentationWinForms.UnitsViews
         {
             InitializeComponent();
 
-            if (AnalyzerGateway.Charger != null)
-                propertyGrid.SelectedObject = AnalyzerGateway.Charger.GetConfiguration();
+            if (Analyzer.Charger != null)
+                propertyGrid.SelectedObject = Analyzer.Charger.GetConfiguration();
         }
 
         private void buttonHookHome_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Charger.HomeHook();
+                    Analyzer.Charger.HomeHook();
                 });
         }
 
         private void buttonRotatorHome_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Charger.HomeRotator();
+                    Analyzer.Charger.HomeRotator();
                 });
         }
 
@@ -36,32 +36,32 @@ namespace PresentationWinForms.UnitsViews
         {
             int cell = (int)editCellNumber.Value;
 
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Charger.HomeRotator();
-                    AnalyzerGateway.Charger.TurnToCell(cell);
+                    Analyzer.Charger.HomeRotator();
+                    Analyzer.Charger.TurnToCell(cell);
                 });
         }
 
         private void buttonChargeCartridge_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Charger.HomeHook();
-                    AnalyzerGateway.Charger.ChargeCartridge();
-                    AnalyzerGateway.Charger.HomeHook();
+                    Analyzer.Charger.HomeHook();
+                    Analyzer.Charger.ChargeCartridge();
+                    Analyzer.Charger.HomeHook();
                 });
         }
 
         private void buttonTurnChargeToDischarge_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Charger.HomeRotator();
-                    AnalyzerGateway.Charger.TurnToDischarge();
+                    Analyzer.Charger.HomeRotator();
+                    Analyzer.Charger.TurnToDischarge();
                 });
         }
     }

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AnalyzerControlCore.MachineControl
+namespace AnalyzerService.MachineControl
 {
     public class TaskExecutor
     {

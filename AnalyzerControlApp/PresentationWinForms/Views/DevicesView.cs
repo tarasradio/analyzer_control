@@ -1,5 +1,5 @@
 ﻿using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
-using AnalyzerControlCore;
+using AnalyzerService;
 using PresentationWinForms.Utils;
 using System;
 using System.Drawing;
@@ -67,15 +67,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (AnalyzerGateway.AppConfig == null)
+            if (Analyzer.AppConfig == null)
                 return;
 
-            DevicesGridView.RowCount = AnalyzerGateway.AppConfig.Devices.Count;
+            DevicesGridView.RowCount = Analyzer.AppConfig.Devices.Count;
 
-            for (int i = 0; i < AnalyzerGateway.AppConfig.Devices.Count; i++)
+            for (int i = 0; i < Analyzer.AppConfig.Devices.Count; i++)
             {
-                DevicesGridView[0, i].Value = AnalyzerGateway.AppConfig.Devices[i].Number;
-                DevicesGridView[1, i].Value = AnalyzerGateway.AppConfig.Devices[i].Name;
+                DevicesGridView[0, i].Value = Analyzer.AppConfig.Devices[i].Number;
+                DevicesGridView[1, i].Value = Analyzer.AppConfig.Devices[i].Name;
                 DevicesGridView[2, i].Value = "Включить";
             }
         }
@@ -102,7 +102,7 @@ namespace PresentationWinForms.Views
                     state = SetDeviceStateCommand.DeviseState.DEVICE_OFF;
                 }
 
-                AnalyzerGateway.Serial.SendPacket(new SetDeviceStateCommand(device, state).GetBytes());
+                Analyzer.Serial.SendPacket(new SetDeviceStateCommand(device, state).GetBytes());
             }
         }
     }

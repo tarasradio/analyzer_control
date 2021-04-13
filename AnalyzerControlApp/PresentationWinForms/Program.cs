@@ -1,7 +1,9 @@
 ﻿using PresentationWinForms.Forms;
-using AnalyzerControlCore;
+using AnalyzerService;
 using System;
 using System.Windows.Forms;
+using AnalyzerControl;
+using AnalyzerConfiguration;
 
 namespace PresentationWinForms
 {
@@ -20,10 +22,17 @@ namespace PresentationWinForms
 
             try
             {
-                AnalyzerGateway core = new AnalyzerGateway();
+                IConfigurationProvider provider = new XmlConfigurationProvider();
+
+                Analyzer analyzer = new Analyzer();
+                AnalyzerDemoController demoController = new AnalyzerDemoController(provider);
+
+                demoController.LoadConfiguration("DemoControllerConfiguration");
 
                 StartWindow startWindow = new StartWindow();
                 MainWindow mainWindow = new MainWindow();
+
+                mainWindow.SetDemoController(demoController);
 
                 startWindow.StartPosition = FormStartPosition.CenterScreen;
                 mainWindow.StartPosition = FormStartPosition.CenterScreen;
@@ -42,7 +51,8 @@ namespace PresentationWinForms
                     Application.Run(mainWindow);
                 }
 
-                core.SaveUnitsConfiguration();
+                analyzer.SaveUnitsConfiguration();
+                demoController.SaveConfiguration("DemoControllerConfiguration");
             }
             catch(System.IO.FileLoadException)
             {

@@ -110,11 +110,11 @@
     <Compile Include="UnitsViews\NeedleUnitView.Designer.cs">
       <DependentUpon>NeedleUnitView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\DemoExecutorView.cs">
+    <Compile Include="Views\DemoControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\DemoExecutorView.Designer.cs">
-      <DependentUpon>DemoExecutorView.cs</DependentUpon>
+    <Compile Include="Views\DemoControllerView.Designer.cs">
+      <DependentUpon>DemoControllerView.cs</DependentUpon>
     </Compile>
     <Compile Include="UnitsViews\ChargeUnitView.cs">
       <SubType>UserControl</SubType>
@@ -155,11 +155,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\InvokeHelper.cs" />
-    <Compile Include="Views\CNCView.cs">
+    <Compile Include="Views\CncControlView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\CNCView.Designer.cs">
-      <DependentUpon>CNCView.cs</DependentUpon>
+    <Compile Include="Views\CncControlView.Designer.cs">
+      <DependentUpon>CncControlView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\DevicesView.cs">
       <SubType>UserControl</SubType>
@@ -204,8 +204,8 @@
     <EmbeddedResource Include="UnitsViews\NeedleUnitView.resx">
       <DependentUpon>NeedleUnitView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\DemoExecutorView.resx">
-      <DependentUpon>DemoExecutorView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\DemoControllerView.resx">
+      <DependentUpon>DemoControllerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UnitsViews\ChargeUnitView.resx">
       <DependentUpon>ChargeUnitView.cs</DependentUpon>
@@ -235,8 +235,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Views\CNCView.resx">
-      <DependentUpon>CNCView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\CncControlView.resx">
+      <DependentUpon>CncControlView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DevicesView.resx">
       <DependentUpon>DevicesView.cs</DependentUpon>
@@ -268,6 +268,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AnalyzerCncControl\AnalyzerCncControl.csproj">
+      <Project>{98E63E4E-12CE-4F4E-B016-38FBD49AECAA}</Project>
+      <Name>AnalyzerCncControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AnalyzerCommunication\AnalyzerCommunication.csproj">
       <Project>{995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE}</Project>
       <Name>AnalyzerCommunication</Name>
@@ -276,9 +280,13 @@
       <Project>{33e1fe15-0dde-4efb-8359-cd035c95e16d}</Project>
       <Name>AnalyzerConfiguration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AnalyzerControlCore\AnalyzerControlCore.csproj">
+    <ProjectReference Include="..\AnalyzerControlCore\AnalyzerService.csproj">
       <Project>{c75697ab-d456-44eb-86a4-a1c23bc776ec}</Project>
-      <Name>AnalyzerControlCore</Name>
+      <Name>AnalyzerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerControl\AnalyzerControl.csproj">
+      <Project>{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}</Project>
+      <Name>AnalyzerControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
       <Project>{17d7a05e-c6d1-4892-b92a-fb3741ab588f}</Project>

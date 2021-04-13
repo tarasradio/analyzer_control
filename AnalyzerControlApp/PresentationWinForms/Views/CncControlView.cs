@@ -1,6 +1,7 @@
-﻿using AnalyzerCommunication;
-using AnalyzerControlCore;
-using AnalyzerControlCore.MachineControl;
+﻿using AnalyzerCncControl;
+using AnalyzerCommunication;
+using AnalyzerService;
+using AnalyzerService.MachineControl;
 using FastColoredTextBoxNS;
 using Infrastructure;
 using System;
@@ -12,11 +13,11 @@ using System.Windows.Forms;
 
 namespace PresentationWinForms.Views
 {
-    public partial class CNCView : UserControl
+    public partial class CncControlView : UserControl
     {
         private List<ICommand> commands;
 
-        public CNCView()
+        public CncControlView()
         {
             InitializeComponent();
             InitilizeProgramtextBox();
@@ -63,7 +64,7 @@ namespace PresentationWinForms.Views
 
         private void ParseProgram(string programText)
         {
-            commands = CommandParser.Parse(programText);
+            commands = CommandsParser.Parse(programText);
         }
 
         private void buttonTestProgram_Click(object sender, EventArgs e)
@@ -118,7 +119,7 @@ namespace PresentationWinForms.Views
                 executionProgressLabel.Text = $"Выполнено команд: {0} из {commands.Count}";
                 executionProgressBar.Value = 0;
 
-                AnalyzerGateway.CmdExecutor.RunExecution(commands);
+                Analyzer.CmdExecutor.RunExecution(commands);
             }
         }
 
@@ -127,7 +128,7 @@ namespace PresentationWinForms.Views
             double progress = 0;
             int commandsCount = 0;
 
-            if (AnalyzerGateway.Executor.GetState() == ThreadState.Running)
+            if (Analyzer.Executor.GetState() == ThreadState.Running)
             {
                 //commandsCount = _taskExecutor.GetCommandsCount();
             }
@@ -149,7 +150,7 @@ namespace PresentationWinForms.Views
 
         private void buttonAbortExecution_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.AbortExecution();
+            Analyzer.AbortExecution();
 
             executionStatusLabel.Text = "Выполнение программы было прерванно";
         }

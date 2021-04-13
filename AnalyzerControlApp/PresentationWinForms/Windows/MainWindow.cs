@@ -1,19 +1,29 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using Infrastructure;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using AnalyzerControl;
 
 namespace PresentationWinForms.Forms
 {
     public partial class MainWindow : Form
     {
+        private AnalyzerDemoController demoController = null;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            AnalyzerGateway.Serial.ConnectionChanged += Serial_ConnectionChanged;
+            Analyzer.Serial.ConnectionChanged += Serial_ConnectionChanged;
+            
             //runWpfWindow();
+        }
+
+        public void SetDemoController(AnalyzerDemoController demoController)
+        {
+            this.demoController = demoController;
+            demoExecutorView.Controller = this.demoController;
         }
 
         private void Serial_ConnectionChanged(bool connected)
@@ -30,7 +40,7 @@ namespace PresentationWinForms.Forms
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
         {
-            ControlPanelWindow controlPanel = new ControlPanelWindow(AnalyzerGateway.AppConfig.Steppers);
+            ControlPanelWindow controlPanel = new ControlPanelWindow(Analyzer.AppConfig.Steppers);
             controlPanel.StartPosition = FormStartPosition.CenterScreen;
             controlPanel.Show();
         }
@@ -60,7 +70,7 @@ namespace PresentationWinForms.Forms
 
             if(dialogResult == DialogResult.Yes)
             {
-                AnalyzerGateway.SaveAppConfiguration();
+                Analyzer.SaveAppConfiguration();
             }
             else if(dialogResult == DialogResult.Cancel ||
                 dialogResult == DialogResult.Abort)
@@ -71,9 +81,9 @@ namespace PresentationWinForms.Forms
 
             demoExecutorView.StopUpdate();
 
-            if (AnalyzerGateway.Serial.IsOpen())
+            if (Analyzer.Serial.IsOpen())
             {
-                AnalyzerGateway.Serial.Close();
+                Analyzer.Serial.Close();
 
                 steppersGridView.StopUpdate();
                 sensorsView.StopUpdate();
@@ -82,23 +92,23 @@ namespace PresentationWinForms.Forms
 
         private void abortExecutionButton_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.AbortExecution();
+            Analyzer.AbortExecution();
         }
 
         private void buttonStartDemo_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Demo.StartWork();
+            demoController.StartWork();
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.F8)
             {
-                AnalyzerGateway.AbortExecution();
+                Analyzer.AbortExecution();
             }
             if(e.KeyCode == Keys.F7)
             {
-                AnalyzerGateway.Demo.StartWork();
+                demoController.StartWork();
             }
         }
 
@@ -111,9 +121,9 @@ namespace PresentationWinForms.Forms
 
         private void updateControlsState()
         {
-            if (AnalyzerGateway.Serial.IsOpen())
+            if (Analyzer.Serial.IsOpen())
             {
-                connectionState.Text = $"Установленно соединение с { AnalyzerGateway.Serial.PortName }.";
+                connectionState.Text = $"Установленно соединение с { Analyzer.Serial.PortName }.";
                 connectionState.ForeColor = Color.DarkGreen;
             }
             else
@@ -121,7 +131,7 @@ namespace PresentationWinForms.Forms
                 connectionState.Text = "Соединение не установлено.";
                 connectionState.ForeColor = Color.Brown;
             }
-            buttonStartDemo.Visible = AnalyzerGateway.Serial.IsOpen();
+            buttonStartDemo.Visible = Analyzer.Serial.IsOpen();
         }
     }
 }

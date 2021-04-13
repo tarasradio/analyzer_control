@@ -1,4 +1,4 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using AnalyzerDomain.Entyties;
 using System;
 using System.Windows.Forms;
@@ -10,36 +10,36 @@ namespace PresentationWinForms.UnitsViews
         public NeedleUnitView()
         {
             InitializeComponent();
-            if(AnalyzerGateway.Needle != null)
-                propertyGrid.SelectedObject = AnalyzerGateway.Needle.Options;
+            if(Analyzer.Needle != null)
+                propertyGrid.SelectedObject = Analyzer.Needle.Options;
         }
 
         private void buttonHomeRotator_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Needle.HomeRotator();
+                    Analyzer.Needle.HomeRotator();
                 });
         }
 
         private void turnOnTubeButton_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Needle.HomeLifterAndRotator();
-                    AnalyzerGateway.Needle.TurnToTubeAndWaitTouch();
+                    Analyzer.Needle.HomeLifterAndRotator();
+                    Analyzer.Needle.TurnToTubeAndWaitTouch();
                 });
         }
 
         private void moveOnWashingButton_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Needle.HomeLifterAndRotator();
-                    AnalyzerGateway.Needle.TurnAndGoDownToWashing();
+                    Analyzer.Needle.HomeLifterAndRotator();
+                    Analyzer.Needle.TurnAndGoDownToWashing();
                 });
         }
 
@@ -64,11 +64,11 @@ namespace PresentationWinForms.UnitsViews
                 cell = CartridgeCell.ResultCell;
             }
 
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Needle.HomeLifterAndRotator();
-                    AnalyzerGateway.Needle.TurnToCartridge(cell);
+                    Analyzer.Needle.HomeLifterAndRotator();
+                    Analyzer.Needle.TurnToCartridge(cell);
                 });
         }
 
@@ -93,19 +93,19 @@ namespace PresentationWinForms.UnitsViews
                 cell = CartridgeCell.ResultCell;
             }
 
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Needle.GoDownAndPerforateCartridge(cell);
+                    Analyzer.Needle.GoDownAndPerforateCartridge(cell);
                 });
         }
 
         private void buttonHomeLift_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Needle.HomeLifter();
+                    Analyzer.Needle.HomeLifter();
                 });
         }
     }

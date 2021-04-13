@@ -1,26 +1,28 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using AnalyzerDomain.Entyties;
 using PresentationWinForms.Forms;
 using PresentationWinForms.Utils;
 using System;
 using System.Windows.Forms;
+using AnalyzerControl;
 
 namespace PresentationWinForms.UnitsViews
 {
-    public partial class DemoExecutorView : UserControl
+    public partial class DemoControllerView : UserControl
     {
+        public AnalyzerDemoController Controller { get; set; }
         AnalysisInfo selectedTube = null;
+        
+        Timer updateTimer = new Timer();
 
         private readonly string[] analisesColumnHeaders = { "#", "Штихкод", "Состояние", "Осталось"};
 
-        Timer updateTimer = new Timer();
-
-        public DemoExecutorView()
+        public DemoControllerView()
         {
             InitializeComponent();
         }
 
-        private void DemoExecutorView_Load(object sender, EventArgs e)
+        private void DemoControllerView_Load(object sender, EventArgs e)
         {
             DrawTubesGrid();
             
@@ -47,16 +49,16 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonAddTube_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Demo.Options.Analyzes.Add(new AnalysisInfo());
+            Controller.Options.Analyzes.Add(new AnalysisInfo());
 
             buttonRemoveTube.Visible = true;
         }
 
         private void buttonRemoveTube_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Demo.Options.Analyzes.Remove(selectedTube);
+            Controller.Options.Analyzes.Remove(selectedTube);
 
-            if (AnalyzerGateway.Demo.Options.Analyzes.Count == 0)
+            if (Controller.Options.Analyzes.Count == 0)
             {
                 buttonRemoveTube.Visible = false;
                 selectedTube = null;
@@ -65,33 +67,33 @@ namespace PresentationWinForms.UnitsViews
 
         private void tubesList_SelectionChanged(object sender, EventArgs e)
         {
-            if (AnalyzerGateway.Demo.Options.Analyzes.Count == 0)
+            if (Controller.Options.Analyzes.Count == 0)
                 return;
-            selectedTube = AnalyzerGateway.Demo.Options.Analyzes[tubesList.CurrentRow.Index];
+            selectedTube = Controller.Options.Analyzes[tubesList.CurrentRow.Index];
 
             buttonRemoveTube.Visible = true;
         }
 
         private void UpdateTubesGrid()
         {
-            if (AnalyzerGateway.Demo.Options.Analyzes == null)
+            if (Controller.Options.Analyzes == null)
                 return;
-            tubesList.RowCount = AnalyzerGateway.Demo.Options.Analyzes.Count;
+            tubesList.RowCount = Controller.Options.Analyzes.Count;
 
-            for (int i = 0; i < AnalyzerGateway.Demo.Options.Analyzes.Count; i++)
+            for (int i = 0; i < Controller.Options.Analyzes.Count; i++)
             {
                 tubesList[0, i].Value = i + 1;
-                tubesList[1, i].Value = $"{AnalyzerGateway.Demo.Options.Analyzes[i].BarCode}";
+                tubesList[1, i].Value = $"{Controller.Options.Analyzes[i].BarCode}";
 
                 string state = "Не найдена";
 
-                if(AnalyzerGateway.Demo.Options.Analyzes[i].IsFind)
+                if(Controller.Options.Analyzes[i].IsFind)
                 {
-                    state = $"{AnalyzerGateway.Demo.Options.Analyzes[i].CurrentStage} из {AnalyzerGateway.Demo.Options.Analyzes[i].Stages.Count}";
+                    state = $"{Controller.Options.Analyzes[i].CurrentStage} из {Controller.Options.Analyzes[i].Stages.Count}";
                 }
 
                 tubesList[2, i].Value = state;
-                tubesList[3, i].Value = AnalyzerGateway.Demo.Options.Analyzes[i].TimeToStageComplete + " мин.";
+                tubesList[3, i].Value = Controller.Options.Analyzes[i].TimeToStageComplete + " мин.";
             }
         }
 

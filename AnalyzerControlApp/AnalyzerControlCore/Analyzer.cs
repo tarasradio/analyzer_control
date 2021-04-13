@@ -2,16 +2,16 @@
 using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.SerialCommunication;
 using AnalyzerConfiguration;
-using AnalyzerControlCore.MachineControl;
-using AnalyzerControlCore.Units;
+using AnalyzerService.MachineControl;
+using AnalyzerService.Units;
 using Infrastructure;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace AnalyzerControlCore
+namespace AnalyzerService
 {
-    public class AnalyzerGateway
+    public class Analyzer
     {
         private static string FirmwareVersion = "04.03.2020";
         
@@ -28,15 +28,13 @@ namespace AnalyzerControlCore
         public static ChargerUnit Charger { get; private set; }
         public static PompUnit Pomp { get; private set; }
 
-        public static DemoController Demo { get; private set; }
-
         private static IConfigurationProvider provider;
 
         public static IAnalyzerContext Context { get; private set; }
 
         public static AnalyzerAppConfiguration AppConfig { get; private set; }
 
-        public AnalyzerGateway()
+        public Analyzer()
         {
             provider = new XmlConfigurationProvider();
             
@@ -48,10 +46,6 @@ namespace AnalyzerControlCore
             Charger = new ChargerUnit(CmdExecutor, provider);
             Rotor = new RotorUnit(CmdExecutor, provider);
             Pomp = new PompUnit(CmdExecutor, provider);
-
-            Demo = new DemoController(provider);
-            
-            AppConfig = new AnalyzerAppConfiguration();
 
             LoadAppConfiguration();
             LoadUnitsConfiguration();
@@ -104,8 +98,6 @@ namespace AnalyzerControlCore
             Charger.LoadConfiguration("ChargerConfiguration");
             Rotor.LoadConfiguration("RotorConfiguration");
             Pomp.LoadConfiguration("PompConfiguration");
-
-            Demo.LoadConfiguration("DemoConfiguration");
         }
 
         public void SaveUnitsConfiguration()
@@ -115,8 +107,6 @@ namespace AnalyzerControlCore
             Charger.SaveConfiguration("ChargerConfiguration");
             Rotor.SaveConfiguration("RotorConfiguration");
             Pomp.SaveConfiguration("PompConfiguration");
-
-            Demo.SaveConfiguration("DemoConfiguration");
         }
         
         public async static void CheckFirmwareVersion(string firmwareVersion)
@@ -156,7 +146,7 @@ namespace AnalyzerControlCore
         {
             Executor.AbortExecution();
             CmdExecutor.AbortExecution();
-            Demo.AbortWork();
+            //Demo.AbortWork();
 
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }

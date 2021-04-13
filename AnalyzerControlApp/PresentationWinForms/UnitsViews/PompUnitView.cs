@@ -1,4 +1,4 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using System;
 using System.Windows.Forms;
 
@@ -9,27 +9,27 @@ namespace PresentationWinForms.UnitsViews
         public PompUnitView()
         {
             InitializeComponent();
-            if (AnalyzerGateway.Pomp != null)
-                propertyGrid.SelectedObject = AnalyzerGateway.Pomp.Options;
+            if (Analyzer.Pomp != null)
+                propertyGrid.SelectedObject = Analyzer.Pomp.Options;
         }
 
         private void buttonNeedleWashing_Click(object sender, EventArgs e)
         {
             int cycles = (int)editNumberCycles.Value;
 
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Pomp.WashTheNeedle(cycles);
+                    Analyzer.Pomp.WashTheNeedle(cycles);
                 });
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Pomp.Home();
+                    Analyzer.Pomp.Home();
                 });
         }
 
@@ -37,10 +37,10 @@ namespace PresentationWinForms.UnitsViews
         {
             int value = (int)editSuctionValue.Value;
 
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Pomp.Pull(value);
+                    Analyzer.Pomp.Pull(value);
                 });
         }
 
@@ -48,10 +48,10 @@ namespace PresentationWinForms.UnitsViews
         {
             int value = (int)editSuctionValue.Value;
 
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.Executor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Pomp.Push(value);
+                    Analyzer.Pomp.Push(value);
                 });
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace PresentationWinForms.Views
 {
-    partial class CNCView
+    partial class CncControlView
     {
         /// <summary> 
         /// Обязательная переменная конструктора.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CNCView));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CncControlView));
             this.programTextBox = new FastColoredTextBoxNS.FastColoredTextBox();
             this.buttonAbortExecution = new System.Windows.Forms.Button();
             this.buttonRunExecution = new System.Windows.Forms.Button();

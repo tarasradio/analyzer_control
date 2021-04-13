@@ -1,4 +1,4 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -30,8 +30,8 @@ namespace PresentationWinForms.Forms
 
         private void buttonConnect_Click(object sender, EventArgs e)
         {
-            if (AnalyzerGateway.Serial.IsOpen()) {
-                AnalyzerGateway.Serial.Close();
+            if (Analyzer.Serial.IsOpen()) {
+                Analyzer.Serial.Close();
                 // Тут останавливалось обновление таблиц
 
                 rescanOpenPorts();
@@ -39,7 +39,7 @@ namespace PresentationWinForms.Forms
                 string portName = selectPort.SelectedItem.ToString();
                 int baudrate = int.Parse(selectBaudrate.SelectedItem.ToString());
 
-                if (AnalyzerGateway.Serial.Open(portName, baudrate)) {
+                if (Analyzer.Serial.Open(portName, baudrate)) {
                     Logger.Info("Открытие подключения - подключение к " + portName + " открыто");
 
                     // Тут запускалось обновление таблиц
@@ -55,7 +55,7 @@ namespace PresentationWinForms.Forms
         {
             selectPort.Items.Clear();
 
-            String[] portsNames = AnalyzerGateway.Serial.GetAvailablePorts();
+            String[] portsNames = Analyzer.Serial.GetAvailablePorts();
 
             if (portsNames.Length != 0)
             {
@@ -77,17 +77,17 @@ namespace PresentationWinForms.Forms
         {
             UpdateStatusState();
 
-            buttonUpdatePorts.Visible = !AnalyzerGateway.Serial.IsOpen();
-            selectPort.Enabled = !AnalyzerGateway.Serial.IsOpen();
-            selectBaudrate.Enabled = !AnalyzerGateway.Serial.IsOpen();
+            buttonUpdatePorts.Visible = !Analyzer.Serial.IsOpen();
+            selectPort.Enabled = !Analyzer.Serial.IsOpen();
+            selectBaudrate.Enabled = !Analyzer.Serial.IsOpen();
         }
 
         private void UpdateStatusState()
         {
-            if (AnalyzerGateway.Serial.IsOpen())
+            if (Analyzer.Serial.IsOpen())
             {
                 buttonConnect.Text = "Отключение";
-                connectionStatus.Text = $"Установленно соединение с { AnalyzerGateway.Serial.PortName }.";
+                connectionStatus.Text = $"Установленно соединение с { Analyzer.Serial.PortName }.";
                 connectionStatus.ForeColor = Color.DarkGreen;
             }
             else
@@ -104,18 +104,18 @@ namespace PresentationWinForms.Forms
             string portName = selectPort.SelectedItem.ToString();
             int baudrate = int.Parse(selectBaudrate.SelectedItem.ToString());
 
-            AnalyzerGateway.AppConfig.PortName = portName;
-            AnalyzerGateway.AppConfig.Baudrate = (uint)baudrate;
+            Analyzer.AppConfig.PortName = portName;
+            Analyzer.AppConfig.Baudrate = (uint)baudrate;
 
-            AnalyzerGateway.SaveAppConfiguration();
+            Analyzer.SaveAppConfiguration();
 
             updateFromSavedPreferences();
         }
 
         private void updateFromSavedPreferences()
         {
-            savedPort.Text = AnalyzerGateway.AppConfig.PortName;
-            savedBaudrate.Text = AnalyzerGateway.AppConfig.Baudrate.ToString();
+            savedPort.Text = Analyzer.AppConfig.PortName;
+            savedBaudrate.Text = Analyzer.AppConfig.Baudrate.ToString();
         }
     }
 }

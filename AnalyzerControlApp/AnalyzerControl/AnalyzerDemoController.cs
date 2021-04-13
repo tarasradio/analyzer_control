@@ -1,29 +1,18 @@
 ﻿using AnalyzerConfiguration;
-using AnalyzerControlCore.Units;
+using AnalyzerControl.Configuration;
+using AnalyzerControl.Entyties;
+using AnalyzerDomain.Entyties;
+using AnalyzerService;
+using AnalyzerService.Units;
 using Infrastructure;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
-using AnalyzerDomain.Entyties;
-using System;
 
-namespace AnalyzerControlCore
+namespace AnalyzerControl
 {
-    public class ConveyorCell
-    {
-        public bool HaveTube { get; set; }
-        public string BarCode { get; set; }
-        public AnalysisInfo AnalysisInfo { get; set; }
-
-        public ConveyorCell()
-        {
-            AnalysisInfo = null;
-            HaveTube = false;
-            BarCode = string.Empty;
-        }
-    };
-
-    public class DemoController : UnitBase<DemoControllerConfiguration>
+    public class AnalyzerDemoController : UnitBase<DemoControllerConfiguration>
     {
         // Ячейки конвейера
         private const int ConveyorCellsNumber = 54;
@@ -40,7 +29,7 @@ namespace AnalyzerControlCore
 
         private static object locker = new object();
 
-        public DemoController(IConfigurationProvider provider) : base(null, provider)
+        public AnalyzerDemoController(IConfigurationProvider provider) : base(null, provider)
         {
             ConveyorCells = Enumerable.Repeat(new ConveyorCell(), ConveyorCellsNumber).ToArray();
 
@@ -55,11 +44,11 @@ namespace AnalyzerControlCore
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if( stopwatch.ElapsedMilliseconds >= (60 * 1e3) )
+            if (stopwatch.ElapsedMilliseconds >= (60 * 1e3))
             {
                 stopwatch.Restart();
                 Logger.DemoInfo("Прошла минута");
-                
+
                 foreach (AnalysisInfo analysis in Options.Analyzes)
                 {
                     lock (locker)
@@ -86,7 +75,7 @@ namespace AnalyzerControlCore
             stopwatch.Start();
 
             //TODO: ПИЗДЕЦ (Надо что то сделать, убрать зависимость...)
-            AnalyzerGateway.Executor.StartTask(() =>
+            Analyzer.Executor.StartTask(() =>
             {
                 AnalyzerWorkTask(); // Итак, запустили мы эту херню в отдельном потоке? зачем? (Возможно, для того, чтобы ее можно было аварийно прервать)
             });
@@ -98,7 +87,7 @@ namespace AnalyzerControlCore
         {
             foreach (AnalysisInfo tube in Options.Analyzes)
             {
-                lock(locker)
+                lock (locker)
                 {
                     tube.Clear(); // А надо ли это делать? А что, если нужно продолжить работу, если пробирки были поставленны ранее? (См. пункт про полный поворот ротора)
                 }
@@ -109,14 +98,14 @@ namespace AnalyzerControlCore
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
-            AnalyzerGateway.Needle.HomeLifterAndRotator();
-            AnalyzerGateway.Conveyor.PrepareBeforeScanning();
+            Analyzer.Needle.HomeLifterAndRotator();
+            Analyzer.Conveyor.PrepareBeforeScanning();
 
             Logger.DemoInfo($"Подготовка завершена");
 
             CurrentCellAtScanner = 0;
 
-            while ( ExistUnhandledAnalyzes() ) // пока есть невыполненные задачи
+            while (ExistUnhandledAnalyzes()) // пока есть невыполненные задачи
             {
                 if (CurrentCellAtScanner == ConveyorCellsNumber) // прошли полный круг (и чо???)
                 {
@@ -134,11 +123,11 @@ namespace AnalyzerControlCore
 
                 AnalysisInfo tubeUnderNeedle = ConveyorCells[cellUnderNeedle].AnalysisInfo;
 
-                if(tubeUnderNeedle != null)
+                if (tubeUnderNeedle != null)
                 {
                     Logger.DemoInfo($"Пробирка со штрихкодом [{tubeUnderNeedle.BarCode}] дошла до точки забора материала.");
 
-                    if (NoSampleWasTaken(tubeUnderNeedle)) 
+                    if (NoSampleWasTaken(tubeUnderNeedle))
                     {
                         Logger.DemoInfo($"Забор материала ранее не производился.");
 
@@ -167,12 +156,12 @@ namespace AnalyzerControlCore
         {
             Logger.DemoInfo($"Запущена инициализация всех устройств");
 
-            AnalyzerGateway.Needle.HomeLifterAndRotator();
-            AnalyzerGateway.Charger.HomeHook();
-            AnalyzerGateway.Charger.MoveHookAfterHome();
-            AnalyzerGateway.Charger.HomeRotator();
-            AnalyzerGateway.Rotor.Home();
-            AnalyzerGateway.Pomp.Home();
+            Analyzer.Needle.HomeLifterAndRotator();
+            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.MoveHookAfterHome();
+            Analyzer.Charger.HomeRotator();
+            Analyzer.Rotor.Home();
+            Analyzer.Pomp.Home();
 
             Logger.DemoInfo($"Инициализация завершена");
         }
@@ -184,7 +173,7 @@ namespace AnalyzerControlCore
         {
             foreach (AnalysisInfo analysis in Options.Analyzes)
             {
-                if ( analysis.ProcessingNotFinished() )
+                if (analysis.ProcessingNotFinished())
                 {
                     analysis.NextStage();
 
@@ -210,9 +199,9 @@ namespace AnalyzerControlCore
         {
             bool result = false;
 
-            foreach(AnalysisInfo analysis in Options.Analyzes)
+            foreach (AnalysisInfo analysis in Options.Analyzes)
             {
-                if ( analysis.Finished() )
+                if (analysis.Finished())
                 {
                     result = true;
                     break;
@@ -230,25 +219,25 @@ namespace AnalyzerControlCore
 
             Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
 
-            AnalyzerGateway.Conveyor.Shift(reverse:false);
-            
+            Analyzer.Conveyor.Shift(reverse: false);
+
             int attempt = 0;
 
             while (attempt < attemptsNumber)
             {
                 Logger.DemoInfo($"Попытка {attempt}.");
 
-                AnalyzerGateway.Conveyor.RotateAndScanTube();
+                Analyzer.Conveyor.RotateAndScanTube();
 
-                string barcode = AnalyzerGateway.Context.TubeBarcode;
+                string barcode = Analyzer.Context.TubeBarcode;
 
-                if ( !string.IsNullOrWhiteSpace(barcode) )
+                if (!string.IsNullOrWhiteSpace(barcode))
                 {
                     Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barcode}].");
 
                     cell.AnalysisInfo = SearchBarcodeInDatabase(barcode);
 
-                    if(cell.AnalysisInfo != null)
+                    if (cell.AnalysisInfo != null)
                     {
                         Logger.DemoInfo($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
                         cell.AnalysisInfo.IsFind = true;
@@ -279,12 +268,12 @@ namespace AnalyzerControlCore
         {
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запущено выполнение подготовительной стадии.");
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
-            
+
             // Смещаем пробирку, чтобы она оказалась под иглой
-            AnalyzerGateway.Conveyor.Shift(false, ConveyorUnit.ShiftType.HalfTube);
+            Analyzer.Conveyor.Shift(false, ConveyorUnit.ShiftType.HalfTube);
 
             // Поднимаем иглу вверх до дома
-            AnalyzerGateway.Needle.HomeLifter();
+            Analyzer.Needle.HomeLifter();
 
             Logger.DemoInfo($"Ожидание загрузки картриджа...");
 
@@ -294,36 +283,36 @@ namespace AnalyzerControlCore
             Logger.DemoInfo($"Ожидание касания жидкости в пробирке...");
 
             // Устанавливаем иглу над пробиркой и опускаем ее до контакта с материалом в пробирке
-            AnalyzerGateway.Needle.TurnToTubeAndWaitTouch();
+            Analyzer.Needle.TurnToTubeAndWaitTouch();
 
             Logger.DemoInfo($"Забор материала из пробирки.");
 
             // Набираем материал из пробирки
-            AnalyzerGateway.Pomp.Pull(0);
-            
+            Analyzer.Pomp.Pull(0);
+
             // Подводим белую кювету картриджа под иглу
-            AnalyzerGateway.Rotor.Home();
-            AnalyzerGateway.Rotor.PlaceCellUnderNeedle( 
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellUnderNeedle(
                 analysis.Stages[0].CartridgePosition,
                 CartridgeCell.MixCell);
 
             // Поднимаем иглу вверх до дома
-            AnalyzerGateway.Needle.HomeLifter();
+            Analyzer.Needle.HomeLifter();
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.MixCell);
+            Analyzer.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
             // Опускаем иглу в кювету
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
+            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
 
             Logger.DemoInfo($"Слив забранного материала в белую кювету.");
 
             // Сливаем материал в белую кювету
-            AnalyzerGateway.Pomp.Push(0);
+            Analyzer.Pomp.Push(0);
 
             // Поднимаем иглу вверх до дома
-            AnalyzerGateway.Needle.HomeLifter();
-            
+            Analyzer.Needle.HomeLifter();
+
             // Промываем иглу
             WashTheNeedle();
 
@@ -331,89 +320,89 @@ namespace AnalyzerControlCore
 
             // Выполняем перенос реагента из нужной ячейки картриджа в белую кювету
             ProcessAnalisysStage(analysis);
-            
+
             // Устанавливаем иглу в домашнюю позицию
-            AnalyzerGateway.Needle.HomeLifterAndRotator();
+            Analyzer.Needle.HomeLifterAndRotator();
 
             // Смещаем пробирку обратно
-            AnalyzerGateway.Conveyor.Shift(reverse: true, ConveyorUnit.ShiftType.HalfTube);
+            Analyzer.Conveyor.Shift(reverse: true, ConveyorUnit.ShiftType.HalfTube);
 
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - завершено выполнение подготовительной стадии.");
         }
 
         private void ChargeTheCartridge(int cartirdgePosition, int cellNumber)
         {
-            AnalyzerGateway.Rotor.Home();
+            Analyzer.Rotor.Home();
 
-            AnalyzerGateway.Rotor.PlaceCellAtCharge(cartirdgePosition, cellNumber);
+            Analyzer.Rotor.PlaceCellAtCharge(cartirdgePosition, cellNumber);
 
-            AnalyzerGateway.Charger.HomeHook();
-            AnalyzerGateway.Charger.MoveHookAfterHome();
-            AnalyzerGateway.Charger.HomeRotator();
+            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.MoveHookAfterHome();
+            Analyzer.Charger.HomeRotator();
 
-            AnalyzerGateway.Charger.TurnToCell(cellNumber);
+            Analyzer.Charger.TurnToCell(cellNumber);
 
-            AnalyzerGateway.Charger.ChargeCartridge();
-            AnalyzerGateway.Charger.HomeHook();
-            AnalyzerGateway.Charger.MoveHookAfterHome();
+            Analyzer.Charger.ChargeCartridge();
+            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.MoveHookAfterHome();
         }
 
         private void ProcessAnalisysStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
 
-            AnalyzerGateway.Needle.HomeLifterAndRotator();
+            Analyzer.Needle.HomeLifterAndRotator();
 
             WashTheNeedle();
 
             // Подводим нужную ячейку картриджа под иглу
-            AnalyzerGateway.Rotor.Home();
-            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellUnderNeedle(
                 analysis.Stages[analysis.CurrentStage].CartridgePosition,
                 analysis.Stages[analysis.CurrentStage].Cell,
                 RotorUnit.CellPosition.CellLeft);
 
             // Устанавливаем иглу над нужной ячейкой картриджа
-            AnalyzerGateway.Needle.TurnToCartridge(analysis.Stages[analysis.CurrentStage].Cell);
+            Analyzer.Needle.TurnToCartridge(analysis.Stages[analysis.CurrentStage].Cell);
 
             // Прокалываем ячейку картриджа
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
+            Analyzer.Needle.GoDownAndPerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
 
             // Поднимаемся на безопасную высоту над картриджем
-            AnalyzerGateway.Needle.GoToSafeLevel();
+            Analyzer.Needle.GoToSafeLevel();
 
             // Подводим центр ячейки картриджа под иглу
-            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
+            Analyzer.Rotor.PlaceCellUnderNeedle(
                 analysis.Stages[analysis.CurrentStage].CartridgePosition,
                 analysis.Stages[analysis.CurrentStage].Cell,
                 RotorUnit.CellPosition.CellCenter);
 
             // Прокалываем ячейку картриджа
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
+            Analyzer.Needle.GoDownAndPerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
 
             // Забираем реагент из ячейки картриджа
-            AnalyzerGateway.Pomp.Pull(0);
+            Analyzer.Pomp.Pull(0);
 
             // Поднимаемся на безопасную высоту над картриджем
-            AnalyzerGateway.Needle.GoToSafeLevel();
+            Analyzer.Needle.GoToSafeLevel();
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.MixCell);
+            Analyzer.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
             // Подводим белую кювету картриджа под иглу
-            AnalyzerGateway.Rotor.Home();
-            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellUnderNeedle(
                 analysis.Stages[analysis.CurrentStage].CartridgePosition,
                 CartridgeCell.MixCell);
 
             // Опускаем иглу в белую кювету
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell, false);
+            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell, false);
 
             // Сливаем реагент в белую кювету
-            AnalyzerGateway.Pomp.Push(0);
+            Analyzer.Pomp.Push(0);
 
             // Поднимаем иглу до дома
-            AnalyzerGateway.Needle.HomeLifter();
+            Analyzer.Needle.HomeLifter();
 
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - завершено выполнение {analysis.CurrentStage}-й стадии.");
         }
@@ -425,33 +414,33 @@ namespace AnalyzerControlCore
 
             WashTheNeedle();
 
-            AnalyzerGateway.Rotor.Home();
-            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellUnderNeedle(
                 analysis.Stages[analysis.Stages.Count - 1].CartridgePosition,
                 CartridgeCell.MixCell);
 
-            AnalyzerGateway.Needle.HomeLifter();
-            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.MixCell);
+            Analyzer.Needle.HomeLifter();
+            Analyzer.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
+            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
 
-            AnalyzerGateway.Pomp.Pull(0);
+            Analyzer.Pomp.Pull(0);
 
-            AnalyzerGateway.Needle.GoToSafeLevel();
+            Analyzer.Needle.GoToSafeLevel();
 
-            AnalyzerGateway.Rotor.PlaceCellUnderNeedle(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition,
+            Analyzer.Rotor.PlaceCellUnderNeedle(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition,
                 CartridgeCell.ResultCell);
 
             // Устанавливаем иглу над белой ячейкой картриджа
-            AnalyzerGateway.Needle.TurnToCartridge(CartridgeCell.ResultCell);
+            Analyzer.Needle.TurnToCartridge(CartridgeCell.ResultCell);
 
-            AnalyzerGateway.Needle.GoDownAndPerforateCartridge(CartridgeCell.ResultCell); // TODO: Добавить реализацию в NeedleUnit
+            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.ResultCell); // TODO: Добавить реализацию в NeedleUnit
 
-            AnalyzerGateway.Pomp.Push(0);
+            Analyzer.Pomp.Push(0);
 
-            AnalyzerGateway.Needle.HomeLifter();
+            Analyzer.Needle.HomeLifter();
 
-            AnalyzerGateway.Rotor.PlaceCellUnderWashBuffer(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
+            Analyzer.Rotor.PlaceCellUnderWashBuffer(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
 
             //AnalyzerGateway.Rotor.PlaceCellAtDischarge(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
 
@@ -466,15 +455,15 @@ namespace AnalyzerControlCore
 
         private void DischargeCartridge(int cartridgePosition)
         {
-            AnalyzerGateway.Rotor.Home();
+            Analyzer.Rotor.Home();
 
-            AnalyzerGateway.Rotor.PlaceCellAtDischarge(cartridgePosition);
+            Analyzer.Rotor.PlaceCellAtDischarge(cartridgePosition);
 
-            AnalyzerGateway.Charger.HomeHook();
-            AnalyzerGateway.Charger.MoveHookAfterHome();
-            AnalyzerGateway.Charger.HomeRotator();
+            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.MoveHookAfterHome();
+            Analyzer.Charger.HomeRotator();
 
-            AnalyzerGateway.Charger.TurnToDischarge();
+            Analyzer.Charger.TurnToDischarge();
 
             //AnalyzerGateway.Charger.ChargeCartridge();
             //AnalyzerGateway.Charger.HomeHook();
@@ -485,11 +474,11 @@ namespace AnalyzerControlCore
         {
             Logger.DemoInfo($"Запущена промывка иглы");
 
-            AnalyzerGateway.Needle.HomeLifter();
-            AnalyzerGateway.Needle.TurnAndGoDownToWashing();
-            AnalyzerGateway.Pomp.WashTheNeedle(2);
-            AnalyzerGateway.Pomp.Home();
-            AnalyzerGateway.Pomp.CloseValves();
+            Analyzer.Needle.HomeLifter();
+            Analyzer.Needle.TurnAndGoDownToWashing();
+            Analyzer.Pomp.WashTheNeedle(2);
+            Analyzer.Pomp.Home();
+            Analyzer.Pomp.CloseValves();
 
             Logger.DemoInfo($"Промывка иглы завершена.");
         }

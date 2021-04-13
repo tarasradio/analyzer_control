@@ -1,6 +1,6 @@
 ﻿namespace PresentationWinForms.UnitsViews
 {
-    partial class DemoExecutorView
+    partial class DemoControllerView
     {
         /// <summary> 
         /// Обязательная переменная конструктора.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DemoExecutorView));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DemoControllerView));
             this.buttonAddTube = new System.Windows.Forms.Button();
             this.buttonRemoveTube = new System.Windows.Forms.Button();
             this.tubesList = new CustomControls.DoubleBufferedDataGridView();
@@ -130,7 +130,7 @@
             this.Controls.Add(this.tubesList);
             this.Name = "DemoExecutorView";
             this.Size = new System.Drawing.Size(823, 427);
-            this.Load += new System.EventHandler(this.DemoExecutorView_Load);
+            this.Load += new System.EventHandler(this.DemoControllerView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tubesList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.stageBindingSource)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);

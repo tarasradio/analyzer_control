@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{33E1FE15-0DDE-4EFB-8359-CD035C95E16D}</ProjectGuid>
+    <ProjectGuid>{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AnalyzerConfiguration</RootNamespace>
-    <AssemblyName>AnalyzerConfiguration</AssemblyName>
+    <RootNamespace>AnalyzerControl</RootNamespace>
+    <AssemblyName>AnalyzerControl</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,8 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.2</LangVersion>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,12 +29,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,25 +41,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyzerAppConfiguration.cs" />
-    <Compile Include="ConfigurationHelper.cs" />
-    <Compile Include="JsonConfigurationProvider.cs" />
-    <Compile Include="UnitsConfiguration\ChargerConfiguration.cs" />
-    <Compile Include="IConfigurationProvider.cs" />
-    <Compile Include="UnitsConfiguration\NeedleConfiguration.cs" />
-    <Compile Include="UnitsConfiguration\PompConfiguration.cs" />
-    <Compile Include="UnitsConfiguration\RotorConfiguration.cs" />
-    <Compile Include="UnitsConfiguration\ConveyorConfiguration.cs" />
+    <Compile Include="AnalyzerController.cs" />
+    <Compile Include="AnalyzerDemoController.cs" />
+    <Compile Include="Configuration\DemoControllerConfiguration.cs" />
+    <Compile Include="Entyties\ConveyorCell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlConfigurationProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\AnalyzerCommunication\AnalyzerCommunication.csproj">
+      <Project>{995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE}</Project>
+      <Name>AnalyzerCommunication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerConfiguration\AnalyzerConfiguration.csproj">
+      <Project>{33E1FE15-0DDE-4EFB-8359-CD035C95E16D}</Project>
+      <Name>AnalyzerConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerControlCore\AnalyzerService.csproj">
+      <Project>{C75697AB-D456-44EB-86A4-A1C23BC776EC}</Project>
+      <Name>AnalyzerService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
-      <Project>{17d7a05e-c6d1-4892-b92a-fb3741ab588f}</Project>
+      <Project>{17D7A05E-C6D1-4892-B92A-FB3741AB588F}</Project>
       <Name>AnalyzerDomain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{6DCFF691-FFBB-45B4-90A9-36806AE27D02}</Project>
+      <Name>Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
