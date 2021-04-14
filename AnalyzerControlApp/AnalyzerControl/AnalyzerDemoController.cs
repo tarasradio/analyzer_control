@@ -12,7 +12,7 @@ using System.Timers;
 
 namespace AnalyzerControl
 {
-    public class AnalyzerDemoController : UnitBase<DemoControllerConfiguration>
+    public class AnalyzerDemoController : Configurable<DemoControllerConfiguration>
     {
         // Ячейки конвейера
         private const int ConveyorCellsNumber = 54;
@@ -29,7 +29,7 @@ namespace AnalyzerControl
 
         private static object locker = new object();
 
-        public AnalyzerDemoController(IConfigurationProvider provider) : base(null, provider)
+        public AnalyzerDemoController(IConfigurationProvider provider) : base(provider)
         {
             ConveyorCells = Enumerable.Repeat(new ConveyorCell(), ConveyorCellsNumber).ToArray();
 

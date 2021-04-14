@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyzerAppConfiguration.cs" />
+    <Compile Include="Configurable.cs" />
     <Compile Include="ConfigurationHelper.cs" />
     <Compile Include="JsonConfigurationProvider.cs" />
     <Compile Include="UnitsConfiguration\ChargerConfiguration.cs" />
@@ -67,6 +68,10 @@
     <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
       <Project>{17d7a05e-c6d1-4892-b92a-fb3741ab588f}</Project>
       <Name>AnalyzerDomain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{6DCFF691-FFBB-45B4-90A9-36806AE27D02}</Project>
+      <Name>Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
