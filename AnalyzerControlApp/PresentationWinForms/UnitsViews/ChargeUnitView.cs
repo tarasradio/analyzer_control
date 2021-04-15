@@ -11,12 +11,12 @@ namespace PresentationWinForms.UnitsViews
             InitializeComponent();
 
             if (Analyzer.Charger != null)
-                propertyGrid.SelectedObject = Analyzer.Charger.GetConfiguration();
+                propertyGrid.SelectedObject = Analyzer.Charger.Options;
         }
 
         private void buttonHookHome_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Charger.HomeHook();
@@ -25,7 +25,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonRotatorHome_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Charger.HomeRotator();
@@ -36,7 +36,7 @@ namespace PresentationWinForms.UnitsViews
         {
             int cell = (int)editCellNumber.Value;
 
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Charger.HomeRotator();
@@ -46,7 +46,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonChargeCartridge_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Charger.HomeHook();
@@ -57,7 +57,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonTurnChargeToDischarge_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Charger.HomeRotator();

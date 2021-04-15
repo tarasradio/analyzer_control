@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyzerAppConfiguration.cs" />
+    <Compile Include="AnalyzerServiceConfiguration.cs" />
     <Compile Include="Configurable.cs" />
     <Compile Include="ConfigurationHelper.cs" />
     <Compile Include="JsonConfigurationProvider.cs" />

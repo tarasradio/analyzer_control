@@ -15,7 +15,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonPrepare_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Conveyor.PrepareBeforeScanning();
@@ -24,7 +24,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonScanAndTurn_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Conveyor.RotateAndScanTube();
@@ -33,7 +33,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                () =>
                {
                    Analyzer.Conveyor.Shift(reverse: false, 

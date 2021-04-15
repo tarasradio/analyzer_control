@@ -11,6 +11,8 @@ namespace PresentationWinForms.Views
 
     public partial class SteppersView : UserControl
     {
+        Analyzer analyzer;
+
         public event SelectionChangedDelegate StepperChanged;
 
         string[] GridHeaders = { "#", "Название", "Статус", "Концевик" };
@@ -30,6 +32,11 @@ namespace PresentationWinForms.Views
 
             updateTimer.Interval = 100;
             updateTimer.Tick += UpdateTimer_Tick;
+        }
+
+        public void Init(Analyzer analyzer)
+        {
+            this.analyzer = analyzer;
         }
 
         public void StartUpdate()
@@ -70,15 +77,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (Analyzer.AppConfig == null)
+            if (analyzer.Options == null)
                 return;
 
-            SteppersGridView.RowCount = Analyzer.AppConfig.Steppers.Count;
+            SteppersGridView.RowCount = analyzer.Options.Steppers.Count;
 
-            for(int i = 0; i < Analyzer.AppConfig.Steppers.Count; i++)
+            for(int i = 0; i < analyzer.Options.Steppers.Count; i++)
             {
-                SteppersGridView[0, i].Value = Analyzer.AppConfig.Steppers[i].Number;
-                SteppersGridView[1, i].Value = Analyzer.AppConfig.Steppers[i].Name;
+                SteppersGridView[0, i].Value = analyzer.Options.Steppers[i].Number;
+                SteppersGridView[1, i].Value = analyzer.Options.Steppers[i].Name;
             }
 
             gridFilled = true;
@@ -91,7 +98,7 @@ namespace PresentationWinForms.Views
 
         public void ShowStates()
         {
-            ushort[] states = Analyzer.Context.SteppersStates;
+            ushort[] states = Analyzer.State.SteppersStates;
 
             for (int i = 0; i < 18; i++)
             {

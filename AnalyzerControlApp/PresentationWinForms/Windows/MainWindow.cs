@@ -9,20 +9,27 @@ namespace PresentationWinForms.Forms
 {
     public partial class MainWindow : Form
     {
+        private Analyzer analyzer = null;
         private AnalyzerDemoController demoController = null;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Analyzer.Serial.ConnectionChanged += Serial_ConnectionChanged;
-            
             //runWpfWindow();
         }
 
-        public void SetDemoController(AnalyzerDemoController demoController)
+        public void Init(Analyzer analyzer, AnalyzerDemoController controller)
         {
-            this.demoController = demoController;
+            this.analyzer = analyzer;
+
+            devicesControlView.Init(analyzer);
+            sensorsView.Init(analyzer);
+            steppersGridView.Init(analyzer);
+
+            Analyzer.Serial.ConnectionChanged += Serial_ConnectionChanged;
+            
+            this.demoController = controller;
             demoExecutorView.Controller = this.demoController;
         }
 
@@ -40,9 +47,11 @@ namespace PresentationWinForms.Forms
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)
         {
-            ControlPanelWindow controlPanel = new ControlPanelWindow(Analyzer.AppConfig.Steppers);
+            ControlPanelWindow controlPanel = new ControlPanelWindow(analyzer.Options.Steppers);
             controlPanel.StartPosition = FormStartPosition.CenterScreen;
             controlPanel.Show();
+
+            controlPanel.Init(analyzer);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -70,7 +79,7 @@ namespace PresentationWinForms.Forms
 
             if(dialogResult == DialogResult.Yes)
             {
-                Analyzer.SaveAppConfiguration();
+                analyzer.SaveConfiguration("AnalyzerServiceConfiguration");
             }
             else if(dialogResult == DialogResult.Cancel ||
                 dialogResult == DialogResult.Abort)

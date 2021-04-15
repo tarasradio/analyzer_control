@@ -2,7 +2,7 @@
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
-using AnalyzerService.MachineControl;
+using AnalyzerService.ExecutionControl;
 using Infrastructure;
 using System.Collections.Generic;
 

@@ -24,7 +24,7 @@ namespace PresentationWinForms
             {
                 IConfigurationProvider provider = new XmlConfigurationProvider();
 
-                Analyzer analyzer = new Analyzer();
+                Analyzer analyzer = new Analyzer(provider);
                 AnalyzerDemoController demoController = new AnalyzerDemoController(provider);
 
                 demoController.LoadConfiguration("DemoControllerConfiguration");
@@ -32,7 +32,7 @@ namespace PresentationWinForms
                 StartWindow startWindow = new StartWindow();
                 MainWindow mainWindow = new MainWindow();
 
-                mainWindow.SetDemoController(demoController);
+                mainWindow.Init(analyzer, demoController);
 
                 startWindow.StartPosition = FormStartPosition.CenterScreen;
                 mainWindow.StartPosition = FormStartPosition.CenterScreen;
@@ -55,6 +55,11 @@ namespace PresentationWinForms
                 demoController.SaveConfiguration("DemoControllerConfiguration");
             }
             catch(System.IO.FileLoadException)
+            {
+                MessageBox.Show("Ошибка при открытии файла конфигурации!");
+                return;
+            }
+            catch(System.IO.IOException)
             {
                 MessageBox.Show("Ошибка при открытии файла конфигурации!");
                 return;

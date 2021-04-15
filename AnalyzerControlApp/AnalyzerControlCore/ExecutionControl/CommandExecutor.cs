@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace AnalyzerService.MachineControl
+namespace AnalyzerService.ExecutionControl
 {
     public class CommandExecutor : ICommandExecutor
     {

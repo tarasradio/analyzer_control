@@ -1,5 +1,5 @@
 ﻿using AnalyzerConfiguration;
-using AnalyzerService.MachineControl;
+using AnalyzerService.ExecutionControl;
 using Infrastructure;
 using System;
 using System.Collections.Generic;

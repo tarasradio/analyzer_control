@@ -75,7 +75,7 @@ namespace AnalyzerControl
             stopwatch.Start();
 
             //TODO: ПИЗДЕЦ (Надо что то сделать, убрать зависимость...)
-            Analyzer.Executor.StartTask(() =>
+            Analyzer.TaskExecutor.StartTask(() =>
             {
                 AnalyzerWorkTask(); // Итак, запустили мы эту херню в отдельном потоке? зачем? (Возможно, для того, чтобы ее можно было аварийно прервать)
             });
@@ -229,7 +229,7 @@ namespace AnalyzerControl
 
                 Analyzer.Conveyor.RotateAndScanTube();
 
-                string barcode = Analyzer.Context.TubeBarcode;
+                string barcode = Analyzer.State.TubeBarcode;
 
                 if (!string.IsNullOrWhiteSpace(barcode))
                 {

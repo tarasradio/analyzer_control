@@ -14,10 +14,17 @@ namespace PresentationWinForms.Forms
 {
     public partial class ConnectionSettingsWindow : Form
     {
+        private Analyzer analyzer;
+
         public ConnectionSettingsWindow()
         {
             InitializeComponent();
+        }
 
+        public void Init(Analyzer analyzer)
+        {
+            this.analyzer = analyzer;
+            
             updateControlsState();
             updateFromSavedPreferences();
             rescanOpenPorts();
@@ -104,18 +111,18 @@ namespace PresentationWinForms.Forms
             string portName = selectPort.SelectedItem.ToString();
             int baudrate = int.Parse(selectBaudrate.SelectedItem.ToString());
 
-            Analyzer.AppConfig.PortName = portName;
-            Analyzer.AppConfig.Baudrate = (uint)baudrate;
+            analyzer.Options.PortName = portName;
+            analyzer.Options.Baudrate = (uint)baudrate;
 
-            Analyzer.SaveAppConfiguration();
+            analyzer.SaveConfiguration("AnalyzerServiceConfiguration");
 
             updateFromSavedPreferences();
         }
 
         private void updateFromSavedPreferences()
         {
-            savedPort.Text = Analyzer.AppConfig.PortName;
-            savedBaudrate.Text = Analyzer.AppConfig.Baudrate.ToString();
+            savedPort.Text = analyzer.Options.PortName;
+            savedBaudrate.Text = analyzer.Options.Baudrate.ToString();
         }
     }
 }

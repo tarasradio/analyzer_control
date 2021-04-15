@@ -8,6 +8,7 @@ namespace PresentationWinForms.Views
 {
     public partial class SensorsView : UserControl
     {
+        private Analyzer analyzer;
         string[] columnHeaders = { "#", "Название", "Значение" };
         
         Timer updateTimer = new Timer();
@@ -23,10 +24,16 @@ namespace PresentationWinForms.Views
             updateTimer.Interval = 100;
             updateTimer.Tick += UpdateValues;
         }
+
+        public void Init(Analyzer analyzer)
+        {
+            this.analyzer = analyzer;
+
+        }
         
         private void UpdateValues(object sender, EventArgs e)
         {
-            ushort[] newValues = Analyzer.Context.SensorsValues;
+            ushort[] newValues = Analyzer.State.SensorsValues;
 
             lock(locker)
             {
@@ -77,15 +84,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (Analyzer.AppConfig == null)
+            if (analyzer.Options == null)
                 return;
 
-            SensorsGridView.RowCount = Analyzer.AppConfig.Sensors.Count;
+            SensorsGridView.RowCount = analyzer.Options.Sensors.Count;
 
-            for (int i = 0; i < Analyzer.AppConfig.Sensors.Count; i++)
+            for (int i = 0; i < analyzer.Options.Sensors.Count; i++)
             {
-                SensorsGridView[0, i].Value = Analyzer.AppConfig.Sensors[i].Number;
-                SensorsGridView[1, i].Value = Analyzer.AppConfig.Sensors[i].Name;
+                SensorsGridView[0, i].Value = analyzer.Options.Sensors[i].Number;
+                SensorsGridView[1, i].Value = analyzer.Options.Sensors[i].Name;
                 SensorsGridView[2, i].Value = "Не задано";
             }
         }

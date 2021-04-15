@@ -3,7 +3,7 @@ using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
-using AnalyzerService.MachineControl;
+using AnalyzerService.ExecutionControl;
 using AnalyzerDomain.Entyties;
 using Infrastructure;
 using System.Collections.Generic;

@@ -3,7 +3,7 @@ using AnalyzerCommunication.CommunicationProtocol.Responses;
 using System;
 using System.Collections.Generic;
 
-namespace AnalyzerService.MachineControl
+namespace AnalyzerService.ExecutionControl
 {
     public interface ICommandExecutor
     {

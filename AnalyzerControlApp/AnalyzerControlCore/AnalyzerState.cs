@@ -1,9 +1,9 @@
 ﻿using Infrastructure;
 using System;
 
-namespace AnalyzerCommunication
+namespace AnalyzerService
 {
-    public class AnalyzerContext : IAnalyzerContext
+    public class AnalyzerState : IAnalyzerState
     {
         private object locker = new object();
 
@@ -15,13 +15,13 @@ namespace AnalyzerCommunication
 
         private static string firmwareVersion;
 
-        public AnalyzerContext(int sensorsNumber, int steppersNumber)
+        public AnalyzerState(int sensorsNumber, int steppersNumber)
         {
             this.sensorsValues = new ushort[sensorsNumber];
             this.steppersStates = new ushort[steppersNumber];
         }
 
-        public string TubeBarcode 
+        public string TubeBarcode
         {
             get
             {
@@ -45,8 +45,8 @@ namespace AnalyzerCommunication
             }
         }
 
-        public string CartridgeBarcode 
-        { 
+        public string CartridgeBarcode
+        {
             get
             {
                 string barCode;
@@ -69,8 +69,8 @@ namespace AnalyzerCommunication
             }
         }
 
-        public ushort[] SensorsValues 
-        { 
+        public ushort[] SensorsValues
+        {
             get
             {
                 ushort[] values = new ushort[sensorsValues.Length];
@@ -94,8 +94,8 @@ namespace AnalyzerCommunication
             }
         }
 
-        public ushort[] SteppersStates 
-        { 
+        public ushort[] SteppersStates
+        {
             get
             {
                 ushort[] states = new ushort[steppersStates.Length];
@@ -119,8 +119,8 @@ namespace AnalyzerCommunication
             }
         }
 
-        public string FirmwareVersion 
-        { 
+        public string FirmwareVersion
+        {
             get
             {
                 return firmwareVersion;

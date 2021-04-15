@@ -17,7 +17,7 @@ namespace PresentationWinForms.UnitsViews
         {
             int cycles = (int)editNumberCycles.Value;
 
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Pomp.WashTheNeedle(cycles);
@@ -26,7 +26,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Pomp.Home();
@@ -37,7 +37,7 @@ namespace PresentationWinForms.UnitsViews
         {
             int value = (int)editSuctionValue.Value;
 
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Pomp.Pull(value);
@@ -48,7 +48,7 @@ namespace PresentationWinForms.UnitsViews
         {
             int value = (int)editSuctionValue.Value;
 
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Pomp.Push(value);

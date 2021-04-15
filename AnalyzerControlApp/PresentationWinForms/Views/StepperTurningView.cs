@@ -9,6 +9,8 @@ namespace PresentationWinForms.Views
 {
     public partial class StepperTurningView : UserControl
     {
+        private Analyzer analyzer;
+
         public enum Direction
         {
             Inverce,
@@ -21,6 +23,11 @@ namespace PresentationWinForms.Views
         public StepperTurningView()
         {
             InitializeComponent();
+        }
+
+        public void Init(Analyzer analyzer)
+        {
+            this.analyzer = analyzer;
         }
 
         public void SetStepperParams(Stepper stepperParams)
@@ -39,7 +46,7 @@ namespace PresentationWinForms.Views
         {
             if (isLoading)
                 return;
-            if (Analyzer.AppConfig == null)
+            if (analyzer.Options == null)
                 return;
 
             stepperParams.Reverse = checkReverse.Checked;
@@ -51,7 +58,7 @@ namespace PresentationWinForms.Views
         public void UpdateInformation()
         {
             isLoading = true;
-            if (Analyzer.AppConfig == null)
+            if (analyzer.Options == null)
                 return;
 
             bool isReverse = stepperParams.Reverse;

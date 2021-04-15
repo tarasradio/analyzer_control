@@ -26,7 +26,7 @@ namespace AnalyzerConfiguration
         public int Position { get; set; } = 0;
     }
 
-    public class AnalyzerAppConfiguration
+    public class AnalyzerServiceConfiguration
     {
         public string PortName { get; set; }
         public uint Baudrate { get; set; }
@@ -35,7 +35,7 @@ namespace AnalyzerConfiguration
         public List<Device> Devices { get; set; }
         public List<Device> Sensors { get; set; }
 
-        public AnalyzerAppConfiguration()
+        public AnalyzerServiceConfiguration()
         {
             PortName = "COM1";
             Baudrate = 115200;

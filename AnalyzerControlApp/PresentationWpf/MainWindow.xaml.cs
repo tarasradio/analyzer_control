@@ -1,4 +1,5 @@
-﻿using AnalyzerService;
+﻿using AnalyzerConfiguration;
+using AnalyzerService;
 using MaterialDesignExtensions.Controls;
 using MaterialDesignExtensions.Model;
 using MaterialDesignThemes.Wpf;
@@ -14,7 +15,8 @@ namespace PresentationWPF
     /// </summary>
     public partial class MainWindow : MaterialWindow
     {
-        Analyzer core;
+        XmlConfigurationProvider provider;
+        Analyzer analyzer;
         SteppersModel steppersModel;
 
         private List<INavigationItem> m_navigationItems;
@@ -39,9 +41,10 @@ namespace PresentationWPF
         {
             InitializeComponent();
 
-            core = new Analyzer();
-            steppersModel = new SteppersModel(Analyzer.AppConfig.Steppers);
-            Analyzer.PackHandler.SensorsValuesReceived += PackHandler_SensorsValuesReceived; ;
+            provider = new XmlConfigurationProvider();
+            analyzer = new Analyzer(provider);
+            steppersModel = new SteppersModel(analyzer.Options.Steppers);
+            Analyzer.ResponseHandler.SensorsValuesReceived += ResponseHandler_SensorsValuesReceived; ;
 
             m_navigationItems = new List<INavigationItem>()
             {
@@ -62,7 +65,7 @@ namespace PresentationWPF
             navigationDrawerNav.DataContext = this;
         }
 
-        private void PackHandler_SensorsValuesReceived(ushort[] states)
+        private void ResponseHandler_SensorsValuesReceived(ushort[] states)
         {
             steppersModel.UpdateSteppersStates(states);
         }

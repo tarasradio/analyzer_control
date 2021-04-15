@@ -1,7 +1,7 @@
 ﻿using AnalyzerCncControl;
 using AnalyzerCommunication;
 using AnalyzerService;
-using AnalyzerService.MachineControl;
+using AnalyzerService.ExecutionControl;
 using FastColoredTextBoxNS;
 using Infrastructure;
 using System;
@@ -119,7 +119,7 @@ namespace PresentationWinForms.Views
                 executionProgressLabel.Text = $"Выполнено команд: {0} из {commands.Count}";
                 executionProgressBar.Value = 0;
 
-                Analyzer.CmdExecutor.RunExecution(commands);
+                Analyzer.CommandExecutor.RunExecution(commands);
             }
         }
 
@@ -128,7 +128,7 @@ namespace PresentationWinForms.Views
             double progress = 0;
             int commandsCount = 0;
 
-            if (Analyzer.Executor.GetState() == ThreadState.Running)
+            if (Analyzer.TaskExecutor.GetState() == ThreadState.Running)
             {
                 //commandsCount = _taskExecutor.GetCommandsCount();
             }

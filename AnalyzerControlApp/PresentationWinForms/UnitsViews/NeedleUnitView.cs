@@ -16,7 +16,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonHomeRotator_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Needle.HomeRotator();
@@ -25,7 +25,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void turnOnTubeButton_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Needle.HomeLifterAndRotator();
@@ -35,7 +35,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void moveOnWashingButton_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Needle.HomeLifterAndRotator();
@@ -64,7 +64,7 @@ namespace PresentationWinForms.UnitsViews
                 cell = CartridgeCell.ResultCell;
             }
 
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Needle.HomeLifterAndRotator();
@@ -93,7 +93,7 @@ namespace PresentationWinForms.UnitsViews
                 cell = CartridgeCell.ResultCell;
             }
 
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Needle.GoDownAndPerforateCartridge(cell);
@@ -102,7 +102,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonHomeLift_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Needle.HomeLifter();

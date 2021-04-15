@@ -1,6 +1,6 @@
-﻿namespace AnalyzerCommunication
+﻿namespace AnalyzerService
 {
-    public interface IAnalyzerContext
+    public interface IAnalyzerState
     {
         string TubeBarcode { get; set; }
         string CartridgeBarcode { get; set; }

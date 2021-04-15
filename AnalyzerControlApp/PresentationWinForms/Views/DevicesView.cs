@@ -10,10 +10,16 @@ namespace PresentationWinForms.Views
     public partial class DevicesView : UserControl
     {
         string[] columnHeaders = { "#", "Название"};
+        Analyzer analyzer;
 
         public DevicesView()
         {
             InitializeComponent();
+        }
+
+        public void Init(Analyzer analyzer)
+        {
+            this.analyzer = analyzer;
             DrawGrid();
         }
 
@@ -67,15 +73,15 @@ namespace PresentationWinForms.Views
 
         private void FillGrid()
         {
-            if (Analyzer.AppConfig == null)
+            if (analyzer.Options == null)
                 return;
 
-            DevicesGridView.RowCount = Analyzer.AppConfig.Devices.Count;
+            DevicesGridView.RowCount = analyzer.Options.Devices.Count;
 
-            for (int i = 0; i < Analyzer.AppConfig.Devices.Count; i++)
+            for (int i = 0; i < analyzer.Options.Devices.Count; i++)
             {
-                DevicesGridView[0, i].Value = Analyzer.AppConfig.Devices[i].Number;
-                DevicesGridView[1, i].Value = Analyzer.AppConfig.Devices[i].Name;
+                DevicesGridView[0, i].Value = analyzer.Options.Devices[i].Number;
+                DevicesGridView[1, i].Value = analyzer.Options.Devices[i].Name;
                 DevicesGridView[2, i].Value = "Включить";
             }
         }

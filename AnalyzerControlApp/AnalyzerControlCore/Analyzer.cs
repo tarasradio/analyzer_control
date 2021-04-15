@@ -2,7 +2,8 @@
 using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.SerialCommunication;
 using AnalyzerConfiguration;
-using AnalyzerService.MachineControl;
+using AnalyzerService;
+using AnalyzerService.ExecutionControl;
 using AnalyzerService.Units;
 using Infrastructure;
 using System;
@@ -11,16 +12,17 @@ using System.Threading.Tasks;
 
 namespace AnalyzerService
 {
-    public class Analyzer
+    public class Analyzer : Configurable<AnalyzerServiceConfiguration>
     {
-        private static string FirmwareVersion = "04.03.2020";
-        
+        public static IAnalyzerState State { get; private set; }
+
         public static IPacketFinder PackFinder { get; private set; }
         public static IPacketHandler PackHandler { get; private set; }
+        public static ResponseHandler ResponseHandler { get; set; }
         public static ISerialAdapter Serial { get; private set; }
 
-        public static ICommandExecutor CmdExecutor { get; private set; }
-        public static TaskExecutor Executor { get; private set; }
+        public static ICommandExecutor CommandExecutor { get; private set; }
+        public static TaskExecutor TaskExecutor { get; private set; }
 
         public static NeedleUnit Needle { get; private set; }
         public static ConveyorUnit Conveyor { get; private set; }
@@ -28,26 +30,20 @@ namespace AnalyzerService
         public static ChargerUnit Charger { get; private set; }
         public static PompUnit Pomp { get; private set; }
 
-        private static IConfigurationProvider provider;
-
-        public static IAnalyzerContext Context { get; private set; }
-
-        public static AnalyzerAppConfiguration AppConfig { get; private set; }
-
-        public Analyzer()
+        public Analyzer(IConfigurationProvider provider) : base(provider)
         {
             provider = new XmlConfigurationProvider();
             
-            CmdExecutor = new CommandExecutor();
-            Executor = new TaskExecutor();
+            CommandExecutor = new CommandExecutor();
+            TaskExecutor = new TaskExecutor();
             
-            Needle = new NeedleUnit(CmdExecutor, provider);
-            Conveyor = new ConveyorUnit(CmdExecutor, provider);
-            Charger = new ChargerUnit(CmdExecutor, provider);
-            Rotor = new RotorUnit(CmdExecutor, provider);
-            Pomp = new PompUnit(CmdExecutor, provider);
+            Needle = new NeedleUnit(CommandExecutor, provider);
+            Conveyor = new ConveyorUnit(CommandExecutor, provider);
+            Charger = new ChargerUnit(CommandExecutor, provider);
+            Rotor = new RotorUnit(CommandExecutor, provider);
+            Pomp = new PompUnit(CommandExecutor, provider);
 
-            LoadAppConfiguration();
+            LoadConfiguration("AnalyzerServiceConfiguration");
             LoadUnitsConfiguration();
             
             SerialCommunicationInit();
@@ -57,38 +53,16 @@ namespace AnalyzerService
 
         private void SerialCommunicationInit()
         {
-            Context = new AnalyzerContext(AppConfig.Sensors.Count, AppConfig.Steppers.Count);
-
-            PackHandler = new PacketHandler(Context);
+            PackHandler = new PacketHandler();
             PackFinder = new PacketFinder(PackHandler);
             Serial = new SerialAdapter(PackFinder);
+            
+            State = new AnalyzerState(Options.Sensors.Count, Options.Steppers.Count);
 
-            PackHandler.DebugMessageReceived += Logger.Info;
-            PackHandler.CommandStateReceived += CmdExecutor.UpdateExecutedCommandInfo;
-        }
+            ResponseHandler = new ResponseHandler(PackHandler, State);
 
-        public static void SaveAppConfiguration()
-        {
-            try
-            {
-                provider.SaveConfiguration(AppConfig, "AppConfiguration");
-            }
-            catch (Exception exeption)
-            {
-                throw new IOException("Ошибка при сохранении файла конфигурации.", innerException: exeption);
-            }
-        }
-
-        public static void LoadAppConfiguration()
-        {
-            try
-            {
-                AppConfig = provider.LoadConfiguration<AnalyzerAppConfiguration>("AppConfiguration");
-            }
-            catch
-            {
-                Logger.Info($"Ошибка при загрузке файла конфигурации. Используется конфигурация по умолчанию.");
-            }
+            ResponseHandler.DebugMessageReceived += Logger.Info;
+            ResponseHandler.CommandStateReceived += CommandExecutor.UpdateExecutedCommandInfo;
         }
 
         public void LoadUnitsConfiguration()
@@ -108,44 +82,11 @@ namespace AnalyzerService
             Rotor.SaveConfiguration("RotorConfiguration");
             Pomp.SaveConfiguration("PompConfiguration");
         }
-        
-        public async static void CheckFirmwareVersion(string firmwareVersion)
-        {
-            for(int i = 0; i < 3; i++)
-            {
-                Serial.SendPacket(new GetFirmwareVersionCommand().GetBytes());
-                await Task.Delay(100);
-            }
-
-            await Task.Run( async()=>{
-                await Task.Delay(1000);
-
-                bool received = string.IsNullOrWhiteSpace(firmwareVersion);
-
-                if(received)
-                {
-                    if (string.Equals(FirmwareVersion, firmwareVersion))
-                    {
-                        Logger.Info("[System] - Версия платы совпадает с требуемой.");
-                    }
-                    else
-                    {
-                        Logger.Info("[System] - Версия платы не совпадает с требуемой. " +
-                            "Подключено несовместимое устройство или требуется обновить прошивку. ");
-                    }
-                }
-                else
-                {
-                    Logger.Info("[System] - Версия платы не совпадает с требуемой. " +
-                            "Подключено несовместимое устройство или требуется обновить прошивку. ");
-                }
-            });
-        }
 
         public static void AbortExecution()
         {
-            Executor.AbortExecution();
-            CmdExecutor.AbortExecution();
+            TaskExecutor.AbortExecution();
+            CommandExecutor.AbortExecution();
             //Demo.AbortWork();
 
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());

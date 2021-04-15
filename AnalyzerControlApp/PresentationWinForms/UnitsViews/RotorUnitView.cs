@@ -17,7 +17,7 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            Analyzer.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
@@ -51,7 +51,7 @@ namespace PresentationWinForms.UnitsViews
 
             if (selectChargePlace.Checked)
             {
-                Analyzer.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
@@ -60,7 +60,7 @@ namespace PresentationWinForms.UnitsViews
             }
             else if(selectNeedleLeftPlace.Checked)
             {
-                Analyzer.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
@@ -69,7 +69,7 @@ namespace PresentationWinForms.UnitsViews
             }
             else if(selectNeedleRightPlace.Checked)
             {
-                Analyzer.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
@@ -78,7 +78,7 @@ namespace PresentationWinForms.UnitsViews
             }
             else if(selectWashBufferPlace.Checked)
             {
-                Analyzer.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
@@ -87,7 +87,7 @@ namespace PresentationWinForms.UnitsViews
             }
             else if(selectDischargePlace.Checked)
             {
-                Analyzer.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
