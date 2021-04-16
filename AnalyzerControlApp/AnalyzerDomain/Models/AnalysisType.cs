@@ -8,6 +8,11 @@ namespace AnalyzerDomain.Models
     public class AnalysisType
     {
         /// <summary>
+        /// Идентификатор типа анализа
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Описание типа анализа
         /// </summary>
         public string Description { get; set; }
@@ -15,7 +20,7 @@ namespace AnalyzerDomain.Models
         /// <summary>
         /// Модель картриджа для выполнения анализа
         /// </summary>
-        public CartridgeModel CartridgeModel { get; set; }
+        public Cartridge CartridgeModel { get; set; }
 
         /// <summary>
         /// Список стадий анализа
@@ -27,7 +32,7 @@ namespace AnalyzerDomain.Models
         /// </summary>
         /// <param name="description">Описание типа анализа</param>
         /// <param name="cartridgeModel">Модель картриджа для выполнения анализа</param>
-        public AnalysisType(string description, CartridgeModel cartridgeModel)
+        public AnalysisType(string description, Cartridge cartridgeModel)
         {
             Stages = new List<AnalysisStage>();
             this.Description = description;

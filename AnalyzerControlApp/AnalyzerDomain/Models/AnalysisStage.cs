@@ -14,7 +14,7 @@ namespace AnalyzerDomain.Models
         /// <summary>
         /// Ячейка картриджа
         /// </summary>
-        public Cartridge.CartridgeCell Cell { get; set; }
+        public AnalysisStages Type { get; set; }
         
         /// <summary>
         /// Объем материала для выполнения

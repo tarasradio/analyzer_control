@@ -1,0 +1,62 @@
+﻿<Window x:Class="AnalyzerControlGUI.Views.EditAnalysisWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnalyzerControlGUI.Views"
+        xmlns:vm="clr-namespace:AnalyzerControlGUI.ViewModels"
+        xmlns:services="clr-namespace:AnalyzerControlGUI.Services"
+        services:DialogCloser.DialogResult="{Binding DialogResult}"
+        mc:Ignorable="d"
+        Title="Редактирование анализа"
+        ResizeMode="CanMinimize" Topmost="True"
+        SizeToContent="WidthAndHeight">
+    <Window.DataContext>
+        <vm:EditAnalysisViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="Дата" VerticalAlignment="Center" Margin="3" FontWeight="Bold"/>
+                <DatePicker SelectedDate="{Binding Date}" 
+                            SelectedDateFormat="Short" 
+                            IsDropDownOpen="False"
+                            Margin="3"
+                            Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="Описание" Margin="3" FontWeight="Bold"/>
+                <TextBox Text="{Binding Description}" Margin="3" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="Штрих-код" Margin="3" FontWeight="Bold"/>
+                <TextBox Text="{Binding Barcode}" Margin="3" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="Тип анализа" VerticalAlignment="Center" Margin="3" FontWeight="Bold"/>
+                <ComboBox HorizontalContentAlignment="Center" 
+                          Width="200" Margin="3"
+                          SelectedIndex="0" >
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Grid.Row="1">
+            <Button x:Name="OkButton"
+                        Content="Сохранить"
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding OkCommand}"/>
+            <Button x:Name="CancelButton"
+                        Content="Отмена"
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding CancelCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>

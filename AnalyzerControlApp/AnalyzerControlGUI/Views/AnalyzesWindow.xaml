@@ -1,0 +1,66 @@
+﻿<Window x:Class="AnalyzerControlGUI.Views.AnalyzesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnalyzerControlGUI.Views"
+        xmlns:vm="clr-namespace:AnalyzerControlGUI.ViewModels"
+        xmlns:services="clr-namespace:AnalyzerControlGUI.Services"
+        services:DialogCloser.DialogResult="{Binding DialogResult}"
+        mc:Ignorable="d"
+        Title="Управление анализами"
+        Topmost="True"
+        SizeToContent="WidthAndHeight"
+        Height="450" Width="800"
+        MinHeight="450" MinWidth="800">
+    <Window.DataContext>
+        <vm:AnalyzesManagementViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="DataGridStyle" TargetType="DataGrid">
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserResizeRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="AlternatingRowBackground" Value="AliceBlue"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid x:Name="AnalyzesDataGrid" Grid.Row="0" 
+                  Style="{StaticResource DataGridStyle}"
+                  ItemsSource="{Binding Analyzes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedIndex="{Binding SelectedIndex, Mode=OneWayToSource}" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Width="Auto" Binding="{Binding Date}"/>
+                <DataGridTextColumn Header="Штрих-код" Width="Auto" Binding="{Binding Barcode}"/>
+                <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Результат" Width="Auto" Binding="{Binding Result}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="227,0">
+            <Button x:Name="AddAnalysisButton"
+                    Content="Добавить запись"
+                    Margin="3"
+                    Padding="3"
+                    Command="{Binding AddAnalysisCommand}"/>
+            <Button x:Name="UpdateAnalysisButton"
+                    Content="Редактировать запись"
+                    Margin="3"
+                    Padding="3"
+                    Command="{Binding EditAnalysisCommand}"
+                    CommandParameter="{Binding ElementName=AnalyzesDataGrid, Path=SelectedIndex}"/>
+            <Button x:Name="RemoveAnalysisButton"
+                    Content="Удалить запись"
+                    Margin="3"
+                    Padding="3"
+                    Command="{Binding RemoveAnalysisCommand}"
+                    CommandParameter="{Binding ElementName=AnalyzesDataGrid, Path=SelectedItem.Id}"/>
+        </StackPanel>
+    </Grid>
+</Window>

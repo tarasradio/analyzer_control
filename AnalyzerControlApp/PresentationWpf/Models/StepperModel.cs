@@ -1,6 +1,5 @@
 ﻿
 using AnalyzerConfiguration;
-using AnalyzerService;
 
 namespace PresentationWPF.Models
 {
