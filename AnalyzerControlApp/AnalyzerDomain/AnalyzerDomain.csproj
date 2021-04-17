@@ -165,6 +165,10 @@
     <Compile Include="Migrations\20210416214411_InitialCreate-Cartridges.designer.cs">
       <DependentUpon>20210416214411_InitialCreate-Cartridges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20210417104248_Add-AnalysisType-simple.cs" />
+    <Compile Include="Migrations\20210417104248_Add-AnalysisType-simple.designer.cs">
+      <DependentUpon>20210417104248_Add-AnalysisType-simple.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AnalyzerContextModelSnapshot.cs" />
     <Compile Include="Models\Analysis.cs" />
     <Compile Include="Models\AnalysisStage.cs" />

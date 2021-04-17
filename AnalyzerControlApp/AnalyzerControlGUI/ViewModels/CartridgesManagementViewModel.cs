@@ -144,8 +144,7 @@ namespace AnalyzerControlGUI.ViewModels
             using (AnalyzerContext db = new AnalyzerContext())
             {
                 db.Cartridges.Load();
-                ObservableCollection<Cartridge> cartridges = db.Cartridges.Local.ToObservableCollection();
-                return cartridges;
+                return db.Cartridges.Local.ToObservableCollection();
             }
         }
     }

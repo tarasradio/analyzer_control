@@ -10,7 +10,8 @@
         mc:Ignorable="d"
         Title="Редактирование типа анализа"
         ResizeMode="CanMinimize" Topmost="True"
-        SizeToContent="WidthAndHeight">
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:EditAnalysisTypeViewModel/>
     </Window.DataContext>
@@ -27,7 +28,13 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock Text="Модель картриджа" Margin="3" FontWeight="Bold"/>
-                    <TextBox Text="{Binding CartridgeModel}" Margin="3" Width="200"/>
+                    <!--<TextBox Text="{Binding CartridgeModel}" Margin="3" Width="200"/>-->
+                    <ComboBox HorizontalContentAlignment="Center" Width="200" Margin="3"
+                              ItemsSource="{Binding Cartridges}"
+                              SelectedValuePath="Barcode"
+                              DisplayMemberPath="Barcode"
+                              SelectedValue="{Binding CartridgeBarcode}">
+                    </ComboBox>
                 </StackPanel>
                 <TextBlock Text="Список стадий" HorizontalAlignment="Center" Margin="3" FontWeight="Bold"/>
                 <StackPanel Orientation="Horizontal">

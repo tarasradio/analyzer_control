@@ -5,7 +5,7 @@ namespace AnalyzerDomain.Models
     /// <summary>
     /// Тип анализа
     /// </summary>
-    public class AnalysisType
+    public class AnalysisType : ModelBase
     {
         /// <summary>
         /// Идентификатор типа анализа
@@ -15,28 +15,51 @@ namespace AnalyzerDomain.Models
         /// <summary>
         /// Описание типа анализа
         /// </summary>
-        public string Description { get; set; }
+        private string _description;
+
+        public string Description
+        {
+            get { return _description; }
+            set {
+                _description = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Модель картриджа для выполнения анализа
         /// </summary>
-        public Cartridge CartridgeModel { get; set; }
+        private Cartridge _cartridge;
+
+        public Cartridge Cartridge
+        {
+            get { return _cartridge; }
+            set {
+                _cartridge = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Список стадий анализа
         /// </summary>
-        public List<AnalysisStage> Stages { get; set; }
+        //public List<AnalysisStage> Stages { get; set; }
 
         /// <summary>
         /// Создание нового типа анализа
         /// </summary>
         /// <param name="description">Описание типа анализа</param>
-        /// <param name="cartridgeModel">Модель картриджа для выполнения анализа</param>
-        public AnalysisType(string description, Cartridge cartridgeModel)
+        /// <param name="cartridge">Модель картриджа для выполнения анализа</param>
+        public AnalysisType(string description, Cartridge cartridge)
         {
-            Stages = new List<AnalysisStage>();
-            this.Description = description;
-            this.CartridgeModel = cartridgeModel;
+            //Stages = new List<AnalysisStage>();
+            Description = description;
+            Cartridge = cartridge;
+        }
+
+        public AnalysisType()
+        {
+
         }
     }
 }

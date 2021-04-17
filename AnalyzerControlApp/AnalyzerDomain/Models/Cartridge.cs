@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -30,9 +32,11 @@ namespace AnalyzerDomain.Models
             }
         }
 
+        public virtual ICollection<AnalysisType> AnalyzesTypes { get; private set; }
+
         public Cartridge()
         {
-
+            AnalyzesTypes = new ObservableCollection<AnalysisType>();
         }
     }
 }

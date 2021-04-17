@@ -10,9 +10,8 @@
         mc:Ignorable="d"
         Title="Управление типами анализов"
         Topmost="True"
-        SizeToContent="WidthAndHeight"
         Height="450" Width="800"
-        MinHeight="450" MinWidth="800">
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:AnalysisTypesManagementViewModel/>
     </Window.DataContext>
@@ -37,7 +36,8 @@
                   ItemsSource="{Binding AnalysisTypes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectedIndex="{Binding SelectedIndex, Mode=OneWayToSource}" Grid.ColumnSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Описание" Width="*" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Штрих-код картриджа" Width="Auto" Binding="{Binding Cartridge.Barcode, UpdateSourceTrigger=PropertyChanged}"/>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="227,0">
