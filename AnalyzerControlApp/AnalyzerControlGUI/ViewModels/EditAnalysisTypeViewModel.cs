@@ -13,8 +13,13 @@ namespace AnalyzerControlGUI.ViewModels
 {
     public class EditAnalysisTypeViewModel : ViewModel
     {
-        private string _cartridgeBarcode;
 
+        public EditAnalysisTypeViewModel()
+        {
+            _analysisStages = InitAnalysisStagesList();
+        }
+
+        private string _cartridgeBarcode;
         public string CartridgeBarcode
         {
             get { return _cartridgeBarcode; }
@@ -25,7 +30,6 @@ namespace AnalyzerControlGUI.ViewModels
         }
 
         private List<Cartridge> _cartridges;
-
         public List<Cartridge> Cartridges
         {
             get { return LoadCartridgesDetails(); }
@@ -37,13 +41,81 @@ namespace AnalyzerControlGUI.ViewModels
         }
 
         private string _description;
-
         public string Description
         {
             get { return _description; }
             set { 
                 _description = value;
                 NotifyPropertyChanged("Description");
+            }
+        }
+
+        public int PipettingVolume {
+            get { return _analysisStages[_selectedStage].PipettingVolume; }
+            set {
+                _analysisStages[_selectedStage].PipettingVolume = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool NeedIncubation
+        {
+            get { return _analysisStages[_selectedStage].NeedIncubation; }
+            set
+            {
+                _analysisStages[_selectedStage].NeedIncubation = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int IncubationTimeInMinutes {
+            get { return _analysisStages[_selectedStage].IncubationTimeInMinutes; }
+            set {
+                _analysisStages[_selectedStage].IncubationTimeInMinutes = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool NeedWashStep
+        {
+            get { return _analysisStages[_selectedStage].NeedWashStep; }
+            set
+            {
+                _analysisStages[_selectedStage].NeedWashStep = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int NumberOfWashStep { 
+            get { return _analysisStages[_selectedStage].NumberOfWashStep; }
+            set {
+                _analysisStages[_selectedStage].NumberOfWashStep = value;
+                NotifyPropertyChanged();
+            } 
+        }
+
+        private int _selectedStage = 0;
+        public int SelectedStage
+        {
+            get { return _selectedStage; }
+            set
+            {
+                _selectedStage = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged("PipettingVolume");
+                NotifyPropertyChanged("NeedIncubation");
+                NotifyPropertyChanged("IncubationTimeInMinutes");
+                NotifyPropertyChanged("NeedWashStep");
+                NotifyPropertyChanged("NumberOfWashStep");
+            }
+        }
+
+        private AnalysisStage[] _analysisStages = new AnalysisStage[4];
+        public AnalysisStage[] AnalysisStages {
+            get { return _analysisStages; }
+            set {
+                _analysisStages = value;
+                NotifyPropertyChanged();
             }
         }
 
@@ -54,6 +126,14 @@ namespace AnalyzerControlGUI.ViewModels
                 db.Cartridges.Load();
                 return db.Cartridges.Local.ToList();
             }
+        }
+
+        public AnalysisStage[] InitAnalysisStagesList()
+        {
+            AnalysisStage[] stages = new AnalysisStage[4];
+            for(int i = 0; i < stages.Length; ++i)
+                stages[i] = new AnalysisStage();
+            return stages;
         }
 
         private bool? _dialogResult;

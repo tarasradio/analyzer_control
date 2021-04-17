@@ -17,9 +17,9 @@ namespace AnalyzerControlGUI.Views
     /// <summary>
     /// Логика взаимодействия для CartridgeModelsWindow.xaml
     /// </summary>
-    public partial class CartridgeModelsWindow : Window
+    public partial class CartridgesWindow : Window
     {
-        public CartridgeModelsWindow()
+        public CartridgesWindow()
         {
             InitializeComponent();
         }

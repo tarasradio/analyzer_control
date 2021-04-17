@@ -49,6 +49,7 @@ namespace AnalyzerControlGUI.ViewModels
                   (addAnalysisTypeCommand = new RelayCommand(obj =>
                   {
                       editAnalysisTypeViewModel = new EditAnalysisTypeViewModel();
+
                       EditAnalysisTypeWindow editAnalysisTypeWindow = new EditAnalysisTypeWindow();
 
                       editAnalysisTypeWindow.DataContext = editAnalysisTypeViewModel;
@@ -60,7 +61,11 @@ namespace AnalyzerControlGUI.ViewModels
                               AnalysisType analysisType = new AnalysisType()
                               {
                                   Description = editAnalysisTypeViewModel.Description,
-                                  Cartridge = db.Cartridges.FirstOrDefault(c => c.Barcode == editAnalysisTypeViewModel.CartridgeBarcode)
+                                  Cartridge = db.Cartridges.FirstOrDefault(c => c.Barcode == editAnalysisTypeViewModel.CartridgeBarcode),
+                                  SamplingStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Sampling],
+                                  ConjugateStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Conjugate],
+                                  EnzymeComplexStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.EnzymeComplex],
+                                  SubstrateStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Substrate]
                               };
 
                               db.AnalysisTypes.Add(analysisType);
@@ -89,6 +94,10 @@ namespace AnalyzerControlGUI.ViewModels
 
                       editAnalysisTypeViewModel.Description = AnalysisTypes[SelectedIndex].Description;
                       editAnalysisTypeViewModel.CartridgeBarcode = AnalysisTypes[SelectedIndex].Cartridge.Barcode;
+                      editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Sampling] = AnalysisTypes[SelectedIndex].SamplingStage;
+                      editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Conjugate] = AnalysisTypes[SelectedIndex].ConjugateStage;
+                      editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.EnzymeComplex] = AnalysisTypes[SelectedIndex].EnzymeComplexStage;
+                      editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Substrate] = AnalysisTypes[SelectedIndex].SubstrateStage;
 
                       if (editAnalysisTypeWindow.ShowDialog() == true)
                       {
@@ -98,7 +107,11 @@ namespace AnalyzerControlGUI.ViewModels
                               {
                                   Id = AnalysisTypes[SelectedIndex].Id,
                                   Description = editAnalysisTypeViewModel.Description,
-                                  Cartridge = db.Cartridges.FirstOrDefault(c => c.Barcode == editAnalysisTypeViewModel.CartridgeBarcode)
+                                  Cartridge = db.Cartridges.FirstOrDefault(c => c.Barcode == editAnalysisTypeViewModel.CartridgeBarcode),
+                                  SamplingStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Sampling],
+                                  ConjugateStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Conjugate],
+                                  EnzymeComplexStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.EnzymeComplex],
+                                  SubstrateStage = editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Substrate]
                               };
                               db.AnalysisTypes.Update(analysisType);
                               db.SaveChanges();
@@ -140,7 +153,13 @@ namespace AnalyzerControlGUI.ViewModels
         {
             using (AnalyzerContext db = new AnalyzerContext())
             {
-                db.AnalysisTypes.Include(a => a.Cartridge).Load();
+                db.AnalysisTypes
+                    .Include(a => a.Cartridge)
+                    .Include(a => a.SamplingStage)
+                    .Include(a => a.ConjugateStage)
+                    .Include(a => a.EnzymeComplexStage)
+                    .Include(a => a.SubstrateStage)
+                    .Load();
                 return db.AnalysisTypes.Local.ToObservableCollection();
             }
         }

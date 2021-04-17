@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnalyzerDomain.Models
 {
-    public enum AnalysisStages
+    public enum AnalysisStages : int
     {
         Sampling,
         Conjugate,

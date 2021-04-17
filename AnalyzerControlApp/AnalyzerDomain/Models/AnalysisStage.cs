@@ -7,6 +7,10 @@ namespace AnalyzerDomain.Models
     public class AnalysisStage
     {
         /// <summary>
+        /// Идентификатор стадии анализа
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
         /// Описание стадии
         /// </summary>
         public string Description { get; set; }

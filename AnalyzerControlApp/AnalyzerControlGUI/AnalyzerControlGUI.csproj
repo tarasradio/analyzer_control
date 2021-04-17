@@ -168,6 +168,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Converters\BoolToIndexConverter.cs" />
     <Compile Include="Services\DialogCloser.cs" />
     <Compile Include="ViewModels\AnalysisTypesManagementViewModel.cs" />
     <Compile Include="ViewModels\AnalyzesManagementViewModel.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="ViewModels\EditAnalysisTypeViewModel.cs" />
     <Compile Include="ViewModels\EditAnalysisViewModel.cs" />
     <Compile Include="ViewModels\EditCartridgeViewModel.cs" />
+    <Compile Include="ViewModels\mainViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\AnalysisTypesWindow.xaml.cs">
       <DependentUpon>AnalysisTypesWindow.xaml</DependentUpon>

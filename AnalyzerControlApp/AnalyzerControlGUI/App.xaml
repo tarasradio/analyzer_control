@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:AnalyzerControlGUI"
              xmlns:views="clr-namespace:AnalyzerControlGUI.Views"
-             StartupUri="views/AnalysisTypesWindow.xaml">
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
          
     </Application.Resources>

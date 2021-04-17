@@ -17,9 +17,9 @@ namespace AnalyzerControlGUI.Views
     /// <summary>
     /// Логика взаимодействия для AnalysisTypesManagementWindow.xaml
     /// </summary>
-    public partial class AnalysisTypesManagementWindow : Window
+    public partial class AnalysisTypesWindow : Window
     {
-        public AnalysisTypesManagementWindow()
+        public AnalysisTypesWindow()
         {
             InitializeComponent();
         }

@@ -40,6 +40,53 @@ namespace AnalyzerDomain.Models
             }
         }
 
+        private AnalysisStage _samplingStage;
+
+        public AnalysisStage SamplingStage
+        {
+            get { return _samplingStage; }
+            set { 
+                _samplingStage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private AnalysisStage _conjugateStage;
+
+        public AnalysisStage ConjugateStage
+        {
+            get { return _conjugateStage; }
+            set
+            {
+                _conjugateStage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private AnalysisStage _enzymeComplexStage;
+
+        public AnalysisStage EnzymeComplexStage
+        {
+            get { return _enzymeComplexStage; }
+            set
+            {
+                _enzymeComplexStage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private AnalysisStage _substrateStage;
+
+        public AnalysisStage SubstrateStage
+        {
+            get { return _substrateStage; }
+            set
+            {
+                _substrateStage = value;
+                OnPropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Список стадий анализа
         /// </summary>
