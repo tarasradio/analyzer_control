@@ -76,6 +76,11 @@ namespace AnalyzerService.Units
             Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell at discharger finished.");
         }
         
+        /// <summary>
+        /// Разместить ячеку ротора в позицию для загрузки картриджа из кассеты
+        /// </summary>
+        /// <param name="cartridgePosition">Позиция ячейки ротора</param>
+        /// <param name="chargePosition">Позиция ячейки кассетницы (загрузки)</param>
         public void PlaceCellAtCharge(int cartridgePosition, int chargePosition)
         {
             Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell at charger.");

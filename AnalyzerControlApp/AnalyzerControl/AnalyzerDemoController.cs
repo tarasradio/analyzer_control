@@ -94,7 +94,7 @@ namespace AnalyzerControl
             }
 
             InitializationTask(); // Вызываем задачу из задачи...
-            WashTheNeedle(); // Опять это делаем
+            AnalyzerOperations.NeedleWash();// Опять это делаем
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
@@ -277,7 +277,7 @@ namespace AnalyzerControl
 
             Logger.DemoInfo($"Ожидание загрузки картриджа...");
 
-            ChargeTheCartridge(cartirdgePosition: 0, cellNumber: 5);
+            AnalyzerOperations.ChargeCartridge(cartirdgePosition: 0, chargePosition: 5);
 
             Logger.DemoInfo($"Загрузка картриджа завершена.");
             Logger.DemoInfo($"Ожидание касания жидкости в пробирке...");
@@ -314,7 +314,7 @@ namespace AnalyzerControl
             Analyzer.Needle.HomeLifter();
 
             // Промываем иглу
-            WashTheNeedle();
+            AnalyzerOperations.NeedleWash();
 
             Logger.DemoInfo($"Перенос реагента в белую кювету.");
 
@@ -330,30 +330,13 @@ namespace AnalyzerControl
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - завершено выполнение подготовительной стадии.");
         }
 
-        private void ChargeTheCartridge(int cartirdgePosition, int cellNumber)
-        {
-            Analyzer.Rotor.Home();
-
-            Analyzer.Rotor.PlaceCellAtCharge(cartirdgePosition, cellNumber);
-
-            Analyzer.Charger.HomeHook();
-            Analyzer.Charger.MoveHookAfterHome();
-            Analyzer.Charger.HomeRotator();
-
-            Analyzer.Charger.TurnToCell(cellNumber);
-
-            Analyzer.Charger.ChargeCartridge();
-            Analyzer.Charger.HomeHook();
-            Analyzer.Charger.MoveHookAfterHome();
-        }
-
         private void ProcessAnalisysStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
 
             Analyzer.Needle.HomeLifterAndRotator();
 
-            WashTheNeedle();
+            AnalyzerOperations.NeedleWash();
 
             // Подводим нужную ячейку картриджа под иглу
             Analyzer.Rotor.Home();
@@ -412,7 +395,7 @@ namespace AnalyzerControl
         {
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запуск выполнения завершающей стадии.");
 
-            WashTheNeedle();
+            AnalyzerOperations.NeedleWash();
 
             Analyzer.Rotor.Home();
             Analyzer.Rotor.PlaceCellUnderNeedle(
@@ -444,43 +427,13 @@ namespace AnalyzerControl
 
             //AnalyzerGateway.Rotor.PlaceCellAtDischarge(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
 
-            DischargeCartridge(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
+            AnalyzerOperations.DischargeCartridge(analysis.Stages[analysis.Stages.Count - 1].CartridgePosition);
 
             // Далее нужно перелить в прозрачную кювету и отправить на анализ.
 
             // TODO: Эта задача не реализована до конца!!!
 
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - выполнения завершающей стадии завершено.");
-        }
-
-        private void DischargeCartridge(int cartridgePosition)
-        {
-            Analyzer.Rotor.Home();
-
-            Analyzer.Rotor.PlaceCellAtDischarge(cartridgePosition);
-
-            Analyzer.Charger.HomeHook();
-            Analyzer.Charger.MoveHookAfterHome();
-            Analyzer.Charger.HomeRotator();
-
-            Analyzer.Charger.TurnToDischarge();
-
-            //AnalyzerGateway.Charger.ChargeCartridge();
-            //AnalyzerGateway.Charger.HomeHook();
-            //AnalyzerGateway.Charger.MoveHookAfterHome();
-        }
-
-        private void WashTheNeedle()
-        {
-            Logger.DemoInfo($"Запущена промывка иглы");
-
-            Analyzer.Needle.HomeLifter();
-            Analyzer.Needle.TurnAndGoDownToWashing();
-            Analyzer.Pomp.WashTheNeedle(2);
-            Analyzer.Pomp.Home();
-            Analyzer.Pomp.CloseValves();
-
-            Logger.DemoInfo($"Промывка иглы завершена.");
         }
     }
 }

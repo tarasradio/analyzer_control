@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AnalyzerController.cs" />
     <Compile Include="AnalyzerDemoController.cs" />
+    <Compile Include="AnalyzerOperations.cs" />
     <Compile Include="Configuration\DemoControllerConfiguration.cs" />
     <Compile Include="Entyties\ConveyorCell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -37,6 +37,10 @@ namespace AnalyzerService.Units
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Rotator homing finished.");
         }
 
+        /// <summary>
+        /// Поворот к ячейке с кассетой
+        /// </summary>
+        /// <param name="cell">Номер ячейки</param>
         public void TurnToCell(int cell)
         {
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start turn to cell[{cell}].");

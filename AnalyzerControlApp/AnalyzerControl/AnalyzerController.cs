@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnalyzerService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace AnalyzerControl
 {
     public class AnalyzerController
     {
+        public AnalyzerController()
+        {
 
+        }
     }
 }
