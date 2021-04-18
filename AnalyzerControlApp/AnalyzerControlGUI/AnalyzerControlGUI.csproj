@@ -169,6 +169,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\BoolToIndexConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Services\DialogCloser.cs" />
     <Compile Include="ViewModels\AnalysisTypesManagementViewModel.cs" />
     <Compile Include="ViewModels\AnalyzesManagementViewModel.cs" />

@@ -29,6 +29,7 @@
             <sys:String>Нет</sys:String>
         </x:Array>
         <converters:BoolToIndexConverter x:Key="boolToIndexConverter" />
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
     </Window.Resources>
     
     <Grid>
@@ -75,7 +76,8 @@
                                       SelectedIndex="{Binding NeedIncubation, Converter={StaticResource boolToIndexConverter}}" >
                             </ComboBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                    Visibility="{Binding NeedIncubation, Mode=OneWay, Converter={StaticResource boolToVisibilityConverter}}">
                             <TextBlock Text="Incubation Time (min)" Margin="3" FontWeight="Bold"/>
                             <TextBox Text="{Binding IncubationTimeInMinutes}" Margin="3" Width="200"/>
                         </StackPanel>
@@ -88,7 +90,8 @@
                                       SelectedIndex="{Binding NeedWashStep, Converter={StaticResource boolToIndexConverter}}" >
                             </ComboBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                    Visibility="{Binding NeedWashStep, Mode=OneWay, Converter={StaticResource boolToVisibilityConverter}}">
                             <TextBlock Text="Number of wash step" Margin="3" FontWeight="Bold"/>
                             <TextBox Text="{Binding NumberOfWashStep}" Margin="3" Width="200"/>
                         </StackPanel>

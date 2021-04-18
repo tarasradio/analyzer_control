@@ -102,12 +102,17 @@ namespace AnalyzerControlGUI.ViewModels
             {
                 _selectedStage = value;
                 NotifyPropertyChanged();
-                NotifyPropertyChanged("PipettingVolume");
-                NotifyPropertyChanged("NeedIncubation");
-                NotifyPropertyChanged("IncubationTimeInMinutes");
-                NotifyPropertyChanged("NeedWashStep");
-                NotifyPropertyChanged("NumberOfWashStep");
+                StagePropertiesChanged();
             }
+        }
+
+        private void StagePropertiesChanged()
+        {
+            NotifyPropertyChanged("PipettingVolume");
+            NotifyPropertyChanged("NeedIncubation");
+            NotifyPropertyChanged("IncubationTimeInMinutes");
+            NotifyPropertyChanged("NeedWashStep");
+            NotifyPropertyChanged("NumberOfWashStep");
         }
 
         private AnalysisStage[] _analysisStages = new AnalysisStage[4];

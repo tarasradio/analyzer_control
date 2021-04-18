@@ -99,6 +99,8 @@ namespace AnalyzerControlGUI.ViewModels
                       editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.EnzymeComplex] = AnalysisTypes[SelectedIndex].EnzymeComplexStage;
                       editAnalysisTypeViewModel.AnalysisStages[(int)AnalysisStages.Substrate] = AnalysisTypes[SelectedIndex].SubstrateStage;
 
+                      editAnalysisTypeViewModel.SelectedStage = (int)AnalysisStages.Sampling;
+
                       if (editAnalysisTypeWindow.ShowDialog() == true)
                       {
                           using (AnalyzerContext db = new AnalyzerContext())
