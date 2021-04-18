@@ -12,6 +12,16 @@ namespace AnalyzerControl
     /// </summary>
     public static class AnalyzerOperations
     {
+        public static void MoveAllToHome()
+        {
+            Analyzer.Needle.HomeLifterAndRotator();
+            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.MoveHookAfterHome();
+            Analyzer.Charger.HomeRotator();
+            Analyzer.Rotor.Home();
+            Analyzer.Pomp.Home();
+        }
+
         /// <summary>
         /// Промывка иглы
         /// </summary>

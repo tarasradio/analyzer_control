@@ -156,12 +156,7 @@ namespace AnalyzerControl
         {
             Logger.DemoInfo($"Запущена инициализация всех устройств");
 
-            Analyzer.Needle.HomeLifterAndRotator();
-            Analyzer.Charger.HomeHook();
-            Analyzer.Charger.MoveHookAfterHome();
-            Analyzer.Charger.HomeRotator();
-            Analyzer.Rotor.Home();
-            Analyzer.Pomp.Home();
+            AnalyzerOperations.MoveAllToHome();
 
             Logger.DemoInfo($"Инициализация завершена");
         }
