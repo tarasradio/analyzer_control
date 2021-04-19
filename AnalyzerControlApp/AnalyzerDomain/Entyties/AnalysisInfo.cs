@@ -45,6 +45,11 @@ namespace AnalyzerDomain.Entyties
             return CurrentStage < Stages.Count;
         }
 
+        public bool NoSampleWasTaken()
+        {
+            return CurrentStage == -1; //TODO: ПИЗДЕЦ!!!! Заменить на enum
+        }
+
         public bool Finished() // Это еще почему ???
         {
             return CurrentStage <= Stages.Count;

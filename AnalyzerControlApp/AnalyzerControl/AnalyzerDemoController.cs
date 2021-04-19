@@ -15,14 +15,10 @@ namespace AnalyzerControl
     public class AnalyzerDemoController : Configurable<DemoControllerConfiguration>
     {
         // Ячейки конвейера
-        private const int ConveyorCellsNumber = 54;
-        private ConveyorCell[] ConveyorCells;
-        private const int CellsNumberBetweenScanAndSuction = 7;
-        private int CurrentCellAtScanner = 0;
-
-        // Ячейки ротора
-        private const int RotorCellsNumber = 40; // !!! Нужно уточнить этот параметр
-        private AnalysisInfo[] RotorCells;
+        private const int conveyorCellsNumber = 54;
+        private ConveyorCell[] conveyorCells;
+        private const int cellsBetweenScanAndSampling = 7;
+        private int currentCellInScan = 0;
 
         private Stopwatch stopwatch;
         Timer timer;
@@ -31,9 +27,7 @@ namespace AnalyzerControl
 
         public AnalyzerDemoController(IConfigurationProvider provider) : base(provider)
         {
-            ConveyorCells = Enumerable.Repeat(new ConveyorCell(), ConveyorCellsNumber).ToArray();
-
-            RotorCells = new AnalysisInfo[RotorCellsNumber];
+            conveyorCells = Enumerable.Repeat(new ConveyorCell(), conveyorCellsNumber).ToArray();
 
             stopwatch = new Stopwatch();
             timer = new Timer();
@@ -93,8 +87,10 @@ namespace AnalyzerControl
                 }
             }
 
-            InitializationTask(); // Вызываем задачу из задачи...
-            AnalyzerOperations.NeedleWash();// Опять это делаем
+            Logger.DemoInfo($"Запущена инициализация всех устройств");
+            AnalyzerOperations.MoveAllToHome();
+            Logger.DemoInfo($"Инициализация завершена");
+            AnalyzerOperations.NeedleWash();
 
             Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
 
@@ -103,62 +99,57 @@ namespace AnalyzerControl
 
             Logger.DemoInfo($"Подготовка завершена");
 
-            CurrentCellAtScanner = 0;
+            currentCellInScan = 0;
 
             while (ExistUnhandledAnalyzes()) // пока есть невыполненные задачи
             {
-                if (CurrentCellAtScanner == ConveyorCellsNumber) // прошли полный круг (и чо???)
+                if (currentCellInScan == conveyorCellsNumber) // прошли полный круг (и чо???)
                 {
-                    CurrentCellAtScanner = 0;
+                    currentCellInScan = 0;
                     Logger.DemoInfo($"Круг пройден. Запуск повторного сканирования.");
                 }
 
                 SearchTubeInConveyorCell(attemptsNumber: 2);
 
-                //TODO: А че, нельзя как то нормально посчитать??? Че за ебаная магия тут???
+                int cellInSampling = getCellInSampling();
 
-                // Получение номера ячейки в точке забора материала из пробирки
-                int cellUnderNeedle = CurrentCellAtScanner - CellsNumberBetweenScanAndSuction;
-                if (cellUnderNeedle < 0) cellUnderNeedle += ConveyorCellsNumber;
+                AnalysisInfo analysisInSampling = conveyorCells[cellInSampling].AnalysisInfo;
 
-                AnalysisInfo tubeUnderNeedle = ConveyorCells[cellUnderNeedle].AnalysisInfo;
-
-                if (tubeUnderNeedle != null)
+                if (analysisInSampling != null)
                 {
-                    Logger.DemoInfo($"Пробирка со штрихкодом [{tubeUnderNeedle.BarCode}] дошла до точки забора материала.");
+                    Logger.DemoInfo($"Пробирка со штрихкодом [{analysisInSampling.BarCode}] дошла до точки забора материала.");
 
-                    if (NoSampleWasTaken(tubeUnderNeedle))
+                    if (analysisInSampling.NoSampleWasTaken())
                     {
                         Logger.DemoInfo($"Забор материала ранее не производился.");
 
-                        tubeUnderNeedle.CurrentStage = 0; //TODO: ПИЗДЕЦ!!!! Заменить на enum
+                        analysisInSampling.CurrentStage = 0; //TODO: ПИЗДЕЦ!!!! Заменить на enum
 
-                        ProcessAnalisysInitialStage(tubeUnderNeedle);
+                        ProcessAnalisysInitialStage(analysisInSampling);
 
-                        tubeUnderNeedle.SetNewIncubationTime();
+                        analysisInSampling.SetNewIncubationTime();
                     }
                 }
 
                 ProcessScheduledAnalizes();
 
-                CurrentCellAtScanner++;
+                currentCellInScan++;
             }
 
             Logger.DemoInfo($"Все пробирки обработаны!"); // Точно? Ты уверен?
         }
 
-        private static bool NoSampleWasTaken(AnalysisInfo tubeUnderNeedle)
+        /// <summary>
+        /// Получение номера ячейки в точке забора материала из пробирки
+        /// </summary>
+        /// <returns></returns>
+        private int getCellInSampling()
         {
-            return tubeUnderNeedle.CurrentStage == -1; //TODO: ПИЗДЕЦ!!!! Заменить на enum
-        }
+            //TODO: А че, нельзя как то нормально посчитать??? Че за ебаная магия тут???
+            int cell = currentCellInScan - cellsBetweenScanAndSampling;
+            if (cell < 0) cell += conveyorCellsNumber;
 
-        private void InitializationTask()
-        {
-            Logger.DemoInfo($"Запущена инициализация всех устройств");
-
-            AnalyzerOperations.MoveAllToHome();
-
-            Logger.DemoInfo($"Инициализация завершена");
+            return cell;
         }
 
         /// <summary>
@@ -194,10 +185,8 @@ namespace AnalyzerControl
         {
             bool result = false;
 
-            foreach (AnalysisInfo analysis in Options.Analyzes)
-            {
-                if (analysis.Finished())
-                {
+            foreach (AnalysisInfo analysis in Options.Analyzes) {
+                if (analysis.Finished()) {
                     result = true;
                     break;
                 }
@@ -210,7 +199,7 @@ namespace AnalyzerControl
         // (это все к вопросу о том, что мы не можем остлеживать точно полный круг конвейера)
         private void SearchTubeInConveyorCell(int attemptsNumber)
         {
-            ConveyorCell cell = ConveyorCells[CurrentCellAtScanner];
+            ConveyorCell cell = conveyorCells[currentCellInScan];
 
             Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
 
