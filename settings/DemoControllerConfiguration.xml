@@ -4,17 +4,17 @@
     <AnalysisInfo>
       <PositionInConveyor>0</PositionInConveyor>
       <PositionInRotor>0</PositionInRotor>
-      <BarCode>RedMary4590</BarCode>
+      <BarCode>fgdfgdgdgdfgdf</BarCode>
       <Stages>
         <Stage>
           <CartridgePosition>0</CartridgePosition>
-          <Cell>SecondCell</Cell>
+          <Cell>FirstCell</Cell>
           <TimeToPerform>5</TimeToPerform>
         </Stage>
       </Stages>
-      <CurrentStage>1</CurrentStage>
+      <CurrentStage>0</CurrentStage>
       <TimeToStageComplete>0</TimeToStageComplete>
-      <IsFind>true</IsFind>
+      <IsFind>false</IsFind>
     </AnalysisInfo>
   </Analyzes>
 </DemoControllerConfiguration>
