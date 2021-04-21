@@ -54,10 +54,7 @@ namespace AnalyzerControl.Services
 
         public (bool, int?) AddAnalysis(string barcode)
         {
-            bool existFreeCells;
-            int? cellIndex;
-
-            (existFreeCells, cellIndex) = findFreeCellIndex();
+            var (existFreeCells, cellIndex) = findFreeCellIndex();
 
             if(existFreeCells) {
                 Cells[(int)cellIndex].AnalysisBarcode = barcode;
