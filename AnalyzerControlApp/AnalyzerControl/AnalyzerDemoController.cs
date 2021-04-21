@@ -294,9 +294,6 @@ namespace AnalyzerControl
             // Сливаем материал в белую кювету
             Analyzer.Pomp.Push(0);
 
-            // Поднимаем иглу вверх до дома
-            Analyzer.Needle.HomeLifter();
-
             // Промываем иглу
             AnalyzerOperations.NeedleWash();
 
