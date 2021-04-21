@@ -32,7 +32,7 @@ namespace AnalyzerService
 
         public Analyzer(IConfigurationProvider provider) : base(provider)
         {
-            provider = new XmlConfigurationProvider();
+            this.provider = provider;
             
             CommandExecutor = new CommandExecutor();
             TaskExecutor = new TaskExecutor();

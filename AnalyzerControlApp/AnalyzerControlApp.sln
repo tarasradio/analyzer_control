@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerCncControl", "Analy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerControlGUI", "AnalyzerControlGUI\AnalyzerControlGUI.csproj", "{F1256FEA-1F18-4CBC-9BE5-B1E5DF65551A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerConsole", "AnalyzerConsole\AnalyzerConsole.csproj", "{49C92932-0AB9-49FC-89EF-F16A3230DBA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{F1256FEA-1F18-4CBC-9BE5-B1E5DF65551A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1256FEA-1F18-4CBC-9BE5-B1E5DF65551A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1256FEA-1F18-4CBC-9BE5-B1E5DF65551A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C92932-0AB9-49FC-89EF-F16A3230DBA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C92932-0AB9-49FC-89EF-F16A3230DBA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C92932-0AB9-49FC-89EF-F16A3230DBA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C92932-0AB9-49FC-89EF-F16A3230DBA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
