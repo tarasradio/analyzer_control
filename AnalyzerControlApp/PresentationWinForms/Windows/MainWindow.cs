@@ -4,12 +4,14 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using AnalyzerControl;
+using AnalyzerControl.Services;
 
 namespace PresentationWinForms.Forms
 {
     public partial class MainWindow : Form
     {
         private Analyzer analyzer = null;
+        private ConveyorService conveyorService = null;
         private AnalyzerDemoController demoController = null;
 
         public MainWindow()
@@ -19,7 +21,7 @@ namespace PresentationWinForms.Forms
             //runWpfWindow();
         }
 
-        public void Init(Analyzer analyzer, AnalyzerDemoController controller)
+        public void Init(Analyzer analyzer, ConveyorService conveyor, AnalyzerDemoController controller)
         {
             this.analyzer = analyzer;
 
@@ -28,7 +30,9 @@ namespace PresentationWinForms.Forms
             steppersGridView.Init(analyzer);
 
             Analyzer.Serial.ConnectionChanged += Serial_ConnectionChanged;
-            
+
+            this.conveyorService = conveyor;
+
             this.demoController = controller;
             demoExecutorView.Controller = this.demoController;
         }

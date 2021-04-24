@@ -19,8 +19,14 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+            <Button Content="Подключение" Margin="3" Command="{Binding ConnectionCommand}"/>
             <Button Content="Картриджи" Margin="3" Command="{Binding CartridgesManagementCommand}"/>
             <Button Content="Типы анализов" Margin="3" Command="{Binding AnalysisTypesManagementCommand}"/>
         </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+            <TextBlock Text="{Binding ConnectionState, TargetNullValue='Состояние соединения'}"/>
+            <TextBlock Text="{Binding LogText}"/>
+        </StackPanel>
+        
     </Grid>
 </Window>

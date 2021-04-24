@@ -36,9 +36,9 @@ namespace AnalyzerControl
 
         bool interruptRequest = false;
 
-        public AnalyzerDemoController(IConfigurationProvider provider) : base(provider)
+        public AnalyzerDemoController(IConfigurationProvider provider, ConveyorService conveyor) : base(provider)
         {
-            conveyor = new ConveyorService(conveyorCellsCount);
+            this.conveyor = conveyor;
 
             stopwatch = new Stopwatch();
             timer = new Timer();
@@ -74,6 +74,8 @@ namespace AnalyzerControl
 
         public void StartWork()
         {
+            state = States.AnalysisProcessing;
+
             timer.Start();
             stopwatch.Reset();
             stopwatch.Start();

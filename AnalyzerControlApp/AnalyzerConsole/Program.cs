@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AnalyzerConfiguration;
 using AnalyzerControl;
+using AnalyzerControl.Services;
 using AnalyzerService;
 
 namespace AnalyzerConsole
@@ -13,6 +14,7 @@ namespace AnalyzerConsole
     {
         static IConfigurationProvider provider = new XmlConfigurationProvider();
         static Analyzer analyzer = null;
+        static ConveyorService conveyor = null;
         static AnalyzerDemoController demoController = null;
 
         const string controllerFileName = "DemoControllerConfiguration";
@@ -43,7 +45,8 @@ namespace AnalyzerConsole
         {
             try {
                 analyzer = new Analyzer(provider);
-                demoController = new AnalyzerDemoController(provider); 
+                conveyor = new ConveyorService(54);
+                demoController = new AnalyzerDemoController(provider, conveyor);
                 demoController.LoadConfiguration(controllerFileName);
                 Console.WriteLine("Анализатор запущен");
             }

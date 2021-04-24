@@ -56,12 +56,12 @@ namespace AnalyzerControl.Services
 
         public void SwitchToManualControl()
         {
-
+            State = States.ManualControl;
         }
 
         public void SwitchToAnalysisProcessing()
         {
-
+            State = States.AnalysisProcessing;
         }
     }
 }

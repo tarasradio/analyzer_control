@@ -1,9 +1,10 @@
 ﻿using PresentationWinForms.Forms;
-using AnalyzerService;
 using System;
 using System.Windows.Forms;
 using AnalyzerControl;
 using AnalyzerConfiguration;
+using AnalyzerControl.Services;
+using AnalyzerService;
 
 namespace PresentationWinForms
 {
@@ -25,14 +26,15 @@ namespace PresentationWinForms
                 IConfigurationProvider provider = new XmlConfigurationProvider();
 
                 Analyzer analyzer = new Analyzer(provider);
-                AnalyzerDemoController demoController = new AnalyzerDemoController(provider);
+                ConveyorService conveyor = new ConveyorService(54);
+                AnalyzerDemoController demoController = new AnalyzerDemoController(provider, conveyor);
 
                 demoController.LoadConfiguration("DemoControllerConfiguration");
 
                 StartWindow startWindow = new StartWindow();
                 MainWindow mainWindow = new MainWindow();
 
-                mainWindow.Init(analyzer, demoController);
+                mainWindow.Init(analyzer, conveyor, demoController);
 
                 startWindow.StartPosition = FormStartPosition.CenterScreen;
                 mainWindow.StartPosition = FormStartPosition.CenterScreen;

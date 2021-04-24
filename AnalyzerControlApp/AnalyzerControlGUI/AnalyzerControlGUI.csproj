@@ -170,10 +170,12 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\BoolToIndexConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\StringToIntConverter.cs" />
     <Compile Include="Services\DialogCloser.cs" />
     <Compile Include="ViewModels\AnalysisTypesManagementViewModel.cs" />
     <Compile Include="ViewModels\AnalyzesManagementViewModel.cs" />
     <Compile Include="ViewModels\CartridgesManagementViewModel.cs" />
+    <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\EditAnalysisTypeViewModel.cs" />
     <Compile Include="ViewModels\EditAnalysisViewModel.cs" />
     <Compile Include="ViewModels\EditCartridgeViewModel.cs" />
@@ -187,6 +189,9 @@
     </Compile>
     <Compile Include="Views\CartridgesWindow.xaml.cs">
       <DependentUpon>CartridgesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectionWindow.xaml.cs">
+      <DependentUpon>ConnectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditAnalysisTypeWindow.xaml.cs">
       <DependentUpon>EditAnalysisTypeWindow.xaml</DependentUpon>
@@ -218,6 +223,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CartridgesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -262,9 +271,29 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AnalyzerCommunication\AnalyzerCommunication.csproj">
+      <Project>{995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE}</Project>
+      <Name>AnalyzerCommunication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerConfiguration\AnalyzerConfiguration.csproj">
+      <Project>{33E1FE15-0DDE-4EFB-8359-CD035C95E16D}</Project>
+      <Name>AnalyzerConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerControlCore\AnalyzerService.csproj">
+      <Project>{C75697AB-D456-44EB-86A4-A1C23BC776EC}</Project>
+      <Name>AnalyzerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerControl\AnalyzerControl.csproj">
+      <Project>{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}</Project>
+      <Name>AnalyzerControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
       <Project>{17D7A05E-C6D1-4892-B92A-FB3741AB588F}</Project>
       <Name>AnalyzerDomain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{6DCFF691-FFBB-45B4-90A9-36806AE27D02}</Project>
+      <Name>Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

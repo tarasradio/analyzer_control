@@ -12,7 +12,6 @@ namespace Infrastructure
 
         private static string WrapMessage(string message)
         {
-
             string text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()} Info: {message} \n";
             return text;
         }
