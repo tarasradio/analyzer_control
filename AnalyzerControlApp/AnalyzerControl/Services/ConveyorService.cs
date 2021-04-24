@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnalyzerControl.Services
 {
-    public class RotorCell
+    public class ConveyorCell
     {
         public string AnalysisBarcode { get; set; }
         public bool IsEmpty {
@@ -16,7 +16,7 @@ namespace AnalyzerControl.Services
             private set { }
         }
 
-        public RotorCell() {
+        public ConveyorCell() {
             AnalysisBarcode = string.Empty;
         }
 
@@ -24,16 +24,17 @@ namespace AnalyzerControl.Services
             AnalysisBarcode = string.Empty;
         }
     }
-    /// <summary>
-    /// Сервис управления ротором
-    /// </summary>
-    public class RotorService
-    {
-        public RotorCell[] Cells { get; private set; }
 
-        public RotorService(int cellsCount)
+    /// <summary>
+    /// Сервис управления конвейером
+    /// </summary>
+    public class ConveyorService
+    {
+        public ConveyorCell[] Cells { get; private set; }
+
+        public ConveyorService(int cellsCount)
         {
-            Cells = Enumerable.Repeat(new RotorCell(), cellsCount).ToArray();
+            Cells = Enumerable.Repeat(new ConveyorCell(), cellsCount).ToArray();
         }
 
         public bool ExistEmptyCells()
@@ -44,21 +45,11 @@ namespace AnalyzerControl.Services
         private (bool, int?) findFreeCellIndex()
         {
             for (int i = 0; i < Cells.Length; i++) {
-                if(Cells[i].IsEmpty) {
+                if (Cells[i].IsEmpty) {
                     return (true, i);
                 }
             }
             return (false, null);
-        }
-
-        public (bool, int?) AddAnalysis(string barcode)
-        {
-            var (existFreeCells, cellIndex) = findFreeCellIndex();
-
-            if(existFreeCells) {
-                Cells[(int)cellIndex].AnalysisBarcode = barcode;
-            }
-            return (existFreeCells, cellIndex);
         }
 
         public void RemoveAnalysis(int cellIndex)
