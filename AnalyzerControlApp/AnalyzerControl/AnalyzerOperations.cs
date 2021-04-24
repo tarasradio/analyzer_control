@@ -1,4 +1,5 @@
 ﻿using AnalyzerService;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,16 @@ namespace AnalyzerControl
     {
         public static void MoveAllToHome()
         {
+            Logger.DemoInfo($"Запуск возврата всех устройств в начальную позицию.");
+
             Analyzer.Needle.HomeLifterAndRotator();
             Analyzer.Charger.HomeHook();
             Analyzer.Charger.MoveHookAfterHome();
             Analyzer.Charger.HomeRotator();
             Analyzer.Rotor.Home();
             Analyzer.Pomp.Home();
+
+            Logger.DemoInfo($"Возврат устройств в начальную позицию завершен.");
         }
 
         /// <summary>
@@ -27,11 +32,15 @@ namespace AnalyzerControl
         /// </summary>
         public static void NeedleWash()
         {
+            Logger.DemoInfo($"Запуск промывки иглы.");
+
             Analyzer.Needle.HomeLifter();
             Analyzer.Needle.TurnAndGoDownToWashing();
             Analyzer.Pomp.WashTheNeedle(2);
             Analyzer.Pomp.Home();
             Analyzer.Pomp.CloseValves();
+
+            Logger.DemoInfo($"Промывка иглы завершена.");
         }
 
         /// <summary>

@@ -32,9 +32,16 @@ namespace AnalyzerControl.Services
     {
         public ConveyorCell[] Cells { get; private set; }
 
+        public enum States {
+            ManualControl,
+            AnalysisProcessing
+        }
+        public States State { get; private set; }
+
         public ConveyorService(int cellsCount)
         {
             Cells = Enumerable.Repeat(new ConveyorCell(), cellsCount).ToArray();
+            State = States.ManualControl;
         }
 
         public bool ExistEmptyCells()
@@ -42,19 +49,19 @@ namespace AnalyzerControl.Services
             return Cells.Count(c => c.IsEmpty) > 0;
         }
 
-        private (bool, int?) findFreeCellIndex()
-        {
-            for (int i = 0; i < Cells.Length; i++) {
-                if (Cells[i].IsEmpty) {
-                    return (true, i);
-                }
-            }
-            return (false, null);
-        }
-
         public void RemoveAnalysis(int cellIndex)
         {
             Cells[cellIndex].SetEmpty();
+        }
+
+        public void SwitchToManualControl()
+        {
+
+        }
+
+        public void SwitchToAnalysisProcessing()
+        {
+
         }
     }
 }

@@ -26,6 +26,16 @@ namespace AnalyzerControl
 
         private static object locker = new object();
 
+        public enum States
+        {
+            Interrupted,
+            AnalysisProcessing
+        }
+
+        public States state { get; private set; }
+
+        bool interruptRequest = false;
+
         public AnalyzerDemoController(IConfigurationProvider provider) : base(provider)
         {
             conveyor = new ConveyorService(conveyorCellsCount);
@@ -35,6 +45,8 @@ namespace AnalyzerControl
 
             timer.Interval = 1000;
             timer.Elapsed += Timer_Elapsed;
+
+            state = States.Interrupted;
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -66,49 +78,82 @@ namespace AnalyzerControl
             stopwatch.Reset();
             stopwatch.Start();
 
-            //TODO: ПИЗДЕЦ (Надо что то сделать, убрать зависимость...)
+            startWorkCycle();
+        }
+
+        public void InterruptWork()
+        {
+            if(state == States.AnalysisProcessing)
+            {
+                interruptRequest = true;
+
+                while (state != States.Interrupted);
+
+                // Выполнение действий после прерывания
+                Analyzer.Needle.HomeLifterAndRotator();
+            }
+        }
+
+        public void ResumeWork()
+        {
+            state = States.AnalysisProcessing;
+
+            startWorkCycle();
+        }
+
+        private void startWorkCycle()
+        {
             Analyzer.TaskExecutor.StartTask(() =>
             {
-                AnalyzerWorkTask(); // Итак, запустили мы эту херню в отдельном потоке? зачем? (Возможно, для того, чтобы ее можно было аварийно прервать)
+                analyzerWorkCycle(); // Итак, запустили мы эту херню в отдельном потоке? зачем? (Возможно, для того, чтобы ее можно было аварийно прервать)
             });
         }
 
         // Типа главная задача, которая запускается в отдельном потоке, выполнение которой (задачи) можно прервать
         // - Вопрос - что будет, если мы прервем задачу и затем запустим ее заного?? Состояние куда то сохраняется?
-        private void AnalyzerWorkTask()
+        private void analyzerWorkCycle()
         {
-            foreach (AnalysisInfo tube in Options.Analyzes)
-            {
-                lock (locker)
-                {
-                    tube.Clear(); // А надо ли это делать? А что, если нужно продолжить работу, если пробирки были поставленны ранее? (См. пункт про полный поворот ротора)
-                }
-            }
+            resetAnalyzes();
 
-            Logger.DemoInfo($"Запущена инициализация всех устройств");
             AnalyzerOperations.MoveAllToHome();
-            Logger.DemoInfo($"Инициализация завершена");
             AnalyzerOperations.NeedleWash();
 
-            Logger.DemoInfo($"Запущена подготовка перед сканированием пробирок");
+            Logger.DemoInfo($"Запуск подготовки перед сканированием пробирок.");
 
             Analyzer.Needle.HomeLifterAndRotator();
             Analyzer.Conveyor.PrepareBeforeScanning();
 
-            Logger.DemoInfo($"Подготовка завершена");
+            Logger.DemoInfo($"Подготовка перед сканированием пробирок завершена.");
 
+            processAnalyzesCycle();
+
+            if(interruptRequest) {
+                state = States.Interrupted;
+                interruptRequest = false;
+                Logger.DemoInfo($"Прерывание работы выполнено.");
+            } else {
+                Logger.DemoInfo($"Все пробирки обработаны!"); // Точно? Ты уверен?
+            }
+        }
+
+        private void processAnalyzesCycle()
+        {
             сellInScanPosition = 0;
 
-            while (ExistUnhandledAnalyzes()) // пока есть невыполненные задачи
-            {
+            while (existUnhandledAnalyzes()) {
+
+                if (interruptRequest) {
+                    break;
+                }
+
                 checkFullCycle();
 
-                SearchTubeInConveyorCell(attemptsNumber: 2);
+                searchTubeInConveyorCell(attemptsNumber: 2);
 
                 int cellInSampling = getCellInSampling();
 
                 AnalysisInfo analysisInSampling =
-                    SearchBarcodeInDatabase(conveyor.Cells[cellInSampling].AnalysisBarcode);
+                    searchBarcodeInDatabase(conveyor.Cells[cellInSampling].AnalysisBarcode);
 
                 if (analysisInSampling != null) {
                     Logger.DemoInfo($"Пробирка со штрихкодом [{analysisInSampling.BarCode}] дошла до точки забора материала.");
@@ -116,20 +161,27 @@ namespace AnalyzerControl
                     if (analysisInSampling.NoSampleWasTaken()) {
                         Logger.DemoInfo($"Забор материала ранее не производился.");
 
-                        analysisInSampling.CurrentStage = 0; //TODO: ПИЗДЕЦ!!!! Заменить на enum
+                        analysisInSampling.SetSamplingStage();
 
-                        ProcessAnalisysInitialStage(analysisInSampling);
+                        processAnalisysInitialStage(analysisInSampling);
 
                         analysisInSampling.SetNewIncubationTime();
                     }
                 }
 
-                ProcessScheduledAnalizes();
+                processScheduledAnalyzes();
 
                 сellInScanPosition++;
             }
+        }
 
-            Logger.DemoInfo($"Все пробирки обработаны!"); // Точно? Ты уверен?
+        private void resetAnalyzes()
+        {   // А надо ли это делать? А что, если нужно продолжить работу, если пробирки были поставленны ранее? (См. пункт про полный поворот ротора)
+            foreach (AnalysisInfo analysis in Options.Analyzes) {
+                lock (locker) {
+                    analysis.Clear(); 
+                }
+            }
         }
 
         /// <summary>
@@ -161,9 +213,13 @@ namespace AnalyzerControl
         /// <summary>
         /// Обработка запланированных (оставшихся) анализов
         /// </summary>
-        private void ProcessScheduledAnalizes()
+        private void processScheduledAnalyzes()
         {
             foreach (AnalysisInfo analysis in Options.Analyzes) {
+                if (interruptRequest) {
+                    break;
+                }
+
                 if (analysis.ProcessingNotFinished()) {
                     analysis.NextStage();
 
@@ -172,17 +228,17 @@ namespace AnalyzerControl
 
                         Logger.DemoInfo($"Завершена инкубация для анализа [{analysis.BarCode}]!");
 
-                        ProcessAnalisysStage(analysis);
+                        processAnalisysStage(analysis);
                     } else {
                         Logger.DemoInfo($"Завершены все стадии анализа для анализа [{analysis.BarCode}]!");
 
-                        ProcessAnalisysFinishStage(analysis);
+                        processAnalisysFinishStage(analysis);
                     }
                 }
             }
         }
 
-        private bool ExistUnhandledAnalyzes()
+        private bool existUnhandledAnalyzes()
         {
             bool result = false;
 
@@ -198,7 +254,7 @@ namespace AnalyzerControl
 
         // TODO: А что, если пробирка найдена, но в cell уже забит штрих-код другой пробирки? 
         // (это все к вопросу о том, что мы не можем остлеживать точно полный круг конвейера)
-        private void SearchTubeInConveyorCell(int attemptsNumber)
+        private void searchTubeInConveyorCell(int attemptsNumber)
         {
             ConveyorCell cell = conveyor.Cells[сellInScanPosition];
 
@@ -218,11 +274,11 @@ namespace AnalyzerControl
                 if (!string.IsNullOrWhiteSpace(barcode)) {
                     Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barcode}].");
 
-                    cell.AnalysisBarcode = SearchBarcodeInDatabase(barcode).BarCode;
+                    cell.AnalysisBarcode = searchBarcodeInDatabase(barcode).BarCode;
 
                     if (!cell.IsEmpty) {
                         Logger.DemoInfo($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
-                        SearchBarcodeInDatabase(cell.AnalysisBarcode).IsFind = true;
+                        searchBarcodeInDatabase(cell.AnalysisBarcode).IsFind = true;
                     } else {
                         Logger.DemoInfo($"Пробирка со штрихкодом [{barcode}] не найдена в списке анализов!");
                     }
@@ -236,13 +292,13 @@ namespace AnalyzerControl
             Logger.DemoInfo($"Поиск пробирки (сканирование) завершен.");
         }
 
-        private AnalysisInfo SearchBarcodeInDatabase(string barcode)
+        private AnalysisInfo searchBarcodeInDatabase(string barcode)
         {
             // Значение по умолчанию для ссылочных и допускающих значения NULL типов равно null .
             return Options.Analyzes.Where(analysis => barcode.Contains(analysis.BarCode)).FirstOrDefault();
         }
 
-        private void ProcessAnalisysInitialStage(AnalysisInfo analysis)
+        private void processAnalisysInitialStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запущено выполнение подготовительной стадии.");
             Logger.DemoInfo($"Подготовка к забору материала из пробирки.");
@@ -294,7 +350,7 @@ namespace AnalyzerControl
             Logger.DemoInfo($"Перенос реагента в белую кювету.");
 
             // Выполняем перенос реагента из нужной ячейки картриджа в белую кювету
-            ProcessAnalisysStage(analysis);
+            processAnalisysStage(analysis);
 
             // Устанавливаем иглу в домашнюю позицию
             Analyzer.Needle.HomeLifterAndRotator();
@@ -305,7 +361,7 @@ namespace AnalyzerControl
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - завершено выполнение подготовительной стадии.");
         }
 
-        private void ProcessAnalisysStage(AnalysisInfo analysis)
+        private void processAnalisysStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
 
@@ -366,7 +422,7 @@ namespace AnalyzerControl
         }
 
         // TODO: Эта задача не реализована до конца!!!
-        private void ProcessAnalisysFinishStage(AnalysisInfo analysis)
+        private void processAnalisysFinishStage(AnalysisInfo analysis)
         {
             Logger.DemoInfo($"Анализ [{analysis.BarCode}] - запуск выполнения завершающей стадии.");
 
