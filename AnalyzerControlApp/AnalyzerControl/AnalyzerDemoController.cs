@@ -1,11 +1,10 @@
 ﻿using AnalyzerConfiguration;
 using AnalyzerControl.Configuration;
-using AnalyzerControl.Entyties;
+using AnalyzerControl.Services;
 using AnalyzerDomain.Entyties;
 using AnalyzerService;
 using AnalyzerService.Units;
 using Infrastructure;
-using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
@@ -14,9 +13,9 @@ namespace AnalyzerControl
 {
     public class AnalyzerDemoController : Configurable<DemoControllerConfiguration>
     {
-        // Ячейки конвейера
-        private const int conveyorCellsNumber = 54;
-        private ConveyorCell[] conveyorCells;
+        private const int conveyorCellsCount = 54;
+        ConveyorService conveyor;
+
         private const int cellsBetweenScanAndSampling = 7;
         private int currentCellInScan = 0;
 
@@ -27,7 +26,7 @@ namespace AnalyzerControl
 
         public AnalyzerDemoController(IConfigurationProvider provider) : base(provider)
         {
-            conveyorCells = Enumerable.Repeat(new ConveyorCell(), conveyorCellsNumber).ToArray();
+            conveyor = new ConveyorService(conveyorCellsCount);
 
             stopwatch = new Stopwatch();
             timer = new Timer();
@@ -103,7 +102,7 @@ namespace AnalyzerControl
 
             while (ExistUnhandledAnalyzes()) // пока есть невыполненные задачи
             {
-                if (currentCellInScan == conveyorCellsNumber) // прошли полный круг (и чо???)
+                if (currentCellInScan == conveyorCellsCount) // прошли полный круг (и чо???)
                 {
                     currentCellInScan = 0;
                     Logger.DemoInfo($"Круг пройден. Запуск повторного сканирования.");
@@ -113,7 +112,8 @@ namespace AnalyzerControl
 
                 int cellInSampling = getCellInSampling();
 
-                AnalysisInfo analysisInSampling = conveyorCells[cellInSampling].AnalysisInfo;
+                AnalysisInfo analysisInSampling = 
+                    SearchBarcodeInDatabase(conveyor.Cells[cellInSampling].AnalysisBarcode);
 
                 if (analysisInSampling != null)
                 {
@@ -147,7 +147,7 @@ namespace AnalyzerControl
         {
             //TODO: А че, нельзя как то нормально посчитать??? Че за ебаная магия тут???
             int cell = currentCellInScan - cellsBetweenScanAndSampling;
-            if (cell < 0) cell += conveyorCellsNumber;
+            if (cell < 0) cell += conveyorCellsCount;
 
             return cell;
         }
@@ -199,7 +199,7 @@ namespace AnalyzerControl
         // (это все к вопросу о том, что мы не можем остлеживать точно полный круг конвейера)
         private void SearchTubeInConveyorCell(int attemptsNumber)
         {
-            ConveyorCell cell = conveyorCells[currentCellInScan];
+            Services.ConveyorCell cell = conveyor.Cells[currentCellInScan];
 
             Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
 
@@ -219,12 +219,12 @@ namespace AnalyzerControl
                 {
                     Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barcode}].");
 
-                    cell.AnalysisInfo = SearchBarcodeInDatabase(barcode);
+                    cell.AnalysisBarcode = SearchBarcodeInDatabase(barcode).BarCode;
 
-                    if (cell.AnalysisInfo != null)
+                    if (!cell.IsEmpty)
                     {
                         Logger.DemoInfo($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
-                        cell.AnalysisInfo.IsFind = true;
+                        SearchBarcodeInDatabase(cell.AnalysisBarcode).IsFind = true;
                     }
                     else
                     {
