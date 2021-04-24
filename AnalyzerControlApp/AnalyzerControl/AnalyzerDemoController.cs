@@ -17,10 +17,12 @@ namespace AnalyzerControl
         ConveyorService conveyor;
 
         private const int cellsBetweenScanAndSampling = 7;
-        private int currentCellInScan = 0;
+        private int сellInScanPosition = 0;
 
         private Stopwatch stopwatch;
         Timer timer;
+
+        const int millisecondsInMinute = 60 * 1000;
 
         private static object locker = new object();
 
@@ -37,15 +39,12 @@ namespace AnalyzerControl
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (stopwatch.ElapsedMilliseconds >= (60 * 1e3))
-            {
+            if (stopwatch.ElapsedMilliseconds >= millisecondsInMinute) {
                 stopwatch.Restart();
                 Logger.DemoInfo("Прошла минута");
 
-                foreach (AnalysisInfo analysis in Options.Analyzes)
-                {
-                    lock (locker)
-                    {
+                foreach (AnalysisInfo analysis in Options.Analyzes) {
+                    lock (locker) {
                         if (analysis.InProgress())
                             analysis.DecrementRemainingTime();
                     }
@@ -98,29 +97,23 @@ namespace AnalyzerControl
 
             Logger.DemoInfo($"Подготовка завершена");
 
-            currentCellInScan = 0;
+            сellInScanPosition = 0;
 
             while (ExistUnhandledAnalyzes()) // пока есть невыполненные задачи
             {
-                if (currentCellInScan == conveyorCellsCount) // прошли полный круг (и чо???)
-                {
-                    currentCellInScan = 0;
-                    Logger.DemoInfo($"Круг пройден. Запуск повторного сканирования.");
-                }
+                checkFullCycle();
 
                 SearchTubeInConveyorCell(attemptsNumber: 2);
 
                 int cellInSampling = getCellInSampling();
 
-                AnalysisInfo analysisInSampling = 
+                AnalysisInfo analysisInSampling =
                     SearchBarcodeInDatabase(conveyor.Cells[cellInSampling].AnalysisBarcode);
 
-                if (analysisInSampling != null)
-                {
+                if (analysisInSampling != null) {
                     Logger.DemoInfo($"Пробирка со штрихкодом [{analysisInSampling.BarCode}] дошла до точки забора материала.");
 
-                    if (analysisInSampling.NoSampleWasTaken())
-                    {
+                    if (analysisInSampling.NoSampleWasTaken()) {
                         Logger.DemoInfo($"Забор материала ранее не производился.");
 
                         analysisInSampling.CurrentStage = 0; //TODO: ПИЗДЕЦ!!!! Заменить на enum
@@ -133,10 +126,23 @@ namespace AnalyzerControl
 
                 ProcessScheduledAnalizes();
 
-                currentCellInScan++;
+                сellInScanPosition++;
             }
 
             Logger.DemoInfo($"Все пробирки обработаны!"); // Точно? Ты уверен?
+        }
+
+        /// <summary>
+        /// Проверка того, что полный круг пройден.
+        /// Обнуляет порядковый номер ячейки в позиции перед сканером.
+        /// </summary>
+        private void checkFullCycle()
+        {
+            // прошли полный круг (и чо???)
+            if (сellInScanPosition == conveyorCellsCount) {
+                сellInScanPosition = 0;
+                Logger.DemoInfo($"Круг пройден. Запуск повторного сканирования.");
+            }
         }
 
         /// <summary>
@@ -146,7 +152,7 @@ namespace AnalyzerControl
         private int getCellInSampling()
         {
             //TODO: А че, нельзя как то нормально посчитать??? Че за ебаная магия тут???
-            int cell = currentCellInScan - cellsBetweenScanAndSampling;
+            int cell = сellInScanPosition - cellsBetweenScanAndSampling;
             if (cell < 0) cell += conveyorCellsCount;
 
             return cell;
@@ -157,22 +163,17 @@ namespace AnalyzerControl
         /// </summary>
         private void ProcessScheduledAnalizes()
         {
-            foreach (AnalysisInfo analysis in Options.Analyzes)
-            {
-                if (analysis.ProcessingNotFinished())
-                {
+            foreach (AnalysisInfo analysis in Options.Analyzes) {
+                if (analysis.ProcessingNotFinished()) {
                     analysis.NextStage();
 
-                    if (analysis.IsNotFinishStage())
-                    {
+                    if (analysis.IsNotFinishStage()) {
                         analysis.SetNewIncubationTime();
 
                         Logger.DemoInfo($"Завершена инкубация для анализа [{analysis.BarCode}]!");
 
                         ProcessAnalisysStage(analysis);
-                    }
-                    else
-                    {
+                    } else {
                         Logger.DemoInfo($"Завершены все стадии анализа для анализа [{analysis.BarCode}]!");
 
                         ProcessAnalisysFinishStage(analysis);
@@ -199,7 +200,7 @@ namespace AnalyzerControl
         // (это все к вопросу о том, что мы не можем остлеживать точно полный круг конвейера)
         private void SearchTubeInConveyorCell(int attemptsNumber)
         {
-            Services.ConveyorCell cell = conveyor.Cells[currentCellInScan];
+            ConveyorCell cell = conveyor.Cells[сellInScanPosition];
 
             Logger.DemoInfo($"Запущен поиск пробирки (сканирование)");
 
@@ -207,33 +208,26 @@ namespace AnalyzerControl
 
             int attempt = 0;
 
-            while (attempt < attemptsNumber)
-            {
+            while (attempt < attemptsNumber) {
                 Logger.DemoInfo($"Попытка {attempt}.");
 
                 Analyzer.Conveyor.RotateAndScanTube();
 
                 string barcode = Analyzer.State.TubeBarcode;
 
-                if (!string.IsNullOrWhiteSpace(barcode))
-                {
+                if (!string.IsNullOrWhiteSpace(barcode)) {
                     Logger.DemoInfo($"Обнаружена пробирка со штрихкодом [{barcode}].");
 
                     cell.AnalysisBarcode = SearchBarcodeInDatabase(barcode).BarCode;
 
-                    if (!cell.IsEmpty)
-                    {
+                    if (!cell.IsEmpty) {
                         Logger.DemoInfo($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
                         SearchBarcodeInDatabase(cell.AnalysisBarcode).IsFind = true;
-                    }
-                    else
-                    {
+                    } else {
                         Logger.DemoInfo($"Пробирка со штрихкодом [{barcode}] не найдена в списке анализов!");
                     }
                     break;
-                }
-                else
-                {
+                } else {
                     Logger.DemoInfo($"Пробирка не обнаружена.");
                 }
                 attempt++;
