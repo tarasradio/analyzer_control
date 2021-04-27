@@ -10,7 +10,7 @@
         xmlns:services="clr-namespace:AnalyzerControlGUI.Services"
         services:DialogCloser.DialogResult="{Binding DialogResult}"
         mc:Ignorable="d"
-        Title="Настройка подключения" 
+        Title="Соединение" 
         ResizeMode="CanMinimize" Topmost="True"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen">

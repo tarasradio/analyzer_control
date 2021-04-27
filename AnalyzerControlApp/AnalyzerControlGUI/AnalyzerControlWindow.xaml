@@ -1,0 +1,134 @@
+﻿<Window x:Class="AnalyzerControlGUI.AnalyzerControlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnalyzerControlGUI"
+        mc:Ignorable="d"
+        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
+        Loaded="Window_Loaded"
+        WindowState="Maximized"
+        Background="Transparent" AllowsTransparency="True">
+    <Border Background="#272537">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="9*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Canvas x:Name="CanvasTubes" Grid.Row="0">
+                    <Canvas.LayoutTransform>
+                        <ScaleTransform ScaleX="1" ScaleY="-1" CenterX=".5" CenterY=".5" />
+                    </Canvas.LayoutTransform>
+                </Canvas>
+                <Grid Grid.Row="1" x:Name="ConvHelp">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Ellipse Grid.Column="1" Grid.Row="1" Stroke="Black" Fill="LightGray" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                    <Ellipse Grid.Column="3" Grid.Row="1" Stroke="Black" Fill="LightGreen" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                    <Ellipse Grid.Column="5" Grid.Row="1" Stroke="Black" Fill="Khaki" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                    <Ellipse Grid.Column="7" Grid.Row="1" Stroke="Black" Fill="LightPink" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                    <Label Grid.Column="1" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Свободно</Label>
+                    <Label Grid.Column="3" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Обработано</Label>
+                    <Label Grid.Column="5" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">В процессе</Label>
+                    <Label Grid.Column="7" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Ошибка</Label>
+                </Grid>
+            </Grid>
+            <StackPanel Orientation="Vertical" Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonGreen}">Загрузка</Button>
+                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPinkRound}">Остановить</Button>
+                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonGreenRound}">Продолжить</Button>
+                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPink}">Выгрузка</Button>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" 
+                                Grid.Column="1" 
+                                Grid.Row="0" 
+                                Margin="50 0">
+
+                        <Label Margin="0 24" 
+                               HorizontalAlignment="Center" 
+                               FontSize="24" 
+                               Foreground="White">
+                            Состояние картриджей
+                        </Label>
+
+                        <StackPanel HorizontalAlignment="Center" 
+                                    x:Name="StackPanelCartriges" 
+                                    Orientation="Horizontal"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" 
+                                Grid.Column="1" 
+                                Grid.Row="1"
+                                Margin="50 0">
+
+                        <Label Margin="0 24 0 0" 
+                                 Height="100" 
+                                 Background="Transparent"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="16"
+                                 Foreground="White"
+                                 Content="Бабка, ты ебанутая? Вынь пальцы!"
+                                 BorderBrush="White"
+                               BorderThickness="0.5">
+                        </Label>
+
+                        <Label Margin="0 24" 
+                               HorizontalAlignment="Center" 
+                               FontSize="24" 
+                               Foreground="White">
+                            Список анализов
+                        </Label>
+
+                        <DataGrid Height="355" Background="Transparent">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Штрих-код" Width="10*" />
+                                <DataGridTextColumn Header="Статус" Width="2*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+
+                    <RichTextBox Height="250" 
+                                 Grid.Column="1" 
+                                 Grid.Row="2" 
+                                 Background="Transparent"
+                                 Margin="50 0">
+
+                    </RichTextBox>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
