@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace AnalyzerControlGUI.Views.CustomViews
@@ -10,8 +11,36 @@ namespace AnalyzerControlGUI.Views.CustomViews
     {
         readonly int _maxCount = 0;
         readonly double _maxHeight = 0;
-        int _countLeft = 0;
-        string _name;
+
+        public static readonly DependencyProperty BarcodeProperty = DependencyProperty.Register(
+            "Barcode", typeof(string), typeof(CartridgeCassetteControl), new PropertyMetadata("Barcode", new PropertyChangedCallback(BarcodeChanged)));
+
+        public static readonly DependencyProperty CountLeftProperty = DependencyProperty.Register(
+            "CountLeft", typeof(int), typeof(CartridgeCassetteControl), new PropertyMetadata(5, new PropertyChangedCallback(CountLeftChanged)));
+
+        private static void BarcodeChanged(DependencyObject depObj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            CartridgeCassetteControl s = (CartridgeCassetteControl)depObj;
+            Label theLabel = s.LabelName;
+            theLabel.Content = args.NewValue.ToString();
+        }
+
+        private static void CountLeftChanged(DependencyObject depObj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            CartridgeCassetteControl s = (CartridgeCassetteControl)depObj;
+            s.CountLeft = (int)args.NewValue;
+            s.UpdateView();
+        }
+
+        public CartridgeCassetteControl()
+        {
+            InitializeComponent();
+            _maxHeight = Status.Height;
+            _maxCount = 10;
+            UpdateView();
+        }
 
         public CartridgeCassetteControl(int maxCount, int countLeft, string name)
         {
@@ -21,27 +50,27 @@ namespace AnalyzerControlGUI.Views.CustomViews
             _maxCount = maxCount;
 
             CountLeft = countLeft;
-            LogoName = name;
+            Barcode = name;
         }
 
-        public string LogoName
+        public string Barcode
         {
-            get => _name;
+            get => (string)GetValue(BarcodeProperty);
             set
             {
-                _name = value;
-                LabelName.Content = _name;
+                SetValue(BarcodeProperty, value);
+                LabelName.Content = value;
             }
         }
 
         public int CountLeft
         {
-            get => _countLeft;
+            get => (int)GetValue(CountLeftProperty);
             set
             {
                 if (value <= _maxCount)
                 {
-                    _countLeft = value;
+                    SetValue(CountLeftProperty, value); ;
                     UpdateView();
                 }
             }
@@ -49,18 +78,16 @@ namespace AnalyzerControlGUI.Views.CustomViews
 
         void UpdateView()
         {
-            Status.Height = _countLeft * _maxHeight / _maxCount;
-            LabelCount.Content = _countLeft.ToString();
-            if ((float)_countLeft / _maxCount <= 0.2)
-            {
+            Status.Height = CountLeft * _maxHeight / _maxCount;
+            LabelCount.Content = CountLeft.ToString();
+
+            if ((float)CountLeft / _maxCount <= 0.2) {
                 Status.Fill = Brushes.LightPink;
             }
-            else if ((float)_countLeft / _maxCount <= 0.6)
-            {
+            else if ((float)CountLeft / _maxCount <= 0.6) {
                 Status.Fill = Brushes.Khaki;
             }
-            else if ((float)_countLeft / _maxCount <= 1)
-            {
+            else if ((float)CountLeft / _maxCount <= 1) {
                 Status.Fill = Brushes.LightGreen;
             }
         }

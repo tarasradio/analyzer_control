@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AnalyzerControlGUI"
+        xmlns:cv="clr-namespace:AnalyzerControlGUI.Views.CustomViews"
         mc:Ignorable="d"
         WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
         Loaded="Window_Loaded"
@@ -83,9 +84,29 @@
                             Состояние картриджей
                         </Label>
 
-                        <StackPanel HorizontalAlignment="Center" 
-                                    x:Name="StackPanelCartriges" 
-                                    Orientation="Horizontal"/>
+                        <ListView x:Name="cassettesLV"
+                                  HorizontalAlignment="Center"  
+                                  Height="Auto" Width="Auto"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  BorderThickness="0" Background="Transparent">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <cv:CartridgeCassetteControl Barcode="{Binding Barcode}" 
+                                                                 CountLeft="{Binding CountLeft}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Background="Transparent" Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Focusable" Value="false"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" 
