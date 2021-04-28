@@ -12,13 +12,13 @@ namespace AnalyzerControlGUI.ViewsHelpers
     {
         public double TubeDiameter { set; get; }
 
-        List<Point> _coords;
-        readonly List<int> _tubesCoordsIndexes;
-        readonly Canvas _canvas;
-        readonly double _pathResolution;
-        readonly double _scale;
-        readonly uint _tubesNum;
-        int offset = 1;
+        private List<Point> _coords;
+        private List<int> _tubesCoordsIndexes;
+        private Canvas _canvas;
+        private double _pathResolution;
+        private double _scale;
+        private uint _tubesNum;
+        private int offset = 1;
 
         public ConveyorHelper(Canvas canvas, double pathResolution, double scale, uint tubesNum)
         {
@@ -29,28 +29,28 @@ namespace AnalyzerControlGUI.ViewsHelpers
             _scale = scale;
             _tubesNum = tubesNum;
 
-            CalcConveyorPath();
-            CalcTubeDiameter();
-            CalcTubesCoordsIndexes();
-            DrawTubes();
+            calcConveyorPath();
+            calcTubeDiameter();
+            calcTubesCoordsIndexes();
+            drawTubes();
         }
 
         public void TubeLoopStep(object sender, EventArgs e)
         {
-            for (int i = 0; i < _tubesNum; i++)
-            {
+            for (int i = 0; i < _tubesNum; i++) {
                 int nextPointIndex = (_tubesCoordsIndexes[i] + offset) % _coords.Count;
                 Canvas.SetLeft(_canvas.Children[i], _coords[nextPointIndex].X);
                 Canvas.SetTop(_canvas.Children[i], _coords[nextPointIndex].Y);
             }
+
             offset += 50;
-            if (offset > _coords.Count)
-            {
+
+            if (offset > _coords.Count) {
                 offset = 0;
             }
         }
 
-        private void CalcConveyorPath()
+        private void calcConveyorPath()
         {
             List<Point> topPart = GraphMath.CalcArcPoint(
                 150, 500,
@@ -81,7 +81,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
             _coords.Add(_coords[0]);
         }
 
-        private Ellipse GetEllipse(Point point, int num, double diameter)
+        private Ellipse getEllipse(Point point, int num, double diameter)
         {
             Ellipse Ellipse = new Ellipse
             {
@@ -100,8 +100,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
         public void DrawPath()
         {
-            for (int i = 0; i < _coords.Count - 1; i++)
-            {
+            for (int i = 0; i < _coords.Count - 1; i++) {
                 Line myLine = new Line
                 {
                     Stroke = Brushes.Black,
@@ -118,32 +117,30 @@ namespace AnalyzerControlGUI.ViewsHelpers
             }
         }
 
-        private void CalcTubeDiameter()
+        private void calcTubeDiameter()
         {
             double path_length = 0;
 
-            for (int i = 1; i < _coords.Count; i++)
-            {
+            for (int i = 1; i < _coords.Count; i++) {
                 path_length += GraphMath.PointLenth(_coords[i - 1], _coords[i]);
             }
 
             TubeDiameter = path_length / _tubesNum;
         }
 
-        private void DrawTubes()
+        private void drawTubes()
         {
-            for (int i = 0; i < _tubesNum; i++)
-            {
-                _canvas.Children.Add(GetEllipse(_coords[_tubesCoordsIndexes[i]], i, TubeDiameter));
+            for (int i = 0; i < _tubesNum; i++) {
+                _canvas.Children.Add(getEllipse(_coords[_tubesCoordsIndexes[i]], i, TubeDiameter));
             }
         }
 
-        public void CalcTubesCoordsIndexes()
+        public void calcTubesCoordsIndexes()
         {
             int length = _coords.Count;
             int step = (int)Math.Floor((double)length / _tubesNum);
-            for (int i = step; i < length; i += step)
-            {
+
+            for (int i = step; i < length; i += step) {
                 _tubesCoordsIndexes.Add(i);
             }
         }

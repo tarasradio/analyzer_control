@@ -17,8 +17,6 @@ namespace PresentationWinForms.Forms
         public MainWindow()
         {
             InitializeComponent();
-
-            //runWpfWindow();
         }
 
         public void Init(Analyzer analyzer, ConveyorService conveyor, AnalyzerDemoController controller)
@@ -40,13 +38,6 @@ namespace PresentationWinForms.Forms
         private void Serial_ConnectionChanged(bool connected)
         {
             updateControlsState();
-        }
-
-        private void runWpfWindow()
-        {
-            PresentationWPF.EditAnalisysWindow editAnalisysWindow = new PresentationWPF.EditAnalisysWindow();
-            editAnalisysWindow.InitializeComponent();
-            editAnalisysWindow.Show();
         }
 
         private void buttonShowControlPanel_Click(object sender, EventArgs e)

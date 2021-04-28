@@ -296,10 +296,6 @@
       <Project>{6dcff691-ffbb-45b4-90a9-36806ae27d02}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PresentationWPF\PresentationWPF.csproj">
-      <Project>{03d18661-5df1-4d12-a564-1637c7028b4a}</Project>
-      <Name>PresentationWPF</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

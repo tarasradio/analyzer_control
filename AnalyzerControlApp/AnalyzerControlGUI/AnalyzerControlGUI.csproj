@@ -167,16 +167,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AnalyzerControlWindow.xaml.cs">
+    <Compile Include="ViewModels\AnalyzerControlViewModel.cs" />
+    <Compile Include="Views\CustomViews\CartridgeCassetteControl.xaml.cs">
+      <DependentUpon>CartridgeCassetteControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\AnalyzerControlWindow.xaml.cs">
       <DependentUpon>AnalyzerControlWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\BoolToIndexConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToIntConverter.cs" />
-    <Compile Include="CustomControls\CartridgeCassetteControl.xaml.cs">
-      <DependentUpon>CartridgeCassetteControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Services\DialogCloser.cs" />
     <Compile Include="ViewModels\AnalysisTypesManagementViewModel.cs" />
     <Compile Include="ViewModels\AnalyzesManagementViewModel.cs" />
@@ -189,36 +190,36 @@
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewsHelpers\ConveyorHelper.cs" />
     <Compile Include="ViewsHelpers\GraphMath.cs" />
-    <Compile Include="Views\AnalysisTypesWindow.xaml.cs">
+    <Compile Include="Views\DialogWindows\AnalysisTypesWindow.xaml.cs">
       <DependentUpon>AnalysisTypesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\AnalyzesWindow.xaml.cs">
+    <Compile Include="Views\DialogWindows\AnalyzesWindow.xaml.cs">
       <DependentUpon>AnalyzesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CartridgesWindow.xaml.cs">
+    <Compile Include="Views\DialogWindows\CartridgesWindow.xaml.cs">
       <DependentUpon>CartridgesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ConnectionWindow.xaml.cs">
+    <Compile Include="Views\DialogWindows\ConnectionWindow.xaml.cs">
       <DependentUpon>ConnectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditAnalysisTypeWindow.xaml.cs">
+    <Compile Include="Views\DialogWindows\EditAnalysisTypeWindow.xaml.cs">
       <DependentUpon>EditAnalysisTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditAnalysisWindow.xaml.cs">
+    <Compile Include="Views\DialogWindows\EditAnalysisWindow.xaml.cs">
       <DependentUpon>EditAnalysisWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditCartridgeModelWindow.xaml.cs">
+    <Compile Include="Views\DialogWindows\EditCartridgeModelWindow.xaml.cs">
       <DependentUpon>EditCartridgeModelWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="AnalyzerControlWindow.xaml">
+    <Page Include="Views\CustomViews\CartridgeCassetteControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CustomControls\CartridgeCassetteControl.xaml">
+    <Page Include="Views\Windows\AnalyzerControlWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -226,7 +227,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -234,31 +235,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AnalysisTypesWindow.xaml">
+    <Page Include="Views\DialogWindows\AnalysisTypesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AnalyzesWindow.xaml">
+    <Page Include="Views\DialogWindows\AnalyzesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\CartridgesWindow.xaml">
+    <Page Include="Views\DialogWindows\CartridgesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ConnectionWindow.xaml">
+    <Page Include="Views\DialogWindows\ConnectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditAnalysisTypeWindow.xaml">
+    <Page Include="Views\DialogWindows\EditAnalysisTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditAnalysisWindow.xaml">
+    <Page Include="Views\DialogWindows\EditAnalysisWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\EditCartridgeModelWindow.xaml">
+    <Page Include="Views\DialogWindows\EditCartridgeModelWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

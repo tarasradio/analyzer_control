@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="AnalyzerControlGUI.CustomControls.CartridgeCassetteControl"
+﻿<UserControl x:Class="AnalyzerControlGUI.Views.CustomViews.CartridgeCassetteControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AnalyzerControlGUI.CustomControls"
+             xmlns:local="clr-namespace:AnalyzerControlGUI.Views.CustomViews"
              mc:Ignorable="d" 
              d:DesignHeight="75" d:DesignWidth="50" Width="100" Height="100">
     <Grid>

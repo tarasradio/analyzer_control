@@ -18,7 +18,7 @@
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="9*"/>
-                    <RowDefinition/>
+                    <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Canvas x:Name="CanvasTubes" Grid.Row="0">
                     <Canvas.LayoutTransform>
@@ -94,7 +94,7 @@
                                 Margin="50 0">
 
                         <Label Margin="0 24 0 0" 
-                                 Height="100" 
+                                 Height="80" 
                                  Background="Transparent"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center"
@@ -112,7 +112,7 @@
                             Список анализов
                         </Label>
 
-                        <DataGrid Height="355" Background="Transparent">
+                        <DataGrid Height="300" Background="Transparent">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Штрих-код" Width="10*" />
                                 <DataGridTextColumn Header="Статус" Width="2*"/>

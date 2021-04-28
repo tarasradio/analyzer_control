@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace AnalyzerControlGUI.CustomControls
+namespace AnalyzerControlGUI.Views.CustomViews
 {
     /// <summary>
     /// Логика взаимодействия для CartridgeCassetteControl.xaml
@@ -39,7 +27,8 @@ namespace AnalyzerControlGUI.CustomControls
         public string LogoName
         {
             get => _name;
-            set {
+            set
+            {
                 _name = value;
                 LabelName.Content = _name;
             }
@@ -48,8 +37,10 @@ namespace AnalyzerControlGUI.CustomControls
         public int CountLeft
         {
             get => _countLeft;
-            set {
-                if (value <= _maxCount) {
+            set
+            {
+                if (value <= _maxCount)
+                {
                     _countLeft = value;
                     UpdateView();
                 }
