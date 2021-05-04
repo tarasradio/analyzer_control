@@ -16,7 +16,7 @@
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
-            <cv:ConveyorControl Grid.Column="0"/>
+            <cv:ConveyorControl x:Name="ConveyorView" Grid.Column="0"/>
             <StackPanel Orientation="Vertical" Grid.Column="1">
                 <Grid>
                     <Grid.ColumnDefinitions>

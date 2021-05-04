@@ -1,4 +1,5 @@
-﻿using AnalyzerControlGUI.Views.CustomViews;
+﻿using AnalyzerControlGUI.Models;
+using AnalyzerControlGUI.Views.CustomViews;
 using AnalyzerControlGUI.ViewsHelpers;
 using System;
 using System.Collections.ObjectModel;
@@ -19,8 +20,10 @@ namespace AnalyzerControlGUI
     public partial class AnalyzerControlWindow : Window
     {
         private const int cassettesCount = 10;
+        private const int conveyorCellsCount = 55;
 
         public ObservableCollection<Cassette> Cassettes { get; set; }
+        public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
 
         public AnalyzerControlWindow()
         {
@@ -40,7 +43,17 @@ namespace AnalyzerControlGUI
                 new Cassette { Barcode="21", CountLeft = 10 },
             };
 
+            ConveyorCells = new ObservableCollection<ConveyorCell>();
+
+            for(int i = 0; i < conveyorCellsCount; ++i)
+                ConveyorCells.Add(new ConveyorCell());
+
+            ConveyorCells[5].State = ConveyorCellState.Processed;
+            ConveyorCells[6].State = ConveyorCellState.Error;
+            ConveyorCells[7].State = ConveyorCellState.Processing;
+
             cassettesLV.ItemsSource = Cassettes;
+            ConveyorView.Cells = ConveyorCells;
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using AnalyzerControlGUI.ViewsHelpers;
+﻿using AnalyzerControlGUI.Models;
+using AnalyzerControlGUI.ViewsHelpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,16 +27,41 @@ namespace AnalyzerControlGUI.Views.CustomViews
         private ConveyorHelper conveyor;
         readonly DispatcherTimer tubeTimer = new DispatcherTimer();
 
+        public static readonly DependencyProperty CellsProperty 
+            = DependencyProperty.Register(
+                "Cells",
+                typeof(ObservableCollection<ConveyorCell>),
+                typeof(ConveyorControl),
+                new PropertyMetadata(null)
+                );
+
+        public ObservableCollection<ConveyorCell> Cells
+        {
+            get => (ObservableCollection<ConveyorCell>)GetValue(CellsProperty);
+            set {
+                SetValue(CellsProperty, value);
+                CreateHelper();
+            }
+        }
+
         public ConveyorControl()
         {
             InitializeComponent();
 
-            conveyor = new ConveyorHelper(CanvasTubes, 0.01, 1.7, 55);
-            ConvHelp.DataContext = conveyor;
+            CreateHelper();
+        }
 
-            tubeTimer.Tick += conveyor.TubeLoopStep;
-            tubeTimer.Interval = TimeSpan.FromMilliseconds(30);
-            tubeTimer.Start();
+        public void CreateHelper()
+        {
+            if(Cells != null)
+            {
+                conveyor = new ConveyorHelper(CanvasTubes, 0.01, 1.7, Cells.ToList());
+                ConvHelp.DataContext = conveyor;
+
+                tubeTimer.Tick += conveyor.ConveyorLoopStep;
+                tubeTimer.Interval = TimeSpan.FromMilliseconds(30);
+                tubeTimer.Start();
+            }
         }
     }
 }
