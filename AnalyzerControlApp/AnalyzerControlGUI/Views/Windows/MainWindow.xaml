@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AnalyzerControlGUI"
         xmlns:vm="clr-namespace:AnalyzerControlGUI.ViewModels"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Title="Управление базой данных анализатора v0.1" 
         Height="450" Width="800"
@@ -19,9 +20,34 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-            <Button Content="Подключение" Margin="3" Command="{Binding ConnectionCommand}"/>
-            <Button Content="Картриджи" Margin="3" Command="{Binding CartridgesManagementCommand}"/>
-            <Button Content="Типы анализов" Margin="3" Command="{Binding AnalysisTypesManagementCommand}"/>
+            <Button Margin="10" Padding="10" Command="{Binding ConnectionCommand}"
+                    Background="DarkBlue" Foreground="White" >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconBlock Icon="Usb" Margin="10,0"/>
+                        <TextBlock Text="Подключение"/>
+                    </StackPanel>
+                    
+                </Button.Content>
+            </Button>
+            <Button Margin="10" Padding="10" Command="{Binding CartridgesManagementCommand}"
+                    Background="DarkOrange" Foreground="White">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconBlock Icon="Box" Margin="10,0"/>
+                        <TextBlock Text="Картриджи"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Margin="10" Padding="10" Command="{Binding AnalysisTypesManagementCommand}"
+                    Background="DarkRed" Foreground="White">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconBlock Icon="PrescriptionBottle" Margin="10,0"/>
+                        <TextBlock Text="Типы анализов"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
             <TextBlock Text="{Binding ConnectionState, TargetNullValue='Состояние соединения'}"/>
