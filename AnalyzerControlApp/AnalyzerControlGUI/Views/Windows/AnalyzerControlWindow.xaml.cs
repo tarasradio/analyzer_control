@@ -19,8 +19,6 @@ namespace AnalyzerControlGUI
     public partial class AnalyzerControlWindow : Window
     {
         private const int cassettesCount = 10;
-        private ConveyorHelper conveyor;
-        readonly DispatcherTimer tubeTimer = new DispatcherTimer();
 
         public ObservableCollection<Cassette> Cassettes { get; set; }
 
@@ -43,16 +41,6 @@ namespace AnalyzerControlGUI
             };
 
             cassettesLV.ItemsSource = Cassettes;
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            conveyor = new ConveyorHelper(CanvasTubes, 0.01, 1.7, 55);
-            ConvHelp.DataContext = conveyor;
-
-            tubeTimer.Tick += conveyor.TubeLoopStep;
-            tubeTimer.Interval = TimeSpan.FromMilliseconds(30);
-            tubeTimer.Start();
         }
     }
 }

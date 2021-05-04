@@ -18,7 +18,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
         private double _pathResolution;
         private double _scale;
         private uint _tubesNum;
-        private int offset = 1;
+        private int _offset = 1;
 
         public ConveyorHelper(Canvas canvas, double pathResolution, double scale, uint tubesNum)
         {
@@ -38,15 +38,15 @@ namespace AnalyzerControlGUI.ViewsHelpers
         public void TubeLoopStep(object sender, EventArgs e)
         {
             for (int i = 0; i < _tubesNum; i++) {
-                int nextPointIndex = (_tubesCoordsIndexes[i] + offset) % _coords.Count;
+                int nextPointIndex = (_tubesCoordsIndexes[i] + _offset) % _coords.Count;
                 Canvas.SetLeft(_canvas.Children[i], _coords[nextPointIndex].X);
                 Canvas.SetTop(_canvas.Children[i], _coords[nextPointIndex].Y);
             }
 
-            offset += 50;
+            _offset += 50;
 
-            if (offset > _coords.Count) {
-                offset = 0;
+            if (_offset > _coords.Count) {
+                _offset = 0;
             }
         }
 

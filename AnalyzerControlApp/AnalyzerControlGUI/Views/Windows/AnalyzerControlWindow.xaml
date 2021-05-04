@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:AnalyzerControlGUI"
         xmlns:cv="clr-namespace:AnalyzerControlGUI.Views.CustomViews"
         mc:Ignorable="d"
-        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
-        Loaded="Window_Loaded"
+        d:DesignHeight="1080" d:DesignWidth="1920"
+        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Background="Transparent" AllowsTransparency="True">
     <Border Background="#272537">
@@ -16,43 +16,7 @@
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="9*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                <Canvas x:Name="CanvasTubes" Grid.Row="0">
-                    <Canvas.LayoutTransform>
-                        <ScaleTransform ScaleX="1" ScaleY="-1" CenterX=".5" CenterY=".5" />
-                    </Canvas.LayoutTransform>
-                </Canvas>
-                <Grid Grid.Row="1" x:Name="ConvHelp">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Ellipse Grid.Column="1" Grid.Row="1" Stroke="Black" Fill="LightGray" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
-                    <Ellipse Grid.Column="3" Grid.Row="1" Stroke="Black" Fill="LightGreen" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
-                    <Ellipse Grid.Column="5" Grid.Row="1" Stroke="Black" Fill="Khaki" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
-                    <Ellipse Grid.Column="7" Grid.Row="1" Stroke="Black" Fill="LightPink" StrokeThickness="0.5" Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
-                    <Label Grid.Column="1" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Свободно</Label>
-                    <Label Grid.Column="3" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Обработано</Label>
-                    <Label Grid.Column="5" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">В процессе</Label>
-                    <Label Grid.Column="7" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Ошибка</Label>
-                </Grid>
-            </Grid>
+            <cv:ConveyorControl Grid.Column="0"/>
             <StackPanel Orientation="Vertical" Grid.Column="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
