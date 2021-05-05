@@ -41,101 +41,105 @@
                             Margin="10" Padding="10"
                             Command="{Binding ConnectionCommand}"/>
                 </Grid>
-                
+
                 <cv:ConveyorControl Grid.Row="1"
                                     Cells="{Binding ConveyorCells, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
-            <StackPanel Grid.Column="1" Orientation="Vertical" >
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
-                        <Button Height="100" Margin="0 24" Command="{Binding WtfCommand}" Style="{StaticResource ButtonGreen}">Загрузка</Button>
-                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPinkRound}">Остановить</Button>
-                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonGreenRound}">Продолжить</Button>
-                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPink}">Выгрузка</Button>
-                    </StackPanel>
+                <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                Grid.Column="0" 
+                                Grid.RowSpan="3">
+                    <Button Height="100" Margin="0 24" Command="{Binding WtfCommand}" Style="{StaticResource ButtonGreen}">Загрузка</Button>
+                    <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPinkRound}">Остановить</Button>
+                    <Button Height="100" Margin="0 24" Style="{StaticResource ButtonGreenRound}">Продолжить</Button>
+                    <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPink}">Выгрузка</Button>
+                </StackPanel>
 
-                    <StackPanel Orientation="Vertical" 
+                <StackPanel Orientation="Vertical" 
                                 Grid.Column="1" 
                                 Grid.Row="0" 
                                 Margin="50 0">
 
-                        <Label Margin="0 24" 
+                    <Label Margin="0 24" 
                                HorizontalAlignment="Center" 
                                FontSize="24" 
                                Foreground="White">
-                            Состояние картриджей
-                        </Label>
+                        Состояние картриджей
+                    </Label>
 
-                        <ListView x:Name="cassettesLV"
+                    <ListView x:Name="cassettesLV"
                                   ItemsSource="{Binding Cassettes, UpdateSourceTrigger=PropertyChanged}"
                                   HorizontalAlignment="Center"  
                                   Height="Auto" Width="Auto"
                                   ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   BorderThickness="0" Background="Transparent">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <cv:CartridgeCassetteControl 
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <cv:CartridgeCassetteControl 
                                         Barcode="{Binding Barcode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                         CountLeft="{Binding CountLeft, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Background="Transparent" Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ListView.ItemsPanel>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Focusable" Value="false"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                    </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Background="Transparent" Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Focusable" Value="false"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </StackPanel>
 
-                    <StackPanel Orientation="Vertical" 
+                <StackPanel Orientation="Vertical" 
                                 Grid.Column="1" 
                                 Grid.Row="1"
                                 Margin="50 0">
 
-                        <Label Margin="0 24 0 0" 
-                                 Height="80" 
-                                 Background="Transparent"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 FontSize="16"
-                                 Foreground="White"
-                                 Content="Бабка, ты ебанутая? Вынь пальцы!"
-                                 BorderBrush="White"
-                               BorderThickness="0.5">
-                        </Label>
+                    <Label Margin="0 24 0 0"
+                           Height="50"
+                           Background="Transparent"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"
+                           FontSize="16"
+                           Foreground="White"
+                           Content="Бабка, ты ебанутая? Вынь пальцы!"
+                           BorderBrush="White"
+                           BorderThickness="0.5"/>
+                    <Button Content="Аварийная остановка!"
+                            Height="80"
+                            Style="{StaticResource EmergencyButton}"/>
 
-                        <Label Margin="0 24" 
+                    <Label Margin="0 24" 
                                HorizontalAlignment="Center" 
                                FontSize="24" 
                                Foreground="White">
-                            Список анализов
-                        </Label>
+                        Список анализов
+                    </Label>
 
-                        <DataGrid Height="300" Background="Transparent">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Штрих-код" Width="10*" />
-                                <DataGridTextColumn Header="Статус" Width="2*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
+                    <DataGrid Height="300" Background="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Штрих-код" Width="10*" />
+                            <DataGridTextColumn Header="Статус" Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
 
-                    <TextBlock Height="250"
+                <TextBlock Height="250"
                                Grid.Column="1"
                                Grid.Row="2"
                                Background="Transparent"
@@ -143,9 +147,8 @@
                                Margin="50 0"
                                Padding="10"
                                Text="{Binding LogText, FallbackValue='Вывод информации...'}">
-                    </TextBlock>
-                </Grid>
-            </StackPanel>
+                </TextBlock>
+            </Grid>
         </Grid>
     </Border>
 </Window>
