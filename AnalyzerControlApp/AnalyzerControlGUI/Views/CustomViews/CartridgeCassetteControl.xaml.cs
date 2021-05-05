@@ -13,24 +13,22 @@ namespace AnalyzerControlGUI.Views.CustomViews
         readonly double _maxHeight = 0;
 
         public static readonly DependencyProperty BarcodeProperty = DependencyProperty.Register(
-            "Barcode", typeof(string), typeof(CartridgeCassetteControl), new PropertyMetadata("Barcode", new PropertyChangedCallback(BarcodeChanged)));
+            "Barcode", typeof(string), typeof(CartridgeCassetteControl), new PropertyMetadata("123", new PropertyChangedCallback(BarcodeChanged)));
 
         public static readonly DependencyProperty CountLeftProperty = DependencyProperty.Register(
-            "CountLeft", typeof(int), typeof(CartridgeCassetteControl), new PropertyMetadata(5, new PropertyChangedCallback(CountLeftChanged)));
+            "CountLeft", typeof(float), typeof(CartridgeCassetteControl), new PropertyMetadata(5.0f, new PropertyChangedCallback(CountLeftChanged)));
 
         private static void BarcodeChanged(DependencyObject depObj,
             DependencyPropertyChangedEventArgs args)
         {
             CartridgeCassetteControl s = (CartridgeCassetteControl)depObj;
-            Label theLabel = s.LabelName;
-            theLabel.Content = args.NewValue.ToString();
+            s.LabelName.Content = args.NewValue.ToString();
         }
 
         private static void CountLeftChanged(DependencyObject depObj,
             DependencyPropertyChangedEventArgs args)
         {
             CartridgeCassetteControl s = (CartridgeCassetteControl)depObj;
-            s.CountLeft = (int)args.NewValue;
             s.UpdateView();
         }
 
@@ -59,19 +57,16 @@ namespace AnalyzerControlGUI.Views.CustomViews
             set
             {
                 SetValue(BarcodeProperty, value);
-                LabelName.Content = value;
             }
         }
 
-        public int CountLeft
+        public float CountLeft
         {
-            get => (int)GetValue(CountLeftProperty);
+            get => (float)GetValue(CountLeftProperty);
             set
             {
-                if (value <= _maxCount)
-                {
-                    SetValue(CountLeftProperty, value); ;
-                    UpdateView();
+                if (value <= _maxCount) {
+                    SetValue(CountLeftProperty, value);
                 }
             }
         }

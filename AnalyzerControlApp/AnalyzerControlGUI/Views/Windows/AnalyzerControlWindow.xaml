@@ -5,18 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AnalyzerControlGUI"
         xmlns:cv="clr-namespace:AnalyzerControlGUI.Views.CustomViews"
+        xmlns:vm="clr-namespace:AnalyzerControlGUI.ViewModels"
         mc:Ignorable="d"
         d:DesignHeight="1080" d:DesignWidth="1920"
         WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Background="Transparent" AllowsTransparency="True">
+    <Window.DataContext>
+        <vm:AnalyzerControlViewModel/>
+    </Window.DataContext>
     <Border Background="#272537">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
-            <cv:ConveyorControl x:Name="ConveyorView" Grid.Column="0"/>
+            <cv:ConveyorControl x:Name="ConveyorView" Grid.Column="0" 
+                                Cells="{Binding ConveyorCells, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Orientation="Vertical" Grid.Column="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -30,7 +35,7 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
-                        <Button Height="100" Margin="0 24" Style="{StaticResource ButtonGreen}">Загрузка</Button>
+                        <Button Height="100" Margin="0 24" Command="{Binding WtfCommand}" Style="{StaticResource ButtonGreen}">Загрузка</Button>
                         <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPinkRound}">Остановить</Button>
                         <Button Height="100" Margin="0 24" Style="{StaticResource ButtonGreenRound}">Продолжить</Button>
                         <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPink}">Выгрузка</Button>
@@ -49,6 +54,7 @@
                         </Label>
 
                         <ListView x:Name="cassettesLV"
+                                  ItemsSource="{Binding Cassettes, UpdateSourceTrigger=PropertyChanged}"
                                   HorizontalAlignment="Center"  
                                   Height="Auto" Width="Auto"
                                   ScrollViewer.VerticalScrollBarVisibility="Disabled" 
@@ -56,8 +62,9 @@
                                   BorderThickness="0" Background="Transparent">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <cv:CartridgeCassetteControl Barcode="{Binding Barcode}" 
-                                                                 CountLeft="{Binding CountLeft}"/>
+                                    <cv:CartridgeCassetteControl 
+                                        Barcode="{Binding Barcode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        CountLeft="{Binding CountLeft, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <ListView.ItemsPanel>

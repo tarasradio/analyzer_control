@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnalyzerDomain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +15,16 @@ namespace AnalyzerControlGUI.Models
         Error
     }
 
-    public class ConveyorCell
+    public class ConveyorCell : ModelBase
     {
-        public ConveyorCellState State { get; set; }
+        private ConveyorCellState _state;
+        public ConveyorCellState State { 
+            get { return _state; }
+            set { 
+                _state = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ConveyorCell()
         {

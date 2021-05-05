@@ -1,6 +1,7 @@
 ﻿using AnalyzerControlGUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,7 +14,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
     {
         public double TubeDiameter { set; get; }
 
-        private List<ConveyorCell> _cells;
+        public ObservableCollection<ConveyorCell> Cells = new ObservableCollection<ConveyorCell>();
 
         private List<Point> _coords;
         private List<int> _cellsCoordsIndexes;
@@ -22,14 +23,14 @@ namespace AnalyzerControlGUI.ViewsHelpers
         private double _scale;
         private int _offset = 1;
 
-        public ConveyorHelper(Canvas canvas, double pathResolution, double scale, List<ConveyorCell> cells) 
+        public ConveyorHelper(Canvas canvas, double pathResolution, double scale, ObservableCollection<ConveyorCell> cells) 
         {
             _coords = new List<Point>();
             _cellsCoordsIndexes = new List<int>();
             _canvas = canvas;
             _pathResolution = pathResolution;
             _scale = scale;
-            _cells = cells;
+            Cells = cells;
 
             calcConveyorPath();
             calcCellDiameter();
@@ -40,7 +41,11 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
         public void ConveyorLoopStep(object sender, EventArgs e)
         {
-            for (int i = 0; i < _cells.Count; i++) {
+            for (int i = 0; i < Cells.Count; i++) {
+
+                Ellipse ellipse = (Ellipse)_canvas.Children[i];
+                ellipse.Fill = GetFillBrush(Cells[i]);
+
                 int nextPointIndex = (_cellsCoordsIndexes[i] + _offset) % _coords.Count;
                 Canvas.SetLeft(_canvas.Children[i], _coords[nextPointIndex].X);
                 Canvas.SetTop(_canvas.Children[i], _coords[nextPointIndex].Y);
@@ -88,25 +93,8 @@ namespace AnalyzerControlGUI.ViewsHelpers
         {
             Brush fillBrush = Brushes.LightGray;
 
-            ConveyorCell cell = _cells[num];
-
-            switch(cell.State)
-            {
-                case ConveyorCellState.Empty:
-                    fillBrush = Brushes.LightGray;
-                    break;
-                case ConveyorCellState.Processed:
-                    fillBrush = Brushes.LightGreen;
-                    break;
-                case ConveyorCellState.Processing:
-                    fillBrush = Brushes.Khaki;
-                    break;
-                case ConveyorCellState.Error:
-                    fillBrush = Brushes.LightPink;
-                    break;
-                default:
-                    break;
-            }
+            ConveyorCell cell = Cells[num];
+            fillBrush = GetFillBrush(cell);
 
             Ellipse Ellipse = new Ellipse
             {
@@ -121,6 +109,30 @@ namespace AnalyzerControlGUI.ViewsHelpers
             Canvas.SetLeft(Ellipse, point.X - diameter / 2);
             Canvas.SetTop(Ellipse, point.Y - diameter / 2);
             return Ellipse;
+        }
+
+        private static Brush GetFillBrush(ConveyorCell cell)
+        {
+            Brush brush = Brushes.LightGray;
+            switch (cell.State)
+            {
+                case ConveyorCellState.Empty:
+                    brush = Brushes.LightGray;
+                    break;
+                case ConveyorCellState.Processed:
+                    brush = Brushes.LightGreen;
+                    break;
+                case ConveyorCellState.Processing:
+                    brush = Brushes.Khaki;
+                    break;
+                case ConveyorCellState.Error:
+                    brush = Brushes.LightPink;
+                    break;
+                default:
+                    break;
+            }
+
+            return brush;
         }
 
         public void DrawPath()
@@ -150,13 +162,13 @@ namespace AnalyzerControlGUI.ViewsHelpers
                 path_length += GraphMath.PointLenth(_coords[i - 1], _coords[i]);
             }
 
-            TubeDiameter = path_length / _cells.Count;
+            TubeDiameter = path_length / Cells.Count;
         }
         
         public void calcCellsCoordsIndexes()
         {
             int length = _coords.Count;
-            int step = (int)Math.Floor((double)length / _cells.Count);
+            int step = (int)Math.Floor((double)length / Cells.Count);
 
             for (int i = step; i < length; i += step) {
                 _cellsCoordsIndexes.Add(i);
@@ -165,7 +177,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
         private void drawCells()
         {
-            for (int i = 0; i < _cells.Count; i++) {
+            for (int i = 0; i < Cells.Count; i++) {
                 _canvas.Children.Add(getEllipse(_coords[_cellsCoordsIndexes[i]], i, TubeDiameter));
             }
         }

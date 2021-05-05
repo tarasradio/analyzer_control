@@ -170,6 +170,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Cassette.cs" />
     <Compile Include="Models\ConveyorCell.cs" />
     <Compile Include="ViewModels\AnalyzerControlViewModel.cs" />
     <Compile Include="Views\CustomViews\CartridgeCassetteControl.xaml.cs">
