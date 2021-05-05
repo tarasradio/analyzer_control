@@ -20,9 +20,32 @@
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
-            <cv:ConveyorControl x:Name="ConveyorView" Grid.Column="0" 
-                                Cells="{Binding ConveyorCells, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <StackPanel Orientation="Vertical" Grid.Column="1">
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Margin="20"
+                               FontSize="16"
+                               Foreground="Red"
+                               Text="{Binding ConnectionState, FallbackValue='Соединение не установленно'}"/>
+                    <Button Grid.Column="1"
+                            Content="Соединение"
+                            Style="{StaticResource ConnectionButton }"
+                            Margin="10" Padding="10"
+                            Command="{Binding ConnectionCommand}"/>
+                </Grid>
+                
+                <cv:ConveyorControl Grid.Row="1"
+                                    Cells="{Binding ConveyorCells, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+            <StackPanel Grid.Column="1" Orientation="Vertical" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -112,13 +135,15 @@
                         </DataGrid>
                     </StackPanel>
 
-                    <RichTextBox Height="250" 
-                                 Grid.Column="1" 
-                                 Grid.Row="2" 
-                                 Background="Transparent"
-                                 Margin="50 0">
-
-                    </RichTextBox>
+                    <TextBlock Height="250"
+                               Grid.Column="1"
+                               Grid.Row="2"
+                               Background="Transparent"
+                               Foreground="White"
+                               Margin="50 0"
+                               Padding="10"
+                               Text="{Binding LogText, FallbackValue='Вывод информации...'}">
+                    </TextBlock>
                 </Grid>
             </StackPanel>
         </Grid>
