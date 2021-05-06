@@ -4,6 +4,7 @@ using AnalyzerConfiguration;
 using AnalyzerService.ExecutionControl;
 using AnalyzerService.Units;
 using Infrastructure;
+using System;
 
 namespace AnalyzerService
 {
@@ -42,8 +43,14 @@ namespace AnalyzerService
             LoadUnitsConfiguration();
             
             SerialCommunicationInit();
+            SerialCommunicationOpen();
 
             Logger.Info("Запись работы системы начата");
+        }
+
+        private void SerialCommunicationOpen()
+        {
+            Serial.Open(Options.PortName, Options.Baudrate);
         }
 
         private void SerialCommunicationInit()

@@ -29,7 +29,7 @@ namespace AnalyzerConfiguration
     public class AnalyzerServiceConfiguration
     {
         public string PortName { get; set; }
-        public uint Baudrate { get; set; }
+        public int Baudrate { get; set; }
 
         public List<Stepper> Steppers { get; set; }
         public List<Device> Devices { get; set; }

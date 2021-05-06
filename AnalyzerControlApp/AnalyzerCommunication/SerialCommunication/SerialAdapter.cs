@@ -6,73 +6,64 @@ namespace AnalyzerCommunication.SerialCommunication
 {
     public class SerialAdapter : ISerialAdapter
     {
-        private IPacketFinder packetFinder = null;
-        private SerialPort serialPort = null;
+        private IPacketFinder _packetFinder = null;
+        private SerialPort _serialPort = null;
 
         public event Action<bool> ConnectionChanged;
 
         public string PortName
         {
-            get => serialPort.PortName;
-            set => serialPort.PortName = value;
+            get => _serialPort.PortName;
+            set => _serialPort.PortName = value;
         }
 
         public string[] GetAvailablePorts() => SerialPort.GetPortNames();
-        public bool IsOpen() => serialPort.IsOpen;
+        public bool IsOpen() => _serialPort.IsOpen;
 
         public SerialAdapter(IPacketFinder packetFinder)
         {
-            this.packetFinder = packetFinder;
-            serialPort = new SerialPort();
-            serialPort.DataReceived += Port_DataReceived;
+            _packetFinder = packetFinder;
+            _serialPort = new SerialPort();
         }
 
         public bool Open(string portName, int baudrate)
         {
-            serialPort = new SerialPort(portName);
-            serialPort.BaudRate = baudrate;
-            serialPort.DataBits = 8;
-            serialPort.DataReceived += Port_DataReceived;
+            _serialPort.PortName = portName;
+            _serialPort.BaudRate = baudrate;
+            _serialPort.DataBits = 8;
+            _serialPort.DataReceived += onDataReceived;
 
-            serialPort.ReadTimeout = 500;
-            serialPort.WriteTimeout = 500;
+            _serialPort.ReadTimeout = 500;
+            _serialPort.WriteTimeout = 500;
 
-            serialPort.NewLine = "\r";
+            _serialPort.NewLine = "\r";
 
-            try
-            {
-                serialPort.Open();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при открытии порта { portName }.");
+            try {
+                _serialPort.Open();
+                ConnectionChanged?.Invoke(true);
+            } catch (Exception ex) {
+                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при открытии порта { portName }. {ex.Message}");
             }
 
-            ConnectionChanged(true);
-
-            return serialPort.IsOpen;
+            return _serialPort.IsOpen;
         }
 
         public void Close()
         {
-            try
-            {
-                serialPort.Close();
+            try {
+                _serialPort.Close();
+                ConnectionChanged?.Invoke(false);
+            } catch (Exception ex) {
+                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при закрытии порта {_serialPort.PortName}. {ex.Message}");
             }
-            catch (System.IO.IOException)
-            {
-                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при закрытии порта {serialPort.PortName}.");
-            }
-
-            ConnectionChanged(false);
         }
 
-        private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void onDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            byte[] buffer = new byte[serialPort.BytesToRead];
-            serialPort.Read(buffer, 0, buffer.Length);
+            byte[] buffer = new byte[_serialPort.BytesToRead];
+            _serialPort.Read(buffer, 0, buffer.Length);
 
-            packetFinder.FindPacket(buffer);
+            _packetFinder.FindPacket(buffer);
         }
 
         public void SendPacket(byte[] packet)
@@ -84,13 +75,10 @@ namespace AnalyzerCommunication.SerialCommunication
 
         private void SendBytes(byte[] bytes)
         {
-            try
-            {
-                serialPort.Write(bytes, 0, bytes.Length);
-            }
-            catch (Exception)
-            {
-                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка записи в порт.");
+            try {
+                _serialPort.Write(bytes, 0, bytes.Length);
+            } catch (Exception ex) {
+                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка записи в порт. {ex.Message}");
             }
         }
     }
