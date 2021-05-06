@@ -19,35 +19,91 @@ namespace AnalyzerControlGUI.ViewModels
         public ObservableCollection<Cassette> Cassettes { get; set; }
         public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
 
-        RelayCommand _wtfCommand;
+        RelayCommand _LoadCommand;
 
-        public RelayCommand WtfCommand
-        {
-            get
-            {
-                if (_wtfCommand == null)
-                {
-                    _wtfCommand = new RelayCommand(
-                       param => { wtf(); },
-                       param => { return (ConveyorCells != null); });
+        public RelayCommand LoadCommand {
+            get {
+                if (_LoadCommand == null) {
+                    _LoadCommand = new RelayCommand(
+                       param => { load(); },
+                       param => { return ConnectionState; });
                 }
-                return _wtfCommand;
+                return _LoadCommand;
             }
+        }
+
+        public void load()
+        {
+            Logger.Info($"Загрузка...");
+        }
+
+        RelayCommand _UnloadCommand;
+
+        public RelayCommand UnloadCommand {
+            get {
+                if (_UnloadCommand == null) {
+                    _UnloadCommand = new RelayCommand(
+                       param => { unload(); },
+                       param => { return ConnectionState; });
+                }
+                return _UnloadCommand;
+            }
+        }
+
+        public void unload()
+        {
+            Logger.Info($"Выгрузка...");
+        }
+
+        RelayCommand _AbortCommand;
+
+        public RelayCommand AbortCommand {
+            get {
+                if (_AbortCommand == null) {
+                    _AbortCommand = new RelayCommand(
+                       param => { abort(); },
+                       param => { return ConnectionState; });
+                }
+                return _AbortCommand;
+            }
+        }
+
+        public void abort()
+        {
+            Logger.Info($"Остановка работы...");
+        }
+
+        RelayCommand _ResumeCommand;
+
+        public RelayCommand ResumeCommand {
+            get {
+                if (_ResumeCommand == null) {
+                    _ResumeCommand = new RelayCommand(
+                       param => { resume(); },
+                       param => { return ConnectionState; });
+                }
+                return _ResumeCommand;
+            }
+        }
+
+        public void resume()
+        {
+            Logger.Info($"Продолжение работы...");
         }
 
         public void wtf()
         {
-            Cassettes[1].CountLeft = 6;
-            Cassettes[4].CountLeft = 2 ;
-            Cassettes[5].CountLeft = 3 ;
+            //Cassettes[1].CountLeft = 6;
+            //Cassettes[4].CountLeft = 2 ;
+            //Cassettes[5].CountLeft = 3 ;
 
-            if (ConveyorCells[4].State == ConveyorCellState.Empty)
-            {
-                ConveyorCells[4].State = ConveyorCellState.Error;
-            } else
-            {
-                ConveyorCells[4].State = ConveyorCellState.Empty;
-            }
+            //if (ConveyorCells[4].State == ConveyorCellState.Empty)
+            //{
+            //    ConveyorCells[4].State = ConveyorCellState.Error;
+            //} else
+            //{
+            //    ConveyorCells[4].State = ConveyorCellState.Empty;
+            //}
         }
 
         static IConfigurationProvider provider = new XmlConfigurationProvider();

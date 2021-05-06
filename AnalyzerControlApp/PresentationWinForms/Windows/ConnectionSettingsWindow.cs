@@ -112,7 +112,7 @@ namespace PresentationWinForms.Forms
             int baudrate = int.Parse(selectBaudrate.SelectedItem.ToString());
 
             analyzer.Options.PortName = portName;
-            analyzer.Options.Baudrate = (uint)baudrate;
+            analyzer.Options.Baudrate = baudrate;
 
             analyzer.SaveConfiguration("AnalyzerServiceConfiguration");
 

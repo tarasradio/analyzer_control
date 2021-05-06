@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AnalyzerControlGUI"
+        xmlns:helpers="clr-namespace:AnalyzerControlGUI.ViewsHelpers"
         xmlns:cv="clr-namespace:AnalyzerControlGUI.Views.CustomViews"
         xmlns:vm="clr-namespace:AnalyzerControlGUI.ViewModels"
         xmlns:converters="clr-namespace:AnalyzerControlGUI.Converters"
@@ -64,10 +65,10 @@
                                 VerticalAlignment="Center"
                                 Grid.Column="0" 
                                 Grid.RowSpan="3">
-                    <Button Height="100" Margin="0 24" Command="{Binding WtfCommand}" Style="{StaticResource ButtonGreen}">Загрузка</Button>
-                    <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPinkRound}">Остановить</Button>
-                    <Button Height="100" Margin="0 24" Style="{StaticResource ButtonGreenRound}">Продолжить</Button>
-                    <Button Height="100" Margin="0 24" Style="{StaticResource ButtonPink}">Выгрузка</Button>
+                    <Button Height="100" Margin="0 24" Command="{Binding LoadCommand}" Style="{StaticResource ButtonGreen}">Загрузка</Button>
+                    <Button Height="100" Margin="0 24" Command="{Binding AbortCommand}" Style="{StaticResource ButtonPinkRound}">Остановить</Button>
+                    <Button Height="100" Margin="0 24" Command="{Binding ResumeCommand}" Style="{StaticResource ButtonGreenRound}">Продолжить</Button>
+                    <Button Height="100" Margin="0 24" Command="{Binding UnloadCommand}" Style="{StaticResource ButtonPink}">Выгрузка</Button>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical" 
@@ -125,6 +126,7 @@
                            BorderBrush="White"
                            BorderThickness="0.5"/>
                     <Button Content="Аварийная остановка!"
+                            Command="{Binding AbortCommand}"
                             Height="80"
                             Style="{StaticResource EmergencyButton}"/>
 
@@ -142,16 +144,15 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-
-                <TextBlock Height="250"
-                               Grid.Column="1"
-                               Grid.Row="2"
-                               Background="Transparent"
-                               Foreground="White"
-                               Margin="50 0"
-                               Padding="10"
-                               Text="{Binding LogText, FallbackValue='Вывод информации...'}">
-                </TextBlock>
+                <ScrollViewer Grid.Column="1" Grid.Row="2" 
+                              Margin="50 0" Padding="0" Height="250"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              CanContentScroll="True"
+                              helpers:AutoScrollHelper.AutoScroll="True">
+                    <TextBlock Text="{Binding LogText, FallbackValue='Вывод информации...'}"
+                               Background="Transparent" Foreground="White"/>
+                </ScrollViewer>
             </Grid>
         </Grid>
     </Border>
