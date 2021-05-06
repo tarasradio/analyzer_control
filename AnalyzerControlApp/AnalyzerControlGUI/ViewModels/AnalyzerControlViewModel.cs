@@ -71,6 +71,8 @@ namespace AnalyzerControlGUI.ViewModels
         public void abort()
         {
             Logger.Info($"Остановка работы...");
+            Analyzer.AbortExecution();
+            demoController.AbortWork();
         }
 
         RelayCommand _ResumeCommand;
