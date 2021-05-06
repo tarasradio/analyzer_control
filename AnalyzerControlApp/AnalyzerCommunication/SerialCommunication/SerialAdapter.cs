@@ -70,10 +70,10 @@ namespace AnalyzerCommunication.SerialCommunication
         {
             byte[] wrappedPacket = ByteStuffing.WrapPacket(packet);
 
-            SendBytes(wrappedPacket);
+            sendBytes(wrappedPacket);
         }
 
-        private void SendBytes(byte[] bytes)
+        private void sendBytes(byte[] bytes)
         {
             try {
                 _serialPort.Write(bytes, 0, bytes.Length);
