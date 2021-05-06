@@ -86,10 +86,11 @@ namespace AnalyzerControlGUI.ViewModels
 
         private void UpdateConnectionState(bool state)
         {
+            ConnectionState = state;
             if (state) {
-                ConnectionState = "Соединение установлено";
+                ConnectionText = "Соединение установлено";
             } else {
-                ConnectionState = "Соединение не установлено";
+                ConnectionText = "Соединение не установлено";
             }
         }
 
@@ -118,9 +119,20 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private string _connectionState;
+        private string _connectionText;
 
-        public string ConnectionState {
+        public string ConnectionText {
+            get => _connectionText;
+            set {
+                _connectionText = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private bool _connectionState;
+
+        public bool ConnectionState
+        {
             get => _connectionState;
             set {
                 _connectionState = value;

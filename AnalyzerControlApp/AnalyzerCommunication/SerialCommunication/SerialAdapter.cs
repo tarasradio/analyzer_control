@@ -28,7 +28,7 @@ namespace AnalyzerCommunication.SerialCommunication
 
         public bool Open(string portName, int baudrate)
         {
-            _serialPort.PortName = portName;
+            _serialPort = new SerialPort(portName);
             _serialPort.BaudRate = baudrate;
             _serialPort.DataBits = 8;
             _serialPort.DataReceived += onDataReceived;

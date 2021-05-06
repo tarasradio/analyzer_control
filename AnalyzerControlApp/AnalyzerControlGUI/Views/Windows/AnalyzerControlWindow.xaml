@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:AnalyzerControlGUI"
         xmlns:cv="clr-namespace:AnalyzerControlGUI.Views.CustomViews"
         xmlns:vm="clr-namespace:AnalyzerControlGUI.ViewModels"
+        xmlns:converters="clr-namespace:AnalyzerControlGUI.Converters"
         mc:Ignorable="d"
         d:DesignHeight="1080" d:DesignWidth="1920"
         WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
@@ -14,6 +15,9 @@
     <Window.DataContext>
         <vm:AnalyzerControlViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <converters:BoolToColorConverter x:Key="connectionToColorConverter" />
+    </Window.Resources>
     <Border Background="#272537">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -33,13 +37,13 @@
                     <TextBlock Grid.Column="0"
                                Margin="20"
                                FontSize="16"
-                               Foreground="Red"
-                               Text="{Binding ConnectionState, FallbackValue='Соединение не установленно'}"/>
-                    <Button Grid.Column="1"
+                               Foreground="{Binding ConnectionState, FallbackValue='Red', Converter={StaticResource connectionToColorConverter}}"
+                               Text="{Binding ConnectionText, FallbackValue='Соединение не установленно'}"/>
+                    <!--<Button Grid.Column="1"
                             Content="Соединение"
                             Style="{StaticResource ConnectionButton }"
                             Margin="10" Padding="10"
-                            Command="{Binding ConnectionCommand}"/>
+                            Command="{Binding ConnectionCommand}"/>-->
                 </Grid>
 
                 <cv:ConveyorControl Grid.Row="1"

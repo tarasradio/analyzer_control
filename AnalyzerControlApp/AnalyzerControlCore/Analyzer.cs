@@ -55,7 +55,16 @@ namespace AnalyzerService
         private void SerialCommunicationOpen()
         {
             CommunicationService.Run();
-            //Serial.Open(Options.PortName, Options.Baudrate);
+            CommunicationService.DeviceConnectionChanged += onDeviceConnectionChanged;
+        }
+
+        private void onDeviceConnectionChanged(bool connected)
+        {
+            if(connected) {
+                Serial.Open(Options.PortName, Options.Baudrate);
+            } else {
+                Serial.Close();
+            }
         }
 
         private void SerialCommunicationInit()
