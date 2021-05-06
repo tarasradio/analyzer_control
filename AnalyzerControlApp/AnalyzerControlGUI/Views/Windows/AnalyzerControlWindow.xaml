@@ -37,7 +37,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
                                Margin="20"
-                               FontSize="16"
+                               FontSize="24"
                                Foreground="{Binding ConnectionState, FallbackValue='Red', Converter={StaticResource connectionToColorConverter}}"
                                Text="{Binding ConnectionText, FallbackValue='Соединение не установленно'}"/>
                     <!--<Button Grid.Column="1"
@@ -57,7 +57,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2.4*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -116,7 +116,7 @@
                                 Margin="50 0">
 
                     <Label Margin="0 24 0 0"
-                           Height="50"
+                           Height="80"
                            Background="Transparent"
                            HorizontalContentAlignment="Center"
                            VerticalContentAlignment="Center"
@@ -125,10 +125,6 @@
                            Content="Бабка, ты ебанутая? Вынь пальцы!"
                            BorderBrush="White"
                            BorderThickness="0.5"/>
-                    <Button Content="Аварийная остановка!"
-                            Command="{Binding AbortCommand}"
-                            Height="80"
-                            Style="{StaticResource EmergencyButton}"/>
 
                     <Label Margin="0 24" 
                                HorizontalAlignment="Center" 
@@ -143,9 +139,16 @@
                             <DataGridTextColumn Header="Статус" Width="2*"/>
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <Button Content="Аварийная остановка!"
+                            Command="{Binding AbortCommand}"
+                            Height="80"
+                            Margin="0 24"
+                            Style="{StaticResource EmergencyButton}"/>
                 </StackPanel>
-                <ScrollViewer Grid.Column="1" Grid.Row="2" 
-                              Margin="50 0" Padding="0" Height="250"
+                <ScrollViewer 
+                              Margin="50 0 50 24"
+                              Grid.Column="1" Grid.Row="3"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled"
                               CanContentScroll="True"
