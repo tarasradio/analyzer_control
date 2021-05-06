@@ -17,6 +17,8 @@ namespace AnalyzerService
         public static ResponseHandler ResponseHandler { get; set; }
         public static ISerialAdapter Serial { get; private set; }
 
+        public static ConnectionService CommunicationService { get; private set; }
+
         public static ICommandExecutor CommandExecutor { get; private set; }
         public static TaskExecutor TaskExecutor { get; private set; }
 
@@ -39,6 +41,8 @@ namespace AnalyzerService
             Rotor = new RotorUnit(CommandExecutor, provider);
             Pomp = new PompUnit(CommandExecutor, provider);
 
+            CommunicationService = new ConnectionService();
+
             LoadConfiguration("AnalyzerServiceConfiguration");
             LoadUnitsConfiguration();
             
@@ -50,7 +54,8 @@ namespace AnalyzerService
 
         private void SerialCommunicationOpen()
         {
-            Serial.Open(Options.PortName, Options.Baudrate);
+            CommunicationService.Run();
+            //Serial.Open(Options.PortName, Options.Baudrate);
         }
 
         private void SerialCommunicationInit()

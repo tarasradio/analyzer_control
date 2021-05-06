@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyzerState.cs" />
+    <Compile Include="ConnectionService.cs" />
     <Compile Include="ExecutionControl\ICommandExecutor.cs" />
     <Compile Include="ExecutionControl\CommandExecutor.cs" />
     <Compile Include="ExecutionControl\TaskExecutor.cs" />
