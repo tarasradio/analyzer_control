@@ -37,7 +37,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0"
                                Margin="20"
-                               FontSize="24"
+                               FontSize="16"
                                Foreground="{Binding ConnectionState, FallbackValue='Red', Converter={StaticResource connectionToColorConverter}}"
                                Text="{Binding ConnectionText, FallbackValue='Соединение не установленно'}"/>
                     <!--<Button Grid.Column="1"
