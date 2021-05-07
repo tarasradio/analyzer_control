@@ -15,7 +15,7 @@ namespace AnalyzerControl
     {
         public static void MoveAllToHome()
         {
-            Logger.DemoInfo($"Запуск возврата всех устройств в начальную позицию.");
+            Logger.Debug($"Запуск возврата всех устройств в начальную позицию.");
 
             Analyzer.Needle.HomeLifterAndRotator();
             Analyzer.Charger.HomeHook();
@@ -24,7 +24,7 @@ namespace AnalyzerControl
             Analyzer.Rotor.Home();
             Analyzer.Pomp.Home();
 
-            Logger.DemoInfo($"Возврат устройств в начальную позицию завершен.");
+            Logger.Debug($"Возврат устройств в начальную позицию завершен.");
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace AnalyzerControl
         /// </summary>
         public static void NeedleWash()
         {
-            Logger.DemoInfo($"Запуск промывки иглы.");
+            Logger.Debug($"Запуск промывки иглы.");
 
             Analyzer.Needle.HomeLifter();
             Analyzer.Needle.TurnAndGoDownToWashing();
@@ -40,7 +40,7 @@ namespace AnalyzerControl
             Analyzer.Pomp.Home();
             Analyzer.Pomp.CloseValves();
 
-            Logger.DemoInfo($"Промывка иглы завершена.");
+            Logger.Debug($"Промывка иглы завершена.");
         }
 
         /// <summary>

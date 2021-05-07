@@ -40,7 +40,7 @@ namespace AnalyzerService
                 lock (locker)
                 {
                     tubeBarcode = value;
-                    Logger.Info($"New tube barcode received: {value}");
+                    Logger.Debug($"New tube barcode received: {value}");
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace AnalyzerService
                 lock (locker)
                 {
                     cartridgeBarcode = value;
-                    Logger.Info($"New cartridge barcode received: {value}");
+                    Logger.Debug($"New cartridge barcode received: {value}");
                 }
             }
         }

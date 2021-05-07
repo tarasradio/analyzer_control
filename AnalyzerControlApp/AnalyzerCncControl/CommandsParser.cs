@@ -25,7 +25,7 @@ namespace AnalyzerCncControl
                 ParseCommand(commands, matchedString);
             }
 
-            Logger.Info($"Программа содержит { commands.Count } команд.");
+            Logger.Debug($"Программа содержит { commands.Count } команд.");
 
             return commands;
         }
@@ -68,7 +68,7 @@ namespace AnalyzerCncControl
             }
 
             parsedCommand += "}";
-            Logger.Info(parsedCommand);
+            Logger.Debug(parsedCommand);
 
             return parsedCommand;
         }
@@ -95,12 +95,12 @@ namespace AnalyzerCncControl
 
                 if (sensor < 0)
                 {
-                    Logger.Info("[Command parser] - Номер датчика не может быть меньше 0.");
+                    Logger.Debug("[Command parser] - Номер датчика не может быть меньше 0.");
                 }
 
                 if (value < 0)
                 {
-                    Logger.Info("[Command parser] - Значение датчика не может быть меньше 0.");
+                    Logger.Debug("[Command parser] - Значение датчика не может быть меньше 0.");
                 }
 
                 parsedCommand += $" | sensor = {sensor}, value = {value}, edge = {edgeType}";
@@ -124,7 +124,7 @@ namespace AnalyzerCncControl
 
                 if (timeMs < 0)
                 {
-                    Logger.Info("[Command parser] - Время задержки не может быть меньше 0.");
+                    Logger.Debug("[Command parser] - Время задержки не может быть меньше 0.");
                 }
 
                 parsedCommand += $"time = {timeMs} ms";
@@ -222,7 +222,7 @@ namespace AnalyzerCncControl
 
                 if (device < 0)
                 {
-                    Logger.Info("[Command parser] - Номер устройства не может быть меньше 0.");
+                    Logger.Debug("[Command parser] - Номер устройства не может быть меньше 0.");
                 }
 
                 arguments.Add(device);
@@ -271,7 +271,7 @@ namespace AnalyzerCncControl
             bool isSuccess = true;
             if (motor < 0)
             {
-                Logger.Info("[Command parser] - Номер мотора не может быть меньше 0.");
+                Logger.Debug("[Command parser] - Номер мотора не может быть меньше 0.");
                 isSuccess = false;
             }
             return isSuccess;

@@ -49,7 +49,7 @@ namespace AnalyzerService
             SerialCommunicationInit();
             SerialCommunicationOpen();
 
-            Logger.Info("Запись работы системы начата");
+            Logger.Debug("Запись работы системы начата");
         }
 
         private void SerialCommunicationOpen()
@@ -77,7 +77,7 @@ namespace AnalyzerService
 
             ResponseHandler = new ResponseHandler(PackHandler, State);
 
-            ResponseHandler.DebugMessageReceived += Logger.Info;
+            ResponseHandler.DebugMessageReceived += Logger.Debug;
             ResponseHandler.CommandStateReceived += CommandExecutor.UpdateExecutedCommandInfo;
         }
 

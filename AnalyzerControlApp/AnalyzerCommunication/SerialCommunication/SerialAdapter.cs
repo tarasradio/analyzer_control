@@ -42,7 +42,7 @@ namespace AnalyzerCommunication.SerialCommunication
                 _serialPort.Open();
                 ConnectionChanged?.Invoke(true);
             } catch (Exception ex) {
-                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при открытии порта { portName }. {ex.Message}");
+                Logger.Debug($"[{nameof(SerialAdapter)}] - Ошибка при открытии порта { portName }. {ex.Message}");
             }
 
             return _serialPort.IsOpen;
@@ -54,7 +54,7 @@ namespace AnalyzerCommunication.SerialCommunication
                 _serialPort.Close();
                 ConnectionChanged?.Invoke(false);
             } catch (Exception ex) {
-                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка при закрытии порта {_serialPort.PortName}. {ex.Message}");
+                Logger.Debug($"[{nameof(SerialAdapter)}] - Ошибка при закрытии порта {_serialPort.PortName}. {ex.Message}");
             }
         }
 
@@ -78,7 +78,7 @@ namespace AnalyzerCommunication.SerialCommunication
             try {
                 _serialPort.Write(bytes, 0, bytes.Length);
             } catch (Exception ex) {
-                Logger.Info($"[{nameof(SerialAdapter)}] - Ошибка записи в порт. {ex.Message}");
+                Logger.Debug($"[{nameof(SerialAdapter)}] - Ошибка записи в порт. {ex.Message}");
             }
         }
     }

@@ -12,28 +12,10 @@ namespace PresentationWinForms.Views
         {
             InitializeComponent();
 
-            Logger.NewInfoMessageAdded += Logger_NewInfoMessageAdded;
-            Logger.NewDemoInfoMessageAdded += Logger_NewDemoInfoMessageAdded;
-            Logger.NewControllerInfoMessageAdded += Logger_NewControllerInfoMessageAdded;
+            Logger.DebugMessageAdded += onDebugMessageAdded;
         }
 
-        private void Logger_NewControllerInfoMessageAdded(string message)
-        {
-            BeginInvoke((Action)(() =>
-            {
-                AddMessage(message, Color.Green);
-            }));
-        }
-
-        private void Logger_NewDemoInfoMessageAdded(string message)
-        {
-            BeginInvoke((Action)(() =>
-            {
-                AddMessage(message, Color.OrangeRed);
-            }));
-        }
-
-        private void Logger_NewInfoMessageAdded(string message)
+        private void onDebugMessageAdded(string message)
         {
             BeginInvoke((Action)(() =>
             {

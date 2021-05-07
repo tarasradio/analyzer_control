@@ -34,6 +34,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         public void load()
         {
+            Logger.Debug($"Загрузка...");
             Logger.Info($"Загрузка...");
         }
 
@@ -52,6 +53,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         public void unload()
         {
+            Logger.Debug($"Выгрузка...");
             Logger.Info($"Выгрузка...");
         }
 
@@ -70,7 +72,8 @@ namespace AnalyzerControlGUI.ViewModels
 
         public void abort()
         {
-            Logger.Info($"Остановка работы...");
+            Logger.Debug($"Остановка работы...");
+            Logger.Info($"Работа была прервана!");
             Analyzer.AbortExecution();
             demoController.AbortWork();
         }
@@ -90,7 +93,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         public void resume()
         {
-            Logger.Info($"Продолжение работы...");
+            Logger.Debug($"Продолжение работы...");
         }
 
         public void wtf()
@@ -119,9 +122,8 @@ namespace AnalyzerControlGUI.ViewModels
         {
             InitCustomControls();
 
-            Logger.NewInfoMessageAdded += Logger_NewInfoMessageAdded;
-            Logger.NewControllerInfoMessageAdded += Logger_NewControllerInfoMessageAdded;
-            Logger.NewDemoInfoMessageAdded += Logger_NewDemoInfoMessageAdded;
+            Logger.InfoMessageAdded += onInfoMessageAdded;
+            Logger.DebugMessageAdded += onDebugMessageAdded;
 
             tryCreateController();
 
@@ -138,7 +140,7 @@ namespace AnalyzerControlGUI.ViewModels
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;
             } catch {
-                Logger.Info("Возникла ошибка при запуске!");
+                Logger.Debug("Возникла ошибка при запуске!");
             }
         }
 
@@ -152,27 +154,33 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private void Logger_NewDemoInfoMessageAdded(string message)
+        private void onDebugMessageAdded(string message)
         {
-            LogText += $"{ message }";
+            DebugText += $"{ message }";
         }
 
-        private void Logger_NewControllerInfoMessageAdded(string message)
+        private void onInfoMessageAdded(string message)
         {
-            LogText += $"{ message }";
+            InformationText = message;
         }
 
-        private void Logger_NewInfoMessageAdded(string message)
-        {
-            LogText += $"{ message }";
-        }
+        private string _debugText;
 
-        private string _logText;
-
-        public string LogText {
-            get => _logText;
+        public string DebugText {
+            get => _debugText;
             set {
-                _logText = value;
+                _debugText = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _informationText;
+
+        public string InformationText
+        {
+            get => _informationText;
+            set {
+                _informationText = value;
                 NotifyPropertyChanged();
             }
         }
