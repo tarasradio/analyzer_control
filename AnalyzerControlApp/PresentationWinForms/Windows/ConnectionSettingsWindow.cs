@@ -47,11 +47,11 @@ namespace PresentationWinForms.Forms
                 int baudrate = int.Parse(selectBaudrate.SelectedItem.ToString());
 
                 if (Analyzer.Serial.Open(portName, baudrate)) {
-                    Logger.Info("Открытие подключения - подключение к " + portName + " открыто");
+                    Logger.Debug("Открытие подключения - подключение к " + portName + " открыто");
 
                     // Тут запускалось обновление таблиц
                 } else {
-                    Logger.Info("Открытие подключения - Ошибка при подключении!");
+                    Logger.Debug("Открытие подключения - Ошибка при подключении!");
                 }
             }
 
@@ -67,12 +67,12 @@ namespace PresentationWinForms.Forms
             if (portsNames.Length != 0)
             {
                 selectPort.Items.AddRange(portsNames);
-                Logger.Info("Поиск портов - найдены открытые порты");
+                Logger.Debug("Поиск портов - найдены открытые порты");
                 selectPort.SelectedIndex = 0;
             }
             else
             {
-                Logger.Info("Поиск портов - открытых портов не найдено");
+                Logger.Debug("Поиск портов - открытых портов не найдено");
                 selectPort.SelectedText = "";
             }
 

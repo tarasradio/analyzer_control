@@ -86,7 +86,7 @@ namespace PresentationWinForms.Views
                 }
                 catch (System.IO.FileNotFoundException)
                 {
-                    Logger.Info("Ошибка при открытии файла - Файл не найден.");
+                    Logger.Debug("Ошибка при открытии файла - Файл не найден.");
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace PresentationWinForms.Views
                 }
                 catch(System.IO.FileNotFoundException)
                 {
-                    Logger.Info("Ошибка при сохранении файла.");
+                    Logger.Debug("Ошибка при сохранении файла.");
                 }
             }
         }

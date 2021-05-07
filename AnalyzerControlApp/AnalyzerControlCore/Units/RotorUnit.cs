@@ -21,7 +21,7 @@ namespace AnalyzerService.Units
 
         public void Home()
         {
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start homing.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Start homing.");
             List<ICommand> commands = new List<ICommand>();
 
             steppers = new Dictionary<int, int>() { { Options.RotorStepper, Options.RotorHomeSpeed } };
@@ -33,12 +33,12 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             Position = 0;
 
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Homing finished.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Homing finished.");
         }
 
         public void PlaceCellUnderWashBuffer(int cartridgePosition)
         {
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell under washing buffer.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Start placing cell under washing buffer.");
             List<ICommand> commands = new List<ICommand>();
 
             int turnSteps = Options.StepsToWashBuffer;
@@ -53,12 +53,12 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell under washing buffer finished.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Placing cell under washing buffer finished.");
         }
 
         public void PlaceCellAtDischarge(int cartridgePosition)
         {
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell at discharger.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Start placing cell at discharger.");
             List<ICommand> commands = new List<ICommand>();
 
             int turnSteps = Options.StepsToUnload;
@@ -73,7 +73,7 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell at discharger finished.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Placing cell at discharger finished.");
         }
         
         /// <summary>
@@ -83,7 +83,7 @@ namespace AnalyzerService.Units
         /// <param name="chargePosition">Позиция ячейки кассетницы (загрузки)</param>
         public void PlaceCellAtCharge(int cartridgePosition, int chargePosition)
         {
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell at charger.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Start placing cell at charger.");
             List<ICommand> commands = new List<ICommand>();
 
             int turnSteps = Options.StepsToLoad[chargePosition];
@@ -98,7 +98,7 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell at charger finished.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Placing cell at charger finished.");
         }
         
         public enum CellPosition
@@ -116,7 +116,7 @@ namespace AnalyzerService.Units
         /// <param name="cellPosition">Позиция ячейки картриджа</param>
         public void PlaceCellUnderNeedle(int cartridgePosition, CartridgeCell cartridgeCell, CellPosition cellPosition = CellPosition.CellCenter)
         {
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Start placing cell under needle.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Start placing cell under needle.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Options.RotorStepper, (uint)Options.RotorSpeed));
@@ -176,7 +176,7 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             Position = turnSteps;
 
-            Logger.ControllerInfo($"[{nameof(RotorUnit)}] - Placing cell under needle finished.");
+            Logger.Debug($"[{nameof(RotorUnit)}] - Placing cell under needle finished.");
         }
     }
 }

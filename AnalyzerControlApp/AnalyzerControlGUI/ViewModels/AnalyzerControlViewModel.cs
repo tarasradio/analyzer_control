@@ -34,6 +34,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         private void load()
         {
+            Logger.Debug($"Загрузка...");
             Logger.Info($"Загрузка...");
             //  Pseudocode:
             //
@@ -81,6 +82,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         private void unload()
         {
+            Logger.Debug($"Выгрузка...");
             Logger.Info($"Выгрузка...");
             
             //  Pseudocode:
@@ -129,7 +131,10 @@ namespace AnalyzerControlGUI.ViewModels
 
         private void abort()
         {
-            Logger.Info($"Остановка работы...");
+            Logger.Debug($"Остановка работы...");
+            Logger.Info($"Работа была прервана!");
+            Analyzer.AbortExecution();
+            demoController.AbortWork();
         }
 
         RelayCommand _ResumeCommand;
@@ -148,6 +153,7 @@ namespace AnalyzerControlGUI.ViewModels
         private void resume()
         {
             Logger.Info($"Продолжение работы...");
+            Logger.Debug($"Продолжение работы...");
             // Pseudocode:
             //
             // Сбрасываем состояние повторной загрузки 
@@ -157,7 +163,6 @@ namespace AnalyzerControlGUI.ViewModels
             // Продолжаем работу (sic!):
             // Сообщаем сервису конвейера об окончании работы
             // Возвращаем управление основному алгоритму
-
         }
 
         public void wtf()
@@ -186,9 +191,8 @@ namespace AnalyzerControlGUI.ViewModels
         {
             InitCustomControls();
 
-            Logger.NewInfoMessageAdded += Logger_NewInfoMessageAdded;
-            Logger.NewControllerInfoMessageAdded += Logger_NewControllerInfoMessageAdded;
-            Logger.NewDemoInfoMessageAdded += Logger_NewDemoInfoMessageAdded;
+            Logger.InfoMessageAdded += onInfoMessageAdded;
+            Logger.DebugMessageAdded += onDebugMessageAdded;
 
             tryCreateController();
 
@@ -205,7 +209,7 @@ namespace AnalyzerControlGUI.ViewModels
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;
             } catch {
-                Logger.Info("Возникла ошибка при запуске!");
+                Logger.Debug("Возникла ошибка при запуске!");
             }
         }
 
@@ -219,27 +223,33 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private void Logger_NewDemoInfoMessageAdded(string message)
+        private void onDebugMessageAdded(string message)
         {
-            LogText += $"{ message }";
+            DebugText += $"{ message }";
         }
 
-        private void Logger_NewControllerInfoMessageAdded(string message)
+        private void onInfoMessageAdded(string message)
         {
-            LogText += $"{ message }";
+            InformationText = message;
         }
 
-        private void Logger_NewInfoMessageAdded(string message)
-        {
-            LogText += $"{ message }";
-        }
+        private string _debugText;
 
-        private string _logText;
-
-        public string LogText {
-            get => _logText;
+        public string DebugText {
+            get => _debugText;
             set {
-                _logText = value;
+                _debugText = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        private string _informationText;
+
+        public string InformationText
+        {
+            get => _informationText;
+            set {
+                _informationText = value;
                 NotifyPropertyChanged();
             }
         }

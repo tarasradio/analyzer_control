@@ -49,7 +49,7 @@ namespace AnalyzerService
             {
                 if (!_connectionExtablished)
                 {
-                    Logger.Info($"Устройство на порту {_portName} было подключено.");
+                    Logger.Debug($"Устройство на порту {_portName} было подключено.");
                     DeviceConnectionChanged?.Invoke(true);
                 }
             }
@@ -57,7 +57,7 @@ namespace AnalyzerService
             {
                 if (_connectionExtablished)
                 {
-                    Logger.Info($"Устройство на порту {_portName} было отключено.");
+                    Logger.Debug($"Устройство на порту {_portName} было отключено.");
                     DeviceConnectionChanged?.Invoke(false);
                 }
             }

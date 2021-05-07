@@ -122,7 +122,7 @@
                            VerticalContentAlignment="Center"
                            FontSize="16"
                            Foreground="White"
-                           Content="Бабка, ты ебанутая? Вынь пальцы!"
+                           Content="{Binding InformationText, FallbackValue='Бака, ты ебанутая? Вынь пальцы!'}"
                            BorderBrush="White"
                            BorderThickness="0.5"/>
 
@@ -153,7 +153,7 @@
                               HorizontalScrollBarVisibility="Disabled"
                               CanContentScroll="True"
                               helpers:AutoScrollHelper.AutoScroll="True">
-                    <TextBlock Text="{Binding LogText, FallbackValue='Вывод информации...'}"
+                    <TextBlock Text="{Binding DebugText, FallbackValue='Вывод информации...'}"
                                Background="Transparent" Foreground="White"/>
                 </ScrollViewer>
             </Grid>

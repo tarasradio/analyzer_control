@@ -21,7 +21,7 @@ namespace AnalyzerService.Units
 
         public void HomeRotator()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start Rotator homing.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start Rotator homing.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -34,7 +34,7 @@ namespace AnalyzerService.Units
             RotatorPosition = 0;
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Rotator homing finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Rotator homing finished.");
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace AnalyzerService.Units
         /// <param name="cell">Номер ячейки</param>
         public void TurnToCell(int cell)
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start turn to cell[{cell}].");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start turn to cell[{cell}].");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -60,12 +60,12 @@ namespace AnalyzerService.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Turn to cell[{cell}] finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Turn to cell[{cell}] finished.");
         }
 
         public void TurnToDischarge()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start turn to discharge.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start turn to discharge.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -80,12 +80,12 @@ namespace AnalyzerService.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Turn to discharge finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Turn to discharge finished.");
         }
 
         public void HomeHook()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start hook homing.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start hook homing.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -97,7 +97,7 @@ namespace AnalyzerService.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Hook homing finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Hook homing finished.");
         }
 
         public void MoveHookAfterHome()
@@ -121,7 +121,7 @@ namespace AnalyzerService.Units
 
         public void ChargeCartridge()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start cartridge charging.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start cartridge charging.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -165,7 +165,7 @@ namespace AnalyzerService.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
         }
     }
 }

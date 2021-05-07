@@ -22,7 +22,7 @@ namespace AnalyzerService.Units
 
         public void PrepareBeforeScanning()
         {
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Start prepare before scanning.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start prepare before scanning.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Options.ConveyorStepper, (uint)Options.ConveyorSpeed));
@@ -36,7 +36,7 @@ namespace AnalyzerService.Units
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Prepare before scanning finished.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Prepare before scanning finished.");
         }
 
         public enum ShiftType
@@ -47,7 +47,7 @@ namespace AnalyzerService.Units
 
         public void Shift(bool reverse, ShiftType shiftType = ShiftType.OneTube)
         {
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Start shift.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start shift.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Options.ConveyorStepper, (uint)Options.ConveyorSpeed));
@@ -61,12 +61,12 @@ namespace AnalyzerService.Units
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Shift finished.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Shift finished.");
         }
 
         public void RotateAndScanTube()
         {
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Start rotating and scanning tube.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start rotating and scanning tube.");
             List<ICommand> commands = new List<ICommand>();
             
             // Сканирование пробирки
@@ -79,7 +79,7 @@ namespace AnalyzerService.Units
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Rotating and scanning tube finished.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Rotating and scanning tube finished.");
         }
     }
 }

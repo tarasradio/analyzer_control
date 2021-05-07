@@ -23,7 +23,7 @@ namespace AnalyzerService.Units
 
         public void TurnToTubeAndWaitTouch()
         {
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start turn to tube and waiting touch.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start turn to tube and waiting touch.");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до пробирки
@@ -51,12 +51,12 @@ namespace AnalyzerService.Units
             
             LifterPositionUnderfined = true; // ибо неизвестно, где он будет после касания жидкости в пробирке
 
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Turn to tube and waiting touch finished.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Turn to tube and waiting touch finished.");
         }
 
         public void HomeRotator()
         {
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start rotator going to home.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start rotator going to home.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Options.RotatorStepper, 1000));
@@ -68,12 +68,12 @@ namespace AnalyzerService.Units
             
             RotatorPosition = 0;
 
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Rotator goint to home finished.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Rotator goint to home finished.");
         }
 
         public void HomeLifter()
         {
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start lift going to home.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start lift going to home.");
             List<ICommand> commands = new List<ICommand>();
 
             
@@ -87,7 +87,7 @@ namespace AnalyzerService.Units
             LifterPosition = 0;
             LifterPositionUnderfined = false;
 
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Lift going to home finished.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Lift going to home finished.");
         }
 
         public void HomeLifterAndRotator()
@@ -98,7 +98,7 @@ namespace AnalyzerService.Units
 
         public void TurnAndGoDownToWashing()
         {
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start turn and going down to washing.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start turn and going down to washing.");
             List<ICommand> commands = new List<ICommand>();
 
             // Поворот иглы до промывки
@@ -125,12 +125,12 @@ namespace AnalyzerService.Units
 
             LifterPosition = Options.LifterStepsToWashing;
 
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Turning and going down to washing finished.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Turning and going down to washing finished.");
         }
 
         public void GoDownAndPerforateCartridge(CartridgeCell cartridgeCell, bool needSuction = true)
         {
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start going down and perforating cartridge.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start going down and perforating cartridge.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -156,12 +156,12 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             LifterPosition = steps;
 
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Going down and piercing cartridge finished.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Going down and piercing cartridge finished.");
         }
 
         public void GoToSafeLevel()
         {
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start going to safe level.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start going to safe level.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -178,12 +178,12 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             LifterPosition = steps;
 
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Going to safe level finished.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Going to safe level finished.");
         }
 
         public void TurnToCartridge(CartridgeCell cell)
         {
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Start turn to cartridge.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start turn to cartridge.");
             List<ICommand> commands = new List<ICommand>();
             
             int turnSteps = 0;
@@ -218,7 +218,7 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             RotatorPosition = turnSteps;
 
-            Logger.ControllerInfo($"[{nameof(NeedleUnit)}] - Turn to cartridge finished.");
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Turn to cartridge finished.");
         }
     }
 }

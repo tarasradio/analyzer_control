@@ -24,9 +24,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         public mainViewModel()
         {
-            Logger.NewInfoMessageAdded += Logger_NewInfoMessageAdded;
-            Logger.NewControllerInfoMessageAdded += Logger_NewControllerInfoMessageAdded;
-            Logger.NewDemoInfoMessageAdded += Logger_NewDemoInfoMessageAdded;
+            Logger.DebugMessageAdded += onDebugMessageAdded;
 
             tryCreateController();
 
@@ -43,7 +41,7 @@ namespace AnalyzerControlGUI.ViewModels
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;
             } catch {
-                Logger.Info("Возникла ошибка при запуске!");
+                Logger.Debug("Возникла ошибка при запуске!");
             }
         }
 
@@ -59,17 +57,7 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private void Logger_NewDemoInfoMessageAdded(string message)
-        {
-            LogText += $"{ message }";
-        }
-
-        private void Logger_NewControllerInfoMessageAdded(string message)
-        {
-            LogText += $"{ message }";
-        }
-
-        private void Logger_NewInfoMessageAdded(string message)
+        private void onDebugMessageAdded(string message)
         {
             LogText += $"{ message }";
         }

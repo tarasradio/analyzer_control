@@ -32,7 +32,7 @@ namespace AnalyzerCommunication.SerialCommunication
                 }
                 catch(KeyNotFoundException)
                 {
-                    Logger.Info($"[{nameof(PacketHandler)}] - Uncknown response with code: {responseType} has been received.");
+                    Logger.Debug($"[{nameof(PacketHandler)}] - Uncknown response with code: {responseType} has been received.");
                 }
             }
         }
