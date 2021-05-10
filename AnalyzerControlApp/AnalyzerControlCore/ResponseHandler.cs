@@ -1,4 +1,5 @@
 ﻿using AnalyzerCommunication.CommunicationProtocol;
+using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.CommunicationProtocol.Responses;
 using AnalyzerCommunication.SerialCommunication;
 using System;
@@ -10,8 +11,8 @@ namespace AnalyzerService
         public event Action<UInt16[]> SteppersStatesReceived;
         public event Action<UInt16[]> SensorsValuesReceived;
         public event Action<string> DebugMessageReceived;
-        public event Action<string> TubeBarCodeReceived;
-        public event Action<string> CartridgeBarCodeReceived;
+        public event Action<string> TubeBarcodeReceived;
+        public event Action<string> CartridgeBarcodeReceived;
         public event Action<string> FirmwareVersionReceived;
         public event Action<uint, CommandStateResponse.CommandStates> CommandStateReceived;
 
@@ -21,7 +22,7 @@ namespace AnalyzerService
         {
             this.analyzerState = analyzerState;
 
-            handler.AddResponseHandler((byte)Protocol.ResponsesTypes.BAR_CODE_RESPONSE, new Action<byte[]>(ProcessBarCodeResponse));
+            handler.AddResponseHandler((byte)Protocol.ResponsesTypes.BARCODE_RESPONSE, new Action<byte[]>(ProcessBarcodeResponse));
             handler.AddResponseHandler((byte)Protocol.ResponsesTypes.COMMAND_STATE_RESPONSE, new Action<byte[]>(ProcessCommandStateResponse));
             handler.AddResponseHandler((byte)Protocol.ResponsesTypes.DEBUG_MESSAGE_RESPONSE, new Action<byte[]>(ProcessDebugMessageResponse));
             handler.AddResponseHandler((byte)Protocol.ResponsesTypes.FIRMWARE_VERSION_RESPONSE, new Action<byte[]>(ProcessFirmwareVersionResponse));
@@ -29,21 +30,21 @@ namespace AnalyzerService
             handler.AddResponseHandler((byte)Protocol.ResponsesTypes.STEPPERS_STATES_RESPONSE, new Action<byte[]>(ProcessSteppersStatesResponse));
         }
 
-        private void ProcessBarCodeResponse(byte[] packet)
+        private void ProcessBarcodeResponse(byte[] packet)
         {
-            BarCodeResponse response = new BarCodeResponse(packet);
+            BarcodeResponse response = new BarcodeResponse(packet);
 
-            string barCode = response.GetBarCode();
-            BarCodeResponse.ScannerTypes type = response.GetScannerType();
+            string barCode = response.Barcode;
+            BarcodeScanner type = response.ScannerType;
 
             switch (type)
             {
-                case BarCodeResponse.ScannerTypes.TUBE_SCANNER:
-                    TubeBarCodeReceived?.Invoke(barCode);
+                case BarcodeScanner.TubeScanner:
+                    TubeBarcodeReceived?.Invoke(barCode);
                     analyzerState.TubeBarcode = barCode;
                     break;
-                case BarCodeResponse.ScannerTypes.CARTRIDGE_SCANNER:
-                    CartridgeBarCodeReceived?.Invoke(barCode);
+                case BarcodeScanner.CartridgeScanner:
+                    CartridgeBarcodeReceived?.Invoke(barCode);
                     analyzerState.CartridgeBarcode = barCode;
                     break;
                 default:

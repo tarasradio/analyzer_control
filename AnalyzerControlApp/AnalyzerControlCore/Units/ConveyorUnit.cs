@@ -70,7 +70,7 @@ namespace AnalyzerService.Units
             List<ICommand> commands = new List<ICommand>();
             
             // Сканирование пробирки
-            commands.Add(new BarStartCommand());
+            commands.Add(new ScanBarcodeCommand(scanner: BarcodeScanner.TubeScanner));
 
             // Вращение пробирки
             commands.Add(new SetSpeedCommand(Options.TubeRotatorStepper, (uint)Options.TubeRotatorSpeed));

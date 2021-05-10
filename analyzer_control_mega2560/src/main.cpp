@@ -12,8 +12,8 @@
 #define BAUDRATE 115200
 #define POLLING_TIMEOUT 50
 
-BarScanner tubeScanner(&Serial1, 1);
-BarScanner cartridgeScanner(&Serial2, 2);
+BarcodeScanner tubeScanner(&Serial1, 0);
+BarcodeScanner cartridgeScanner(&Serial2, 1);
 
 MovingController moveController;
 HomingController homeController;

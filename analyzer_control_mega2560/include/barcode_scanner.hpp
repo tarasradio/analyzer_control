@@ -3,13 +3,13 @@
 
 #include <Arduino.h>
 
-class BarScanner
+class BarcodeScanner
 {
 private:
     HardwareSerial * serial;
     uint8_t id;
 public:
-    BarScanner(HardwareSerial * serialPort, uint8_t id);
+    BarcodeScanner(HardwareSerial * serialPort, uint8_t id);
     void updateState();
     void startScan();
 };

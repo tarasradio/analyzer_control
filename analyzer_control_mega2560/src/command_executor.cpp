@@ -30,8 +30,8 @@ CommandExecutor::CommandExecutor(
     HomingController * homingController,
     RunningController * runningController,
     MovingController * movingController,
-    BarScanner * tubeScanner,
-    BarScanner * cartridgeScanner)
+    BarcodeScanner * tubeScanner,
+    BarcodeScanner * cartridgeScanner)
 {
     this->homingController = homingController;
     this->runningController = runningController;
@@ -134,9 +134,9 @@ void CommandExecutor::listenPacket(uint8_t *packet, uint8_t packetLength)
             executeAbortCommand(packet + 5, packetId);
         }
         break;
-        case CMD_BAR_START:
+        case CMD_SCAN_BARCODE:
         {
-            executeBarStartCommand(packet + 5, packetId);
+            executeBarcodeScanCommand(packet + 5, packetId);
         }
         break;
         case CMD_GET_FIRMWARE_VERSION:
@@ -243,15 +243,21 @@ void CommandExecutor::executeAbortCommand(uint8_t *packet, uint32_t packetId)
 #endif
 }
 
-void CommandExecutor::executeBarStartCommand(uint8_t *packet, uint32_t packetId)
+void CommandExecutor::executeBarcodeScanCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
-    tubeScanner->startScan();
-    cartridgeScanner->startScan();
+    int8_t scanner = packet[0];
+
+    if(scanner == 0) {
+        tubeScanner->startScan();
+    } else if(scanner == 1) {
+        cartridgeScanner->startScan();
+    }
+    
 #ifdef DEBUG
     {
-        String message = "[Bar start]";
+        String message = "[Scan barcode]";
         Protocol::sendMessage(message.c_str());
     }
 #endif

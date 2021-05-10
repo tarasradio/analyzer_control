@@ -34,17 +34,17 @@ bool Emulator::taskIsRunning()
   return _taskIsRunning;
 }
 
-bool Emulator::barCodeExist()
+bool Emulator::barcodeExist()
 {
   return _barCodeExist;
 }
 
-void Emulator::nextBarCode()
+void Emulator::nextBarcode()
 {
   _barCodeExist = true;
 }
 
-const char* Emulator::getBarCodeMessage()
+const char* Emulator::getBarcodeMessage()
 {
   _barCodeExist = false;
   if(currentMessage < 3)

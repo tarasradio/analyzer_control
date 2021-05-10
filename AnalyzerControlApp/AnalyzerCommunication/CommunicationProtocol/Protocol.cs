@@ -16,7 +16,7 @@
             SENSORS_VALUES_RESPONSE,
             COMMAND_STATE_RESPONSE,
             DEBUG_MESSAGE_RESPONSE,
-            BAR_CODE_RESPONSE
+            BARCODE_RESPONSE
         }
 
         public enum StepperCommands
@@ -33,7 +33,7 @@
             SET_DEVICE_STATE = 0x14,
             ABORT_EXECUTION,
             WAIT_TIME,
-            BAR_START,
+            START_BARCODE_SCAN,
             GET_FIRMWARE_VERSION
         }
 
