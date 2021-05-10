@@ -32,7 +32,41 @@ namespace AnalyzerControl.Services
     {
         public ConveyorCell[] Cells { get; private set; }
 
-        public enum States {
+        private const int cellsBetweenScanAndSampling = 7;
+        private const int cellsBetweenScanAndLoading = 25; // TODO:проверить, сколько реально
+
+        /// <summary>
+        /// Ячейка в позиции перед сканером
+        /// </summary>
+        public int CellInScanPosition { get; set; } = 0;
+
+        /// <summary>
+        /// Ячейка в позиции забора материала
+        /// </summary>
+        public int CellInSamplingPosition { 
+            get {
+                int cell = CellInScanPosition - cellsBetweenScanAndSampling;
+                if (cell < 0) cell += Cells.Length;
+
+                return cell;
+            }
+        }
+
+        /// <summary>
+        /// Ячейка в позиции загрузки/выгрузки
+        /// </summary>
+        public int CellInLoadingPosition
+        {
+            get {
+                int cell = CellInScanPosition - cellsBetweenScanAndLoading;
+                if (cell < 0) cell += Cells.Length;
+
+                return cell;
+            }
+        }
+
+        public enum States
+        {
             ManualControl,
             AnalysisProcessing
         }
@@ -42,6 +76,16 @@ namespace AnalyzerControl.Services
         {
             Cells = Enumerable.Repeat(new ConveyorCell(), cellsCount).ToArray();
             State = States.ManualControl;
+        }
+
+        /// <summary>
+        /// Проверка, что проден полный круг, обнуляет индекс ячейки перед сканером
+        /// </summary>
+        public void CheckFullCycle()
+        {
+            if (CellInScanPosition == Cells.Length) {
+                CellInScanPosition = 0;
+            }
         }
 
         public bool ExistEmptyCells()

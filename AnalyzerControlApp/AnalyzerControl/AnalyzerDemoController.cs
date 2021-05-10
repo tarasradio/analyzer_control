@@ -13,11 +13,7 @@ namespace AnalyzerControl
 {
     public class AnalyzerDemoController : Configurable<DemoControllerConfiguration>
     {
-        private const int conveyorCellsCount = 54;
         ConveyorService conveyor;
-
-        private const int cellsBetweenScanAndSampling = 7;
-        private int сellInScanPosition = 0;
 
         private Stopwatch stopwatch;
         Timer timer;
@@ -140,7 +136,7 @@ namespace AnalyzerControl
 
         private void processAnalyzesCycle()
         {
-            сellInScanPosition = 0;
+            conveyor.CellInScanPosition = 0;
 
             while (existUnhandledAnalyzes()) {
 
@@ -148,11 +144,11 @@ namespace AnalyzerControl
                     break;
                 }
 
-                checkFullCycle();
+                conveyor.CheckFullCycle();
 
                 searchTubeInConveyorCell(attemptsNumber: 2);
 
-                int cellInSampling = getCellInSampling();
+                int cellInSampling = conveyor.CellInSamplingPosition;
 
                 AnalysisInfo analysisInSampling =
                     searchBarcodeInDatabase(conveyor.Cells[cellInSampling].AnalysisBarcode);
@@ -173,7 +169,7 @@ namespace AnalyzerControl
 
                 processScheduledAnalyzes();
 
-                сellInScanPosition++;
+                conveyor.CellInScanPosition++;
             }
         }
 
@@ -184,32 +180,6 @@ namespace AnalyzerControl
                     analysis.Clear(); 
                 }
             }
-        }
-
-        /// <summary>
-        /// Проверка того, что полный круг пройден.
-        /// Обнуляет порядковый номер ячейки в позиции перед сканером.
-        /// </summary>
-        private void checkFullCycle()
-        {
-            // прошли полный круг (и чо???)
-            if (сellInScanPosition == conveyorCellsCount) {
-                сellInScanPosition = 0;
-                Logger.Debug($"Круг пройден. Запуск повторного сканирования.");
-            }
-        }
-
-        /// <summary>
-        /// Получение номера ячейки в точке забора материала из пробирки
-        /// </summary>
-        /// <returns></returns>
-        private int getCellInSampling()
-        {
-            //TODO: А че, нельзя как то нормально посчитать??? Че за ебаная магия тут???
-            int cell = сellInScanPosition - cellsBetweenScanAndSampling;
-            if (cell < 0) cell += conveyorCellsCount;
-
-            return cell;
         }
 
         /// <summary>
@@ -258,7 +228,7 @@ namespace AnalyzerControl
         // (это все к вопросу о том, что мы не можем остлеживать точно полный круг конвейера)
         private void searchTubeInConveyorCell(int attemptsNumber)
         {
-            ConveyorCell cell = conveyor.Cells[сellInScanPosition];
+            ConveyorCell cell = conveyor.Cells[conveyor.CellInScanPosition];
 
             Logger.Debug($"Запущен поиск пробирки (сканирование)");
 
