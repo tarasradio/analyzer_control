@@ -224,7 +224,7 @@ namespace AnalyzerControl.Services
         private void waitControllerFinished()
         {
             // Ожидаем завершения прерывания (по завершению поднимает иглу в безопасное положение)
-
+            while (_controller.state != AnalyzerDemoController.States.Interrupted);
         }
 
         private void cellArrived()
