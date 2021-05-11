@@ -81,5 +81,21 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
             Logger.Debug($"[{nameof(ConveyorUnit)}] - Rotating and scanning tube finished.");
         }
+
+        public void Move(int cellsCount, bool reverse = false)
+        {
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Запуск перемещения ячейки.");
+            List<ICommand> commands = new List<ICommand>();
+
+            int totalSteps = Options.ConveyorStepsPerSingleTube * cellsCount;
+            if (reverse) totalSteps *= -1;
+
+            steppers = new Dictionary<int, int>() { { Options.ConveyorStepper, totalSteps } };
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Перемещение ячеек завершено.");
+        }
     }
 }
