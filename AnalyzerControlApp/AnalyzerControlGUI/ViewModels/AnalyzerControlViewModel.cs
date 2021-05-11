@@ -35,7 +35,8 @@ namespace AnalyzerControlGUI.ViewModels
 
         private bool canLoadExecute()
         {
-            return (conveyor.State != ConveyorService.States.Unloading) 
+            return (conveyor.State == ConveyorService.States.Waiting 
+                || conveyor.State == ConveyorService.States.AnalyzesProcessing) 
                 && ConnectionState;
         }
 
@@ -63,7 +64,8 @@ namespace AnalyzerControlGUI.ViewModels
 
         private bool canUnloadExecute()
         {
-            return (conveyor.State != ConveyorService.States.Loading) 
+            return (conveyor.State == ConveyorService.States.Waiting
+                || conveyor.State == ConveyorService.States.AnalyzesProcessing)
                 && ConnectionState;
         }
 
