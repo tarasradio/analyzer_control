@@ -14,7 +14,7 @@ namespace AnalyzerControlGUI.ViewModels
     public class AnalyzerControlViewModel : ViewModel
     {
         private const int cassettesCount = 10;
-        private const int conveyorCellsCount = 55;
+        private const int conveyorCellsCount = 54;
 
         public ObservableCollection<Cassette> Cassettes { get; set; }
         public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
@@ -25,11 +25,18 @@ namespace AnalyzerControlGUI.ViewModels
             get {
                 if (_LoadCommand == null) {
                     _LoadCommand = new RelayCommand(
-                       param => { load(); },
-                       param => { return ConnectionState; });
+                       param => load(),
+                       param => canLoadExecute()
+                       );
                 }
                 return _LoadCommand;
             }
+        }
+
+        private bool canLoadExecute()
+        {
+            return (conveyor.State != ConveyorService.States.Unloading) 
+                && ConnectionState;
         }
 
         private void load()
@@ -46,11 +53,18 @@ namespace AnalyzerControlGUI.ViewModels
             get {
                 if (_UnloadCommand == null) {
                     _UnloadCommand = new RelayCommand(
-                       param => { unload(); },
-                       param => { return ConnectionState; });
+                       param => unload(),
+                       param => canUnloadExecute()
+                       );
                 }
                 return _UnloadCommand;
             }
+        }
+
+        private bool canUnloadExecute()
+        {
+            return (conveyor.State != ConveyorService.States.Loading) 
+                && ConnectionState;
         }
 
         private void unload()
@@ -88,11 +102,18 @@ namespace AnalyzerControlGUI.ViewModels
             get {
                 if (_ResumeCommand == null) {
                     _ResumeCommand = new RelayCommand(
-                       param => { resume(); },
-                       param => { return ConnectionState; });
+                       param => resume(),
+                       param => canResumeExecute()
+                       );
                 }
                 return _ResumeCommand;
             }
+        }
+
+        private bool canResumeExecute()
+        {
+            return (conveyor.State == ConveyorService.States.Waiting) 
+                && ConnectionState;
         }
 
         private void resume()
@@ -141,7 +162,7 @@ namespace AnalyzerControlGUI.ViewModels
         {
             try {
                 analyzer = new Analyzer(provider);
-                conveyor = new ConveyorService(54);
+                conveyor = new ConveyorService(conveyorCellsCount);
                 demoController = new AnalyzerDemoController(provider, conveyor);
                 demoController.LoadConfiguration(controllerFileName);
 
