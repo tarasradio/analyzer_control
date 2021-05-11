@@ -8,23 +8,23 @@ namespace AnalyzerControl.Services
 {
     public class CartridgeCassette
     {
-        public string CartridgeBarcode { get; set; }
-        public int Amount { get; set; }
+        public string Barcode { get; set; }
+        public int CountLeft { get; set; }
         public int Volume { get; set; }
 
         public bool IsEmpty {
             get {
-                return CartridgeBarcode == string.Empty;
+                return Barcode == string.Empty;
             }
             private set { }
         }
 
         public CartridgeCassette() {
-            CartridgeBarcode = string.Empty;
+            Barcode = string.Empty;
         }
 
         public void SetEmpty() {
-            CartridgeBarcode = string.Empty;
+            Barcode = string.Empty;
         }
     }
     /// <summary>
