@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using AnalyzerService;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +102,27 @@ namespace AnalyzerControl.Services
             return Cells.Count(c => c.IsEmpty) > 0;
         }
 
+        private (bool, int?) findFreeCellIndex()
+        {
+            for (int i = 0; i < Cells.Length; i++) {
+                if (Cells[i].IsEmpty) {
+                    return (true, i);
+                }
+            }
+            return (false, null);
+        }
+
+        private (bool, int?) findCompletedIndex()
+        {
+            for (int i = 0; i < Cells.Length; i++) {
+                if (!Cells[i].IsEmpty) {
+                    //TODO: добавить проверку на завершенность
+                    return (true, i);
+                }
+            }
+            return (false, null);
+        }
+
         public void RemoveAnalysis(int cellIndex)
         {
             Cells[cellIndex].SetEmpty();
@@ -109,17 +131,24 @@ namespace AnalyzerControl.Services
         public async void Load()
         {
             //  Проверяем или есть свободная ячейка до загрузки
-            if(ExistEmptyCells()) {
+            var (exist, index) = findFreeCellIndex();
+            if(exist)
+            {
                 State = States.Loading; // Деактивировать кнопку "Выгрузка" и "Продолжить"
-                if(!FirstRequest) {
+                if (!FirstRequest)
+                {
                     Logger.Info("Ожидайте, следующая свободная ячейка выехала...");
-                } else {
+                }
+                else
+                {
                     Logger.Info("Ожидание завершения критических задач...");
                     // Отправляем запрос на прерывание работы алгоритма
                     await Task.Run(waitControllerFinished);
                 }
 
-                // Отправляем конвейеру запрос на загрузку
+                int cellsOffset = calcCellsOffset(index);
+                Analyzer.Conveyor.Move(cellsOffset); // Отправляем конвейеру запрос на загрузку
+
                 Logger.Info("Ожидайте, ячейка уже выехала...");
                 await Task.Run(cellArrived);
                 State = States.Waiting; // Aктивировать кнопку "Продолжить"
@@ -129,15 +158,25 @@ namespace AnalyzerControl.Services
                     "Для выхода их режима загрузки нажмите кнопку \"Продолжить\"");
                 // Моргаем на интерфейсе слотом и включаем лампочку подсветки слота
                 FirstRequest = false;
-            } else {
+            }
+            else {
                 Logger.Info("Нет свободных слотов для загрузки!");
             }
+        }
+
+        private int calcCellsOffset(int? index)
+        {
+            int cellsBetweenScanAndIndex = (CellInScanPosition - (int)index);
+            int cells = cellsBetweenScanAndLoading - cellsBetweenScanAndIndex;
+            return cells;
         }
 
         public async void Unload()
         {
             //  Проверяем или есть свободная ячейка для выгрузки (нераспознанные/завершенные)
-            if(ExistEmptyCells()) { // TODO: написать функцию проверки
+            var (exist, index) = findCompletedIndex();
+
+            if (exist) {
                 State = States.Unloading; // Деактивировать кнопку "Загрузка" и "Продолжить"
                 if (!FirstRequest) {
                     Logger.Info("Ожидайте, следующая пробирка выехала...");
@@ -147,9 +186,13 @@ namespace AnalyzerControl.Services
                     await Task.Run(waitControllerFinished);
                 }
 
-                // Отправляем конвейеру запрос на выгрузку
+                int cellsOffset = calcCellsOffset(index);
+                Analyzer.Conveyor.Move(cellsOffset); // Отправляем конвейеру запрос на загрузку
+
                 Logger.Info("Ожидайте, пробирка уже выехала...");
                 await Task.Run(cellArrived);
+
+                RemoveAnalysis((int)index); // Помечаем ячейку как свободную
 
                 State = States.Waiting; // Aктивировать кнопку "Продолжить"
                 Logger.Info(
