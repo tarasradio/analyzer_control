@@ -106,7 +106,7 @@ namespace AnalyzerControl.Services
             Cells[cellIndex].SetEmpty();
         }
 
-        public void Load()
+        public async void Load()
         {
             //  Проверяем или есть свободная ячейка до загрузки
             if(ExistEmptyCells()) {
@@ -116,12 +116,12 @@ namespace AnalyzerControl.Services
                 } else {
                     Logger.Info("Ожидание завершения критических задач...");
                     // Отправляем запрос на прерывание работы алгоритма
-                    // Ожидаем завершения прерывания (по завершению поднимает иглу в безопасное положение)
+                    await Task.Run(waitControllerFinished);
                 }
 
                 // Отправляем конвейеру запрос на загрузку
                 Logger.Info("Ожидайте, ячейка уже выехала...");
-                // wait пока ячейка не подъехала
+                await Task.Run(cellArrived);
                 State = States.Waiting; // Aктивировать кнопку "Продолжить"
                 Logger.Info(
                     "Загрузите пробирку в слот\n" +
@@ -134,7 +134,7 @@ namespace AnalyzerControl.Services
             }
         }
 
-        public void Unload()
+        public async void Unload()
         {
             //  Проверяем или есть свободная ячейка для выгрузки (нераспознанные/завершенные)
             if(ExistEmptyCells()) { // TODO: написать функцию проверки
@@ -144,12 +144,13 @@ namespace AnalyzerControl.Services
                 } else {
                     Logger.Info("Ожидание завершения критических задач...");
                     // Отправляем запрос на прерывание работы алгоритма
-                    // Ожидаем завершения прерывания (по завершению поднимает иглу в безопасное положение)
+                    await Task.Run(waitControllerFinished);
                 }
 
                 // Отправляем конвейеру запрос на выгрузку
                 Logger.Info("Ожидайте, пробирка уже выехала...");
-                // wait пока ячейка не подъехала
+                await Task.Run(cellArrived);
+
                 State = States.Waiting; // Aктивировать кнопку "Продолжить"
                 Logger.Info(
                     "Выгрузите пробирку из слота\n" +
@@ -168,6 +169,18 @@ namespace AnalyzerControl.Services
             State = States.AnalyzesProcessing;// Активируем кнопки "Загрузка" и "Выгрузка"
             Logger.Info("Возврат к обработке анализов...");
             // Возвращаем управление основному алгоритму
+        }
+
+        private void waitControllerFinished()
+        {
+            // Ожидаем завершения прерывания (по завершению поднимает иглу в безопасное положение)
+
+        }
+
+        private void cellArrived()
+        {
+            // Ожидаем, пока ячейка не подъехала
+
         }
     }
 }
