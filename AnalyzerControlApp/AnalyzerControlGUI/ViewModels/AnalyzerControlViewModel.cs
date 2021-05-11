@@ -166,6 +166,7 @@ namespace AnalyzerControlGUI.ViewModels
                 analyzer = new Analyzer(provider);
                 conveyor = new ConveyorService(conveyorCellsCount);
                 demoController = new AnalyzerDemoController(provider, conveyor);
+                conveyor.SetController(demoController);
                 demoController.LoadConfiguration(controllerFileName);
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;

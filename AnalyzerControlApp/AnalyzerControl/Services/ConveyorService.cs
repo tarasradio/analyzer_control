@@ -81,10 +81,17 @@ namespace AnalyzerControl.Services
         /// </summary>
         public bool FirstRequest { get; set; } = false;
 
+        private AnalyzerDemoController _controller;
+
         public ConveyorService(int cellsCount)
         {
             Cells = Enumerable.Repeat(new ConveyorCell(), cellsCount).ToArray();
             State = States.Waiting;
+        }
+
+        public void SetController(AnalyzerDemoController controller)
+        {
+            _controller = controller;
         }
 
         /// <summary>
@@ -142,7 +149,7 @@ namespace AnalyzerControl.Services
                 else
                 {
                     Logger.Info("Ожидание завершения критических задач...");
-                    // Отправляем запрос на прерывание работы алгоритма
+                    _controller.InterruptWork(); // Отправляем запрос на прерывание работы алгоритма
                     await Task.Run(waitControllerFinished);
                 }
 
@@ -182,7 +189,7 @@ namespace AnalyzerControl.Services
                     Logger.Info("Ожидайте, следующая пробирка выехала...");
                 } else {
                     Logger.Info("Ожидание завершения критических задач...");
-                    // Отправляем запрос на прерывание работы алгоритма
+                    _controller.InterruptWork(); // Отправляем запрос на прерывание работы алгоритма
                     await Task.Run(waitControllerFinished);
                 }
 
@@ -211,7 +218,7 @@ namespace AnalyzerControl.Services
             FirstRequest = true;
             State = States.AnalyzesProcessing;// Активируем кнопки "Загрузка" и "Выгрузка"
             Logger.Info("Возврат к обработке анализов...");
-            // Возвращаем управление основному алгоритму
+            _controller.ResumeWork(); // Возвращаем управление основному алгоритму
         }
 
         private void waitControllerFinished()
