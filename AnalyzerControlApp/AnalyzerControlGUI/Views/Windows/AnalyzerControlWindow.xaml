@@ -85,10 +85,16 @@
                             Command="{Binding LoadCommand}" 
                             Style="{StaticResource RectangleButton}" 
                             Content="Загрузка"/>
-                    <Button Height="100" Margin="0 10" Command="{Binding AbortCommand}" 
-                            Style="{StaticResource ButtonPinkRound}" Content="Остановить"/>
-                    <Button Height="100" Margin="0 10" Command="{Binding ResumeCommand}" 
-                            Style="{StaticResource ButtonGreenRound}" Content="Продолжить"/>
+                    <Button Height="100" Margin="0 10" 
+                            BorderBrush="HotPink"
+                            Command="{Binding AbortCommand}" 
+                            Style="{StaticResource RoundedButton}" 
+                            Content="Остановить работу"/>
+                    <Button Height="100" Margin="0 10" 
+                            BorderBrush="LightGreen"
+                            Command="{Binding ResumeCommand}" 
+                            Style="{StaticResource RoundedButton}" 
+                            Content="Продолжить работу"/>
                     <Button Height="50" Margin="0 10" 
                             BorderBrush="HotPink"
                             Command="{Binding UnloadCommand}" 
