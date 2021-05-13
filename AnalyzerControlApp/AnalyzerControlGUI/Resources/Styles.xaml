@@ -59,9 +59,10 @@
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="3">
                                 <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Text="{TemplateBinding Content}" 
-                                   TextWrapping="Wrap"/>
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center"
+                                           Text="{TemplateBinding Content}"
+                                           TextWrapping="Wrap"/>
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -70,15 +71,19 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="ButtonPinkRound" TargetType="{x:Type Button}">
+    <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="HotPink" BorderThickness="2" CornerRadius="50">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2" CornerRadius="50">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="{TemplateBinding Content}" 
+                                   TextWrapping="Wrap"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -89,35 +94,11 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Background}" BorderBrush="HotPink" BorderThickness="3" CornerRadius="50">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="ButtonGreenRound" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Background="{TemplateBinding Background}" BorderBrush="LightGreen" BorderThickness="2" CornerRadius="50">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="LightGreen" BorderThickness="3" CornerRadius="50">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           TextAlignment="Center"
+                                           Text="{TemplateBinding Content}"
+                                           TextWrapping="Wrap"/>
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
