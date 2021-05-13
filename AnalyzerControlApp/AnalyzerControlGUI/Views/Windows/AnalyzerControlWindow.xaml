@@ -172,9 +172,11 @@
 
                     <Button Content="Аварийная остановка!"
                             Command="{Binding AbortCommand}"
+                            Background="Red"
+                            FontSize="24"
                             Height="80"
                             Margin="0 24"
-                            Style="{StaticResource EmergencyButton}"/>
+                            Style="{StaticResource RectangleButton}"/>
                 </StackPanel>
                 <ScrollViewer 
                               Margin="50 0 50 24"
