@@ -134,6 +134,7 @@
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -174,12 +175,20 @@
     <Compile Include="Models\Cassette.cs" />
     <Compile Include="Models\ConveyorCell.cs" />
     <Compile Include="ViewModels\AnalyzerControlViewModel.cs" />
+    <Compile Include="ViewModels\EveningCheckoutViewModel.cs" />
+    <Compile Include="ViewModels\MorningCheckoutViewModel.cs" />
     <Compile Include="ViewsHelpers\AutoScrollHelper.cs" />
     <Compile Include="Views\CustomViews\CartridgeCassetteControl.xaml.cs">
       <DependentUpon>CartridgeCassetteControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomViews\ConveyorControl.xaml.cs">
       <DependentUpon>ConveyorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DialogWindows\EveningCheckoutWindow.xaml.cs">
+      <DependentUpon>EveningCheckoutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DialogWindows\MorningChechoutWindow.xaml.cs">
+      <DependentUpon>MorningChechoutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\AnalyzerControlWindow.xaml.cs">
       <DependentUpon>AnalyzerControlWindow.xaml</DependentUpon>
@@ -226,6 +235,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CustomViews\ConveyorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogWindows\EveningCheckoutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogWindows\MorningChechoutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

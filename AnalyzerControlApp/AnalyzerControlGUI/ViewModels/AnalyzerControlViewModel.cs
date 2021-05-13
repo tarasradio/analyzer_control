@@ -4,8 +4,11 @@ using AnalyzerControl.Services;
 using AnalyzerControlGUI.Commands;
 using AnalyzerControlGUI.Models;
 using AnalyzerControlGUI.Views;
+using AnalyzerControlGUI.Views.DialogWindows;
 using AnalyzerService;
 using Infrastructure;
+using System;
+using System.Management;
 using System.Collections.ObjectModel;
 using ConveyorCell = AnalyzerControlGUI.Models.ConveyorCell;
 
@@ -18,6 +21,92 @@ namespace AnalyzerControlGUI.ViewModels
 
         public ObservableCollection<Cassette> Cassettes { get; set; }
         public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
+
+        RelayCommand _morningCheckoutCommand;
+
+        public RelayCommand MorningCheckoutCommand {
+            get {
+                if (_morningCheckoutCommand == null) {
+                    _morningCheckoutCommand = new RelayCommand(
+                       param => morningCheckout(),
+                       param => canMorningCheckoutExecute()
+                       );
+                }
+                return _morningCheckoutCommand;
+            }
+        }
+
+        private bool canMorningCheckoutExecute()
+        {
+            return true;// ConnectionState;
+        }
+
+        private void morningCheckout()
+        {
+            MorningCheckoutViewModel viewModel = new MorningCheckoutViewModel();
+            MorningChechoutWindow morningChechoutWindow = new MorningChechoutWindow();
+            morningChechoutWindow.DataContext = viewModel;
+
+            morningChechoutWindow.ShowDialog();
+        }
+
+        RelayCommand _eveningCheckoutCommand;
+
+        public RelayCommand EveningCheckoutCommand
+        {
+            get
+            {
+                if (_eveningCheckoutCommand == null)
+                {
+                    _eveningCheckoutCommand = new RelayCommand(
+                       param => eveningCheckout(),
+                       param => canEveningCheckoutExecute()
+                       );
+                }
+                return _eveningCheckoutCommand;
+            }
+        }
+
+        private bool canEveningCheckoutExecute()
+        {
+            return true;
+        }
+
+        private void eveningCheckout()
+        {
+            EveningCheckoutViewModel viewModel = new EveningCheckoutViewModel();
+            EveningCheckoutWindow eveningCheckoutWindow = new EveningCheckoutWindow();
+            eveningCheckoutWindow.DataContext = viewModel;
+
+            eveningCheckoutWindow.ShowDialog();
+        }
+
+        RelayCommand _startCommand;
+
+        public RelayCommand StartCommand {
+            get {
+                if (_startCommand == null) {
+                    _startCommand = new RelayCommand(
+                       param => start(),
+                       param => canStartExecute()
+                       );
+                }
+                return _startCommand;
+            }
+        }
+
+        private bool canStartExecute()
+        {
+            return ConnectionState;
+        }
+
+        private void start()
+        {
+            Logger.Debug($"Загрузка...");
+            Logger.Info($"Загрузка...");
+
+            demoController.StartWork();
+        }
 
         RelayCommand _LoadCommand;
 
@@ -144,6 +233,7 @@ namespace AnalyzerControlGUI.ViewModels
         static IConfigurationProvider provider = new XmlConfigurationProvider();
         static Analyzer analyzer = null;
         static ConveyorService conveyor = null;
+        static CartridgesDeckService cartridgesDeck = null;
         static AnalyzerDemoController demoController = null;
 
         const string controllerFileName = "DemoControllerConfiguration";
@@ -165,6 +255,7 @@ namespace AnalyzerControlGUI.ViewModels
             try {
                 analyzer = new Analyzer(provider);
                 conveyor = new ConveyorService(conveyorCellsCount);
+                cartridgesDeck = new CartridgesDeckService(cassettesCount);
                 demoController = new AnalyzerDemoController(provider, conveyor);
                 conveyor.SetController(demoController);
                 demoController.LoadConfiguration(controllerFileName);
@@ -193,6 +284,44 @@ namespace AnalyzerControlGUI.ViewModels
         private void onInfoMessageAdded(string message)
         {
             InformationText = message;
+        }
+
+        private int _selectedCassette;
+        public int SelectedCassette {
+            get => _selectedCassette;
+            set
+            {
+                _selectedCassette = value;
+                if(ConnectionState)
+                    scanCassette();
+                NotifyPropertyChanged();
+            }
+        }
+
+        // Сканирование кассеты
+        private void scanCassette()
+        {
+            if (SelectedCassette == -1)
+                return;
+            cartridgesDeck.ScanCassette(SelectedCassette);
+            string barcode = Analyzer.State.CartridgeBarcode;
+            Analyzer.State.CartridgeBarcode = string.Empty;
+            if(barcode != null)
+            {
+                if(!String.IsNullOrEmpty(barcode))
+                {
+                    Cassettes[SelectedCassette].Barcode = barcode;
+                    Cassettes[SelectedCassette].CountLeft = 10;
+                } else {
+                    Cassettes[SelectedCassette].Barcode = "Пусто";
+                    Cassettes[SelectedCassette].CountLeft = 0;
+                }
+                
+            } else {
+                Cassettes[SelectedCassette].Barcode = "Пусто";
+                Cassettes[SelectedCassette].CountLeft = 0;
+            }
+            
         }
 
         private string _debugText;
