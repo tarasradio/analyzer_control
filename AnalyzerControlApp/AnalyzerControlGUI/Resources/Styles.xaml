@@ -45,6 +45,7 @@
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2">
                         <TextBlock HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
+                                   TextAlignment="Center"
                                    Text="{TemplateBinding Content}" 
                                    TextWrapping="Wrap"/>
                     </Border>
