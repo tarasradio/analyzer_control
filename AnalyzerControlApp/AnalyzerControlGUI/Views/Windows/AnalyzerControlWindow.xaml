@@ -74,7 +74,7 @@
                             BorderBrush="DeepSkyBlue"
                             Command="{Binding EveningCheckoutCommand}" 
                             Style="{StaticResource RectangleButton}" 
-                            Content="Evening Checkout"/>
+                            Content="Завершение работы"/>
                     <Button Height="100" Margin="0 10"
                             BorderBrush="LightGreen"
                             Command="{Binding StartCommand}" 
