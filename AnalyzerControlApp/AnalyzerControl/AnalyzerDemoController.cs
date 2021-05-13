@@ -246,7 +246,7 @@ namespace AnalyzerControl
                 if (!string.IsNullOrWhiteSpace(barcode)) {
                     Logger.Debug($"Обнаружена пробирка со штрихкодом [{barcode}].");
 
-                    cell.AnalysisBarcode = searchBarcodeInDatabase(barcode).BarCode;
+                    cell.AnalysisBarcode = searchBarcodeInDatabase(barcode).BarCode; // TODO: - может вернуть null
 
                     if (!cell.IsEmpty) {
                         Logger.Debug($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
