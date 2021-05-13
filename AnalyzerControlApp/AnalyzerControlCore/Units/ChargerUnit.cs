@@ -1,4 +1,5 @@
 ﻿using AnalyzerCommunication;
+using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
@@ -43,6 +44,8 @@ namespace AnalyzerService.Units
         /// <param name="cell">Номер ячейки</param>
         public void TurnToCell(int cell)
         {
+            if (cell < 0)
+                return;
             Logger.Debug($"[{nameof(ChargerUnit)}] - Start turn to cell[{cell}].");
 
             List<ICommand> commands = new List<ICommand>();
@@ -166,6 +169,18 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
 
             Logger.Debug($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
+        }
+
+        public void ScanBarcode()
+        {
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Запуск сканирования кассеты.");
+            List<ICommand> commands = new List<ICommand>();
+
+            // Сканирование кассеты
+            commands.Add(new ScanBarcodeCommand(scanner: BarcodeScanner.CartridgeScanner));
+
+            executor.WaitExecution(commands);
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Сканирование кассеты завершено.");
         }
     }
 }
