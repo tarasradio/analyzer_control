@@ -35,7 +35,7 @@ namespace AnalyzerControl.Services
         public ConveyorCell[] Cells { get; private set; }
 
         private const int cellsBetweenScanAndSampling = 7;
-        private const int cellsBetweenScanAndLoading = 25; // TODO:проверить, сколько реально
+        private const int cellsBetweenScanAndLoading = 29; // TODO:проверить, сколько реально
 
         /// <summary>
         /// Ячейка в позиции перед сканером
