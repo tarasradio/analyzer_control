@@ -75,13 +75,13 @@
                             BorderBrush="DeepSkyBlue"
                             Command="{Binding EveningCheckoutCommand}" 
                             Style="{StaticResource RectangleButton}" 
-                            Content="Вечерняя проверка"/>
-                    <Button Height="50" Margin="0 10"
-                            BorderBrush="DeepSkyBlue"
-                            Command="{Binding ManualInputCommand}" 
+                            Content="Завершение работы"/>
+                    <Button Height="100" Margin="0 10"
+                            BorderBrush="LightGreen"
+                            Command="{Binding StartCommand}" 
                             Style="{StaticResource RectangleButton}" 
-                            Content="Ручной ввод"/>
-                    <Button Height="100" Margin="0 100 0 10" 
+                            Content="Запуск"/>
+                    <Button Height="50" Margin="0 10" 
                             BorderBrush="LightGreen"
                             Command="{Binding LoadCommand}" 
                             Style="{StaticResource RectangleButton}" 
