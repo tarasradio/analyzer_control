@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnalyzerService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,5 +39,15 @@ namespace AnalyzerControl.Services
         {
             Cassettes = Enumerable.Repeat(new CartridgeCassette(), deckSize).ToArray();
         }
+
+        public void ScanCassette(int index)
+        {
+            Analyzer.Charger.HomeRotator();
+            Analyzer.Charger.TurnToCell(index);
+            Analyzer.Charger.ScanBarcode();
+            System.Threading.Thread.Sleep(1000);
+        }
     }
+
+    
 }
