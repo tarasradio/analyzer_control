@@ -130,6 +130,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         private void unloadRotor()
         {
+            Analyzer.Charger.HomeHook();
             Analyzer.Rotor.PlaceCellAtDischarge(0);
             Analyzer.Charger.HomeRotator();
             Analyzer.Charger.TurnToDischarge();
