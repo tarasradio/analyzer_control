@@ -10,7 +10,6 @@ using Infrastructure;
 using System;
 using System.Management;
 using System.Collections.ObjectModel;
-using ConveyorCell = AnalyzerControlGUI.Models.ConveyorCell;
 
 namespace AnalyzerControlGUI.ViewModels
 {
@@ -18,10 +17,13 @@ namespace AnalyzerControlGUI.ViewModels
     {
         private const int cassettesCount = 10;
         private const int conveyorCellsCount = 54;
+        private const int rotorCellsCount = 40;
 
         public ObservableCollection<Cassette> Cassettes { get; set; }
-        public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
+        public ObservableCollection<Models.ConveyorCell> ConveyorCells { get; set; }
+        public ObservableCollection<Models.RotorCell> RotorCells { get; set; }
 
+        #region MorningCheckout
         RelayCommand _morningCheckoutCommand;
 
         public RelayCommand MorningCheckoutCommand {
@@ -50,6 +52,9 @@ namespace AnalyzerControlGUI.ViewModels
             morningChechoutWindow.ShowDialog();
         }
 
+        #endregion
+
+        #region EveningCheckout
         RelayCommand _eveningCheckoutCommand;
 
         public RelayCommand EveningCheckoutCommand
@@ -80,7 +85,9 @@ namespace AnalyzerControlGUI.ViewModels
 
             eveningCheckoutWindow.ShowDialog();
         }
+        #endregion
 
+        #region Start
         RelayCommand _startCommand;
 
         public RelayCommand StartCommand {
@@ -107,7 +114,41 @@ namespace AnalyzerControlGUI.ViewModels
 
             demoController.StartWork();
         }
+        #endregion
 
+        #region ManualInputCommand
+
+        RelayCommand _manualInputCommand;
+
+        public RelayCommand ManualInputCommand
+        {
+            get
+            {
+                if (_manualInputCommand == null)
+                {
+                    _manualInputCommand = new RelayCommand(
+                       param => manualInput(),
+                       param => canManualInputExecute()
+                       );
+                }
+                return _manualInputCommand;
+            }
+        }
+
+        private bool canManualInputExecute()
+        {
+            return ConnectionState;
+        }
+
+        private void manualInput()
+        {
+            ManualInputDialog dialog = new ManualInputDialog();
+            dialog.ShowDialog();
+        }
+
+        #endregion
+
+        #region LoadCommand
         RelayCommand _LoadCommand;
 
         public RelayCommand LoadCommand {
@@ -134,8 +175,12 @@ namespace AnalyzerControlGUI.ViewModels
             Logger.Debug($"Загрузка...");
             Logger.Info($"Загрузка...");
 
-            conveyor.Load();
+            //conveyor.Load();\
+            changeCell();
         }
+        #endregion
+
+        #region UnloadCommand
 
         RelayCommand _UnloadCommand;
 
@@ -165,7 +210,9 @@ namespace AnalyzerControlGUI.ViewModels
 
             conveyor.Unload();
         }
+        #endregion
 
+        #region AbortCommand
         RelayCommand _AbortCommand;
 
         public RelayCommand AbortCommand {
@@ -186,7 +233,9 @@ namespace AnalyzerControlGUI.ViewModels
             Analyzer.AbortExecution();
             demoController.AbortWork();
         }
+        #endregion
 
+        #region ResumeCommand
         RelayCommand _ResumeCommand;
 
         public RelayCommand ResumeCommand {
@@ -214,21 +263,7 @@ namespace AnalyzerControlGUI.ViewModels
 
             conveyor.Resume();
         }
-
-        public void wtf()
-        {
-            //Cassettes[1].CountLeft = 6;
-            //Cassettes[4].CountLeft = 2 ;
-            //Cassettes[5].CountLeft = 3 ;
-
-            //if (ConveyorCells[4].State == ConveyorCellState.Empty)
-            //{
-            //    ConveyorCells[4].State = ConveyorCellState.Error;
-            //} else
-            //{
-            //    ConveyorCells[4].State = ConveyorCellState.Empty;
-            //}
-        }
+        #endregion
 
         static IConfigurationProvider provider = new XmlConfigurationProvider();
         static Analyzer analyzer = null;
@@ -382,6 +417,19 @@ namespace AnalyzerControlGUI.ViewModels
                    }));
             }
         }
+        
+        private void changeCell()
+        {
+            if(ConveyorCells[0].State == ConveyorCellState.Empty)
+                ConveyorCells[0].State = ConveyorCellState.Error;
+            else
+                ConveyorCells[0].State = ConveyorCellState.Empty;
+
+            if (RotorCells[0].AnalysisBarcode == string.Empty)
+                RotorCells[0].AnalysisBarcode = "123";
+            else
+                RotorCells[0].AnalysisBarcode = string.Empty;
+        }
 
         private void InitCustomControls()
         {
@@ -399,14 +447,24 @@ namespace AnalyzerControlGUI.ViewModels
                 new Cassette { Barcode="21", CountLeft = 10 },
             };
 
-            ConveyorCells = new ObservableCollection<ConveyorCell>();
+            ConveyorCells = new ObservableCollection<Models.ConveyorCell>();
 
             for (int i = 0; i < conveyorCellsCount; ++i)
-                ConveyorCells.Add(new ConveyorCell());
+                ConveyorCells.Add(new Models.ConveyorCell());
 
             ConveyorCells[5].State = ConveyorCellState.Processed;
             ConveyorCells[6].State = ConveyorCellState.Error;
             ConveyorCells[7].State = ConveyorCellState.Processing;
+
+            RotorCells = new ObservableCollection<Models.RotorCell>();
+
+            for(int i = 0; i < rotorCellsCount; ++i)
+            {
+                RotorCells.Add(new Models.RotorCell());
+            }
+
+            RotorCells[0].AnalysisBarcode = "123";
+            RotorCells[4].AnalysisBarcode = "123";
         }
     }
 }

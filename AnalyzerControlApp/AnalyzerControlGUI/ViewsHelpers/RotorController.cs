@@ -10,11 +10,11 @@ using System.Windows.Shapes;
 
 namespace AnalyzerControlGUI.ViewsHelpers
 {
-    public class ConveyorHelper
+    public class RotorController
     {
         public double TubeDiameter { set; get; }
 
-        public ObservableCollection<ConveyorCell> Cells = new ObservableCollection<ConveyorCell>();
+        public ObservableCollection<RotorCell> Cells = new ObservableCollection<RotorCell>();
 
         private List<Point> _coords;
         private List<int> _cellsCoordsIndexes;
@@ -23,7 +23,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
         private double _scale;
         private int _offset = 1;
 
-        public ConveyorHelper(Canvas canvas, double pathResolution, double scale, ObservableCollection<ConveyorCell> cells) 
+        public RotorController(Canvas canvas, double pathResolution, double scale, ObservableCollection<RotorCell> cells) 
         {
             _coords = new List<Point>();
             _cellsCoordsIndexes = new List<int>();
@@ -39,16 +39,16 @@ namespace AnalyzerControlGUI.ViewsHelpers
             drawCells();
         }
 
-        public void ConveyorLoopStep(object sender, EventArgs e)
+        public void RotorLoopStep(object sender, EventArgs e)
         {
             for (int i = 0; i < Cells.Count; i++) {
 
-                Ellipse ellipse = (Ellipse)_canvas.Children[i];
+                Ellipse ellipse = (Ellipse)_canvas.Children[i+54];
                 ellipse.Fill = GetFillBrush(Cells[i]);
 
                 int nextPointIndex = (_cellsCoordsIndexes[i] + _offset) % _coords.Count;
-                Canvas.SetLeft(_canvas.Children[i], _coords[nextPointIndex].X);
-                Canvas.SetTop(_canvas.Children[i], _coords[nextPointIndex].Y);
+                Canvas.SetLeft(_canvas.Children[i+54], _coords[nextPointIndex].X);
+                Canvas.SetTop(_canvas.Children[i+54], _coords[nextPointIndex].Y);
             }
 
             _offset += 50;
@@ -60,32 +60,12 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
         private void calcConveyorPath()
         {
-            List<Point> topPart = GraphMath.CalcArcPoint(
-                150, 500,
-                45, 225,
-                50, _pathResolution, _scale);
+            List<Point> rotor= GraphMath.CalcArcPoint(
+                50, 315,
+                0, 360,
+                100, _pathResolution, _scale);
 
-            List<Point> leftPart = GraphMath.CalcArcPoint(
-                -43.0672, 304.1683,
-                -45, 45,
-                225, _pathResolution, _scale);
-
-            leftPart.Reverse();
-
-            List<Point> bottomPart = GraphMath.CalcArcPoint(
-                150, 108.3365,
-                135, 315,
-                50, _pathResolution, _scale);
-
-            List<Point> rightPart = GraphMath.CalcArcPoint(
-                -43.0672, 304.1683,
-                -45, 45,
-                325, _pathResolution, _scale);
-
-            _coords = _coords.Concat(topPart).ToList();
-            _coords = _coords.Concat(leftPart).ToList();
-            _coords = _coords.Concat(bottomPart).ToList();
-            _coords = _coords.Concat(rightPart).ToList();
+            _coords = _coords.Concat(rotor).ToList();
             _coords.Add(_coords[0]);
         }
 
@@ -93,7 +73,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
         {
             Brush fillBrush = Brushes.LightGray;
 
-            ConveyorCell cell = Cells[num];
+            RotorCell cell = Cells[num];
             fillBrush = GetFillBrush(cell);
 
             Ellipse Ellipse = new Ellipse
@@ -111,25 +91,12 @@ namespace AnalyzerControlGUI.ViewsHelpers
             return Ellipse;
         }
 
-        private static Brush GetFillBrush(ConveyorCell cell)
+        private static Brush GetFillBrush(RotorCell cell)
         {
             Brush brush = Brushes.LightGray;
-            switch (cell.State)
-            {
-                case ConveyorCellState.Empty:
-                    brush = Brushes.LightGray;
-                    break;
-                case ConveyorCellState.Processed:
-                    brush = Brushes.LightGreen;
-                    break;
-                case ConveyorCellState.Processing:
-                    brush = Brushes.Khaki;
-                    break;
-                case ConveyorCellState.Error:
-                    brush = Brushes.LightPink;
-                    break;
-                default:
-                    break;
+
+            if(cell.AnalysisBarcode != string.Empty) {
+                brush = Brushes.LightGreen;
             }
 
             return brush;

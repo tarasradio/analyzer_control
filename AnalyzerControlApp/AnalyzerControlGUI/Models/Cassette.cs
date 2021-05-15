@@ -24,10 +24,23 @@ namespace AnalyzerControlGUI.Models
             }
         }
 
+        private bool _inserted;
+
+        public bool Inserted
+        {
+            get => _inserted;
+            set
+            {
+                _inserted = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Cassette()
         {
             Barcode = "RedMary4590";
             CountLeft = 0;
+            Inserted = false;
         }
     }
 }

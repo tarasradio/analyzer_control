@@ -22,7 +22,7 @@
     <Border Background="#272537">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5.5*"/>
                 <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0">
@@ -48,7 +48,8 @@
                 </Grid>
 
                 <cv:ConveyorControl Grid.Row="1"
-                                    Cells="{Binding ConveyorCells, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    ConveyorCells="{Binding ConveyorCells, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    RotorCells="{Binding RotorCells, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
@@ -65,22 +66,27 @@
                                 VerticalAlignment="Center"
                                 Grid.Column="0" 
                                 Grid.RowSpan="3">
-                    <Button Height="100" Margin="0 10" 
-                            BorderBrush="DeepSkyBlue"
-                            Command="{Binding MorningCheckoutCommand}" 
-                            Style="{StaticResource RectangleButton}" 
-                            Content="Morning Checkout"/>
-                    <Button Height="100" Margin="0 10" 
-                            BorderBrush="DeepSkyBlue"
-                            Command="{Binding EveningCheckoutCommand}" 
-                            Style="{StaticResource RectangleButton}" 
-                            Content="Evening Checkout"/>
                     <Button Height="100" Margin="0 10"
                             BorderBrush="LightGreen"
                             Command="{Binding StartCommand}" 
                             Style="{StaticResource RectangleButton}" 
                             Content="Запуск"/>
                     <Button Height="50" Margin="0 10" 
+                            BorderBrush="DeepSkyBlue"
+                            Command="{Binding MorningCheckoutCommand}" 
+                            Style="{StaticResource RectangleButton}" 
+                            Content="Утренняя проверка"/>
+                    <Button Height="50" Margin="0 10" 
+                            BorderBrush="DeepSkyBlue"
+                            Command="{Binding EveningCheckoutCommand}" 
+                            Style="{StaticResource RectangleButton}" 
+                            Content="Вечерняя проверка"/>
+                    <Button Height="50" Margin="0 10"
+                            BorderBrush="DeepSkyBlue"
+                            Command="{Binding ManualInputCommand}" 
+                            Style="{StaticResource RectangleButton}" 
+                            Content="Ручной ввод"/>
+                    <Button Height="100" Margin="0 100 0 10" 
                             BorderBrush="LightGreen"
                             Command="{Binding LoadCommand}" 
                             Style="{StaticResource RectangleButton}" 
@@ -89,7 +95,7 @@
                             Style="{StaticResource ButtonPinkRound}" Content="Остановить"/>
                     <Button Height="100" Margin="0 10" Command="{Binding ResumeCommand}" 
                             Style="{StaticResource ButtonGreenRound}" Content="Продолжить"/>
-                    <Button Height="50" Margin="0 10" 
+                    <Button Height="100" Margin="0 10" 
                             BorderBrush="HotPink"
                             Command="{Binding UnloadCommand}" 
                             Style="{StaticResource RectangleButton}" 
@@ -119,9 +125,10 @@
                               BorderThickness="0" Background="Transparent">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <cv:CartridgeCassetteControl 
-                                        Barcode="{Binding Barcode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                        CountLeft="{Binding CountLeft, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <cv:CartridgeCassetteControl
+                                    Barcode="{Binding Barcode, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    CountLeft="{Binding CountLeft, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Inserted="{Binding Inserted, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         <ListView.ItemsPanel>

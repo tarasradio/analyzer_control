@@ -13,31 +13,61 @@ namespace AnalyzerControlGUI.Views.CustomViews
     /// </summary>
     public partial class ConveyorControl : UserControl
     {
-        private ConveyorHelper conveyor;
-        readonly DispatcherTimer tubeTimer = new DispatcherTimer();
+        private ConveyorController conveyor;
+        private RotorController rotor;
+        readonly DispatcherTimer conveyorTimer = new DispatcherTimer();
+        readonly DispatcherTimer rotorTimer = new DispatcherTimer();
 
-        public static readonly DependencyProperty CellsProperty 
+        #region ConveyorCellsDefinition
+        public static readonly DependencyProperty ConveyorCellsProperty 
             = DependencyProperty.Register(
-                "Cells",
+                "ConveyorCells",
                 typeof(ObservableCollection<ConveyorCell>),
                 typeof(ConveyorControl),
-                new PropertyMetadata(null, new PropertyChangedCallback(CellsChanged))
+                new PropertyMetadata(null, new PropertyChangedCallback(ConveyorCellsChanged))
                 );
 
-        private static void CellsChanged(DependencyObject depObj,
+        private static void ConveyorCellsChanged(DependencyObject depObj,
             DependencyPropertyChangedEventArgs args)
         {
             ConveyorControl s = (ConveyorControl)depObj;
             s.CreateHelper();
         }
 
-        public ObservableCollection<ConveyorCell> Cells
+        public ObservableCollection<ConveyorCell> ConveyorCells
         {
-            get => (ObservableCollection<ConveyorCell>)GetValue(CellsProperty);
+            get => (ObservableCollection<ConveyorCell>)GetValue(ConveyorCellsProperty);
             set {
-                SetValue(CellsProperty, value);
+                SetValue(ConveyorCellsProperty, value);
             }
         }
+        #endregion
+
+        #region RotorCellsDefinition
+        public static readonly DependencyProperty RotorCellsProperty
+            = DependencyProperty.Register(
+                "RotorCells",
+                typeof(ObservableCollection<RotorCell>),
+                typeof(ConveyorControl),
+                new PropertyMetadata(null, new PropertyChangedCallback(RotorCellsChanged))
+                );
+
+        private static void RotorCellsChanged(DependencyObject depObj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            ConveyorControl s = (ConveyorControl)depObj;
+            s.CreateHelper();
+        }
+
+        public ObservableCollection<RotorCell> RotorCells
+        {
+            get => (ObservableCollection<RotorCell>)GetValue(RotorCellsProperty);
+            set
+            {
+                SetValue(RotorCellsProperty, value);
+            }
+        }
+        #endregion
 
         public ConveyorControl()
         {
@@ -46,14 +76,20 @@ namespace AnalyzerControlGUI.Views.CustomViews
 
         public void CreateHelper()
         {
-            if(Cells != null)
+            if(ConveyorCells != null && RotorCells != null)
             {
-                conveyor = new ConveyorHelper(CanvasTubes, 0.01, 1.7, Cells);
+                conveyor = new ConveyorController(CanvasTubes, 0.01, 1.7, ConveyorCells);
+                rotor = new RotorController(CanvasTubes, 0.01, 1.7, RotorCells);
+                
                 ConvHelp.DataContext = conveyor;
 
-                tubeTimer.Tick += conveyor.ConveyorLoopStep;
-                tubeTimer.Interval = TimeSpan.FromMilliseconds(30);
-                tubeTimer.Start();
+                conveyorTimer.Tick += conveyor.ConveyorLoopStep;
+                conveyorTimer.Interval = TimeSpan.FromMilliseconds(30);
+                conveyorTimer.Start();
+
+                rotorTimer.Tick += rotor.RotorLoopStep;
+                rotorTimer.Interval = TimeSpan.FromMilliseconds(30);
+                rotorTimer.Start();
             }
         }
     }

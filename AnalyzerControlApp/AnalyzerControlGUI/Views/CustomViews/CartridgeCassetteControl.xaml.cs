@@ -15,6 +15,9 @@ namespace AnalyzerControlGUI.Views.CustomViews
         public static readonly DependencyProperty BarcodeProperty = DependencyProperty.Register(
             "Barcode", typeof(string), typeof(CartridgeCassetteControl), new PropertyMetadata("123", new PropertyChangedCallback(BarcodeChanged)));
 
+        public static readonly DependencyProperty InsertedProperty = DependencyProperty.Register(
+           "Inserted", typeof(bool), typeof(CartridgeCassetteControl), new PropertyMetadata(false, new PropertyChangedCallback(InsertedChanged)));
+
         public static readonly DependencyProperty CountLeftProperty = DependencyProperty.Register(
             "CountLeft", typeof(float), typeof(CartridgeCassetteControl), new PropertyMetadata(5.0f, new PropertyChangedCallback(CountLeftChanged)));
 
@@ -22,7 +25,17 @@ namespace AnalyzerControlGUI.Views.CustomViews
             DependencyPropertyChangedEventArgs args)
         {
             CartridgeCassetteControl s = (CartridgeCassetteControl)depObj;
-            s.LabelName.Content = args.NewValue.ToString();
+            //if (s.Inserted) {
+            //    s.LabelName.Content = args.NewValue.ToString();
+            //}
+            s.UpdateView();
+        }
+
+        private static void InsertedChanged(DependencyObject depObj,
+            DependencyPropertyChangedEventArgs args)
+        {
+            CartridgeCassetteControl s = (CartridgeCassetteControl)depObj;
+            s.UpdateView();
         }
 
         private static void CountLeftChanged(DependencyObject depObj,
@@ -40,7 +53,7 @@ namespace AnalyzerControlGUI.Views.CustomViews
             UpdateView();
         }
 
-        public CartridgeCassetteControl(int maxCount, int countLeft, string name)
+        public CartridgeCassetteControl(int maxCount, int countLeft, string name, bool inserted = false)
         {
             InitializeComponent();
 
@@ -49,6 +62,7 @@ namespace AnalyzerControlGUI.Views.CustomViews
 
             CountLeft = countLeft;
             Barcode = name;
+            Inserted = inserted;
         }
 
         public string Barcode
@@ -57,6 +71,15 @@ namespace AnalyzerControlGUI.Views.CustomViews
             set
             {
                 SetValue(BarcodeProperty, value);
+            }
+        }
+
+        public bool Inserted
+        {
+            get => (bool)GetValue(InsertedProperty);
+            set
+            {
+                SetValue(InsertedProperty, value);
             }
         }
 
@@ -73,17 +96,27 @@ namespace AnalyzerControlGUI.Views.CustomViews
 
         void UpdateView()
         {
-            Status.Height = CountLeft * _maxHeight / _maxCount;
-            LabelCount.Content = CountLeft.ToString();
+            if (!Inserted)
+            {
+                Status.Fill = Brushes.LightGray;
+                LabelName.Content = "Unplugged";
+            } else {
+                LabelName.Content = Barcode;
+                Status.Height = CountLeft * _maxHeight / _maxCount;
+                LabelCount.Content = CountLeft.ToString();
 
-            if ((float)CountLeft / _maxCount <= 0.2) {
-                Status.Fill = Brushes.LightPink;
-            }
-            else if ((float)CountLeft / _maxCount <= 0.6) {
-                Status.Fill = Brushes.Khaki;
-            }
-            else if ((float)CountLeft / _maxCount <= 1) {
-                Status.Fill = Brushes.LightGreen;
+                if ((float)CountLeft / _maxCount <= 0.2)
+                {
+                    Status.Fill = Brushes.LightPink;
+                }
+                else if ((float)CountLeft / _maxCount <= 0.6)
+                {
+                    Status.Fill = Brushes.Khaki;
+                }
+                else if ((float)CountLeft / _maxCount <= 1)
+                {
+                    Status.Fill = Brushes.LightGreen;
+                }
             }
         }
     }
