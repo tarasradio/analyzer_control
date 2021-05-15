@@ -40,11 +40,6 @@
                                FontSize="16"
                                Foreground="{Binding ConnectionState, FallbackValue='Red', Converter={StaticResource connectionToColorConverter}}"
                                Text="{Binding ConnectionText, FallbackValue='Соединение не установленно'}"/>
-                    <!--<Button Grid.Column="1"
-                            Content="Соединение"
-                            Style="{StaticResource ConnectionButton }"
-                            Margin="10" Padding="10"
-                            Command="{Binding ConnectionCommand}"/>-->
                 </Grid>
 
                 <cv:ConveyorControl Grid.Row="1"
