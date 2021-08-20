@@ -27,7 +27,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
             double scale)
         {
             var arc = new List<Point>();
-            double x_offset = 0;
+            double x_offset = 75;
             double y_offset = -35;
 
             double beginAngleRad = beginAngleDeg * Math.PI / 180;

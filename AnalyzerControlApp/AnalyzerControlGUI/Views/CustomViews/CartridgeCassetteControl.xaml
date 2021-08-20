@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AnalyzerControlGUI.Views.CustomViews"
              mc:Ignorable="d" 
-             d:DesignHeight="75" d:DesignWidth="50" Width="95" Height="100">
+             d:DesignHeight="75" d:DesignWidth="50" Width="85" Height="100">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>

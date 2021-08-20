@@ -142,6 +142,21 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
+    <Reference Include="System.Reactive.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Core.3.0.0\lib\net46\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Interfaces.3.0.0\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.3.0.0\lib\net46\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.PlatformServices.3.0.0\lib\net46\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Windows.Threading.3.0.0\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -153,6 +168,8 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -165,6 +182,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFTabTip, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFTabTip.1.2.2\lib\net45\WPFTabTip.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -174,10 +194,13 @@
     <Compile Include="Converters\BoolToColorConverter.cs" />
     <Compile Include="Models\Cassette.cs" />
     <Compile Include="Models\ConveyorCell.cs" />
+    <Compile Include="Models\RotorCell.cs" />
     <Compile Include="ViewModels\AnalyzerControlViewModel.cs" />
     <Compile Include="ViewModels\EveningCheckoutViewModel.cs" />
+    <Compile Include="ViewModels\ManualInputDialogViewModel.cs" />
     <Compile Include="ViewModels\MorningCheckoutViewModel.cs" />
     <Compile Include="ViewsHelpers\AutoScrollHelper.cs" />
+    <Compile Include="ViewsHelpers\RotorController.cs" />
     <Compile Include="Views\CustomViews\CartridgeCassetteControl.xaml.cs">
       <DependentUpon>CartridgeCassetteControl.xaml</DependentUpon>
     </Compile>
@@ -186,6 +209,9 @@
     </Compile>
     <Compile Include="Views\DialogWindows\EveningCheckoutWindow.xaml.cs">
       <DependentUpon>EveningCheckoutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DialogWindows\ManualInputDialog.xaml.cs">
+      <DependentUpon>ManualInputDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DialogWindows\MorningChechoutWindow.xaml.cs">
       <DependentUpon>MorningChechoutWindow.xaml</DependentUpon>
@@ -207,7 +233,7 @@
     <Compile Include="ViewModels\EditCartridgeViewModel.cs" />
     <Compile Include="ViewModels\mainViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
-    <Compile Include="ViewsHelpers\ConveyorHelper.cs" />
+    <Compile Include="ViewsHelpers\ConveyorController.cs" />
     <Compile Include="ViewsHelpers\GraphMath.cs" />
     <Compile Include="Views\DialogWindows\AnalysisTypesWindow.xaml.cs">
       <DependentUpon>AnalysisTypesWindow.xaml</DependentUpon>
@@ -239,6 +265,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DialogWindows\EveningCheckoutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogWindows\ManualInputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
