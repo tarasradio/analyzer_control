@@ -123,19 +123,26 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private void unloadTubes()
+        private async void unloadTubes()
         {
-            Analyzer.Conveyor.Move(25);
+            await Task.Run(() =>
+            {
+                Analyzer.Conveyor.Move(25);
+            });
+            
         }
 
-        private void unloadRotor()
+        private async void unloadRotor()
         {
-            Analyzer.Rotor.PlaceCellAtDischarge(0);
-            Analyzer.Charger.HomeRotator();
-            Analyzer.Charger.TurnToDischarge();
-            Analyzer.Charger.HomeHook();
-            Analyzer.Charger.MoveHookAfterHome();
-            Analyzer.Charger.ChargeCartridge();
+            await Task.Run( () =>
+            {
+                Analyzer.Rotor.PlaceCellAtDischarge(0);
+                Analyzer.Charger.HomeRotator();
+                Analyzer.Charger.TurnToDischarge();
+                Analyzer.Charger.HomeHook();
+                Analyzer.Charger.MoveHookAfterHome();
+                Analyzer.Charger.ChargeCartridge();
+            });
         }
     }
 }
