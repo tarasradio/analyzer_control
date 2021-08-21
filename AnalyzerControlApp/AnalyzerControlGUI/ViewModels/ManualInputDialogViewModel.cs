@@ -24,7 +24,7 @@ namespace AnalyzerControlGUI.ViewModels
         }
 
         private string _patientDescription;
-        public string PatientDescriprion {
+        public string PatientDescription {
             get => _patientDescription;
             set {
                 _patientDescription = value;
@@ -140,7 +140,7 @@ namespace AnalyzerControlGUI.ViewModels
                     analysis.Date = DateTime.Now;
                     analysis.AnalysisType = analysisType;
                     analysis.CurrentStage = 0;
-                    analysis.Description = PatientDescriprion;
+                    analysis.Description = PatientDescription;
                     analysis.CurrentStage = 0;
                     analysis.Barcode = String.Empty;
 
