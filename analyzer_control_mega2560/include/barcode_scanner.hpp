@@ -3,6 +3,11 @@
 
 #include <Arduino.h>
 
+enum ScannerType {
+    TubeScanner = 0x00,
+    CartridgeScanner = 0x01
+};
+
 class BarcodeScanner
 {
 private:

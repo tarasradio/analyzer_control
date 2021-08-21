@@ -12,8 +12,6 @@
             _scanner = (byte)scanner;
         }
 
-        
-
         private byte _scanner;
 
         public byte[] GetBytes()

@@ -2,7 +2,7 @@
 #define system_h
 
 //#define DEBUG
-//#define EMULATOR
+#define EMULATOR
 #define VERSION "17.08.2020"
 
 #endif
