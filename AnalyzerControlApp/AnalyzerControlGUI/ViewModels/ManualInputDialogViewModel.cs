@@ -2,9 +2,10 @@
 using AnalyzerDomain;
 using AnalyzerDomain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 namespace AnalyzerControlGUI.ViewModels
 {
@@ -30,12 +31,18 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
+        #region AnalysisTypes
+
         private ObservableCollection<AnalysisType> _analysisTypes;
 
         public ObservableCollection<AnalysisType> AnalysisTypes
         {
             get {
-                return LoadAnalysisTypesDetails();
+                if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+                    return new ObservableCollection<AnalysisType>();
+                }
+                else
+                    return LoadAnalysisTypesDetails();
             } 
             private set {
                 _analysisTypes = value;
@@ -58,6 +65,10 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
+        #endregion
+
+        #region AnalysisIndex
+
         private int _analysisIndex;
 
         public int AnalysisIndex
@@ -65,6 +76,11 @@ namespace AnalyzerControlGUI.ViewModels
             get { return _analysisIndex; }
             set { _analysisIndex = value; }
         }
+
+        #endregion
+
+
+        #region SheduledAnalyzes
 
         private ObservableCollection<AnalysisType> _sheduledAnalyzes = new ObservableCollection<AnalysisType>();
 
@@ -79,6 +95,10 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
+        #endregion
+
+        #region SheduledAnalysisIndex
+
         private int _sheduledAnalysisIndex;
 
         public int SheduledAnalysisIndex
@@ -86,6 +106,9 @@ namespace AnalyzerControlGUI.ViewModels
             get { return _sheduledAnalysisIndex; }
             set { _sheduledAnalysisIndex = value; }
         }
+
+        #endregion
+
 
         #region InputCommand
         RelayCommand _inputCommand;

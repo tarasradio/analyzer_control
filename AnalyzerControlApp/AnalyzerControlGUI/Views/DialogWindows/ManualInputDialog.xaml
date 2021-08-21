@@ -26,7 +26,8 @@
             <Setter Property="AlternatingRowBackground" Value="AliceBlue"/>
             <Setter Property="AutoGenerateColumns" Value="False"/>
 
-            <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle}"/>
+            <Setter Property="ColumnHeaderStyle" 
+                    Value="{DynamicResource ColumnHeaderStyle}"/>
         </Style>
         <Style x:Key="ColumnHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="FontSize" Value="24" />
