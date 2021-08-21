@@ -2,6 +2,7 @@
 using AnalyzerDomain;
 using AnalyzerDomain.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -130,7 +131,23 @@ namespace AnalyzerControlGUI.ViewModels
 
         private void input()
         {
-            
+            using (AnalyzerContext db = new AnalyzerContext())
+            {
+                foreach (var analysisType in SheduledAnalyzes)
+                {
+                    Analysis analysis = new Analysis();
+
+                    analysis.Date = DateTime.Now;
+                    analysis.AnalysisType = analysisType;
+                    analysis.CurrentStage = 0;
+                    analysis.Description = PatientDescriprion;
+                    analysis.CurrentStage = 0;
+                    analysis.Barcode = String.Empty;
+
+                    db.SheduledAnalyzes.Add(analysis);
+                }
+                db.SaveChanges();
+            }
         }
         #endregion
 
