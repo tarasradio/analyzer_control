@@ -3,14 +3,16 @@ using System;
 using AnalyzerDomain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnalyzerDomain.Migrations
 {
     [DbContext(typeof(AnalyzerContext))]
-    partial class AnalyzerContextModelSnapshot : ModelSnapshot
+    [Migration("20210821092822_AddSheduledAnalyzes")]
+    partial class AddSheduledAnalyzes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
