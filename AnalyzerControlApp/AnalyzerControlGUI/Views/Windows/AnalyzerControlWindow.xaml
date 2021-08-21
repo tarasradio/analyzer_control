@@ -61,6 +61,11 @@
                                 VerticalAlignment="Center"
                                 Grid.Column="0" 
                                 Grid.RowSpan="3">
+                    <Button Height="100" Margin="0 10"
+                            BorderBrush="LightGreen"
+                            Command="{Binding StartCommand}" 
+                            Style="{StaticResource RectangleButton}" 
+                            Content="Запуск"/>
                     <Button Height="50" Margin="0 10" 
                             BorderBrush="DeepSkyBlue"
                             Command="{Binding MorningCheckoutCommand}" 
@@ -71,21 +76,16 @@
                             Command="{Binding EveningCheckoutCommand}" 
                             Style="{StaticResource RectangleButton}" 
                             Content="Завершение работы"/>
-                    <Button Height="100" Margin="0 10"
-                            BorderBrush="LightGreen"
-                            Command="{Binding StartCommand}" 
-                            Style="{StaticResource RectangleButton}" 
-                            Content="Запуск"/>
-                    <Button Height="50" Margin="0 10" 
-                            BorderBrush="LightGreen"
-                            Command="{Binding LoadCommand}" 
-                            Style="{StaticResource RectangleButton}" 
-                            Content="Загрузка"/>
                     <Button Height="50" Margin="0 10"
                             BorderBrush="DeepSkyBlue"
                             Command="{Binding ManualInputCommand}" 
                             Style="{StaticResource RectangleButton}" 
                             Content="Ручной ввод"/>
+                    <Button Height="50" Margin="0 10" 
+                            BorderBrush="LightGreen"
+                            Command="{Binding LoadCommand}" 
+                            Style="{StaticResource RectangleButton}" 
+                            Content="Загрузка"/>
                     <Button Height="100" Margin="0 10" 
                             BorderBrush="HotPink"
                             Command="{Binding AbortCommand}" 
