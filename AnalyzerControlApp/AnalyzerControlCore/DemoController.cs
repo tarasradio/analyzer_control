@@ -476,6 +476,8 @@ namespace AnalyzerControlCore
 
             AnalyzerGateway.Charger.TurnToDischarge();
 
+            AnalyzerGateway.Charger.DischargeCartridge();
+
             //AnalyzerGateway.Charger.ChargeCartridge();
             //AnalyzerGateway.Charger.HomeHook();
             //AnalyzerGateway.Charger.MoveHookAfterHome();

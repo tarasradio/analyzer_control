@@ -20,6 +20,7 @@ namespace PresentationWinForms.UnitsViews
                 () =>
                 {
                     AnalyzerGateway.Charger.HomeHook();
+                    AnalyzerGateway.Charger.MoveHookAfterHome();
                 });
         }
 
@@ -62,6 +63,17 @@ namespace PresentationWinForms.UnitsViews
                 {
                     AnalyzerGateway.Charger.HomeRotator();
                     AnalyzerGateway.Charger.TurnToDischarge();
+                });
+        }
+
+        private void buttonDischargeCartridge_Click(object sender, EventArgs e)
+        {
+            AnalyzerGateway.Executor.StartTask(
+                () =>
+                {
+                    AnalyzerGateway.Charger.DischargeCartridge();
+                    AnalyzerGateway.Charger.HomeHook();
+                    AnalyzerGateway.Charger.MoveHookAfterHome();
                 });
         }
     }

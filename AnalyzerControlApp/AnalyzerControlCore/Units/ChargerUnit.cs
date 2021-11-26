@@ -163,5 +163,44 @@ namespace AnalyzerControlCore.Units
 
             Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
         }
+
+        public void DischargeCartridge()
+        {
+            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start cartridge discharging.");
+
+            List<ICommand> commands = new List<ICommand>();
+
+            // Продвижение крюка до картриджа
+            steppers = new Dictionary<int, int>() {
+                { Options.HookStepper, Options.HookSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                { Options.HookStepper, Options.HookStepsToCartridge} };
+
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            commands.Clear();
+
+            //Отъезд загрузки, чтобы крюк мог пройти под картриджем
+            steppers = new Dictionary<int, int>() {
+                { Options.RotatorStepper, Options.RotatorSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                { Options.RotatorStepper, -Options.RotatorStepsToOffsetAtCharging } };
+
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            commands.Clear();
+
+
+
+            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Cartridge discharging finished.");
+        }
     }
 }
