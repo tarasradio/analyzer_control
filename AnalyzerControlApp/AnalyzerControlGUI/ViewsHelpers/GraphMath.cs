@@ -44,6 +44,36 @@ namespace AnalyzerControlGUI.ViewsHelpers
             return arc;
         }
 
+        public static List<Point> CalcLinePoint(
+            Point begin,
+            Point end,
+            double stepLen,
+            double scale)
+        {
+            var line = new List<Point>();
+            double x_offset = 75;
+            double y_offset = -35;
+
+            if (begin.X == end.X) {
+                if(begin.Y < end.Y) {
+                    for (var y = begin.Y; y )
+                }
+                if (begin.Y > end.Y)
+                {
+
+                }
+            } else if (begin.Y == begin.Y) {
+                if (begin.X < end.X)
+                {
+
+                }
+                if (begin.X > end.X)
+                {
+
+                }
+            }
+        }
+
         public static double PointLenth(Point point1, Point point2)
         {
             return Math.Sqrt(Math.Pow((point2.X - point1.X), 2) + Math.Pow((point2.Y - point1.Y), 2));
