@@ -4,11 +4,11 @@ using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
-using AnalyzerControlCore.MachineControl;
+using AnalyzerService.ExecutionControl;
 using Infrastructure;
 using System.Collections.Generic;
 
-namespace AnalyzerControlCore.Units
+namespace AnalyzerService.Units
 {
     //TODO: а тут видимо вообще нахер не надо отслеживание
     public class ConveyorUnit : UnitBase<ConveyorConfiguration>
@@ -22,7 +22,7 @@ namespace AnalyzerControlCore.Units
 
         public void PrepareBeforeScanning()
         {
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Start prepare before scanning.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start prepare before scanning.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Options.ConveyorStepper, (uint)Options.ConveyorSpeed));
@@ -36,7 +36,7 @@ namespace AnalyzerControlCore.Units
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Prepare before scanning finished.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Prepare before scanning finished.");
         }
 
         public enum ShiftType
@@ -47,7 +47,7 @@ namespace AnalyzerControlCore.Units
 
         public void Shift(bool reverse, ShiftType shiftType = ShiftType.OneTube)
         {
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Start shift.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start shift.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new SetSpeedCommand(Options.ConveyorStepper, (uint)Options.ConveyorSpeed));
@@ -61,16 +61,16 @@ namespace AnalyzerControlCore.Units
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Shift finished.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Shift finished.");
         }
 
         public void RotateAndScanTube()
         {
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Start rotating and scanning tube.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start rotating and scanning tube.");
             List<ICommand> commands = new List<ICommand>();
             
             // Сканирование пробирки
-            commands.Add(new BarStartCommand());
+            commands.Add(new ScanBarcodeCommand(scanner: BarcodeScanner.TubeScanner));
 
             // Вращение пробирки
             commands.Add(new SetSpeedCommand(Options.TubeRotatorStepper, (uint)Options.TubeRotatorSpeed));
@@ -79,7 +79,23 @@ namespace AnalyzerControlCore.Units
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ConveyorUnit)}] - Rotating and scanning tube finished.");
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Rotating and scanning tube finished.");
+        }
+
+        public void Move(int cellsCount, bool reverse = false)
+        {
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Запуск перемещения ячейки.");
+            List<ICommand> commands = new List<ICommand>();
+
+            int totalSteps = Options.ConveyorStepsPerSingleTube * cellsCount;
+            if (reverse) totalSteps *= -1;
+
+            steppers = new Dictionary<int, int>() { { Options.ConveyorStepper, totalSteps } };
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            Logger.Debug($"[{nameof(ConveyorUnit)}] - Перемещение ячеек завершено.");
         }
     }
 }

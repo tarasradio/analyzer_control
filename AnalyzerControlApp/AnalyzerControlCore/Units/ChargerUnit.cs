@@ -1,12 +1,13 @@
 ﻿using AnalyzerCommunication;
+using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
-using AnalyzerControlCore.MachineControl;
+using AnalyzerService.ExecutionControl;
 using Infrastructure;
 using System.Collections.Generic;
 
-namespace AnalyzerControlCore.Units
+namespace AnalyzerService.Units
 {
     public class ChargerUnit : UnitBase<ChargerConfiguration>
     {
@@ -21,7 +22,7 @@ namespace AnalyzerControlCore.Units
 
         public void HomeRotator()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start Rotator homing.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start Rotator homing.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -34,12 +35,18 @@ namespace AnalyzerControlCore.Units
             RotatorPosition = 0;
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Rotator homing finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Rotator homing finished.");
         }
 
+        /// <summary>
+        /// Поворот к ячейке с кассетой
+        /// </summary>
+        /// <param name="cell">Номер ячейки</param>
         public void TurnToCell(int cell)
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start turn to cell[{cell}].");
+            if (cell < 0)
+                return;
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start turn to cell[{cell}].");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -56,12 +63,12 @@ namespace AnalyzerControlCore.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Turn to cell[{cell}] finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Turn to cell[{cell}] finished.");
         }
 
         public void TurnToDischarge()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start turn to discharge.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start turn to discharge.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -76,12 +83,12 @@ namespace AnalyzerControlCore.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Turn to discharge finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Turn to discharge finished.");
         }
 
         public void HomeHook()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start hook homing.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start hook homing.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -93,7 +100,7 @@ namespace AnalyzerControlCore.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Hook homing finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Hook homing finished.");
         }
 
         public void MoveHookAfterHome()
@@ -117,7 +124,7 @@ namespace AnalyzerControlCore.Units
 
         public void ChargeCartridge()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start cartridge charging.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start cartridge charging.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -161,7 +168,19 @@ namespace AnalyzerControlCore.Units
 
             executor.WaitExecution(commands);
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
+        }
+
+        public void ScanBarcode()
+        {
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Запуск сканирования кассеты.");
+            List<ICommand> commands = new List<ICommand>();
+
+            // Сканирование кассеты
+            commands.Add(new ScanBarcodeCommand(scanner: BarcodeScanner.CartridgeScanner));
+
+            executor.WaitExecution(commands);
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Сканирование кассеты завершено.");
         }
 
         public void DischargeCartridge()

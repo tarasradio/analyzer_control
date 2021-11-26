@@ -17,7 +17,7 @@ enum Responses
   SENSORS_VALUES_MESSAGE,
   COMMAND_STATE_MESSAGE,
   TEXT_MESSAGE,
-  BAR_CODE_MESSAGE
+  BARCODE_MESSAGE
 };
 
 enum StepperCommands
@@ -34,7 +34,7 @@ enum AdditionalCommands
 	CMD_SET_DEVICE_STATE = 0x14,
 	CMD_ABORT,
   CMD_WAIT_TIME,
-  CMD_BAR_START,
+  CMD_SCAN_BARCODE,
   CMD_GET_FIRMWARE_VERSION
 };
 
@@ -54,7 +54,7 @@ class Protocol
 public:
     static void sendFirmwareVersion(const char* version);
     static void sendMessage(const char* message);
-    static void sendBarCode(uint8_t id, const char* barCode);
+    static void sendBarcode(uint8_t id, const char* barCode);
     static void sendSteppersStates(const uint16_t *steppersStates, uint8_t steppersCount);
     static void sendSensorsValues(const uint16_t *sensorsValues, uint8_t sensorsCount);
     static void sendCommandState(const uint32_t *commandId, uint8_t commandState);

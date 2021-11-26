@@ -45,10 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnalyzerContext.cs" />
     <Compile Include="CommunicationProtocol\AbstractCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\AbortExecutionCommand.cs" />
-    <Compile Include="CommunicationProtocol\AdditionalCommands\BarStartCommand.cs" />
+    <Compile Include="CommunicationProtocol\AdditionalCommands\ScanBarcodeCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\GetFirmwareVersionCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\SetDeviceStateCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\WaitTimeCommand.cs" />
@@ -60,7 +59,7 @@
     <Compile Include="CommunicationProtocol\CncCommands\SetSpeedCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\SteppersCncCommand.cs" />
     <Compile Include="CommunicationProtocol\Responses\AbstaractResponse.cs" />
-    <Compile Include="CommunicationProtocol\Responses\BarCodeResponse.cs" />
+    <Compile Include="CommunicationProtocol\Responses\BarcodeResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\CommandStateResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\DebugResponse.cs" />
     <Compile Include="CommunicationProtocol\Responses\FirmwareVersionResponse.cs" />
@@ -71,7 +70,6 @@
     <Compile Include="CommunicationProtocol\StepperCommands\RunCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\SetSpeedCommand.cs" />
     <Compile Include="CommunicationProtocol\StepperCommands\StopCommand.cs" />
-    <Compile Include="IAnalyzerContext.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="CommunicationProtocol\Protocol.cs" />
     <Compile Include="CommunicationProtocol\SendPacket.cs" />

@@ -30,8 +30,8 @@ CommandExecutor::CommandExecutor(
     HomingController * homingController,
     RunningController * runningController,
     MovingController * movingController,
-    BarScanner * tubeScanner,
-    BarScanner * cartridgeScanner)
+    BarcodeScanner * tubeScanner,
+    BarcodeScanner * cartridgeScanner)
 {
     this->homingController = homingController;
     this->runningController = runningController;
@@ -70,79 +70,49 @@ void CommandExecutor::listenPacket(uint8_t *packet, uint8_t packetLength)
     switch (commandCode)
     {
         case CMD_HOME:
-        {
             executeHomeCommand(packet + 5, packetId);
-        }
         break;
         case CMD_RUN:
-        {
             executeRunCommand(packet + 5, packetId);
-        }
         break;
         case CMD_MOVE:
-        {
             executeMoveCommand(packet + 5, packetId);
-        }
         break;
         case CMD_STOP:
-        {
             executeStopCommand(packet + 5, packetId);
-        }
         break;
         case CMD_SET_SPEED:
-        {
             executeSetSpeedCommand(packet + 5, packetId);
-        }
         break;
         case CMD_SET_DEVICE_STATE:
-        {
             executeSetDeviceStateCommand(packet + 5, packetId);
-        }
         break;
         case CNC_MOVE:
-        {
             executeCncMoveCommand(packet + 5, packetId);
-        }
         break;
         case CNC_SET_SPEED:
-        {
             executeCncSetSpeedCommand(packet + 5, packetId);
-        }
         break;
         case CNC_HOME:
-        {
             executeCncHomeCommand(packet + 5, packetId);
-        }
         break;
         case CNC_ON_DEVICE:
-        {
             executeCncSetDeviceStateCommand(packet + 5, packetId, 1);
-        }
         break;
         case CNC_OFF_DEVICE:
-        {
             executeCncSetDeviceStateCommand(packet + 5, packetId, 0);
-        }
         break;
         case CNC_RUN:
-        {
             executeCncRunCommand(packet + 5, packetId);
-        }
         break;
         case CMD_ABORT:
-        {
             executeAbortCommand(packet + 5, packetId);
-        }
         break;
-        case CMD_BAR_START:
-        {
-            executeBarStartCommand(packet + 5, packetId);
-        }
+        case CMD_SCAN_BARCODE:
+            executeBarcodeScanCommand(packet + 5, packetId);
         break;
         case CMD_GET_FIRMWARE_VERSION:
-        {
             executeGetFirmwareVersionCommand(packet + 5, packetId);
-        }
         break;
         default:
         {
@@ -243,15 +213,21 @@ void CommandExecutor::executeAbortCommand(uint8_t *packet, uint32_t packetId)
 #endif
 }
 
-void CommandExecutor::executeBarStartCommand(uint8_t *packet, uint32_t packetId)
+void CommandExecutor::executeBarcodeScanCommand(uint8_t *packet, uint32_t packetId)
 {
     if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
-    tubeScanner->startScan();
-    cartridgeScanner->startScan();
+    int8_t scanner = packet[0];
+
+    if(scanner == ScannerType::TubeScanner) {
+        tubeScanner->startScan();
+    } else if(scanner == ScannerType::CartridgeScanner) {
+        cartridgeScanner->startScan();
+    }
+    
 #ifdef DEBUG
     {
-        String message = "[Bar start]";
+        String message = "[Scan barcode]";
         Protocol::sendMessage(message.c_str());
     }
 #endif

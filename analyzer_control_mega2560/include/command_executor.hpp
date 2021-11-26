@@ -6,7 +6,7 @@
 #include "homing_controller.hpp"
 #include "moving_controller.hpp"
 #include "running_controller.hpp"
-#include "bar_scanner.hpp"
+#include "barcode_scanner.hpp"
 
 #include "packet_manager.hpp"
 
@@ -28,7 +28,7 @@ private:
     void executeGetFirmwareVersionCommand(uint8_t *packet, uint32_t packetId);
 
     void executeAbortCommand(uint8_t *packet, uint32_t packetId);
-    void executeBarStartCommand(uint8_t *packet, uint32_t packetId);
+    void executeBarcodeScanCommand(uint8_t *packet, uint32_t packetId);
     void executeHomeCommand(uint8_t *packet, uint32_t packetId);
     void executeRunCommand(uint8_t *packet, uint32_t packetId);
     void executeMoveCommand(uint8_t *packet, uint32_t packetId);
@@ -47,8 +47,8 @@ private:
     HomingController * homingController;
     RunningController * runningController;
     MovingController * movingController;
-    BarScanner * tubeScanner;
-    BarScanner * cartridgeScanner;
+    BarcodeScanner * tubeScanner;
+    BarcodeScanner * cartridgeScanner;
     
 public:
     CommandExecutor() {}
@@ -56,8 +56,8 @@ public:
         HomingController * homingController,
         RunningController * runningController,
         MovingController * movingController,
-        BarScanner * tubeScanner,
-        BarScanner * cartridgeScanner);
+        BarcodeScanner * tubeScanner,
+        BarcodeScanner * cartridgeScanner);
 
     void updateState();
     void listenPacket(uint8_t *packet, uint8_t packetLength);

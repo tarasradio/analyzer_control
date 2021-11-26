@@ -1,4 +1,4 @@
-﻿using AnalyzerControlCore;
+﻿using AnalyzerService;
 using System;
 using System.Windows.Forms;
 
@@ -9,35 +9,35 @@ namespace PresentationWinForms.UnitsViews
         public ConveyorUnitView()
         {
             InitializeComponent();
-            if(AnalyzerGateway.Conveyor != null)
-                propertyGrid.SelectedObject = AnalyzerGateway.Conveyor.Options;
+            if(Analyzer.Conveyor != null)
+                propertyGrid.SelectedObject = Analyzer.Conveyor.Options;
         }
 
         private void buttonPrepare_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Conveyor.PrepareBeforeScanning();
+                    Analyzer.Conveyor.PrepareBeforeScanning();
                 });
         }
 
         private void buttonScanAndTurn_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Conveyor.RotateAndScanTube();
+                    Analyzer.Conveyor.RotateAndScanTube();
                 });
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                () =>
                {
-                   AnalyzerGateway.Conveyor.Shift(reverse: false, 
-                       shiftType: AnalyzerControlCore.Units.ConveyorUnit.ShiftType.OneTube);
+                   Analyzer.Conveyor.Shift(reverse: false, 
+                       shiftType: AnalyzerService.Units.ConveyorUnit.ShiftType.OneTube);
                });
         }
     }

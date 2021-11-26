@@ -1,5 +1,5 @@
-﻿using AnalyzerControlCore;
-using AnalyzerControlCore.Units;
+﻿using AnalyzerService;
+using AnalyzerService.Units;
 using AnalyzerDomain.Entyties;
 using System;
 using System.Windows.Forms;
@@ -11,16 +11,16 @@ namespace PresentationWinForms.UnitsViews
         public RotorUnitView()
         {
             InitializeComponent();
-            if (AnalyzerGateway.Rotor != null)
-                propertyGrid.SelectedObject = AnalyzerGateway.Rotor.Options;
+            if (Analyzer.Rotor != null)
+                propertyGrid.SelectedObject = Analyzer.Rotor.Options;
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Rotor.Home();
+                    Analyzer.Rotor.Home();
                 });
         }
 
@@ -51,47 +51,47 @@ namespace PresentationWinForms.UnitsViews
 
             if (selectChargePlace.Checked)
             {
-                AnalyzerGateway.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Rotor.Home();
-                    AnalyzerGateway.Rotor.PlaceCellAtCharge(cellNumber, chargePosition);
+                    Analyzer.Rotor.Home();
+                    Analyzer.Rotor.PlaceCellAtCharge(cellNumber, chargePosition);
                 });
             }
             else if(selectNeedleLeftPlace.Checked)
             {
-                AnalyzerGateway.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Rotor.Home();
-                    AnalyzerGateway.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorUnit.CellPosition.CellLeft);
+                    Analyzer.Rotor.Home();
+                    Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorUnit.CellPosition.CellLeft);
                 });
             }
             else if(selectNeedleRightPlace.Checked)
             {
-                AnalyzerGateway.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Rotor.Home();
-                    AnalyzerGateway.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorUnit.CellPosition.CellRight);
+                    Analyzer.Rotor.Home();
+                    Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorUnit.CellPosition.CellRight);
                 });
             }
             else if(selectWashBufferPlace.Checked)
             {
-                AnalyzerGateway.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Rotor.Home();
-                    AnalyzerGateway.Rotor.PlaceCellUnderWashBuffer(cellNumber);
+                    Analyzer.Rotor.Home();
+                    Analyzer.Rotor.PlaceCellUnderWashBuffer(cellNumber);
                 });
             }
             else if(selectDischargePlace.Checked)
             {
-                AnalyzerGateway.Executor.StartTask(
+                Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Rotor.Home();
-                    AnalyzerGateway.Rotor.PlaceCellAtDischarge(cellNumber);
+                    Analyzer.Rotor.Home();
+                    Analyzer.Rotor.PlaceCellAtDischarge(cellNumber);
                 });
             }
         }

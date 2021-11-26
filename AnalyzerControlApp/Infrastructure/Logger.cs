@@ -4,40 +4,27 @@ namespace Infrastructure
 {
     public static class Logger
     {
-        public static event Action<string> NewInfoMessageAdded;
-        public static event Action<string> NewDemoInfoMessageAdded;
-        public static event Action<string> NewControllerInfoMessageAdded;
+        public static event Action<string> InfoMessageAdded;
+        public static event Action<string> DebugMessageAdded;
 
         private static object locker = new object();
 
-        private static string WrapMessage(string message)
+        private static string wrapMessage(string message)
         {
+            return $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()} : {message} \n";
+        }
 
-            string text = $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToLongTimeString()} Info: {message} \n";
-            return text;
+        public static void Debug(string message)
+        {
+            lock (locker) {
+                DebugMessageAdded?.Invoke(wrapMessage(message));
+            }
         }
 
         public static void Info(string message)
         {
-            lock (locker)
-            {
-                NewInfoMessageAdded?.Invoke(WrapMessage(message));
-            }
-        }
-
-        public static void DemoInfo(string message)
-        {
-            lock (locker)
-            {
-                NewDemoInfoMessageAdded?.Invoke(WrapMessage(message));
-            }
-        }
-
-        public static void ControllerInfo(string message)
-        {
-            lock (locker)
-            {
-                NewControllerInfoMessageAdded?.Invoke(WrapMessage(message));
+            lock (locker) {
+                InfoMessageAdded?.Invoke(message);
             }
         }
     }

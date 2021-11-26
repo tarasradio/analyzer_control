@@ -15,9 +15,9 @@ public:
   static void init();
   static uint32_t getElapsedMilliseconds();
 
-  static bool barCodeExist();
-  static void nextBarCode();
-  static const char* getBarCodeMessage();
+  static bool barcodeExist();
+  static void nextBarcode();
+  static const char* getBarcodeMessage();
   
   static void runTask();
   static void stopTask();

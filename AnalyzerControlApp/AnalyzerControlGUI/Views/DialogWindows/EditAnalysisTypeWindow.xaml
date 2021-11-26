@@ -1,0 +1,117 @@
+﻿<Window x:Class="AnalyzerControlGUI.Views.EditAnalysisTypeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnalyzerControlGUI.Views"
+        xmlns:vm="clr-namespace:AnalyzerControlGUI.ViewModels"
+        xmlns:converters="clr-namespace:AnalyzerControlGUI.Converters"
+        xmlns:services="clr-namespace:AnalyzerControlGUI.Services"
+        services:DialogCloser.DialogResult="{Binding DialogResult}"
+        mc:Ignorable="d"
+        Title="Редактирование типа анализа"
+        ResizeMode="CanMinimize" Topmost="True"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:EditAnalysisTypeViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <x:Array x:Key="AnalysisStages" Type="sys:String">
+            <sys:String>Sampling</sys:String>
+            <sys:String>Conjugate</sys:String>
+            <sys:String>EnzymeComplex</sys:String>
+            <sys:String>Substrate</sys:String>
+        </x:Array>
+        <x:Array x:Key="YesOrNoVariants" Type="sys:String">
+            <sys:String>Да</sys:String>
+            <sys:String>Нет</sys:String>
+        </x:Array>
+        <converters:BoolToIndexConverter x:Key="boolToIndexConverter" />
+        <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" />
+    </Window.Resources>
+    
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="Описание" Margin="3" FontWeight="Bold"/>
+                    <TextBox Text="{Binding Description}" Margin="3" Width="200"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="Модель картриджа" Margin="3" FontWeight="Bold"/>
+                    <!--<TextBox Text="{Binding CartridgeModel}" Margin="3" Width="200"/>-->
+                    <ComboBox HorizontalContentAlignment="Center" Width="200" Margin="3"
+                              ItemsSource="{Binding Cartridges}"
+                              SelectedValuePath="Barcode"
+                              DisplayMemberPath="Barcode"
+                              SelectedValue="{Binding CartridgeBarcode}">
+                    </ComboBox>
+                </StackPanel>
+                <TextBlock Text="Список стадий" HorizontalAlignment="Center" Margin="3" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Стадия" VerticalAlignment="Center"  Margin="3" FontWeight="Bold"/>
+                            <ComboBox HorizontalContentAlignment="Center" Width="200" Margin="3"
+                                      ItemsSource="{Binding Source={StaticResource AnalysisStages}}" 
+                                      SelectedIndex="{Binding SelectedStage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Pipetting Volume" Margin="3" FontWeight="Bold"/>
+                            <TextBox Text="{Binding PipettingVolume, UpdateSourceTrigger=PropertyChanged}" Margin="3" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Right">
+                            <TextBlock Text="Need Incubation?" Margin="3" FontWeight="Bold" 
+                                       VerticalAlignment="Center"/>
+                            <ComboBox HorizontalContentAlignment="Center" Width="200" Margin="3"
+                                      ItemsSource="{Binding Source={StaticResource YesOrNoVariants}}"
+                                      SelectedIndex="{Binding NeedIncubation, Converter={StaticResource boolToIndexConverter}}" >
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                    Visibility="{Binding NeedIncubation, Mode=OneWay, Converter={StaticResource boolToVisibilityConverter}}">
+                            <TextBlock Text="Incubation Time (min)" Margin="3" FontWeight="Bold"/>
+                            <TextBox Text="{Binding IncubationTimeInMinutes}" Margin="3" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Right">
+                            <TextBlock Text="Need Wash Step?" Margin="3" FontWeight="Bold" 
+                                       VerticalAlignment="Center"/>
+                            <ComboBox HorizontalContentAlignment="Center" Width="200" Margin="3"
+                                      ItemsSource="{Binding Source={StaticResource YesOrNoVariants}}"
+                                      SelectedIndex="{Binding NeedWashStep, Converter={StaticResource boolToIndexConverter}}" >
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                                    Visibility="{Binding NeedWashStep, Mode=OneWay, Converter={StaticResource boolToVisibilityConverter}}">
+                            <TextBlock Text="Number of wash step" Margin="3" FontWeight="Bold"/>
+                            <TextBox Text="{Binding NumberOfWashStep}" Margin="3" Width="200"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Grid.Row="1">
+                <Button x:Name="OkButton"
+                        Content="Сохранить"
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding OkCommand}"/>
+                <Button x:Name="CancelButton"
+                        Content="Отмена"
+                        Margin="3"
+                        Padding="3"
+                        Command="{Binding CancelCommand}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

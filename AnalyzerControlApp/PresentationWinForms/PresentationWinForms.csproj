@@ -86,17 +86,23 @@
     <Compile Include="CustomControls\DoubleBufferedDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\EditTubeDialogForm.cs">
+    <Compile Include="Windows\ConnectionSettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EditTubeDialogForm.Designer.cs">
+    <Compile Include="Windows\ConnectionSettingsWindow.Designer.cs">
+      <DependentUpon>ConnectionSettingsWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditTubeDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\EditTubeDialogForm.Designer.cs">
       <DependentUpon>EditTubeDialogForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\StartForm.cs">
+    <Compile Include="Windows\StartWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\StartForm.Designer.cs">
-      <DependentUpon>StartForm.cs</DependentUpon>
+    <Compile Include="Windows\StartWindow.Designer.cs">
+      <DependentUpon>StartWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="UnitsViews\NeedleUnitView.cs">
       <SubType>UserControl</SubType>
@@ -104,11 +110,11 @@
     <Compile Include="UnitsViews\NeedleUnitView.Designer.cs">
       <DependentUpon>NeedleUnitView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\DemoExecutorView.cs">
+    <Compile Include="Views\DemoControllerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\DemoExecutorView.Designer.cs">
-      <DependentUpon>DemoExecutorView.cs</DependentUpon>
+    <Compile Include="Views\DemoControllerView.Designer.cs">
+      <DependentUpon>DemoControllerView.cs</DependentUpon>
     </Compile>
     <Compile Include="UnitsViews\ChargeUnitView.cs">
       <SubType>UserControl</SubType>
@@ -134,26 +140,26 @@
     <Compile Include="UnitsViews\ConveyorUnitView.Designer.cs">
       <DependentUpon>ConveyorUnitView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ControlPanelForm.cs">
+    <Compile Include="Windows\ControlPanelWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ControlPanelForm.Designer.cs">
-      <DependentUpon>ControlPanelForm.cs</DependentUpon>
+    <Compile Include="Windows\ControlPanelWindow.Designer.cs">
+      <DependentUpon>ControlPanelWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MainForm.cs">
+    <Compile Include="Windows\MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="Windows\MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\InvokeHelper.cs" />
-    <Compile Include="Views\CNCView.cs">
+    <Compile Include="Views\CncControlView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\CNCView.Designer.cs">
-      <DependentUpon>CNCView.cs</DependentUpon>
+    <Compile Include="Views\CncControlView.Designer.cs">
+      <DependentUpon>CncControlView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\DevicesView.cs">
       <SubType>UserControl</SubType>
@@ -186,17 +192,20 @@
       <DependentUpon>StepperTurningView.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\DataGridViewStyler.cs" />
-    <EmbeddedResource Include="Forms\EditTubeDialogForm.resx">
+    <EmbeddedResource Include="Windows\ConnectionSettingsWindow.resx">
+      <DependentUpon>ConnectionSettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\EditTubeDialogForm.resx">
       <DependentUpon>EditTubeDialogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\StartForm.resx">
-      <DependentUpon>StartForm.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\StartWindow.resx">
+      <DependentUpon>StartWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UnitsViews\NeedleUnitView.resx">
       <DependentUpon>NeedleUnitView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\DemoExecutorView.resx">
-      <DependentUpon>DemoExecutorView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\DemoControllerView.resx">
+      <DependentUpon>DemoControllerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UnitsViews\ChargeUnitView.resx">
       <DependentUpon>ChargeUnitView.cs</DependentUpon>
@@ -210,11 +219,11 @@
     <EmbeddedResource Include="UnitsViews\ConveyorUnitView.resx">
       <DependentUpon>ConveyorUnitView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ControlPanelForm.resx">
-      <DependentUpon>ControlPanelForm.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\ControlPanelWindow.resx">
+      <DependentUpon>ControlPanelWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="Windows\MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -226,8 +235,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Views\CNCView.resx">
-      <DependentUpon>CNCView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\CncControlView.resx">
+      <DependentUpon>CncControlView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DevicesView.resx">
       <DependentUpon>DevicesView.cs</DependentUpon>
@@ -259,6 +268,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AnalyzerCncControl\AnalyzerCncControl.csproj">
+      <Project>{98E63E4E-12CE-4F4E-B016-38FBD49AECAA}</Project>
+      <Name>AnalyzerCncControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AnalyzerCommunication\AnalyzerCommunication.csproj">
       <Project>{995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE}</Project>
       <Name>AnalyzerCommunication</Name>
@@ -267,9 +280,13 @@
       <Project>{33e1fe15-0dde-4efb-8359-cd035c95e16d}</Project>
       <Name>AnalyzerConfiguration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AnalyzerControlCore\AnalyzerControlCore.csproj">
+    <ProjectReference Include="..\AnalyzerControlCore\AnalyzerService.csproj">
       <Project>{c75697ab-d456-44eb-86a4-a1c23bc776ec}</Project>
-      <Name>AnalyzerControlCore</Name>
+      <Name>AnalyzerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerControl\AnalyzerControl.csproj">
+      <Project>{9FDBC665-FB23-4401-92E3-81E0FF9E4D71}</Project>
+      <Name>AnalyzerControl</Name>
     </ProjectReference>
     <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj">
       <Project>{17d7a05e-c6d1-4892-b92a-fb3741ab588f}</Project>
@@ -278,10 +295,6 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{6dcff691-ffbb-45b4-90a9-36806ae27d02}</Project>
       <Name>Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PresentationWPF\PresentationWPF.csproj">
-      <Project>{03d18661-5df1-4d12-a564-1637c7028b4a}</Project>
-      <Name>PresentationWPF</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

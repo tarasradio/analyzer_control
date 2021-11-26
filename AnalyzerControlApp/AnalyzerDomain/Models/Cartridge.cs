@@ -1,22 +1,42 @@
-﻿namespace AnalyzerDomain.Models
-{
-    public class Cartridge
-    {
-        public enum CartridgeCell
-        {
-            FirstCell, // Ячейка с первым реагентом
-            SecondCell, // Ячейка со вторым реагентом
-            ThirdCell, // Ячейка с третьим реагентом
-            MixCell, // Белая ячейка, в которой происходит смешивание реагентов
-            ResultCell // Прозрачная ячейка, куда помещается конечный результат
-        };
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-        public string Barcode { get; set; }
-        public CartridgeModel Model { get; set; }
+namespace AnalyzerDomain.Models
+{
+    public class Cartridge : ModelBase
+    {
+        public int Id { get; set; }
+
+        private string _description;
+
+        public string Description
+        {
+            get { return _description; }
+            set { 
+                _description = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _barcode;
+
+        public string Barcode
+        {
+            get { return _barcode; }
+            set { 
+                _barcode = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public virtual ICollection<AnalysisType> AnalyzesTypes { get; private set; }
 
         public Cartridge()
         {
-
+            AnalyzesTypes = new ObservableCollection<AnalysisType>();
         }
     }
 }

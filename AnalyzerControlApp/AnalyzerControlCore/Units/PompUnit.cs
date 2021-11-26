@@ -2,11 +2,11 @@
 using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
-using AnalyzerControlCore.MachineControl;
+using AnalyzerService.ExecutionControl;
 using Infrastructure;
 using System.Collections.Generic;
 
-namespace AnalyzerControlCore.Units
+namespace AnalyzerService.Units
 {
     public class PompUnit : UnitBase<PompConfiguration>
     {
@@ -17,7 +17,7 @@ namespace AnalyzerControlCore.Units
 
         public void CloseValves()
         {
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Close valves.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Close valves.");
             List<ICommand> commands = new List<ICommand>();
 
             commands.Add(new OffDeviceCncCommand(new List<int>() { 0 , 1 }));
@@ -27,7 +27,7 @@ namespace AnalyzerControlCore.Units
 
         public void Home()
         {
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start homing.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Start homing.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add(new OnDeviceCncCommand(new List<int>() { 0 }));
@@ -47,12 +47,12 @@ namespace AnalyzerControlCore.Units
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Homing finished.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Homing finished.");
         }
 
         public void Pull(int value)
         {
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start suction.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Start suction.");
             List<ICommand> commands = new List<ICommand>();
 
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
@@ -71,12 +71,12 @@ namespace AnalyzerControlCore.Units
             commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Suction finished.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Suction finished.");
         }
 
         public void Push(int value)
         {
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start unsuction.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Start unsuction.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
@@ -95,18 +95,18 @@ namespace AnalyzerControlCore.Units
             commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
 
             executor.WaitExecution(commands);
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Unsuction finished.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Unsuction finished.");
         }
 
         public void WashTheNeedle(int cycles)
         {
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Start washing ({cycles} cycles).");
+            Logger.Debug($"[{nameof(PompUnit)}] - Start washing ({cycles} cycles).");
             
             for (int i = 0; i < cycles; i++)
             {
                 WashingCycle();
             }
-            Logger.ControllerInfo($"[{nameof(PompUnit)}] - Washing finished.");
+            Logger.Debug($"[{nameof(PompUnit)}] - Washing finished.");
         }
 
         private void WashingCycle()

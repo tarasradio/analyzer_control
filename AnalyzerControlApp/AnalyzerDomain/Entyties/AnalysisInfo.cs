@@ -5,6 +5,12 @@ namespace AnalyzerDomain.Entyties
 {
     public class AnalysisInfo
     {
+        public enum ProcessingStages
+        {
+            NoSampleWasTaken = -1,
+            Sampling
+        }
+
         [DisplayName("Позиция в конвейере")]
         public int PositionInConveyor { get; set; } = 0;
         [DisplayName("Позиция в роторе")]
@@ -35,6 +41,11 @@ namespace AnalyzerDomain.Entyties
             TimeToStageComplete = 0;
         }
 
+        public void SetSamplingStage()
+        {
+            CurrentStage = (int)ProcessingStages.Sampling;
+        }
+
         public void SetNewIncubationTime()
         {
             TimeToStageComplete = Stages[CurrentStage].TimeToPerform;
@@ -43,6 +54,11 @@ namespace AnalyzerDomain.Entyties
         public bool IsNotFinishStage()
         {
             return CurrentStage < Stages.Count;
+        }
+
+        public bool NoSampleWasTaken()
+        {
+            return CurrentStage == (int)ProcessingStages.NoSampleWasTaken;
         }
 
         public bool Finished() // Это еще почему ???

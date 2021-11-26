@@ -66,7 +66,7 @@ namespace AnalyzerCommunication.SerialCommunication
 
             if (packetTail == maxPacketLength)
             {
-                Logger.Info($"[{nameof(PacketFinder)}] - Превышен размер пакета.");
+                Logger.Debug($"[{nameof(PacketFinder)}] - Превышен размер пакета.");
                 packetTail = 0;
             }
             escapeFlag = false;

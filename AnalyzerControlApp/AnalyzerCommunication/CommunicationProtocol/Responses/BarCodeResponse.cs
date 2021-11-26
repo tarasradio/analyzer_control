@@ -1,26 +1,23 @@
-﻿using System.Text;
+﻿using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
+using System.Text;
 
 namespace AnalyzerCommunication.CommunicationProtocol.Responses
 {
-    public class BarCodeResponse : ResponseBase
+    public class BarcodeResponse : ResponseBase
     {
-        public enum ScannerTypes
-        {
-            TUBE_SCANNER = 1,
-            CARTRIDGE_SCANNER
+        public BarcodeResponse(byte[] buffer) : base (buffer) { }
+
+        public string Barcode { 
+            get => getBarcode();
         }
 
-        public BarCodeResponse(byte[] buffer) : base (buffer) { }
-
-        public string GetBarCode()
+        private string getBarcode()
         {
-            string message = Encoding.UTF8.GetString(buffer, 1, buffer.Length - 1);
-            return message;
+            return Encoding.UTF8.GetString(buffer, 1, buffer.Length - 1);
         }
 
-        public ScannerTypes GetScannerType()
-        {
-            return (ScannerTypes)buffer[0];
+        public BarcodeScanner ScannerType {
+            get => (BarcodeScanner)buffer[0];
         }
     }
 }

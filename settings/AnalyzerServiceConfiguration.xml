@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AnalyzerServiceConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PortName>COM3</PortName>
+  <Baudrate>115200</Baudrate>
+  <Steppers>
+    <Stepper Number="0" Name="Выталкивание картриджa">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="1" Name="Не задано">
+      <Reverse>false</Reverse>
+      <NumberSteps>1000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="2" Name="Трясучка">
+      <Reverse>false</Reverse>
+      <NumberSteps>100000</NumberSteps>
+      <FullSpeed>200</FullSpeed>
+    </Stepper>
+    <Stepper Number="3" Name="Пресс">
+      <Reverse>false</Reverse>
+      <NumberSteps>1000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="4" Name="Нажимание картриджа">
+      <Reverse>false</Reverse>
+      <NumberSteps>2300</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="5" Name="Вращение пробирки">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="6" Name="Лента конвейера">
+      <Reverse>true</Reverse>
+      <NumberSteps>3000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="7" Name="Ротор">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="8" Name="Игла 1 (вращение)">
+      <Reverse>false</Reverse>
+      <NumberSteps>1000</NumberSteps>
+      <FullSpeed>50</FullSpeed>
+    </Stepper>
+    <Stepper Number="9" Name="Игла 2 (вращение)">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="10" Name="Движение загрузки (поворот)">
+      <Reverse>true</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="11" Name="Шприц (большой плунжер)">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="12" Name="Шприц (малый плунжер)">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="13" Name="Wash буфер">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="14" Name="Выгрузка">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="15" Name="Челнок загрузки">
+      <Reverse>false</Reverse>
+      <NumberSteps>10000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="16" Name="Игла 2 (подъем)">
+      <Reverse>true</Reverse>
+      <NumberSteps>50000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+    <Stepper Number="17" Name="Игла 1 (Подъем)">
+      <Reverse>true</Reverse>
+      <NumberSteps>1000</NumberSteps>
+      <FullSpeed>100</FullSpeed>
+    </Stepper>
+  </Steppers>
+  <Devices>
+    <Device Number="0" Name="Насос / клапан 0" />
+    <Device Number="1" Name="Насос / клапан 1" />
+    <Device Number="2" Name="Насос / клапан 2" />
+    <Device Number="3" Name="Насос / клапан 3" />
+    <Device Number="4" Name="Насос / клапан 4" />
+    <Device Number="5" Name="Насос / клапан 5" />
+    <Device Number="6" Name="Насос / клапан 6" />
+    <Device Number="7" Name="Насос / клапан 7" />
+    <Device Number="8" Name="Насос / клапан 8" />
+    <Device Number="9" Name="Насос / клапан 9" />
+    <Device Number="10" Name="Насос / клапан 10" />
+    <Device Number="11" Name="Насос / клапан 11" />
+  </Devices>
+  <Sensors>
+    <Device Number="0" Name="Датчик 0" />
+    <Device Number="1" Name="Датчик 1" />
+    <Device Number="2" Name="Датчик 2" />
+    <Device Number="3" Name="Датчик 3" />
+    <Device Number="4" Name="Датчик 4" />
+    <Device Number="5" Name="Датчик 5" />
+    <Device Number="6" Name="Датчик 6" />
+    <Device Number="7" Name="Датчик 7" />
+    <Device Number="8" Name="Датчик 8" />
+    <Device Number="9" Name="Датчик 9" />
+    <Device Number="10" Name="Датчик 10" />
+    <Device Number="11" Name="Датчик 11" />
+    <Device Number="12" Name="Датчик 12" />
+    <Device Number="13" Name="Датчик 13" />
+    <Device Number="14" Name="Датчик 14" />
+    <Device Number="15" Name="Датчик прозрачности" />
+  </Sensors>
+</AnalyzerServiceConfiguration>

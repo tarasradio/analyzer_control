@@ -7,6 +7,10 @@ namespace AnalyzerDomain.Models
     public class AnalysisStage
     {
         /// <summary>
+        /// Идентификатор стадии анализа
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
         /// Описание стадии
         /// </summary>
         public string Description { get; set; }
@@ -14,7 +18,7 @@ namespace AnalyzerDomain.Models
         /// <summary>
         /// Ячейка картриджа
         /// </summary>
-        public Cartridge.CartridgeCell Cell { get; set; }
+        public AnalysisStages Type { get; set; }
         
         /// <summary>
         /// Объем материала для выполнения
