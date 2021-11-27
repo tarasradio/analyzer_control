@@ -36,12 +36,57 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
             for (var angle = beginAngleRad; angle < endAngleRad; angle += deltaAngle)
             {
-                var point = new Point();
-                point.X = (x + x_offset + Math.Cos(angle) * radius) * scale;
-                point.Y = (y + y_offset + Math.Sin(angle) * radius) * scale;
+                var point = new Point
+                {
+                    X = (x + x_offset + Math.Cos(angle) * radius) * scale,
+                    Y = (y + y_offset + Math.Sin(angle) * radius) * scale
+                };
                 arc.Add(point);
             }
             return arc;
+        }
+
+        public static List<Point> CalcVerticalLinePoint(
+            Point begin,
+            Point end,
+            double stepLen)
+        {
+            var line = new List<Point>();
+
+            /*
+            if (Math.Abs(begin.X - end.X) < stepLen)
+            {
+                throw new ArgumentException("Points ain't placed on vectical line");
+            }
+            */
+
+            if (begin.Y < end.Y)
+            {
+                for (var y = begin.Y; y <= end.Y; y+=stepLen)
+                {
+                    var point = new Point();
+                    point.X = begin.X;
+                    point.Y = y;
+                    line.Add(point);
+                }
+            } else if (begin.Y > end.Y)
+            {
+                for (var y = begin.Y; y >= end.Y; y -= stepLen)
+                {
+                    var point = new Point
+                    {
+                        X = begin.X,
+                        Y = y
+                    };
+                    line.Add(point);
+                }
+            }
+            if (line[line.Count - 1] != end)
+            {
+                line.Add(end);
+            }
+
+            return line;
         }
 
         public static double PointLenth(Point point1, Point point2)
