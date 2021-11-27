@@ -338,25 +338,36 @@ namespace AnalyzerControlGUI.ViewModels
         {
             if (SelectedCassette == -1)
                 return;
-            cartridgesDeck.ScanCassette(SelectedCassette);
-            string barcode = Analyzer.State.CartridgeBarcode;
-            Analyzer.State.CartridgeBarcode = string.Empty;
-            if(barcode != null)
+
+            bool cartridgeInserted = false;
+            if(SelectedCassette == 9)
+                cartridgeInserted = Analyzer.State.SensorsValues[14] > 512;
+            Cassettes[SelectedCassette].Inserted = cartridgeInserted;
+
+            if(cartridgeInserted)
             {
-                if(!String.IsNullOrEmpty(barcode))
+                cartridgesDeck.ScanCassette(SelectedCassette);
+                string barcode = Analyzer.State.CartridgeBarcode;
+                Analyzer.State.CartridgeBarcode = string.Empty;
+                if(barcode != null)
                 {
-                    Cassettes[SelectedCassette].Barcode = barcode;
-                    Cassettes[SelectedCassette].CountLeft = 10;
+                    if(!String.IsNullOrEmpty(barcode))
+                    {
+                        Cassettes[SelectedCassette].Barcode = barcode;
+                        Cassettes[SelectedCassette].CountLeft = 10;
+                    } else {
+                        Cassettes[SelectedCassette].Barcode = "No barcode";
+                        Cassettes[SelectedCassette].CountLeft = 0;
+                    }
+                
                 } else {
-                    Cassettes[SelectedCassette].Barcode = "Пусто";
+                    Cassettes[SelectedCassette].Barcode = "No barcode";
                     Cassettes[SelectedCassette].CountLeft = 0;
                 }
-                
-            } else {
-                Cassettes[SelectedCassette].Barcode = "Пусто";
+            } else
+            {
                 Cassettes[SelectedCassette].CountLeft = 0;
             }
-            
         }
 
         private string _debugText;

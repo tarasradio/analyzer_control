@@ -99,9 +99,15 @@ namespace AnalyzerControlGUI.Views.CustomViews
             if (!Inserted)
             {
                 Status.Fill = Brushes.LightGray;
-                LabelName.Content = "Unplugged";
+                LabelName.Content = "--|--";
+                LabelState.Content = "Unplugged";
+                LabelState.Foreground = Brushes.Red;
             } else {
                 LabelName.Content = Barcode;
+
+                LabelState.Content = "Inserted";
+                LabelState.Foreground = Brushes.Green;
+
                 Status.Height = CountLeft * _maxHeight / _maxCount;
                 LabelCount.Content = CountLeft.ToString();
 

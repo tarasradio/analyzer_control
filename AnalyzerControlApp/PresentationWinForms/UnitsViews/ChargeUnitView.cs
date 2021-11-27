@@ -67,12 +67,12 @@ namespace PresentationWinForms.UnitsViews
 
         private void buttonDischargeCartridge_Click(object sender, EventArgs e)
         {
-            AnalyzerGateway.Executor.StartTask(
+            Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    AnalyzerGateway.Charger.DischargeCartridge();
-                    AnalyzerGateway.Charger.HomeHook();
-                    AnalyzerGateway.Charger.MoveHookAfterHome();
+                    Analyzer.Charger.DischargeCartridge();
+                    Analyzer.Charger.HomeHook();
+                    Analyzer.Charger.MoveHookAfterHome();
                 });
         }
     }

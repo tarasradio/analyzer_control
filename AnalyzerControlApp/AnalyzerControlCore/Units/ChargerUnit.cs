@@ -185,7 +185,7 @@ namespace AnalyzerService.Units
 
         public void DischargeCartridge()
         {
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Start cartridge discharging.");
+            Logger.Info($"[{nameof(ChargerUnit)}] - Start cartridge discharging.");
 
             List<ICommand> commands = new List<ICommand>();
 
@@ -219,7 +219,7 @@ namespace AnalyzerService.Units
 
 
 
-            Logger.ControllerInfo($"[{nameof(ChargerUnit)}] - Cartridge discharging finished.");
+            Logger.Info($"[{nameof(ChargerUnit)}] - Cartridge discharging finished.");
         }
     }
 }
