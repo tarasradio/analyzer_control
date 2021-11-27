@@ -139,7 +139,7 @@
                         </ListView.ItemsPanel>
                     </ListView>
                 </StackPanel>
-
+                
                 <StackPanel Orientation="Vertical" 
                                 Grid.Column="1" 
                                 Grid.Row="1"

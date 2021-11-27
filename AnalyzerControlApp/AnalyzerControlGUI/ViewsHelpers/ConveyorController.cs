@@ -61,26 +61,26 @@ namespace AnalyzerControlGUI.ViewsHelpers
         private void calcConveyorPath()
         {
             List<Point> topPart = GraphMath.CalcArcPoint(
-                150, 500,
-                45, 225,
+                230, 500,
+                0, 180,
                 50, _pathResolution, _scale);
-
-            List<Point> leftPart = GraphMath.CalcArcPoint(
-                -43.0672, 304.1683,
-                -45, 45,
-                225, _pathResolution, _scale);
-
-            leftPart.Reverse();
 
             List<Point> bottomPart = GraphMath.CalcArcPoint(
-                150, 108.3365,
-                135, 315,
+                230, 108.3365,
+                180, 360,
                 50, _pathResolution, _scale);
 
-            List<Point> rightPart = GraphMath.CalcArcPoint(
-                -43.0672, 304.1683,
-                -45, 45,
-                325, _pathResolution, _scale);
+            List<Point> leftPart = GraphMath.CalcVerticalLinePoint(
+                    topPart[topPart.Count - 1],
+                    bottomPart[0],
+                    _pathResolution * 1.7
+                );
+
+            List<Point> rightPart = GraphMath.CalcVerticalLinePoint(
+                    bottomPart[topPart.Count - 1],
+                    topPart[0],
+                    _pathResolution * 1.7
+                );
 
             _coords = _coords.Concat(topPart).ToList();
             _coords = _coords.Concat(leftPart).ToList();

@@ -36,42 +36,57 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
             for (var angle = beginAngleRad; angle < endAngleRad; angle += deltaAngle)
             {
-                var point = new Point();
-                point.X = (x + x_offset + Math.Cos(angle) * radius) * scale;
-                point.Y = (y + y_offset + Math.Sin(angle) * radius) * scale;
+                var point = new Point
+                {
+                    X = (x + x_offset + Math.Cos(angle) * radius) * scale,
+                    Y = (y + y_offset + Math.Sin(angle) * radius) * scale
+                };
                 arc.Add(point);
             }
             return arc;
         }
 
-        public static List<Point> CalcLinePoint(
+        public static List<Point> CalcVerticalLinePoint(
             Point begin,
             Point end,
-            double stepLen,
-            double scale)
+            double stepLen)
         {
             var line = new List<Point>();
-            double x_offset = 75;
-            double y_offset = -35;
 
-            if (begin.X == end.X) {
-                if(begin.Y < end.Y) {
-                    for (var y = begin.Y; y )
-                }
-                if (begin.Y > end.Y)
+            /*
+            if (Math.Abs(begin.X - end.X) < stepLen)
+            {
+                throw new ArgumentException("Points ain't placed on vectical line");
+            }
+            */
+
+            if (begin.Y < end.Y)
+            {
+                for (var y = begin.Y; y <= end.Y; y+=stepLen)
                 {
-
+                    var point = new Point();
+                    point.X = begin.X;
+                    point.Y = y;
+                    line.Add(point);
                 }
-            } else if (begin.Y == begin.Y) {
-                if (begin.X < end.X)
+            } else if (begin.Y > end.Y)
+            {
+                for (var y = begin.Y; y >= end.Y; y -= stepLen)
                 {
-
-                }
-                if (begin.X > end.X)
-                {
-
+                    var point = new Point
+                    {
+                        X = begin.X,
+                        Y = y
+                    };
+                    line.Add(point);
                 }
             }
+            if (line[line.Count - 1] != end)
+            {
+                line.Add(end);
+            }
+
+            return line;
         }
 
         public static double PointLenth(Point point1, Point point2)
