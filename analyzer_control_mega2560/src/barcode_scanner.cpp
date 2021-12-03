@@ -26,7 +26,7 @@ void BarcodeScanner::updateState()
     while(serial->available() > 0)
     {
         byte symbol = serial->read();
-        if('\r' == symbol)
+        if('\n' == symbol)
         {
             // Обработка приема сообщения
 
@@ -42,7 +42,7 @@ void BarcodeScanner::updateState()
         else
         {
             barcodeBuffer[currentBarcodeByte++] = symbol;
-            if(currentBarcodeByte >= 64)
+            if(currentBarcodeByte >= 100)
             {
                 // слишком длинное сообщение
 #ifdef DUBUG
