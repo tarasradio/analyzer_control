@@ -13,6 +13,7 @@ namespace PresentationWinForms.Views
             InitializeComponent();
 
             Logger.DebugMessageAdded += onDebugMessageAdded;
+            Logger.InfoMessageAdded += onInfoMessageAdded;
         }
 
         private void onDebugMessageAdded(string message)
@@ -20,6 +21,14 @@ namespace PresentationWinForms.Views
             BeginInvoke((Action)(() =>
             {
                 AddMessage(message, Color.Blue);
+            }));
+        }
+
+        private void onInfoMessageAdded(string message)
+        {
+            BeginInvoke((Action)(() =>
+            {
+                AddMessage(message, Color.Red);
             }));
         }
 

@@ -27,6 +27,9 @@ namespace PresentationWinForms.Forms
             sensorsView.Init(analyzer);
             steppersGridView.Init(analyzer);
 
+            steppersGridView.StartUpdate();
+            sensorsView.StartUpdate();
+
             Analyzer.Serial.ConnectionChanged += Serial_ConnectionChanged;
 
             this.conveyorService = conveyor;
@@ -52,8 +55,6 @@ namespace PresentationWinForms.Forms
         private void MainForm_Load(object sender, EventArgs e)
         {
             updateControlsState();
-
-            Text = $"Управление анализами - версия {Application.ProductVersion}";
 
             steppersGridView.UpdateInformation();
             devicesControlView.UpdateInformation();

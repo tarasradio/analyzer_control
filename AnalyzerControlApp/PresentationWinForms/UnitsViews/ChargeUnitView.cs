@@ -75,5 +75,14 @@ namespace PresentationWinForms.UnitsViews
                     Analyzer.Charger.MoveHookAfterHome();
                 });
         }
+
+        private void buttonScanCartridge_Click(object sender, EventArgs e)
+        {
+            Analyzer.TaskExecutor.StartTask(
+                () =>
+                {
+                    Analyzer.Charger.ScanBarcode();
+                });
+        }
     }
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationWinForms", "PresentationWinForms\PresentationWinForms.csproj", "{11A12811-EC99-4265-A6F8-7ADD89582C7C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceApp", "PresentationWinForms\ServiceApp.csproj", "{11A12811-EC99-4265-A6F8-7ADD89582C7C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE} = {995B3702-B9DC-45B6-91EA-5CCCC7AEC7CE}
 		{6DCFF691-FFBB-45B4-90A9-36806AE27D02} = {6DCFF691-FFBB-45B4-90A9-36806AE27D02}
