@@ -45,8 +45,9 @@ void CommandExecutor::updateState()
     sendSteppersStates();
     sendSensorsValues();
 
-    tubeScanner->updateState();
     cartridgeScanner->updateState();
+    tubeScanner->updateState();
+    
 
     if (0 != waitForCommandDone) // Есть команды, ожидающие завершения
     {
@@ -227,7 +228,8 @@ void CommandExecutor::executeBarcodeScanCommand(uint8_t *packet, uint32_t packet
     
 #ifdef DEBUG
     {
-        String message = "[Scan barcode]";
+        String message = "[Scan barcode], scanner=";
+        message += String(scanner);
         Protocol::sendMessage(message.c_str());
     }
 #endif

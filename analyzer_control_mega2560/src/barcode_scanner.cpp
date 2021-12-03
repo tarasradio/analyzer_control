@@ -10,11 +10,28 @@ uint8_t currentBarcodeByte = 0;
 bool stringComplete = false;
 long millisendstr = 0;
 
+const char startSeq [7] = {0x02, 0x00, 0x00, 0x01, 0x00, 0x33, 0x31}; 
+
+bool BarcodeScanner::isSeq(char chr) {
+    static uint8_t current = 0;
+    if (chr != startSeq[current]) {
+        current = 0;
+        return false;
+    } else {
+        if (++current >= sizeof(startSeq)) {
+            current = 0;
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 BarcodeScanner::BarcodeScanner(HardwareSerial * serialPort, uint8_t id)
 {
     this->id = id;
     serial = serialPort;
-    serial->begin(9600);
+    serial->begin(115200);
 }
 
 void BarcodeScanner::updateState()
@@ -24,24 +41,33 @@ void BarcodeScanner::updateState()
         Protocol::sendBarcode(id, Emulator::getBarcodeMessage());
     return;
 #endif
+    static bool readBar = false;
 
     if(serial->available() > 0) {
         byte inChar = serial->read();
-        barcodeBuffer[currentBarcodeByte++] = inChar;
-        millisendstr = millis();
+
+        if (!readBar) {
+            if (isSeq(inChar)) {
+                readBar = true;
+            }
+        } else {
+            barcodeBuffer[currentBarcodeByte++] = inChar;
+            millisendstr = millis();
+        }
     } else {
         if(millis() - millisendstr > 1000 && currentBarcodeByte > 0) {
             stringComplete = true;
+            readBar = false;
         }
     }
 
     if(stringComplete) {
         barcodeBuffer[currentBarcodeByte] = '\0';
-#ifdef DUBUG
-            String message = "[Barcode scan] barcode = " + String((char*)barcodeBuffer);
+#ifdef DEBUG
+            String message = "[Barcode scan] barcode = " + String((char*)(barcodeBuffer));
             Protocol::sendMessage(message.c_str());
 #endif
-            Protocol::sendBarcode(id, String((char*)barcodeBuffer).c_str());
+            Protocol::sendBarcode(id, String((char*)(barcodeBuffer)).c_str());
 
             currentBarcodeByte = 0;
             stringComplete = false;

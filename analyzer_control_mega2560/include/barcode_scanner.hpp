@@ -17,6 +17,7 @@ public:
     BarcodeScanner(HardwareSerial * serialPort, uint8_t id);
     void updateState();
     void startScan();
+    bool isSeq(char chr);
 };
 
 #endif
