@@ -5,12 +5,11 @@ using AnalyzerControlGUI.Commands;
 using AnalyzerControlGUI.Models;
 using AnalyzerControlGUI.Views;
 using AnalyzerControlGUI.Views.DialogWindows;
+using AnalyzerDomain.Models;
 using AnalyzerService;
 using Infrastructure;
 using System;
-using System.Management;
 using System.Collections.ObjectModel;
-using AnalyzerDomain.Models;
 
 namespace AnalyzerControlGUI.ViewModels
 {
@@ -22,7 +21,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         public ObservableCollection<Cassette> Cassettes { get; set; }
         public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
-        public ObservableCollection<Models.RotorCell> RotorCells { get; set; }
+        public ObservableCollection<RotorCell> RotorCells { get; set; }
 
         #region MorningCheckout
         RelayCommand _morningCheckoutCommand;
@@ -269,6 +268,7 @@ namespace AnalyzerControlGUI.ViewModels
         static IConfigurationProvider provider = new XmlConfigurationProvider();
         static Analyzer analyzer = null;
         static ConveyorService conveyor = null;
+        static RotorService rotor = null;
         static CartridgesDeckService cartridgesDeck = null;
         static AnalyzerDemoController demoController = null;
 
@@ -291,12 +291,16 @@ namespace AnalyzerControlGUI.ViewModels
             try {
                 analyzer = new Analyzer(provider);
                 conveyor = new ConveyorService(conveyorCellsCount);
+                rotor = new RotorService(rotorCellsCount);
                 cartridgesDeck = new CartridgesDeckService(cassettesCount);
-                demoController = new AnalyzerDemoController(provider, conveyor);
+
+                demoController = new AnalyzerDemoController(provider, conveyor, rotor);
+
                 conveyor.SetController(demoController);
                 demoController.LoadConfiguration(controllerFileName);
 
                 ConveyorCells = conveyor.Cells;
+                RotorCells = rotor.Cells;
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;
             } catch {
@@ -471,12 +475,12 @@ namespace AnalyzerControlGUI.ViewModels
             //ConveyorCells[6].State = ConveyorCellState.Error;
             //ConveyorCells[7].State = ConveyorCellState.Processing;
 
-            RotorCells = new ObservableCollection<Models.RotorCell>();
+            //RotorCells = new ObservableCollection<Models.RotorCell>();
 
-            for(int i = 0; i < rotorCellsCount; ++i)
-            {
-                RotorCells.Add(new Models.RotorCell());
-            }
+            //for(int i = 0; i < rotorCellsCount; ++i)
+            //{
+            //    RotorCells.Add(new RotorCell());
+            //}
 
             //RotorCells[0].AnalysisBarcode = "123";
             //RotorCells[4].AnalysisBarcode = "123";

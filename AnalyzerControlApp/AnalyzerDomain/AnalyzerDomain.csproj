@@ -177,6 +177,7 @@
     <Compile Include="Models\Cartridge.cs" />
     <Compile Include="Models\ConveyorCell.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="Models\RotorCell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

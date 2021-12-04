@@ -1,4 +1,4 @@
-﻿using AnalyzerControlGUI.Models;
+﻿using AnalyzerDomain.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

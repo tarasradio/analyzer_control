@@ -15,6 +15,7 @@ namespace AnalyzerControl
     public class AnalyzerDemoController : Configurable<DemoControllerConfiguration>
     {
         ConveyorService conveyor;
+        RotorService rotor;
 
         private Stopwatch stopwatch;
         Timer timer;
@@ -33,9 +34,10 @@ namespace AnalyzerControl
 
         bool interruptRequest = false;
 
-        public AnalyzerDemoController(IConfigurationProvider provider, ConveyorService conveyor) : base(provider)
+        public AnalyzerDemoController(IConfigurationProvider provider, ConveyorService conveyor, RotorService rotor) : base(provider)
         {
             this.conveyor = conveyor;
+            this.rotor = rotor;
 
             initTimer();
 

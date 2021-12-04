@@ -1,39 +1,28 @@
-﻿using System;
+﻿using AnalyzerDomain.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AnalyzerControl.Services
 {
-    public class RotorCell
-    {
-        public string AnalysisBarcode { get; set; }
-        public bool IsEmpty {
-            get {
-                return AnalysisBarcode == string.Empty;
-            }
-            private set { }
-        }
-
-        public RotorCell() {
-            AnalysisBarcode = string.Empty;
-        }
-
-        public void SetEmpty() {
-            AnalysisBarcode = string.Empty;
-        }
-    }
     /// <summary>
     /// Сервис управления ротором
     /// </summary>
     public class RotorService
     {
-        public RotorCell[] Cells { get; private set; }
+        public ObservableCollection<RotorCell> Cells { get; private set; }
 
         public RotorService(int cellsCount)
         {
-            Cells = Enumerable.Repeat(new RotorCell(), cellsCount).ToArray();
+            Cells = new ObservableCollection<RotorCell>();
+
+            for (int i = 0; i < cellsCount; i++)
+            {
+                Cells.Add(new RotorCell());
+            }
         }
 
         public bool ExistEmptyCells()
@@ -43,7 +32,7 @@ namespace AnalyzerControl.Services
 
         private (bool, int?) findFreeCellIndex()
         {
-            for (int i = 0; i < Cells.Length; i++) {
+            for (int i = 0; i < Cells.Count; i++) {
                 if(Cells[i].IsEmpty) {
                     return (true, i);
                 }

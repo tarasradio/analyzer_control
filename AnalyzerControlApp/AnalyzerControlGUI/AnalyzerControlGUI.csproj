@@ -193,7 +193,6 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToColorConverter.cs" />
     <Compile Include="Models\Cassette.cs" />
-    <Compile Include="Models\RotorCell.cs" />
     <Compile Include="ViewModels\AnalyzerControlViewModel.cs" />
     <Compile Include="ViewModels\EveningCheckoutViewModel.cs" />
     <Compile Include="ViewModels\ManualInputDialogViewModel.cs" />
