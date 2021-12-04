@@ -28,7 +28,9 @@ namespace PresentationWinForms
                 Analyzer analyzer = new Analyzer(provider);
                 ConveyorService conveyor = new ConveyorService(54);
                 RotorService rotor = new RotorService(40);
-                AnalyzerDemoController demoController = new AnalyzerDemoController(provider, conveyor, rotor);
+                CartridgesDeckService cartridgesDeck = new CartridgesDeckService(10);
+
+                AnalyzerDemoController demoController = new AnalyzerDemoController(provider, conveyor, rotor, cartridgesDeck);
 
                 demoController.LoadConfiguration("DemoControllerConfiguration");
 

@@ -19,6 +19,7 @@ namespace AnalyzerControlGUI.ViewModels
         static Analyzer analyzer = null;
         static ConveyorService conveyor = null;
         static RotorService rotor = null;
+        static CartridgesDeckService cartridgesDeck = null;
         static AnalyzerDemoController demoController = null;
 
         const string controllerFileName = "DemoControllerConfiguration";
@@ -36,9 +37,12 @@ namespace AnalyzerControlGUI.ViewModels
         {
             try {
                 analyzer = new Analyzer(provider);
+
                 conveyor = new ConveyorService(54);
                 rotor = new RotorService(40);
-                demoController = new AnalyzerDemoController(provider, conveyor, rotor);
+                cartridgesDeck = new CartridgesDeckService(10);
+
+                demoController = new AnalyzerDemoController(provider, conveyor, rotor, cartridgesDeck);
                 demoController.LoadConfiguration(controllerFileName);
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;

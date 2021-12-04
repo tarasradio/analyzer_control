@@ -294,7 +294,7 @@ namespace AnalyzerControlGUI.ViewModels
                 rotor = new RotorService(rotorCellsCount);
                 cartridgesDeck = new CartridgesDeckService(cassettesCount);
 
-                demoController = new AnalyzerDemoController(provider, conveyor, rotor);
+                demoController = new AnalyzerDemoController(provider, conveyor, rotor, cartridgesDeck);
 
                 conveyor.SetController(demoController);
                 demoController.LoadConfiguration(controllerFileName);

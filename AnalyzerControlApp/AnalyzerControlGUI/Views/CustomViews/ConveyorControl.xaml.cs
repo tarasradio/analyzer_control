@@ -1,9 +1,7 @@
-﻿using AnalyzerControlGUI.Models;
-using AnalyzerControlGUI.ViewsHelpers;
+﻿using AnalyzerControlGUI.ViewsHelpers;
 using AnalyzerDomain.Models;
 using System;
 using System.Collections.ObjectModel;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
