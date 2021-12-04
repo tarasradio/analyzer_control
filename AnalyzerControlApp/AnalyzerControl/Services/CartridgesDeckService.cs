@@ -45,7 +45,7 @@ namespace AnalyzerControl.Services
             Analyzer.Charger.HomeRotator();
             Analyzer.Charger.TurnToCell(index);
             Analyzer.Charger.ScanBarcode();
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(2000); // Типа ожидаем, когда бар-код будет прочитан
         }
     }
 

@@ -10,6 +10,7 @@ using Infrastructure;
 using System;
 using System.Management;
 using System.Collections.ObjectModel;
+using AnalyzerDomain.Models;
 
 namespace AnalyzerControlGUI.ViewModels
 {
@@ -20,7 +21,7 @@ namespace AnalyzerControlGUI.ViewModels
         private const int rotorCellsCount = 40;
 
         public ObservableCollection<Cassette> Cassettes { get; set; }
-        public ObservableCollection<Models.ConveyorCell> ConveyorCells { get; set; }
+        public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
         public ObservableCollection<Models.RotorCell> RotorCells { get; set; }
 
         #region MorningCheckout
@@ -295,6 +296,8 @@ namespace AnalyzerControlGUI.ViewModels
                 conveyor.SetController(demoController);
                 demoController.LoadConfiguration(controllerFileName);
 
+                ConveyorCells = conveyor.Cells;
+
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;
             } catch {
                 Logger.Debug("Возникла ошибка при запуске!");
@@ -347,8 +350,9 @@ namespace AnalyzerControlGUI.ViewModels
             if(cartridgeInserted)
             {
                 cartridgesDeck.ScanCassette(SelectedCassette);
+
                 string barcode = Analyzer.State.CartridgeBarcode;
-                Analyzer.State.CartridgeBarcode = string.Empty;
+
                 if(barcode != null)
                 {
                     if(!String.IsNullOrEmpty(barcode))
@@ -458,14 +462,14 @@ namespace AnalyzerControlGUI.ViewModels
                 new Cassette { Barcode="21", CountLeft = 10 },
             };
 
-            ConveyorCells = new ObservableCollection<Models.ConveyorCell>();
+            //ConveyorCells = new ObservableCollection<Models.ConveyorCell>();
 
-            for (int i = 0; i < conveyorCellsCount; ++i)
-                ConveyorCells.Add(new Models.ConveyorCell());
+            //for (int i = 0; i < conveyorCellsCount; ++i)
+            //    ConveyorCells.Add(new Models.ConveyorCell());
 
-            ConveyorCells[5].State = ConveyorCellState.Processed;
-            ConveyorCells[6].State = ConveyorCellState.Error;
-            ConveyorCells[7].State = ConveyorCellState.Processing;
+            //ConveyorCells[5].State = ConveyorCellState.Processed;
+            //ConveyorCells[6].State = ConveyorCellState.Error;
+            //ConveyorCells[7].State = ConveyorCellState.Processing;
 
             RotorCells = new ObservableCollection<Models.RotorCell>();
 
@@ -474,8 +478,8 @@ namespace AnalyzerControlGUI.ViewModels
                 RotorCells.Add(new Models.RotorCell());
             }
 
-            RotorCells[0].AnalysisBarcode = "123";
-            RotorCells[4].AnalysisBarcode = "123";
+            //RotorCells[0].AnalysisBarcode = "123";
+            //RotorCells[4].AnalysisBarcode = "123";
         }
     }
 }

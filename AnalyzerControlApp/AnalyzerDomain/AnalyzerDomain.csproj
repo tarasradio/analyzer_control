@@ -159,7 +159,6 @@
   <ItemGroup>
     <Compile Include="AnalyzerContext.cs" />
     <Compile Include="Entyties\AnalysisInfo.cs" />
-    <Compile Include="Entyties\CartridgeCell.cs" />
     <Compile Include="Entyties\Stage.cs" />
     <Compile Include="Migrations\20210417202334_InitialCreate.cs" />
     <Compile Include="Migrations\20210417202334_InitialCreate.designer.cs">
@@ -176,6 +175,7 @@
     <Compile Include="Models\AnalysisType.cs" />
     <Compile Include="Models\CartridgeCell.cs" />
     <Compile Include="Models\Cartridge.cs" />
+    <Compile Include="Models\ConveyorCell.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

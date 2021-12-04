@@ -1,11 +1,10 @@
-﻿using AnalyzerDomain.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnalyzerControlGUI.Models
+namespace AnalyzerDomain.Models
 {
     public enum ConveyorCellState
     {
@@ -17,10 +16,22 @@ namespace AnalyzerControlGUI.Models
 
     public class ConveyorCell : ModelBase
     {
+        public string AnalysisBarcode { get; set; }
+        public bool IsEmpty
+        {
+            get
+            {
+                return AnalysisBarcode == string.Empty;
+            }
+            private set { }
+        }
+
         private ConveyorCellState _state;
-        public ConveyorCellState State { 
+        public ConveyorCellState State
+        {
             get { return _state; }
-            set { 
+            set
+            {
                 _state = value;
                 OnPropertyChanged();
             }
@@ -28,6 +39,13 @@ namespace AnalyzerControlGUI.Models
 
         public ConveyorCell()
         {
+            AnalysisBarcode = string.Empty;
+            State = ConveyorCellState.Empty;
+        }
+
+        public void SetEmpty()
+        {
+            AnalysisBarcode = string.Empty;
             State = ConveyorCellState.Empty;
         }
     }

@@ -7,6 +7,7 @@ using AnalyzerService.ExecutionControl;
 using AnalyzerDomain.Entyties;
 using Infrastructure;
 using System.Collections.Generic;
+using AnalyzerDomain.Models;
 
 namespace AnalyzerService.Units
 {

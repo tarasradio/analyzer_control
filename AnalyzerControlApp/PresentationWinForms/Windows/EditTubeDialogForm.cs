@@ -1,4 +1,5 @@
 ﻿using AnalyzerDomain.Entyties;
+using AnalyzerDomain.Models;
 using PresentationWinForms.Utils;
 using System;
 using System.Windows.Forms;

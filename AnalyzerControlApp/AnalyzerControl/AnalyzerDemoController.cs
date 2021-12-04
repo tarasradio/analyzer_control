@@ -2,6 +2,7 @@
 using AnalyzerControl.Configuration;
 using AnalyzerControl.Services;
 using AnalyzerDomain.Entyties;
+using AnalyzerDomain.Models;
 using AnalyzerService;
 using AnalyzerService.Units;
 using Infrastructure;

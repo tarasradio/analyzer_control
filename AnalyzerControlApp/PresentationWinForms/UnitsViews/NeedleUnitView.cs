@@ -2,6 +2,7 @@
 using AnalyzerDomain.Entyties;
 using System;
 using System.Windows.Forms;
+using AnalyzerDomain.Models;
 
 namespace PresentationWinForms.UnitsViews
 {

@@ -1,5 +1,6 @@
 ﻿using AnalyzerControlGUI.Models;
 using AnalyzerControlGUI.ViewsHelpers;
+using AnalyzerDomain.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Timers;

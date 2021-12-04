@@ -1,38 +1,19 @@
-﻿using AnalyzerService;
+﻿using AnalyzerDomain.Models;
+using AnalyzerService;
 using Infrastructure;
-using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AnalyzerControl.Services
 {
-    public class ConveyorCell
-    {
-        public string AnalysisBarcode { get; set; }
-        public bool IsEmpty {
-            get {
-                return AnalysisBarcode == string.Empty;
-            }
-            private set { }
-        }
-
-        public ConveyorCell() {
-            AnalysisBarcode = string.Empty;
-        }
-
-        public void SetEmpty() {
-            AnalysisBarcode = string.Empty;
-        }
-    }
 
     /// <summary>
     /// Сервис управления конвейером
     /// </summary>
     public class ConveyorService
     {
-        public ConveyorCell[] Cells { get; private set; }
+        public ObservableCollection<ConveyorCell> Cells { get; private set; }
 
         private const int cellsBetweenScanAndSampling = 7;
         private const int cellsBetweenScanAndLoading = 29; // TODO:проверить, сколько реально
@@ -48,7 +29,7 @@ namespace AnalyzerControl.Services
         public int CellInSamplingPosition { 
             get {
                 int cell = CellInScanPosition - cellsBetweenScanAndSampling;
-                if (cell < 0) cell += Cells.Length;
+                if (cell < 0) cell += Cells.Count;
 
                 return cell;
             }
@@ -61,7 +42,7 @@ namespace AnalyzerControl.Services
         {
             get {
                 int cell = CellInScanPosition - cellsBetweenScanAndLoading;
-                if (cell < 0) cell += Cells.Length;
+                if (cell < 0) cell += Cells.Count;
 
                 return cell;
             }
@@ -85,7 +66,12 @@ namespace AnalyzerControl.Services
 
         public ConveyorService(int cellsCount)
         {
-            Cells = Enumerable.Repeat(new ConveyorCell(), cellsCount).ToArray();
+            Cells = new ObservableCollection<ConveyorCell>();
+
+            for(int i = 0; i < cellsCount; i++) {
+                Cells.Add(new ConveyorCell());
+            }
+
             State = States.Waiting;
         }
 
@@ -99,7 +85,7 @@ namespace AnalyzerControl.Services
         /// </summary>
         public void CheckFullCycle()
         {
-            if (CellInScanPosition == Cells.Length) {
+            if (CellInScanPosition == Cells.Count) {
                 CellInScanPosition = 0;
             }
         }
@@ -111,7 +97,7 @@ namespace AnalyzerControl.Services
 
         private (bool, int?) findFreeCellIndex()
         {
-            for (int i = 0; i < Cells.Length; i++) {
+            for (int i = 0; i < Cells.Count; i++) {
                 if (Cells[i].IsEmpty) {
                     return (true, i);
                 }
@@ -121,7 +107,7 @@ namespace AnalyzerControl.Services
 
         private (bool, int?) findCompletedIndex()
         {
-            for (int i = 0; i < Cells.Length; i++) {
+            for (int i = 0; i < Cells.Count; i++) {
                 if (!Cells[i].IsEmpty) {
                     //TODO: добавить проверку на завершенность
                     return (true, i);
