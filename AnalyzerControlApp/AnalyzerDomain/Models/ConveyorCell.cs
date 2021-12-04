@@ -17,10 +17,8 @@ namespace AnalyzerDomain.Models
     public class ConveyorCell : ModelBase
     {
         public string AnalysisBarcode { get; set; }
-        public bool IsEmpty
-        {
-            get
-            {
+        public bool IsEmpty {
+            get  {
                 return AnalysisBarcode == string.Empty;
             }
             private set { }

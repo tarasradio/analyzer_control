@@ -257,8 +257,10 @@ namespace AnalyzerControl
                     if (!cell.IsEmpty) {
                         Logger.Debug($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
                         searchBarcodeInDatabase(cell.AnalysisBarcode).IsFind = true;
+                        cell.State = ConveyorCellState.Processing;
                     } else {
                         Logger.Debug($"Пробирка со штрихкодом [{barcode}] не найдена в списке анализов!");
+                        cell.State = ConveyorCellState.Error;
                     }
                     break;
                 } else {
@@ -443,6 +445,8 @@ namespace AnalyzerControl
             // TODO: Эта задача не реализована до конца!!!
 
             Logger.Debug($"Анализ [{analysis.BarCode}] - выполнения завершающей стадии завершено.");
+
+            conveyor.Cells.Where(c => c.AnalysisBarcode == analysis.BarCode).FirstOrDefault().State = ConveyorCellState.Processed;
         }
     }
 }
