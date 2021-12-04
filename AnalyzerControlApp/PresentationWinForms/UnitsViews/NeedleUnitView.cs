@@ -28,7 +28,7 @@ namespace PresentationWinForms.UnitsViews
             Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    Analyzer.Needle.HomeLifterAndRotator();
+                    Analyzer.Needle.GoHome();
                     Analyzer.Needle.TurnToTubeAndWaitTouch();
                 });
         }
@@ -38,7 +38,7 @@ namespace PresentationWinForms.UnitsViews
             Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    Analyzer.Needle.HomeLifterAndRotator();
+                    Analyzer.Needle.GoHome();
                     Analyzer.Needle.TurnAndGoDownToWashing();
                 });
         }
@@ -67,7 +67,7 @@ namespace PresentationWinForms.UnitsViews
             Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    Analyzer.Needle.HomeLifterAndRotator();
+                    Analyzer.Needle.GoHome();
                     Analyzer.Needle.TurnToCartridge(cell);
                 });
         }
@@ -96,7 +96,7 @@ namespace PresentationWinForms.UnitsViews
             Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    Analyzer.Needle.GoDownAndPerforateCartridge(cell);
+                    Analyzer.Needle.PerforateCartridge(cell);
                 });
         }
 

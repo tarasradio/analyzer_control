@@ -103,7 +103,6 @@ namespace AnalyzerService
         {
             TaskExecutor.AbortExecution();
             CommandExecutor.AbortExecution();
-            //Demo.AbortWork();
 
             Serial.SendPacket(new AbortExecutionCommand().GetBytes());
         }

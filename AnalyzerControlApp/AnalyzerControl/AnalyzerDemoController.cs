@@ -19,7 +19,7 @@ namespace AnalyzerControl
         Timer timer;
 
         const int millisecondsInMinute = 60 * 1000;
-
+        private const int timerInterval = 1000;
         private static object locker = new object();
 
         public enum States
@@ -36,19 +36,25 @@ namespace AnalyzerControl
         {
             this.conveyor = conveyor;
 
-            stopwatch = new Stopwatch();
-            timer = new Timer();
-
-            timer.Interval = 1000;
-            timer.Elapsed += Timer_Elapsed;
+            initTimer();
 
             state = States.Interrupted;
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void initTimer()
+        {
+            stopwatch = new Stopwatch();
+            timer = new Timer();
+
+            timer.Interval = timerInterval;
+            timer.Elapsed += timerElapsed;
+        }
+
+        private void timerElapsed(object sender, ElapsedEventArgs e)
         {
             if (stopwatch.ElapsedMilliseconds >= millisecondsInMinute) {
                 stopwatch.Restart();
+
                 Logger.Debug("Прошла минута");
 
                 foreach (AnalysisInfo analysis in Options.Analyzes) {
@@ -88,7 +94,7 @@ namespace AnalyzerControl
                 while (state != States.Interrupted);
 
                 // Выполнение действий после прерывания
-                Analyzer.Needle.HomeLifterAndRotator();
+                Analyzer.Needle.GoHome();
             }
         }
 
@@ -103,22 +109,22 @@ namespace AnalyzerControl
         {
             Analyzer.TaskExecutor.StartTask(() =>
             {
-                analyzerWorkCycle(); // Итак, запустили мы эту херню в отдельном потоке? зачем? (Возможно, для того, чтобы ее можно было аварийно прервать)
+                mainCycle(); // Итак, запустили мы эту херню в отдельном потоке? зачем? (Возможно, для того, чтобы ее можно было аварийно прервать)
             });
         }
 
         // Типа главная задача, которая запускается в отдельном потоке, выполнение которой (задачи) можно прервать
         // - Вопрос - что будет, если мы прервем задачу и затем запустим ее заного?? Состояние куда то сохраняется?
-        private void analyzerWorkCycle()
+        private void mainCycle()
         {
             resetAnalyzes();
 
             AnalyzerOperations.MoveAllToHome();
-            AnalyzerOperations.NeedleWash();
+            AnalyzerOperations.WashNeedle();
 
             Logger.Debug($"Запуск подготовки перед сканированием пробирок.");
 
-            Analyzer.Needle.HomeLifterAndRotator();
+            Analyzer.Needle.GoHome();
             Analyzer.Conveyor.PrepareBeforeScanning();
 
             Logger.Debug($"Подготовка перед сканированием пробирок завершена.");
@@ -154,9 +160,8 @@ namespace AnalyzerControl
                     searchBarcodeInDatabase(conveyor.Cells[cellInSampling].AnalysisBarcode);
 
                 if (analysisInSampling != null) {
-                    Logger.Debug($"Пробирка со штрихкодом [{analysisInSampling.BarCode}] дошла до точки забора материала.");
-
                     if (analysisInSampling.NoSampleWasTaken()) {
+                        Logger.Debug($"Пробирка со штрихкодом [{analysisInSampling.BarCode}] дошла до точки забора материала.");
                         Logger.Debug($"Забор материала ранее не производился.");
 
                         analysisInSampling.SetSamplingStage();
@@ -246,7 +251,7 @@ namespace AnalyzerControl
                 if (!string.IsNullOrWhiteSpace(barcode)) {
                     Logger.Debug($"Обнаружена пробирка со штрихкодом [{barcode}].");
 
-                    cell.AnalysisBarcode = searchBarcodeInDatabase(barcode).BarCode; // TODO: - может вернуть null
+                    cell.AnalysisBarcode = searchBarcodeInDatabase(barcode)?.BarCode; // TODO: - может вернуть null
 
                     if (!cell.IsEmpty) {
                         Logger.Debug($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
@@ -309,7 +314,7 @@ namespace AnalyzerControl
             Analyzer.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
             // Опускаем иглу в кювету
-            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
+            Analyzer.Needle.PerforateCartridge(CartridgeCell.MixCell);
 
             Logger.Debug($"Слив забранного материала в белую кювету.");
 
@@ -317,7 +322,7 @@ namespace AnalyzerControl
             Analyzer.Pomp.Push(0);
 
             // Промываем иглу
-            AnalyzerOperations.NeedleWash();
+            AnalyzerOperations.WashNeedle();
 
             Logger.Debug($"Перенос реагента в белую кювету.");
 
@@ -325,7 +330,7 @@ namespace AnalyzerControl
             processAnalisysStage(analysis);
 
             // Устанавливаем иглу в домашнюю позицию
-            Analyzer.Needle.HomeLifterAndRotator();
+            Analyzer.Needle.GoHome();
 
             // Смещаем пробирку обратно
             Analyzer.Conveyor.Shift(reverse: true, ConveyorUnit.ShiftType.HalfTube);
@@ -337,9 +342,9 @@ namespace AnalyzerControl
         {
             Logger.Debug($"Анализ [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
 
-            Analyzer.Needle.HomeLifterAndRotator();
+            Analyzer.Needle.GoHome();
 
-            AnalyzerOperations.NeedleWash();
+            AnalyzerOperations.WashNeedle();
 
             // Подводим нужную ячейку картриджа под иглу
             Analyzer.Rotor.Home();
@@ -352,7 +357,7 @@ namespace AnalyzerControl
             Analyzer.Needle.TurnToCartridge(analysis.Stages[analysis.CurrentStage].Cell);
 
             // Прокалываем ячейку картриджа
-            Analyzer.Needle.GoDownAndPerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
+            Analyzer.Needle.PerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
 
             // Поднимаемся на безопасную высоту над картриджем
             Analyzer.Needle.GoToSafeLevel();
@@ -364,7 +369,7 @@ namespace AnalyzerControl
                 RotorUnit.CellPosition.CellCenter);
 
             // Прокалываем ячейку картриджа
-            Analyzer.Needle.GoDownAndPerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
+            Analyzer.Needle.PerforateCartridge(analysis.Stages[analysis.CurrentStage].Cell);
 
             // Забираем реагент из ячейки картриджа
             Analyzer.Pomp.Pull(0);
@@ -382,7 +387,7 @@ namespace AnalyzerControl
                 CartridgeCell.MixCell);
 
             // Опускаем иглу в белую кювету
-            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell, false);
+            Analyzer.Needle.PerforateCartridge(CartridgeCell.MixCell, false);
 
             // Сливаем реагент в белую кювету
             Analyzer.Pomp.Push(0);
@@ -398,7 +403,7 @@ namespace AnalyzerControl
         {
             Logger.Debug($"Анализ [{analysis.BarCode}] - запуск выполнения завершающей стадии.");
 
-            AnalyzerOperations.NeedleWash();
+            AnalyzerOperations.WashNeedle();
 
             Analyzer.Rotor.Home();
             Analyzer.Rotor.PlaceCellUnderNeedle(
@@ -408,7 +413,7 @@ namespace AnalyzerControl
             Analyzer.Needle.HomeLifter();
             Analyzer.Needle.TurnToCartridge(CartridgeCell.MixCell);
 
-            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.MixCell);
+            Analyzer.Needle.PerforateCartridge(CartridgeCell.MixCell);
 
             Analyzer.Pomp.Pull(0);
 
@@ -420,7 +425,7 @@ namespace AnalyzerControl
             // Устанавливаем иглу над белой ячейкой картриджа
             Analyzer.Needle.TurnToCartridge(CartridgeCell.ResultCell);
 
-            Analyzer.Needle.GoDownAndPerforateCartridge(CartridgeCell.ResultCell); // TODO: Добавить реализацию в NeedleUnit
+            Analyzer.Needle.PerforateCartridge(CartridgeCell.ResultCell); // TODO: Добавить реализацию в NeedleUnit
 
             Analyzer.Pomp.Push(0);
 

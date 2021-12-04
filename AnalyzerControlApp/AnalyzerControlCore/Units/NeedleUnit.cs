@@ -90,7 +90,7 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(NeedleUnit)}] - Lift going to home finished.");
         }
 
-        public void HomeLifterAndRotator()
+        public void GoHome()
         {
             HomeLifter();
             HomeRotator();
@@ -128,7 +128,7 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(NeedleUnit)}] - Turning and going down to washing finished.");
         }
 
-        public void GoDownAndPerforateCartridge(CartridgeCell cartridgeCell, bool needSuction = true)
+        public void PerforateCartridge(CartridgeCell cartridgeCell, bool needSuction = true)
         {
             Logger.Debug($"[{nameof(NeedleUnit)}] - Start going down and perforating cartridge.");
 
@@ -189,24 +189,19 @@ namespace AnalyzerService.Units
             int turnSteps = 0;
 
             //TODO: Что то тут не так (if-else)
-            if(cell == CartridgeCell.ResultCell)
-            {
+            if(cell == CartridgeCell.ResultCell) {
                 turnSteps = Options.RotatorStepsToResultCell;
             }
-            if(cell == CartridgeCell.MixCell)
-            {
+            else if(cell == CartridgeCell.MixCell) {
                 turnSteps = Options.RotatorStepsToMixCell;
             }
-            else if(cell == CartridgeCell.FirstCell)
-            {
+            else if(cell == CartridgeCell.FirstCell) {
                 turnSteps = Options.RotatorStepsToFirstCell;
             }
-            else if(cell == CartridgeCell.SecondCell)
-            {
+            else if(cell == CartridgeCell.SecondCell) {
                 turnSteps = Options.RotatorStepsToSecondCell;
             }
-            else if(cell == CartridgeCell.ThirdCell)
-            {
+            else if(cell == CartridgeCell.ThirdCell) {
                 turnSteps = Options.RotatorStepsToThirdCell;
             }
 

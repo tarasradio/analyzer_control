@@ -17,7 +17,7 @@ namespace AnalyzerControl
         {
             Logger.Debug($"Запуск возврата всех устройств в начальную позицию.");
 
-            Analyzer.Needle.HomeLifterAndRotator();
+            Analyzer.Needle.GoHome();
             Analyzer.Charger.HomeHook();
             Analyzer.Charger.MoveHookAfterHome();
             Analyzer.Charger.HomeRotator();
@@ -30,7 +30,7 @@ namespace AnalyzerControl
         /// <summary>
         /// Промывка иглы
         /// </summary>
-        public static void NeedleWash()
+        public static void WashNeedle()
         {
             Logger.Debug($"Запуск промывки иглы.");
 

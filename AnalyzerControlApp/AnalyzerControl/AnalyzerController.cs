@@ -97,7 +97,7 @@ namespace AnalyzerControl
             moveMaterialToCartridge(volume);
 
             // слив.4 Требуется переместить иглу в позицию для промывки и выполнить промывку.
-            AnalyzerOperations.NeedleWash();
+            AnalyzerOperations.WashNeedle();
         }
 
         void makeMaterialWashing()
