@@ -96,7 +96,8 @@ namespace AnalyzerControlGUI.ViewModels
                     State = MorningChecoutState.Finished;
                     break;
                 case MorningChecoutState.Finished:
-                    shutdown();
+                    closeScreen();
+                    //shutdown();
                     NotFinished = false;
                     break;
             }
@@ -123,6 +124,14 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
+        private async void closeScreen()
+        {
+            await Task.Run(() =>
+            {
+                Analyzer.AdditionalDevices.CloseScreen();
+            });
+        }
+
         private async void unloadTubes()
         {
             await Task.Run(() =>
@@ -139,7 +148,7 @@ namespace AnalyzerControlGUI.ViewModels
                 Analyzer.Rotor.PlaceCellAtDischarge(0);
                 Analyzer.Charger.HomeRotator();
                 Analyzer.Charger.TurnToDischarge();
-                Analyzer.Charger.HomeHook();
+                Analyzer.Charger.HomeHook(false);
                 Analyzer.Charger.MoveHookAfterHome();
                 Analyzer.Charger.ChargeCartridge();
             });

@@ -11,6 +11,12 @@ using Infrastructure;
 using System;
 using System.Collections.ObjectModel;
 
+using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
+using System.ComponentModel;
+using System.Windows;
+using AnalyzerDomain;
+using Microsoft.EntityFrameworkCore;
+
 namespace AnalyzerControlGUI.ViewModels
 {
     public class AnalyzerControlViewModel : ViewModel
@@ -19,9 +25,12 @@ namespace AnalyzerControlGUI.ViewModels
         private const int conveyorCellsCount = 54;
         private const int rotorCellsCount = 40;
 
-        public ObservableCollection<Cassette> Cassettes { get; set; }
+        public ObservableCollection<CartridgeCassette> Cassettes { get; set; }
         public ObservableCollection<ConveyorCell> ConveyorCells { get; set; }
-        public ObservableCollection<RotorCell> RotorCells { get; set; }
+        public ObservableCollection<RotorCell> RotorCells { get;  set; }
+
+        private readonly int[] cassettesSensors = { 14, 11, 9, 10, 8, 12, 13, 7, 5, 6 };
+        private const int sensorTreshold = 512;
 
         #region MorningCheckout
         RelayCommand _morningCheckoutCommand;
@@ -165,9 +174,9 @@ namespace AnalyzerControlGUI.ViewModels
 
         private bool canLoadExecute()
         {
-            return (conveyor.State == ConveyorService.States.Waiting 
-                || conveyor.State == ConveyorService.States.AnalyzesProcessing) 
-                && ConnectionState;
+            return (conveyor.State == ConveyorService.States.Waiting
+                || conveyor.State == ConveyorService.States.AnalyzesProcessing);
+                // ю&& ConnectionState;
         }
 
         private void load()
@@ -175,8 +184,18 @@ namespace AnalyzerControlGUI.ViewModels
             Logger.Debug($"Загрузка...");
             Logger.Info($"Загрузка...");
 
-            //conveyor.Load();\
-            changeCell();
+            LoadAnalysisViewModel viewModel = new LoadAnalysisViewModel();
+            viewModel.CartridgesDeck = cartridgesDeck;
+            viewModel.Conveyor = conveyor;
+            viewModel.Rotor = rotor;
+
+            viewModel.Init();
+
+            LoadAnalysisWindow dialog = new LoadAnalysisWindow();
+            dialog.DataContext = viewModel;
+
+            dialog.ShowDialog();
+            NotifyPropertyChanged("SheduledAnalyzes");
         }
         #endregion
 
@@ -265,6 +284,66 @@ namespace AnalyzerControlGUI.ViewModels
         }
         #endregion
 
+        #region CheckCassetteCommand
+        RelayCommand _CheckCassetteCommand;
+
+        public RelayCommand CheckCassetteCommand
+        {
+            get
+            {
+                if (_CheckCassetteCommand == null)
+                {
+                    _CheckCassetteCommand = new RelayCommand(
+                       param => checkCassette(),
+                       param => canCheckCassetteExecute()
+                       );
+                }
+                return _CheckCassetteCommand;
+            }
+        }
+
+        private bool canCheckCassetteExecute()
+        {
+            return ConnectionState;
+        }
+
+        private void checkCassette()
+        {
+            scanCassette();
+        }
+        #endregion
+
+        #region SheduledAnalyzes
+        private ObservableCollection<Analysis> _sheduledAnalyzes;
+
+        public ObservableCollection<Analysis> SheduledAnalyzes
+        {
+            get
+            {
+                if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                {
+                    return new ObservableCollection<Analysis>();
+                }
+                else
+                    return LoadSheduledAnalyzesDetails();
+            }
+            private set
+            {
+                _sheduledAnalyzes = value;
+                NotifyPropertyChanged("SheduledAnalyzes");
+            }
+        }
+
+        private ObservableCollection<Analysis> LoadSheduledAnalyzesDetails()
+        {
+            using (AnalyzerContext db = new AnalyzerContext())
+            {
+                db.SheduledAnalyzes.Load();
+                return db.SheduledAnalyzes.Local.ToObservableCollection();
+            }
+        }
+        #endregion
+
         static IConfigurationProvider provider = new XmlConfigurationProvider();
         static Analyzer analyzer = null;
         static ConveyorService conveyor = null;
@@ -301,6 +380,7 @@ namespace AnalyzerControlGUI.ViewModels
 
                 ConveyorCells = conveyor.Cells;
                 RotorCells = rotor.Cells;
+                Cassettes = cartridgesDeck.Cassettes;
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;
             } catch {
@@ -313,6 +393,7 @@ namespace AnalyzerControlGUI.ViewModels
             ConnectionState = state;
             if (state) {
                 ConnectionText = "Соединение установлено";
+                openScreen();
             } else {
                 ConnectionText = "Соединение не установлено";
             }
@@ -335,9 +416,25 @@ namespace AnalyzerControlGUI.ViewModels
             {
                 _selectedCassette = value;
                 if(ConnectionState)
-                    scanCassette();
+                    //scanCassette();
                 NotifyPropertyChanged();
             }
+        }
+
+        private void openScreen()
+        {
+            Analyzer.TaskExecutor.StartTask(() =>
+            {
+                Analyzer.AdditionalDevices.OpenScreen();
+            });
+        }
+
+        private void closeScreen()
+        {
+            Analyzer.TaskExecutor.StartTask(() =>
+            {
+                Analyzer.AdditionalDevices.CloseScreen();
+            });
         }
 
         // Сканирование кассеты
@@ -346,9 +443,9 @@ namespace AnalyzerControlGUI.ViewModels
             if (SelectedCassette == -1)
                 return;
 
-            bool cartridgeInserted = false;
-            if(SelectedCassette == 9)
-                cartridgeInserted = Analyzer.State.SensorsValues[14] > 512;
+            int sensorNumber = cassettesSensors[SelectedCassette];
+            bool cartridgeInserted = true;// Analyzer.State.SensorsValues[sensorNumber] > sensorTreshold;
+
             Cassettes[SelectedCassette].Inserted = cartridgeInserted;
 
             if(cartridgeInserted)
@@ -359,22 +456,25 @@ namespace AnalyzerControlGUI.ViewModels
 
                 if(barcode != null)
                 {
-                    if(!String.IsNullOrEmpty(barcode))
+                    if(string.IsNullOrEmpty(barcode) || string.IsNullOrWhiteSpace(barcode) || barcode.Contains("\u0002"))
                     {
-                        Cassettes[SelectedCassette].Barcode = barcode;
-                        Cassettes[SelectedCassette].CountLeft = 10;
+                        cartridgesDeck.Cassettes[SelectedCassette].Barcode = "No barcode";
+                        cartridgesDeck.Cassettes[SelectedCassette].CountLeft = 0;
+                        Analyzer.Serial.SendPacket(new SetLedColorCommand(SelectedCassette, LEDColor.Red()).GetBytes());
                     } else {
-                        Cassettes[SelectedCassette].Barcode = "No barcode";
-                        Cassettes[SelectedCassette].CountLeft = 0;
+                        cartridgesDeck.Cassettes[SelectedCassette].Barcode = barcode.Trim();
+                        cartridgesDeck.Cassettes[SelectedCassette].CountLeft = 10;
+                        Analyzer.Serial.SendPacket(new SetLedColorCommand(SelectedCassette, LEDColor.Green()).GetBytes());
                     }
                 
                 } else {
-                    Cassettes[SelectedCassette].Barcode = "No barcode";
-                    Cassettes[SelectedCassette].CountLeft = 0;
+                    cartridgesDeck.Cassettes[SelectedCassette].Barcode = "No barcode";
+                    cartridgesDeck.Cassettes[SelectedCassette].CountLeft = 0;
+
+                    Analyzer.Serial.SendPacket(new SetLedColorCommand(SelectedCassette, LEDColor.NoColor()).GetBytes());
                 }
-            } else
-            {
-                Cassettes[SelectedCassette].CountLeft = 0;
+            } else {
+                Analyzer.Serial.SendPacket(new SetLedColorCommand(SelectedCassette, LEDColor.Red()).GetBytes());
             }
         }
 
@@ -452,19 +552,19 @@ namespace AnalyzerControlGUI.ViewModels
 
         private void InitCustomControls()
         {
-            Cassettes = new ObservableCollection<Cassette>
-            {
-                new Cassette { Barcode="12", CountLeft = 1 },
-                new Cassette { Barcode="13", CountLeft = 2 },
-                new Cassette { Barcode="14", CountLeft = 3 },
-                new Cassette { Barcode="15", CountLeft = 4 },
-                new Cassette { Barcode="16", CountLeft = 5 },
-                new Cassette { Barcode="17", CountLeft = 6 },
-                new Cassette { Barcode="18", CountLeft = 7 },
-                new Cassette { Barcode="19", CountLeft = 8 },
-                new Cassette { Barcode="20", CountLeft = 9 },
-                new Cassette { Barcode="21", CountLeft = 10 },
-            };
+            //Cassettes = new ObservableCollection<CartridgeCassette>
+            //{
+            //    new CartridgeCassette { Barcode="A" },
+            //    new CartridgeCassette { Barcode="B" },
+            //    new CartridgeCassette { Barcode="C" },
+            //    new CartridgeCassette { Barcode="D" },
+            //    new CartridgeCassette { Barcode="E" },
+            //    new CartridgeCassette { Barcode="F" },
+            //    new CartridgeCassette { Barcode="G" },
+            //    new CartridgeCassette { Barcode="H" },
+            //    new CartridgeCassette { Barcode="K" },
+            //    new CartridgeCassette { Barcode="L" },
+            //};
 
             //ConveyorCells = new ObservableCollection<Models.ConveyorCell>();
 

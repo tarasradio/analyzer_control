@@ -50,6 +50,7 @@
     <Compile Include="CommunicationProtocol\AdditionalCommands\ScanBarcodeCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\GetFirmwareVersionCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\SetDeviceStateCommand.cs" />
+    <Compile Include="CommunicationProtocol\AdditionalCommands\SetLedColorCommand.cs" />
     <Compile Include="CommunicationProtocol\AdditionalCommands\WaitTimeCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\HomeCncCommand.cs" />
     <Compile Include="CommunicationProtocol\CncCommands\MoveCncCommand.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="SerialCommunication\PacketFinder.cs" />
     <Compile Include="SerialCommunication\PacketHandler.cs" />
     <Compile Include="SerialCommunication\SerialAdapter.cs" />
+    <Compile Include="ServerCommunication\DatabaseClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">

@@ -7,7 +7,7 @@ namespace AnalyzerCommunication.SerialCommunication
     {
         private IPacketHandler packetHandler;
 
-        private const uint maxPacketLength = 128;
+        private const uint maxPacketLength = 1024;
 
         private static byte[] packetBuffer = new byte[maxPacketLength];
         private static uint packetTail = 0;
@@ -27,12 +27,9 @@ namespace AnalyzerCommunication.SerialCommunication
             {
                 if (ByteStuffing.FlagSymbol == buffer[currentBufferByte])
                 {
-                    if (escapeFlag)
-                    {
+                    if (escapeFlag) {
                         TryPacketBuild(buffer[currentBufferByte]);
-                    }
-                    else
-                    {
+                    } else {
                         byte[] recvPacket = new byte[packetTail];
                         Array.Copy(packetBuffer, recvPacket, packetTail);
 
@@ -43,12 +40,9 @@ namespace AnalyzerCommunication.SerialCommunication
                 }
                 else if (ByteStuffing.EscSymbol == buffer[currentBufferByte])
                 {
-                    if (escapeFlag)
-                    {
+                    if (escapeFlag) {
                         TryPacketBuild(buffer[currentBufferByte]);
-                    }
-                    else
-                    {
+                    } else {
                         escapeFlag = true;
                     }
                 }

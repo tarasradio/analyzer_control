@@ -27,7 +27,10 @@ CommandExecutor commandExecutor = CommandExecutor(  &homeController,
 
 PacketManager packetManager = PacketManager(&commandExecutor);
 
-uint32_t timer;
+unsigned long timer;
+
+void sendSteppersStates();
+void sendSensorsValues();
 
 void setup()
 {
@@ -44,6 +47,8 @@ void setup()
     Steppers::get(15).configStepMode(STEP_FS_32);
 
     timer = millis();
+
+    commandExecutor.init_leds();
 }
 
 void loop()
@@ -54,6 +59,33 @@ void loop()
 
         packetManager.readPacket();
         packetManager.findByteStuffingPacket();
+        
+        cartridgeScanner.updateState();
+        tubeScanner.updateState();
+        
         commandExecutor.updateState();
+
+        sendSteppersStates();
+        sendSensorsValues();
     }
+}
+
+void sendSteppersStates()
+{
+    uint16_t steppersStates[STEPPERS_COUNT];
+
+    for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
+        steppersStates[i] =  Steppers::get(i).getStatus();
+
+    Protocol::sendSteppersStates(steppersStates, STEPPERS_COUNT);
+}
+
+void sendSensorsValues()
+{
+    uint16_t sensorValues[16];
+
+    for (uint8_t i = 0; i < 16; i++)
+        sensorValues[i] =  Sensors::getSensorValue(i);
+
+    Protocol::sendSensorsValues(sensorValues, 16);
 }

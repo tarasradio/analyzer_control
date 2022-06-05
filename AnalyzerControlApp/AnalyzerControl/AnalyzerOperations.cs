@@ -13,12 +13,14 @@ namespace AnalyzerControl
     /// </summary>
     public static class AnalyzerOperations
     {
+        public static bool UseNeedleWashing = false;
+
         public static void MoveAllToHome()
         {
             Logger.Debug($"Запуск возврата всех устройств в начальную позицию.");
 
             Analyzer.Needle.GoHome();
-            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.HomeHook(false);
             Analyzer.Charger.MoveHookAfterHome();
             Analyzer.Charger.HomeRotator();
             Analyzer.Rotor.Home();
@@ -32,6 +34,8 @@ namespace AnalyzerControl
         /// </summary>
         public static void WashNeedle()
         {
+            if (!UseNeedleWashing)
+                return;
             Logger.Debug($"Запуск промывки иглы.");
 
             Analyzer.Needle.HomeLifter();
@@ -53,14 +57,14 @@ namespace AnalyzerControl
             Analyzer.Rotor.Home();
             Analyzer.Rotor.PlaceCellAtCharge(cartirdgePosition, chargePosition);
 
-            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.HomeHook(false);
             Analyzer.Charger.MoveHookAfterHome();
             Analyzer.Charger.HomeRotator();
 
             Analyzer.Charger.TurnToCell(chargePosition);
 
             Analyzer.Charger.ChargeCartridge();
-            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.HomeHook(true);
             Analyzer.Charger.MoveHookAfterHome();
         }
 
@@ -73,7 +77,7 @@ namespace AnalyzerControl
             Analyzer.Rotor.Home();
             Analyzer.Rotor.PlaceCellAtDischarge(cartridgePosition);
 
-            Analyzer.Charger.HomeHook();
+            Analyzer.Charger.HomeHook(false);
             Analyzer.Charger.MoveHookAfterHome();
             Analyzer.Charger.HomeRotator();
 

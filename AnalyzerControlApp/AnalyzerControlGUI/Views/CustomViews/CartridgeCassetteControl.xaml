@@ -30,19 +30,23 @@
                    VerticalAlignment="Center" 
                    HorizontalAlignment="Center" 
                    Height="71" Width="46"/>
+<!--
         <Label Grid.Row="0" 
                x:Name="LabelCount" 
                HorizontalAlignment="Center" 
                VerticalAlignment="Center"/>
+-->
         <Rectangle Grid.Row="1"/>
         <StackPanel Grid.Row="1" 
                     Orientation="Vertical">
+
             <Label x:Name="LabelName" 
                    FontSize="12"
                    Padding="0"
                    Content="Картридж 1"
                HorizontalAlignment="Center" 
                Foreground="White"/>
+
             <Label x:Name="LabelState" 
                    FontSize="12"
                    Padding="0"

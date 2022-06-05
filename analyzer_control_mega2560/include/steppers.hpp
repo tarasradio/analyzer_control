@@ -5,7 +5,7 @@
 #include <powerSTEP01ArduinoLibrary.h>
 #include <SPI.h>
 
-#define STEPPERS_COUNT 18
+#define STEPPERS_COUNT 17 // 18
 
 #define CS_PIN 53 // PB0
 #define RESET_PIN 48 // PL1

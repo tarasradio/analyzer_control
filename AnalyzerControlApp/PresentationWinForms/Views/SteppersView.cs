@@ -100,7 +100,7 @@ namespace PresentationWinForms.Views
         {
             ushort[] states = Analyzer.State.SteppersStates;
 
-            for (int i = 0; i < 18; i++)
+            for (int i = 0; i < 17; i++)
             {
                 string stateStr = "Остановлен";
                 if ((states[i] & (ushort)DriverState.STATUS_MOT_STATUS) == (ushort)StepperState.ACCELERATION)

@@ -11,10 +11,11 @@ namespace AnalyzerControlGUI.Views.CustomViews
     /// <summary>
     /// Логика взаимодействия для ConveyorControl.xaml
     /// </summary>
-    public partial class ConveyorControl : UserControl
+    public partial class ConveyorAndRotorControl : UserControl
     {
         private ConveyorController conveyor;
         private RotorController rotor;
+
         readonly DispatcherTimer conveyorTimer = new DispatcherTimer();
         readonly DispatcherTimer rotorTimer = new DispatcherTimer();
 
@@ -23,14 +24,14 @@ namespace AnalyzerControlGUI.Views.CustomViews
             = DependencyProperty.Register(
                 "ConveyorCells",
                 typeof(ObservableCollection<ConveyorCell>),
-                typeof(ConveyorControl),
+                typeof(ConveyorAndRotorControl),
                 new PropertyMetadata(null, new PropertyChangedCallback(ConveyorCellsChanged))
                 );
 
         private static void ConveyorCellsChanged(DependencyObject depObj,
             DependencyPropertyChangedEventArgs args)
         {
-            ConveyorControl s = (ConveyorControl)depObj;
+            ConveyorAndRotorControl s = (ConveyorAndRotorControl)depObj;
             s.CreateHelper();
         }
 
@@ -48,14 +49,14 @@ namespace AnalyzerControlGUI.Views.CustomViews
             = DependencyProperty.Register(
                 "RotorCells",
                 typeof(ObservableCollection<RotorCell>),
-                typeof(ConveyorControl),
+                typeof(ConveyorAndRotorControl),
                 new PropertyMetadata(null, new PropertyChangedCallback(RotorCellsChanged))
                 );
 
         private static void RotorCellsChanged(DependencyObject depObj,
             DependencyPropertyChangedEventArgs args)
         {
-            ConveyorControl s = (ConveyorControl)depObj;
+            ConveyorAndRotorControl s = (ConveyorAndRotorControl)depObj;
             s.CreateHelper();
         }
 
@@ -69,7 +70,7 @@ namespace AnalyzerControlGUI.Views.CustomViews
         }
         #endregion
 
-        public ConveyorControl()
+        public ConveyorAndRotorControl()
         {
             InitializeComponent();
         }

@@ -6,7 +6,7 @@
 class IPacketListener
 {
 public:
-    virtual void listenPacket(uint8_t *packet, uint8_t packetLength) = 0;
+    virtual void listenPacket(uint8_t *packet, uint16_t packetLength) = 0;
 };
 
 class PacketManager
@@ -18,10 +18,10 @@ public:
     void readPacket();
 
     static void writePacketData(uint8_t byte);
-    static void writePacketData(uint8_t const *bytes, uint8_t bytesNumber);
+    static void writePacketData(uint8_t const *bytes, uint16_t bytesNumber);
     static void writePacketFlag();
 
-    void tryPacketBuild(uint8_t bufferPosition);
+    void tryPacketBuild(uint16_t bufferPosition);
     void findByteStuffingPacket();
 };
 

@@ -16,6 +16,8 @@ namespace AnalyzerConfiguration.UnitsConfiguration
 
         [DisplayName("Скорость движения крюка"), Category("2.2 Скорость (крюк)")]
         public int HookSpeed { get; set; } = 0;
+        [DisplayName("Скорость движения крюка при загрузке"), Category("2.2 Скорость (крюк)")]
+        public int HookSpeedOnCharge { get; set; } = 0;
         [DisplayName("Скорость движения крюка домой"), Category("2.2 Скорость (крюк)")]
         public int HookHomeSpeed { get; set; } = 0;
 
@@ -25,6 +27,8 @@ namespace AnalyzerConfiguration.UnitsConfiguration
         public int RotatorStepsToUnload { get; set; } = 0;
         [DisplayName("Шаги для отъезда при загрузке"), Category("3.1 Шаги (поворот загрузки)")]
         public int RotatorStepsToOffsetAtCharging { get; set; } = 0;
+        [DisplayName("Шаги для отъезда при сканировании"), Category("3.1 Шаги (поворот загрузки)")]
+        public int RotatorStepsToOffsetAtScan { get; set; } = 0;
         [DisplayName("Шаги движения крюка к картриджу"), Category("3.2 Шаги (крюк)")]
         public int HookStepsToCartridge { get; set; } = 0;
         [DisplayName("Шаги движения крюка после возврата домой"), Category("3.2 Шаги (крюк)")]

@@ -15,9 +15,6 @@ class CommandExecutor : public IPacketListener
 private:
     bool checkStepper(uint8_t stepper);
     
-    void sendSteppersStates();
-    void sendSensorsValues();
-
     uint8_t getSteppersInMove();
 
     uint32_t readLong(uint8_t *buffer);
@@ -35,6 +32,7 @@ private:
     void executeStopCommand(uint8_t *packet, uint32_t packetId);
     void executeSetSpeedCommand(uint8_t *packet, uint32_t packetId);
     void executeSetDeviceStateCommand(uint8_t *packet, uint32_t packetId);
+    void executeSetLedColorCommand(uint8_t *packet, uint32_t packetId);
 
     void executeCncMoveCommand(uint8_t *packet, uint32_t packetId);
     void executeCncRunCommand(uint8_t *packet, uint32_t packetId);
@@ -59,8 +57,9 @@ public:
         BarcodeScanner * tubeScanner,
         BarcodeScanner * cartridgeScanner);
 
+    void init_leds();
     void updateState();
-    void listenPacket(uint8_t *packet, uint8_t packetLength);
+    void listenPacket(uint8_t *packet, uint16_t packetLength);
 };
 
 #endif

@@ -16,6 +16,11 @@ namespace AnalyzerCommunication.CommunicationProtocol.Responses
             return Encoding.UTF8.GetString(buffer, 1, buffer.Length - 1);
         }
 
+        public int getLength()
+        {
+            return buffer.Length;
+        }
+
         public BarcodeScanner ScannerType {
             get => (BarcodeScanner)buffer[0];
         }

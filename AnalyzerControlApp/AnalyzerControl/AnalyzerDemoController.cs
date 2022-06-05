@@ -1,11 +1,13 @@
 ﻿using AnalyzerConfiguration;
 using AnalyzerControl.Configuration;
 using AnalyzerControl.Services;
+using AnalyzerDomain;
 using AnalyzerDomain.Entyties;
 using AnalyzerDomain.Models;
 using AnalyzerService;
 using AnalyzerService.Units;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
@@ -127,12 +129,12 @@ namespace AnalyzerControl
             AnalyzerOperations.MoveAllToHome();
             AnalyzerOperations.WashNeedle();
 
-            Logger.Debug($"Запуск подготовки перед сканированием пробирок.");
+            //Logger.Debug($"Запуск подготовки перед сканированием пробирок.");
 
             Analyzer.Needle.GoHome();
-            Analyzer.Conveyor.PrepareBeforeScanning();
+            //Analyzer.Conveyor.PrepareBeforeScanning();
 
-            Logger.Debug($"Подготовка перед сканированием пробирок завершена.");
+            //Logger.Debug($"Подготовка перед сканированием пробирок завершена.");
 
             processAnalyzesCycle();
 
@@ -166,7 +168,7 @@ namespace AnalyzerControl
 
                 if (analysisInSampling != null) {
                     if (analysisInSampling.NoSampleWasTaken()) {
-                        Logger.Debug($"Пробирка со штрихкодом [{analysisInSampling.BarCode}] дошла до точки забора материала.");
+                        Logger.Debug($"Пробирка со штрихкодом [{ analysisInSampling.BarCode }] дошла до точки забора материала.");
                         Logger.Debug($"Забор материала ранее не производился.");
 
                         analysisInSampling.SetSamplingStage();
@@ -208,11 +210,11 @@ namespace AnalyzerControl
                     if (analysis.IsNotFinishStage()) {
                         analysis.SetNewIncubationTime();
 
-                        Logger.Debug($"Завершена инкубация для анализа [{analysis.BarCode}]!");
+                        Logger.Debug($"Завершена инкубация для анализа [{ analysis.BarCode }]!");
 
                         processAnalisysStage(analysis);
                     } else {
-                        Logger.Debug($"Завершены все стадии анализа для анализа [{analysis.BarCode}]!");
+                        Logger.Debug($"Завершены все стадии анализа для анализа [{ analysis.BarCode }]!");
 
                         processAnalisysFinishStage(analysis);
                     }
@@ -251,19 +253,32 @@ namespace AnalyzerControl
 
                 Analyzer.Conveyor.RotateAndScanTube();
 
-                string barcode = Analyzer.State.TubeBarcode;
+                string barcode = Analyzer.State.TubeBarcode; //испарвить на TubeBarcode!!!
 
                 if (!string.IsNullOrWhiteSpace(barcode)) {
-                    Logger.Debug($"Обнаружена пробирка со штрихкодом [{barcode}].");
+                    Logger.Debug($"Обнаружена пробирка со штрихкодом [{ barcode }].");
+
+                    barcode = barcode.Trim();
+                    // Связываем анализ из БД с анализом в локальной БД (старой в файле)
+                    Analysis analysis = searchAnalysisInDB(barcode);
+
+                    if(analysis != null) {
+                        Logger.Debug("Анализ найден в БД!");
+                        if(searchBarcodeInDatabase(barcode) == null)
+                            addAnalysisInDB(analysis);
+                        else {
+
+                        }
+                    }
 
                     cell.AnalysisBarcode = searchBarcodeInDatabase(barcode)?.BarCode; // TODO: - может вернуть null
 
                     if (!cell.IsEmpty) {
-                        Logger.Debug($"Пробирка со штрихкодом [{barcode}] найдена в списке анализов!");
+                        Logger.Debug($"Пробирка со штрихкодом [{ barcode }] найдена в списке анализов!");
                         searchBarcodeInDatabase(cell.AnalysisBarcode).IsFind = true;
                         cell.State = ConveyorCellState.Processing;
                     } else {
-                        Logger.Debug($"Пробирка со штрихкодом [{barcode}] не найдена в списке анализов!");
+                        Logger.Debug($"Пробирка со штрихкодом [{ barcode }] не найдена в списке анализов!");
                         cell.State = ConveyorCellState.Error;
                     }
                     break;
@@ -276,6 +291,34 @@ namespace AnalyzerControl
             Logger.Debug($"Поиск пробирки (сканирование) завершен.");
         }
 
+        private void addAnalysisInDB(Analysis analysis)
+        {
+            Logger.Debug("Добавление анализа в локальную БД");
+            AnalysisInfo analysisInfo = new AnalysisInfo();
+
+            analysisInfo.BarCode = analysis.Barcode;
+
+            analysisInfo.Stages.Add(new Stage() { Cell = CartridgeCell.FirstCell, CartridgePosition = 0, TimeToPerform = 10 });
+            analysisInfo.Stages.Add(new Stage() { Cell = CartridgeCell.MixCell, CartridgePosition = 0, TimeToPerform = 10 });
+            analysisInfo.Stages.Add(new Stage() { Cell = CartridgeCell.ResultCell, CartridgePosition = 0, TimeToPerform = 10 });
+            analysisInfo.CurrentStage = 0;
+
+            Options.Analyzes.Add(analysisInfo);
+        }
+
+        private Analysis searchAnalysisInDB(string barcode)
+        {
+            Analysis analysis = null;
+
+            using (AnalyzerContext db = new AnalyzerContext())
+            {
+                db.SheduledAnalyzes.Load();
+                analysis = db.SheduledAnalyzes.FirstOrDefault(a => string.Equals(a.Barcode.Trim(), barcode));
+            }
+
+            return analysis;
+        }
+
         private AnalysisInfo searchBarcodeInDatabase(string barcode)
         {
             // Значение по умолчанию для ссылочных и допускающих значения NULL типов равно null .
@@ -284,7 +327,7 @@ namespace AnalyzerControl
 
         private void processAnalisysInitialStage(AnalysisInfo analysis)
         {
-            Logger.Debug($"Анализ [{analysis.BarCode}] - запущено выполнение подготовительной стадии.");
+            Logger.Debug($"Анализ [{ analysis.BarCode }] - запущено выполнение подготовительной стадии.");
             Logger.Debug($"Подготовка к забору материала из пробирки.");
 
             // Смещаем пробирку, чтобы она оказалась под иглой
@@ -342,12 +385,12 @@ namespace AnalyzerControl
             // Смещаем пробирку обратно
             Analyzer.Conveyor.Shift(reverse: true, ConveyorUnit.ShiftType.HalfTube);
 
-            Logger.Debug($"Анализ [{analysis.BarCode}] - завершено выполнение подготовительной стадии.");
+            Logger.Debug($"Анализ [{ analysis.BarCode }] - завершено выполнение подготовительной стадии.");
         }
 
         private void processAnalisysStage(AnalysisInfo analysis)
         {
-            Logger.Debug($"Анализ [{analysis.BarCode}] - запуск выполнения {analysis.CurrentStage}-й стадии.");
+            Logger.Debug($"Анализ [{ analysis.BarCode }] - запуск выполнения { analysis.CurrentStage }-й стадии.");
 
             Analyzer.Needle.GoHome();
 
@@ -402,13 +445,13 @@ namespace AnalyzerControl
             // Поднимаем иглу до дома
             Analyzer.Needle.HomeLifter();
 
-            Logger.Debug($"Анализ [{analysis.BarCode}] - завершено выполнение {analysis.CurrentStage}-й стадии.");
+            Logger.Debug($"Анализ [{ analysis.BarCode }] - завершено выполнение { analysis.CurrentStage }-й стадии.");
         }
 
         // TODO: Эта задача не реализована до конца!!!
         private void processAnalisysFinishStage(AnalysisInfo analysis)
         {
-            Logger.Debug($"Анализ [{analysis.BarCode}] - запуск выполнения завершающей стадии.");
+            Logger.Debug($"Анализ [{ analysis.BarCode }] - запуск выполнения завершающей стадии.");
 
             AnalyzerOperations.WashNeedle();
 
@@ -448,7 +491,7 @@ namespace AnalyzerControl
 
             // TODO: Эта задача не реализована до конца!!!
 
-            Logger.Debug($"Анализ [{analysis.BarCode}] - выполнения завершающей стадии завершено.");
+            Logger.Debug($"Анализ [{ analysis.BarCode }] - выполнения завершающей стадии завершено.");
 
             conveyor.Cells.Where(c => c.AnalysisBarcode == analysis.BarCode).FirstOrDefault().State = ConveyorCellState.Processed;
         }

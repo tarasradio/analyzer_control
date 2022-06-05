@@ -104,6 +104,9 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.14.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.3.1.14\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -195,6 +198,7 @@
     <Compile Include="Models\Cassette.cs" />
     <Compile Include="ViewModels\AnalyzerControlViewModel.cs" />
     <Compile Include="ViewModels\EveningCheckoutViewModel.cs" />
+    <Compile Include="ViewModels\LoadAnalysisViewModel.cs" />
     <Compile Include="ViewModels\ManualInputDialogViewModel.cs" />
     <Compile Include="ViewModels\MorningCheckoutViewModel.cs" />
     <Compile Include="ViewsHelpers\AutoScrollHelper.cs" />
@@ -202,11 +206,14 @@
     <Compile Include="Views\CustomViews\CartridgeCassetteControl.xaml.cs">
       <DependentUpon>CartridgeCassetteControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomViews\ConveyorControl.xaml.cs">
-      <DependentUpon>ConveyorControl.xaml</DependentUpon>
+    <Compile Include="Views\CustomViews\ConveyorAndRotorControl.xaml.cs">
+      <DependentUpon>ConveyorAndRotorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DialogWindows\EveningCheckoutWindow.xaml.cs">
       <DependentUpon>EveningCheckoutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DialogWindows\LoadAnalysisWindow.xaml.cs">
+      <DependentUpon>LoadAnalysisWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DialogWindows\ManualInputDialog.xaml.cs">
       <DependentUpon>ManualInputDialog.xaml</DependentUpon>
@@ -258,11 +265,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\CustomViews\ConveyorControl.xaml">
+    <Page Include="Views\CustomViews\ConveyorAndRotorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DialogWindows\EveningCheckoutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DialogWindows\LoadAnalysisWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

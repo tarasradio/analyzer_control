@@ -38,8 +38,14 @@
             this.labelSuctionValue = new System.Windows.Forms.Label();
             this.editSuctionValue = new System.Windows.Forms.NumericUpDown();
             this.buttonUnsuction = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.buttonAspirateBigPiston = new System.Windows.Forms.Button();
+            this.buttonDispensionBigPiston = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.editNumberCyclesBigPiston = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.editNumberCycles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.editSuctionValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editNumberCyclesBigPiston)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonHome
@@ -65,7 +71,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(154, 6);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(506, 290);
+            this.propertyGrid.Size = new System.Drawing.Size(506, 386);
             this.propertyGrid.TabIndex = 10;
             // 
             // buttonNeedleWashing
@@ -130,7 +136,7 @@
             this.editSuctionValue.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.editSuctionValue.Location = new System.Drawing.Point(3, 175);
             this.editSuctionValue.Name = "editSuctionValue";
-            this.editSuctionValue.Size = new System.Drawing.Size(145, 25);
+            this.editSuctionValue.Size = new System.Drawing.Size(115, 25);
             this.editSuctionValue.TabIndex = 21;
             this.editSuctionValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -148,10 +154,73 @@
             this.buttonUnsuction.UseVisualStyleBackColor = false;
             this.buttonUnsuction.Click += new System.EventHandler(this.buttonUnsuction_Click);
             // 
-            // PompControllerView
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label1.Location = new System.Drawing.Point(124, 179);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(24, 15);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "mL";
+            // 
+            // buttonAspirateBigPiston
+            // 
+            this.buttonAspirateBigPiston.BackColor = System.Drawing.Color.SteelBlue;
+            this.buttonAspirateBigPiston.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAspirateBigPiston.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonAspirateBigPiston.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonAspirateBigPiston.Location = new System.Drawing.Point(3, 241);
+            this.buttonAspirateBigPiston.Name = "buttonAspirateBigPiston";
+            this.buttonAspirateBigPiston.Size = new System.Drawing.Size(145, 29);
+            this.buttonAspirateBigPiston.TabIndex = 25;
+            this.buttonAspirateBigPiston.Text = "Забор материала (Б)";
+            this.buttonAspirateBigPiston.UseVisualStyleBackColor = false;
+            this.buttonAspirateBigPiston.Click += new System.EventHandler(this.buttonAspirateBigPiston_Click);
+            // 
+            // buttonDispensionBigPiston
+            // 
+            this.buttonDispensionBigPiston.BackColor = System.Drawing.Color.SteelBlue;
+            this.buttonDispensionBigPiston.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonDispensionBigPiston.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonDispensionBigPiston.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonDispensionBigPiston.Location = new System.Drawing.Point(3, 276);
+            this.buttonDispensionBigPiston.Name = "buttonDispensionBigPiston";
+            this.buttonDispensionBigPiston.Size = new System.Drawing.Size(145, 29);
+            this.buttonDispensionBigPiston.TabIndex = 26;
+            this.buttonDispensionBigPiston.Text = "Слив материала (Б)";
+            this.buttonDispensionBigPiston.UseVisualStyleBackColor = false;
+            this.buttonDispensionBigPiston.Click += new System.EventHandler(this.buttonDispensionBigPiston_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(3, 308);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(52, 15);
+            this.label2.TabIndex = 28;
+            this.label2.Text = "Циклов:";
+            // 
+            // editNumberCyclesBigPiston
+            // 
+            this.editNumberCyclesBigPiston.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.editNumberCyclesBigPiston.Location = new System.Drawing.Point(3, 326);
+            this.editNumberCyclesBigPiston.Name = "editNumberCyclesBigPiston";
+            this.editNumberCyclesBigPiston.Size = new System.Drawing.Size(145, 25);
+            this.editNumberCyclesBigPiston.TabIndex = 27;
+            this.editNumberCyclesBigPiston.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // PompUnitView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.editNumberCyclesBigPiston);
+            this.Controls.Add(this.buttonDispensionBigPiston);
+            this.Controls.Add(this.buttonAspirateBigPiston);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonUnsuction);
             this.Controls.Add(this.labelSuctionValue);
             this.Controls.Add(this.editSuctionValue);
@@ -161,10 +230,11 @@
             this.Controls.Add(this.buttonNeedleWashing);
             this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.buttonHome);
-            this.Name = "PompControllerView";
-            this.Size = new System.Drawing.Size(663, 299);
+            this.Name = "PompUnitView";
+            this.Size = new System.Drawing.Size(663, 395);
             ((System.ComponentModel.ISupportInitialize)(this.editNumberCycles)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.editSuctionValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editNumberCyclesBigPiston)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,5 +251,10 @@
         private System.Windows.Forms.Label labelSuctionValue;
         private System.Windows.Forms.NumericUpDown editSuctionValue;
         private System.Windows.Forms.Button buttonUnsuction;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button buttonAspirateBigPiston;
+        private System.Windows.Forms.Button buttonDispensionBigPiston;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown editNumberCyclesBigPiston;
     }
 }

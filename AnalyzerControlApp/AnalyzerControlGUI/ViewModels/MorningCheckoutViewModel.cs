@@ -144,12 +144,12 @@ namespace AnalyzerControlGUI.ViewModels
         {
             await Task.Run(() =>
             {
-                Analyzer.Charger.HomeHook();
+                Analyzer.Charger.HomeHook(false);
                 Analyzer.Charger.MoveHookAfterHome();
                 Analyzer.Rotor.PlaceCellAtDischarge(0);
                 Analyzer.Charger.HomeRotator();
                 Analyzer.Charger.TurnToDischarge();
-                Analyzer.Charger.HomeHook();
+                Analyzer.Charger.HomeHook(true);
                 Analyzer.Charger.MoveHookAfterHome();
                 Analyzer.Charger.ChargeCartridge();
             });

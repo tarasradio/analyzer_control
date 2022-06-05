@@ -19,7 +19,7 @@ static powerSTEP steppers[STEPPERS_COUNT] =
   powerSTEP(14, CS_PIN, RESET_PIN),
   powerSTEP(15, CS_PIN, RESET_PIN),
   powerSTEP(16, CS_PIN, RESET_PIN),
-  powerSTEP(17, CS_PIN, RESET_PIN)
+  //powerSTEP(17, CS_PIN, RESET_PIN)
 };
 
 powerSTEP & Steppers::get(uint8_t stepper)

@@ -15,6 +15,8 @@ namespace AnalyzerService.Units
         public int HookPosition { get; set; } = 0;
         public int CurrentCell { get; private set; } = 0;
 
+        public int hookCenterSensor = 4;
+
         public ChargerUnit(ICommandExecutor executor, IConfigurationProvider provider) : base(executor, provider)
         { 
 
@@ -26,10 +28,10 @@ namespace AnalyzerService.Units
 
             List<ICommand> commands = new List<ICommand>();
 
-            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, Options.RotatorHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, -Options.RotatorHomeSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, Options.RotatorHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, -Options.RotatorHomeSpeed } };
             commands.Add( new HomeCncCommand(steppers) );
 
             RotatorPosition = 0;
@@ -52,7 +54,7 @@ namespace AnalyzerService.Units
 
             CurrentCell = cell;
 
-            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, 30 } };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, Options.RotatorSpeed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
@@ -72,7 +74,7 @@ namespace AnalyzerService.Units
 
             List<ICommand> commands = new List<ICommand>();
 
-            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, 30 } };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, Options.RotatorSpeed } };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
@@ -86,17 +88,38 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(ChargerUnit)}] - Turn to discharge finished.");
         }
 
-        public void HomeHook()
+        public void HomeHook(bool useChargeSpeed)
         {
             Logger.Debug($"[{nameof(ChargerUnit)}] - Start hook homing.");
 
             List<ICommand> commands = new List<ICommand>();
 
-            steppers = new Dictionary<int, int>() { { Options.HookStepper, Options.HookHomeSpeed } };
+            int speed = useChargeSpeed ? Options.HookSpeedOnCharge : Options.HookHomeSpeed;
+
+            steppers = new Dictionary<int, int>() { { Options.HookStepper, speed } };
             commands.Add( new SetSpeedCncCommand(steppers) );
 
-            steppers = new Dictionary<int, int>() { { Options.HookStepper, Options.HookHomeSpeed } };
+            steppers = new Dictionary<int, int>() { { Options.HookStepper, speed } };
             commands.Add( new HomeCncCommand(steppers) );
+
+            executor.WaitExecution(commands);
+
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Hook homing finished.");
+        }
+
+        public void HookCenter( )
+        {
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Start hook go to center.");
+
+            List<ICommand> commands = new List<ICommand>();
+
+            int speed = Options.HookHomeSpeed;
+
+            steppers = new Dictionary<int, int>() { { Options.HookStepper, speed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() { { Options.HookStepper, speed } };
+            commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
 
@@ -171,6 +194,31 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(ChargerUnit)}] - Cartridge charging finished.");
         }
 
+        public void TurnScanner(bool underCartridge = false)
+        {
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Запуск перемещения сканера.");
+
+            List<ICommand> commands = new List<ICommand>();
+
+            commands.Clear();
+
+            // Поворот загрузки, чтобы чканер попал под картридж
+            steppers = new Dictionary<int, int>() {
+                { Options.RotatorStepper, Options.RotatorSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            int steps = underCartridge ? Options.RotatorStepsToOffsetAtScan : -Options.RotatorStepsToOffsetAtScan;
+
+            steppers = new Dictionary<int, int>() {
+                { Options.RotatorStepper, steps } };
+
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            Logger.Debug($"[{nameof(ChargerUnit)}] - Перемещение сканера завершено.");
+        }
+
         public void ScanBarcode()
         {
             Logger.Debug($"[{nameof(ChargerUnit)}] - Запуск сканирования кассеты.");
@@ -180,6 +228,7 @@ namespace AnalyzerService.Units
             commands.Add(new ScanBarcodeCommand(scanner: BarcodeScanner.CartridgeScanner));
 
             executor.WaitExecution(commands);
+
             Logger.Debug($"[{nameof(ChargerUnit)}] - Сканирование кассеты завершено.");
         }
 

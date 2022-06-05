@@ -19,7 +19,7 @@ namespace AnalyzerControlGUI.Views.CustomViews
            "Inserted", typeof(bool), typeof(CartridgeCassetteControl), new PropertyMetadata(false, new PropertyChangedCallback(InsertedChanged)));
 
         public static readonly DependencyProperty CountLeftProperty = DependencyProperty.Register(
-            "CountLeft", typeof(float), typeof(CartridgeCassetteControl), new PropertyMetadata(5.0f, new PropertyChangedCallback(CountLeftChanged)));
+            "CountLeft", typeof(float), typeof(CartridgeCassetteControl), new PropertyMetadata(10.0f, new PropertyChangedCallback(CountLeftChanged)));
 
         private static void BarcodeChanged(DependencyObject depObj,
             DependencyPropertyChangedEventArgs args)
@@ -108,8 +108,9 @@ namespace AnalyzerControlGUI.Views.CustomViews
                 LabelState.Content = "Inserted";
                 LabelState.Foreground = Brushes.Green;
 
-                Status.Height = CountLeft * _maxHeight / _maxCount;
-                LabelCount.Content = CountLeft.ToString();
+                //Status.Height = CountLeft * _maxHeight / _maxCount;
+                Status.Height = _maxHeight;
+                //LabelCount.Content = CountLeft.ToString();
 
                 if ((float)CountLeft / _maxCount <= 0.2)
                 {

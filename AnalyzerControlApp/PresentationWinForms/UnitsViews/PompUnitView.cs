@@ -54,5 +54,27 @@ namespace PresentationWinForms.UnitsViews
                     Analyzer.Pomp.Push(value);
                 });
         }
+
+        private void buttonAspirateBigPiston_Click(object sender, EventArgs e)
+        {
+            int cycles = (int)editNumberCyclesBigPiston.Value;
+
+            Analyzer.TaskExecutor.StartTask(
+                () =>
+                {
+                    Analyzer.Pomp.AspirateBigPiston(cycles);
+                });
+        }
+
+        private void buttonDispensionBigPiston_Click(object sender, EventArgs e)
+        {
+            int cycles = (int)editNumberCyclesBigPiston.Value;
+
+            Analyzer.TaskExecutor.StartTask(
+                () =>
+                {
+                    Analyzer.Pomp.DispenceBigPiston(cycles);
+                });
+        }
     }
 }

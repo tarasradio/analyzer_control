@@ -8,6 +8,14 @@
 #include "sensors.hpp"
 #include "devices.hpp"
 
+#define STRIP_PIN 12
+#define NUMLEDS 10
+#define COLOR_DEBTH 3
+
+#include <microLED.h>
+
+static microLED<NUMLEDS, STRIP_PIN, MLED_NO_CLOCK, LED_WS2812, ORDER_GRB, CLI_AVER> strip;
+
 enum StopType
 {
     STOP_SOFT = 0x00,
@@ -40,15 +48,14 @@ CommandExecutor::CommandExecutor(
     this->cartridgeScanner = cartridgeScanner;
 }
 
+void CommandExecutor::init_leds() {
+    strip.setBrightness(200);
+    strip.clear();
+    strip.show();
+}
+
 void CommandExecutor::updateState()
 {
-    sendSteppersStates();
-    sendSensorsValues();
-
-    cartridgeScanner->updateState();
-    tubeScanner->updateState();
-    
-
     if (0 != waitForCommandDone) // Есть команды, ожидающие завершения
     {
         if (
@@ -63,7 +70,7 @@ void CommandExecutor::updateState()
     }
 }
 
-void CommandExecutor::listenPacket(uint8_t *packet, uint8_t packetLength)
+void CommandExecutor::listenPacket(uint8_t *packet, uint16_t packetLength)
 {
     uint32_t packetId = readLong(packet + 0);
     uint8_t commandCode = packet[4];
@@ -115,6 +122,8 @@ void CommandExecutor::listenPacket(uint8_t *packet, uint8_t packetLength)
         case CMD_GET_FIRMWARE_VERSION:
             executeGetFirmwareVersionCommand(packet + 5, packetId);
         break;
+        case CMD_SET_LED_COLOR:
+            executeSetLedColorCommand(packet + 5, packetId);
         default:
         {
 #ifdef DEBUG
@@ -593,22 +602,17 @@ void CommandExecutor::executeCncSetDeviceStateCommand(uint8_t *packet, uint32_t 
     }
 }
 
-void CommandExecutor::sendSteppersStates()
+void CommandExecutor::executeSetLedColorCommand(uint8_t *packet, uint32_t packetId)
 {
-    uint16_t steppersStates[STEPPERS_COUNT];
+    if(checkRepeatCommand(packetId, SIMPLE_COMMAND)) return;
 
-    for (uint8_t i = 0; i < STEPPERS_COUNT; i++)
-        steppersStates[i] =  Steppers::get(i).getStatus();
+    uint8_t led = packet[0];
 
-    Protocol::sendSteppersStates(steppersStates, STEPPERS_COUNT);
-}
+    uint8_t r = packet[1];
+    uint8_t g = packet[2];
+    uint8_t b = packet[3];
 
-void CommandExecutor::sendSensorsValues()
-{
-    uint16_t sensorValues[16];
-
-    for (uint8_t i = 0; i < 16; i++)
-        sensorValues[i] =  Sensors::getSensorValue(i);
-
-    Protocol::sendSensorsValues(sensorValues, 16);
+    strip.set(led, mData(r, g, b));
+    
+    strip.show();
 }

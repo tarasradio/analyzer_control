@@ -1,9 +1,9 @@
 #include "packet_manager.hpp"
 
-#define PACKET_SIZE 64
+#define PACKET_SIZE 256
 
 static uint8_t buffer[PACKET_SIZE * 2];
-static uint8_t bufferTail = 0;
+static uint16_t bufferTail = 0;
 
 uint8_t packetBuffer[PACKET_SIZE];
 
@@ -12,7 +12,7 @@ const uint8_t FlagSymbol = 0xDD;
 
 static bool escapeFlag = false;
 
-static uint8_t packetTail = 0;
+static uint16_t packetTail = 0;
 
 PacketManager::PacketManager(IPacketListener * listener)
 {
@@ -43,9 +43,9 @@ void PacketManager::writePacketData(uint8_t byte)
     Serial.write(byte);
 }
 
-void PacketManager::writePacketData(uint8_t const * bytes, uint8_t bytesNumber)
+void PacketManager::writePacketData(uint8_t const * bytes, uint16_t bytesNumber)
 {
-    for(uint8_t i = 0; i < bytesNumber; i++)
+    for(uint16_t i = 0; i < bytesNumber; i++)
     {
         writePacketData(bytes[i]);
     }
@@ -56,7 +56,7 @@ void PacketManager::writePacketFlag()
     Serial.write(FlagSymbol);
 }
 
-void PacketManager::tryPacketBuild(uint8_t bufferPosition)
+void PacketManager::tryPacketBuild(uint16_t bufferPosition)
 {
     packetBuffer[packetTail++] = buffer[bufferPosition];
 
@@ -69,7 +69,7 @@ void PacketManager::tryPacketBuild(uint8_t bufferPosition)
 
 void PacketManager::findByteStuffingPacket()
 {
-    uint8_t position = 0;
+    uint16_t position = 0;
 
     while(position < bufferTail)
     {

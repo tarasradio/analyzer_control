@@ -14,16 +14,6 @@ namespace AnalyzerControlGUI.Models
             }
         }
 
-        private int _countLeft;
-
-        public int CountLeft {
-            get => _countLeft;
-            set {
-                _countLeft = value;
-                OnPropertyChanged();
-            }
-        }
-
         private bool _inserted;
 
         public bool Inserted
@@ -36,10 +26,21 @@ namespace AnalyzerControlGUI.Models
             }
         }
 
+        private int _countLeft;
+
+        public int CountLeft
+        {
+            get => _countLeft;
+            set
+            {
+                _countLeft = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Cassette()
         {
-            Barcode = "RedMary4590";
-            CountLeft = 0;
+            Barcode = string.Empty;
             Inserted = false;
         }
     }

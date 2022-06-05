@@ -52,6 +52,7 @@
     <Compile Include="Configurable.cs" />
     <Compile Include="ConfigurationHelper.cs" />
     <Compile Include="JsonConfigurationProvider.cs" />
+    <Compile Include="UnitsConfiguration\AdditionalDevicesConfiguration.cs" />
     <Compile Include="UnitsConfiguration\ChargerConfiguration.cs" />
     <Compile Include="IConfigurationProvider.cs" />
     <Compile Include="UnitsConfiguration\NeedleConfiguration.cs" />

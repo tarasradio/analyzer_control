@@ -39,6 +39,9 @@
             this.buttonTurnChargeToDischarge = new System.Windows.Forms.Button();
             this.buttonDischargeCartridge = new System.Windows.Forms.Button();
             this.buttonScanCartridge = new System.Windows.Forms.Button();
+            this.buttonSetCellColor = new System.Windows.Forms.Button();
+            this.selectColor = new System.Windows.Forms.ComboBox();
+            this.buttonHookCenter = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,7 +68,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(161, 3);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(502, 426);
+            this.propertyGrid.Size = new System.Drawing.Size(502, 510);
             this.propertyGrid.TabIndex = 10;
             // 
             // buttonHookHome
@@ -128,7 +131,7 @@
             this.buttonChargeCartridge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonChargeCartridge.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonChargeCartridge.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonChargeCartridge.Location = new System.Drawing.Point(3, 148);
+            this.buttonChargeCartridge.Location = new System.Drawing.Point(3, 213);
             this.buttonChargeCartridge.Name = "buttonChargeCartridge";
             this.buttonChargeCartridge.Size = new System.Drawing.Size(152, 32);
             this.buttonChargeCartridge.TabIndex = 19;
@@ -142,7 +145,7 @@
             this.buttonTurnChargeToDischarge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonTurnChargeToDischarge.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonTurnChargeToDischarge.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonTurnChargeToDischarge.Location = new System.Drawing.Point(3, 236);
+            this.buttonTurnChargeToDischarge.Location = new System.Drawing.Point(3, 289);
             this.buttonTurnChargeToDischarge.Name = "buttonTurnChargeToDischarge";
             this.buttonTurnChargeToDischarge.Size = new System.Drawing.Size(152, 32);
             this.buttonTurnChargeToDischarge.TabIndex = 20;
@@ -156,7 +159,7 @@
             this.buttonDischargeCartridge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDischargeCartridge.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonDischargeCartridge.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonDischargeCartridge.Location = new System.Drawing.Point(3, 187);
+            this.buttonDischargeCartridge.Location = new System.Drawing.Point(3, 251);
             this.buttonDischargeCartridge.Name = "buttonDischargeCartridge";
             this.buttonDischargeCartridge.Size = new System.Drawing.Size(152, 32);
             this.buttonDischargeCartridge.TabIndex = 21;
@@ -170,7 +173,7 @@
             this.buttonScanCartridge.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonScanCartridge.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonScanCartridge.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonScanCartridge.Location = new System.Drawing.Point(3, 274);
+            this.buttonScanCartridge.Location = new System.Drawing.Point(3, 327);
             this.buttonScanCartridge.Name = "buttonScanCartridge";
             this.buttonScanCartridge.Size = new System.Drawing.Size(152, 32);
             this.buttonScanCartridge.TabIndex = 22;
@@ -178,10 +181,51 @@
             this.buttonScanCartridge.UseVisualStyleBackColor = false;
             this.buttonScanCartridge.Click += new System.EventHandler(this.buttonScanCartridge_Click);
             // 
+            // buttonSetCellColor
+            // 
+            this.buttonSetCellColor.BackColor = System.Drawing.Color.SteelBlue;
+            this.buttonSetCellColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSetCellColor.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonSetCellColor.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonSetCellColor.Location = new System.Drawing.Point(3, 148);
+            this.buttonSetCellColor.Name = "buttonSetCellColor";
+            this.buttonSetCellColor.Size = new System.Drawing.Size(152, 32);
+            this.buttonSetCellColor.TabIndex = 23;
+            this.buttonSetCellColor.Text = "Подсветить ячейку";
+            this.buttonSetCellColor.UseVisualStyleBackColor = false;
+            this.buttonSetCellColor.Click += new System.EventHandler(this.buttonSetCellColor_Click);
+            // 
+            // selectColor
+            // 
+            this.selectColor.FormattingEnabled = true;
+            this.selectColor.Location = new System.Drawing.Point(3, 186);
+            this.selectColor.Name = "selectColor";
+            this.selectColor.Size = new System.Drawing.Size(152, 21);
+            this.selectColor.TabIndex = 24;
+            // 
+            // buttonHookCenter
+            // 
+            this.buttonHookCenter.BackColor = System.Drawing.Color.Green;
+            this.buttonHookCenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonHookCenter.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonHookCenter.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonHookCenter.Image = ((System.Drawing.Image)(resources.GetObject("buttonHookCenter.Image")));
+            this.buttonHookCenter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonHookCenter.Location = new System.Drawing.Point(3, 365);
+            this.buttonHookCenter.Name = "buttonHookCenter";
+            this.buttonHookCenter.Size = new System.Drawing.Size(152, 32);
+            this.buttonHookCenter.TabIndex = 25;
+            this.buttonHookCenter.Text = "Крюк в центр";
+            this.buttonHookCenter.UseVisualStyleBackColor = false;
+            this.buttonHookCenter.Click += new System.EventHandler(this.buttonHookCenter_Click);
+            // 
             // ChargeUnitView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonHookCenter);
+            this.Controls.Add(this.selectColor);
+            this.Controls.Add(this.buttonSetCellColor);
             this.Controls.Add(this.buttonScanCartridge);
             this.Controls.Add(this.buttonDischargeCartridge);
             this.Controls.Add(this.buttonTurnChargeToDischarge);
@@ -193,7 +237,7 @@
             this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.buttonRotatorHome);
             this.Name = "ChargeUnitView";
-            this.Size = new System.Drawing.Size(666, 432);
+            this.Size = new System.Drawing.Size(666, 516);
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -212,5 +256,8 @@
         private System.Windows.Forms.Button buttonTurnChargeToDischarge;
         private System.Windows.Forms.Button buttonDischargeCartridge;
         private System.Windows.Forms.Button buttonScanCartridge;
+        private System.Windows.Forms.Button buttonSetCellColor;
+        private System.Windows.Forms.ComboBox selectColor;
+        private System.Windows.Forms.Button buttonHookCenter;
     }
 }

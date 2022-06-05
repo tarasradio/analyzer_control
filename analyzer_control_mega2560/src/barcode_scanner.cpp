@@ -4,34 +4,33 @@
 
 #include "protocol.hpp"
 
-byte barcodeBuffer[64];
-uint8_t currentBarcodeByte = 0;
+const byte startSeq [] = { 0x02, 0x00, 0x00, 0x01, 0x00, 0x33, 0x31 };
+const byte scanCommand[] = { 0x7E, 0x00, 0x08, 0x01, 0x00, 0x02, 0x01, 0xAB, 0xCD };
 
-bool stringComplete = false;
-long millisendstr = 0;
-
-const char startSeq [7] = {0x02, 0x00, 0x00, 0x01, 0x00, 0x33, 0x31}; 
-
-bool BarcodeScanner::isSeq(char chr) {
-    static uint8_t current = 0;
-    if (chr != startSeq[current]) {
-        current = 0;
-        return false;
-    } else {
-        if (++current >= sizeof(startSeq)) {
-            current = 0;
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
+char barcodeBuffer[BUFFER_SIZE];
+unsigned tail = 0;
+byte inChar;
 
 BarcodeScanner::BarcodeScanner(HardwareSerial * serialPort, uint8_t id)
 {
     this->id = id;
     serial = serialPort;
-    serial->begin(115200);
+    serial->begin(9600);
+}
+
+bool BarcodeScanner::isSeq(char chr) {
+  static uint8_t current = 0;
+  if (chr != startSeq[current]) {
+      current = 0;
+      return false;
+  } else {
+      if (++current >= sizeof(startSeq)) {
+          current = 0;
+          return true;
+      } else {
+          return false;
+      }
+  }
 }
 
 void BarcodeScanner::updateState()
@@ -41,72 +40,23 @@ void BarcodeScanner::updateState()
         Protocol::sendBarcode(id, Emulator::getBarcodeMessage());
     return;
 #endif
-    static bool readBar = false;
 
-    if(serial->available() > 0) {
-        byte inChar = serial->read();
-
-        if (!readBar) {
-            if (isSeq(inChar)) {
-                readBar = true;
-            }
-        } else {
-            barcodeBuffer[currentBarcodeByte++] = inChar;
-            millisendstr = millis();
+  if (serial->available()) {
+    serial->readBytes(&inChar, 1);
+    if (isSeq((char)inChar)) {
+      tail = 0;
+      while (serial->readBytes(&inChar, 1) && inChar) {
+        barcodeBuffer[tail++] = (char)inChar;
+        if (tail == BUFFER_SIZE - 1) {
+            break;
         }
-    } else {
-        if(millis() - millisendstr > 1000 && currentBarcodeByte > 0) {
-            stringComplete = true;
-            readBar = false;
-        }
+      }
+      barcodeBuffer[tail] = '\0';
+      
+      Protocol::sendBarcode(id, barcodeBuffer);
     }
-
-    if(stringComplete) {
-        barcodeBuffer[currentBarcodeByte] = '\0';
-#ifdef DEBUG
-            String message = "[Barcode scan] barcode = " + String((char*)(barcodeBuffer));
-            Protocol::sendMessage(message.c_str());
-#endif
-            Protocol::sendBarcode(id, String((char*)(barcodeBuffer)).c_str());
-
-            currentBarcodeByte = 0;
-            stringComplete = false;
-    }
-
-//     currentBarcodeByte = 0;
-//     while(serial->available() > 0)
-//     {
-//         byte symbol = serial->read();
-//         if('\r' == symbol)
-//         {
-//             // Обработка приема сообщения
-
-//             barcodeBuffer[currentBarcodeByte] = '\0';
-// #ifdef DUBUG
-//             String message = "[Barcode scan] barcode = " + String((char*)barcodeBuffer);
-//             Protocol::sendMessage(message.c_str());
-// #endif
-//             Protocol::sendBarcode(id, String((char*)barcodeBuffer).c_str());
-
-//             currentBarcodeByte = 0;
-//         }
-//         else
-//         {
-//             barcodeBuffer[currentBarcodeByte++] = symbol;
-//             if(currentBarcodeByte >= 100)
-//             {
-//                 // слишком длинное сообщение
-// #ifdef DUBUG
-//                 String message = "[Barcode scan] overflow";
-//                 Protocol::SendMessage(message.c_str());
-// #endif
-//                 currentBarcodeByte = 0;
-//             }
-//         }
-//     }
+  }
 }
-
-const byte scanCommand[] = {0x7E, 0x00, 0x08, 0x01, 0x00, 0x02, 0x01, 0xAB, 0xCD};
 
 void BarcodeScanner::startScan()
 {

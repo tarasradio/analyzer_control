@@ -27,6 +27,7 @@ namespace AnalyzerService
         public static RotorUnit Rotor { get; private set; }
         public static ChargerUnit Charger { get; private set; }
         public static PompUnit Pomp { get; private set; }
+        public static AdditionalDevicesUnit AdditionalDevices { get; private set; }
 
         public Analyzer(IConfigurationProvider provider) : base(provider)
         {
@@ -40,6 +41,7 @@ namespace AnalyzerService
             Charger = new ChargerUnit(CommandExecutor, provider);
             Rotor = new RotorUnit(CommandExecutor, provider);
             Pomp = new PompUnit(CommandExecutor, provider);
+            AdditionalDevices = new AdditionalDevicesUnit(CommandExecutor, provider);
 
             CommunicationService = new ConnectionService();
 
@@ -73,7 +75,8 @@ namespace AnalyzerService
             PackFinder = new PacketFinder(PackHandler);
             Serial = new SerialAdapter(PackFinder);
             
-            State = new AnalyzerState(Options.Sensors.Count, Options.Steppers.Count);
+            //State = new AnalyzerState(Options.Sensors.Count, Options.Steppers.Count);
+            State = new AnalyzerState(Options.Sensors.Count, 17);
 
             ResponseHandler = new ResponseHandler(PackHandler, State);
 
@@ -88,6 +91,7 @@ namespace AnalyzerService
             Charger.LoadConfiguration("ChargerConfiguration");
             Rotor.LoadConfiguration("RotorConfiguration");
             Pomp.LoadConfiguration("PompConfiguration");
+            AdditionalDevices.LoadConfiguration("AdditionalDevicesConfiguration");
         }
 
         public void SaveUnitsConfiguration()
@@ -97,6 +101,7 @@ namespace AnalyzerService
             Charger.SaveConfiguration("ChargerConfiguration");
             Rotor.SaveConfiguration("RotorConfiguration");
             Pomp.SaveConfiguration("PompConfiguration");
+            AdditionalDevices.SaveConfiguration("AdditionalDevicesConfiguration");
         }
 
         public static void AbortExecution()

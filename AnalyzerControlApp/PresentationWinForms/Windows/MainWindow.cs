@@ -138,5 +138,30 @@ namespace PresentationWinForms.Forms
             }
             buttonStartDemo.Visible = Analyzer.Serial.IsOpen();
         }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            if(Analyzer.Serial.IsOpen())
+            {
+                openMonitor();
+            }
+            
+        }
+
+        private void openMonitor()
+        {
+            Analyzer.TaskExecutor.StartTask( () =>
+            {
+                Analyzer.AdditionalDevices.OpenScreen();
+            });
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            Analyzer.TaskExecutor.StartTask(() =>
+            {
+                Analyzer.AdditionalDevices.CloseScreen();
+            });
+        }
     }
 }

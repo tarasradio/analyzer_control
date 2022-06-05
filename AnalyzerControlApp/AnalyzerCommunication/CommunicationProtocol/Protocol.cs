@@ -34,12 +34,13 @@
             ABORT_EXECUTION,
             WAIT_TIME,
             START_BARCODE_SCAN,
-            GET_FIRMWARE_VERSION
+            GET_FIRMWARE_VERSION,
+            SET_LED_COLOR
         }
 
         public enum CncCommands
         {
-            CNC_MOVE = 0x19,
+            CNC_MOVE = 0x1A,
             CNC_SET_SPEED,
             CNC_STOP,
             CNC_HOME,

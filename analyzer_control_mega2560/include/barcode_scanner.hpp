@@ -1,6 +1,8 @@
 #ifndef bar_scanner_hpp
 #define bar_scanner_hpp
 
+#define BUFFER_SIZE 512
+
 #include <Arduino.h>
 
 enum ScannerType {
