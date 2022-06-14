@@ -47,7 +47,7 @@ uint8_t HomingController::getSteppersInHoming()
     return steppersInHoming;
 }
 
-void HomingController::addStepperForHoming(int8_t stepper, int32_t speed)
+void HomingController::addStepperForHoming(int8_t stepper, int32_t speed, bool falling_edge)
 {
     int8_t dir = speed > 0 ? 1 : 0;
     homingSteppers[countHomeSteppers].stepper = stepper;
@@ -58,7 +58,15 @@ void HomingController::addStepperForHoming(int8_t stepper, int32_t speed)
     if (0 == sw_status)
     {
         homingSteppers[countHomeSteppers].state = WAIT_SW_PRESSED;
-        Steppers::get(stepper).goUntil(RESET_ABSPOS, dir, abs(speed));
+        
+        Steppers::get(stepper).setMaxSpeed(abs(speed));
+
+        if(falling_edge) {
+            Steppers::get(stepper).goUntil(RESET_ABSPOS, dir, abs(speed));
+        } else {
+            Steppers::get(stepper).setMinSpeed(abs(speed));
+            Steppers::get(stepper).releaseSw(RESET_ABSPOS, dir);
+        }
     }
     else
     {

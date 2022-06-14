@@ -21,8 +21,10 @@ namespace AnalyzerConfiguration.UnitsConfiguration
 
         [DisplayName("Шагов до пробирки"), Category("3.1 Шаги (поворот)")]
         public int RotatorStepsToTube { get; set; } = 0;
-        [DisplayName("Шагов до промывки"), Category("3.1 Шаги (поворот)")]
+        [DisplayName("Шагов до промывки (вода)"), Category("3.1 Шаги (поворот)")]
         public int RotatorStepsToWashing { get; set; } = 0;
+        [DisplayName("Шагов до промывки (щёлочь)"), Category("3.1 Шаги (поворот)")]
+        public int RotatorStepsToAlkaliWashing { get; set; } = 0;
         [DisplayName("Шагов до прозрачной ячейки"), Category("3.1 Шаги (поворот)")]
         public int RotatorStepsToResultCell { get; set; } = 0;
         [DisplayName("Шагов до белой ячейки"), Category("3.1 Шаги (поворот)")]

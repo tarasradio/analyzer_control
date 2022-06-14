@@ -1,13 +1,10 @@
-﻿using AnalyzerControlGUI.Commands;
-using AnalyzerDomain;
+﻿using AnalyzerDomain;
 using AnalyzerDomain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
+using MVVM.Commands;
+using MVVM.ViewModels;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AnalyzerControlGUI.ViewModels
 {

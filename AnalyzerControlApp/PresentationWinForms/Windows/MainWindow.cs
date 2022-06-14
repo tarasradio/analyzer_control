@@ -163,5 +163,17 @@ namespace PresentationWinForms.Forms
                 Analyzer.AdditionalDevices.CloseScreen();
             });
         }
+
+        private void fillNeedleButton_Click(object sender, EventArgs e)
+        {
+            Analyzer.TaskExecutor.StartTask(() =>
+            {
+                Analyzer.Needle.GoHome();
+                Analyzer.Needle.TurnAndGoDownToWashing(false);
+                Analyzer.Pomp.Home();
+                Analyzer.Pomp.FillTheNeedle(10);
+                Analyzer.Needle.GoHome();
+            });
+        }
     }
 }

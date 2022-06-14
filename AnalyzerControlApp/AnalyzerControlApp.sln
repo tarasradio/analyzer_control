@@ -30,9 +30,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerCncControl", "Analy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalyzerControlGUI", "AnalyzerControlGUI\AnalyzerControlGUI.csproj", "{F1256FEA-1F18-4CBC-9BE5-B1E5DF65551A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteDatabaseApp", "RemoteDatabaseApp\RemoteDatabaseApp.csproj", "{CF8407EE-C42A-4485-ABF8-9AAA80AD172B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RemoteDatabaseApp", "RemoteDatabaseApp\RemoteDatabaseApp.csproj", "{CF8407EE-C42A-4485-ABF8-9AAA80AD172B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{37A262DA-316B-4B85-8997-A7DC6DBB49B9} = {37A262DA-316B-4B85-8997-A7DC6DBB49B9}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientConsoleApp", "ClientConsoleApp\ClientConsoleApp.csproj", "{88D0F5C2-4D5F-47EC-B040-188D8D675601}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientConsoleApp", "ClientConsoleApp\ClientConsoleApp.csproj", "{88D0F5C2-4D5F-47EC-B040-188D8D675601}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVVM", "MVVM\MVVM.csproj", "{37A262DA-316B-4B85-8997-A7DC6DBB49B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +89,10 @@ Global
 		{88D0F5C2-4D5F-47EC-B040-188D8D675601}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88D0F5C2-4D5F-47EC-B040-188D8D675601}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88D0F5C2-4D5F-47EC-B040-188D8D675601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37A262DA-316B-4B85-8997-A7DC6DBB49B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37A262DA-316B-4B85-8997-A7DC6DBB49B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37A262DA-316B-4B85-8997-A7DC6DBB49B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37A262DA-316B-4B85-8997-A7DC6DBB49B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

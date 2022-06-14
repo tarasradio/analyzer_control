@@ -39,12 +39,29 @@ namespace AnalyzerControl
             Logger.Debug($"Запуск промывки иглы.");
 
             Analyzer.Needle.HomeLifter();
-            Analyzer.Needle.TurnAndGoDownToWashing();
+            Analyzer.Needle.TurnAndGoDownToWashing(false);
             Analyzer.Pomp.WashTheNeedle(2);
             Analyzer.Pomp.Home();
             Analyzer.Pomp.CloseValves();
 
             Logger.Debug($"Промывка иглы завершена.");
+        }
+
+        public static void WashNeedle2()
+        {
+            Analyzer.Needle.HomeLifter();
+            Analyzer.Needle.TurnAndGoDownToWashing(true); // В щелочь
+
+            Analyzer.Pomp.WashTheNeedle2(3);
+            Analyzer.Pomp.HomeSmall();
+            Analyzer.Pomp.CloseValves();
+
+            Analyzer.Needle.HomeLifter();
+            Analyzer.Needle.TurnAndGoDownToWashing(false); // В воду
+
+            Analyzer.Pomp.WashTheNeedle2(3);
+            Analyzer.Pomp.HomeSmall();
+            Analyzer.Pomp.CloseValves();
         }
 
         /// <summary>

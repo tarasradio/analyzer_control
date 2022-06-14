@@ -9,6 +9,10 @@ namespace AnalyzerService.ExecutionControl
     {
         event Action<int> CommandExecuted;
 
+        /// <summary>
+        /// Запускает выполнение списка команд и ожидает завершения их выполнения (блокирующая).
+        /// </summary>
+        /// <param name="commands"></param>
         void WaitExecution(List<ICommand> commands);
         void RunExecution(List<ICommand> commands);
         void AbortExecution();

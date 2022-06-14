@@ -82,20 +82,28 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(ConveyorUnit)}] - Rotating and scanning tube finished.");
         }
 
-        public void Move(int cellsCount, bool reverse = false)
+        public void Shift2(int cellsCount)
         {
-            Logger.Debug($"[{nameof(ConveyorUnit)}] - Запуск перемещения ячейки.");
+            for (int i = 0; i < cellsCount; i++)
+            {
+                Shift2();
+            }
+        }
+
+        public void Shift2()
+        {
             List<ICommand> commands = new List<ICommand>();
 
-            int totalSteps = Options.ConveyorStepsPerSingleTube * cellsCount;
-            if (reverse) totalSteps *= -1;
+            if(Analyzer.State.SensorsValues[3] >= 500)
+            {
+                steppers = new Dictionary<int, int>() { { Options.ConveyorStepper, Options.ConveyorSpeed } };
+                commands.Add(new RunCncCommand(steppers, 3, 500, ValueEdge.FallingEdge));
+            }
 
-            steppers = new Dictionary<int, int>() { { Options.ConveyorStepper, totalSteps } };
-            commands.Add(new MoveCncCommand(steppers));
+            steppers = new Dictionary<int, int>() { { Options.ConveyorStepper, Options.ConveyorSpeed } };
+            commands.Add(new RunCncCommand(steppers, 3, 500, ValueEdge.RisingEdge));
 
             executor.WaitExecution(commands);
-
-            Logger.Debug($"[{nameof(ConveyorUnit)}] - Перемещение ячеек завершено.");
         }
     }
 }

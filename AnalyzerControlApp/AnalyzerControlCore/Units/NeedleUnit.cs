@@ -80,7 +80,7 @@ namespace AnalyzerService.Units
             
             commands.Add(new SetSpeedCommand(Options.LifterStepper, 1000));
 
-            steppers = new Dictionary<int, int>() { { Options.LifterStepper, -200 } };
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, -500 } };
             commands.Add(new HomeCncCommand(steppers));
 
             executor.WaitExecution(commands);
@@ -97,27 +97,29 @@ namespace AnalyzerService.Units
             HomeRotator();
         }
 
-        public void TurnAndGoDownToWashing()
+        public void TurnAndGoDownToWashing(bool alkali)
         {
             Logger.Debug($"[{nameof(NeedleUnit)}] - Start turn and going down to washing.");
             List<ICommand> commands = new List<ICommand>();
 
+            int steps = alkali ? Options.RotatorStepsToAlkaliWashing : Options.RotatorStepsToWashing;
+
             // Поворот иглы до промывки
             commands.Add(new SetSpeedCommand(Options.RotatorStepper, 50));
 
-            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, Options.RotatorStepsToWashing - RotatorPosition} };
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, steps - RotatorPosition} };
             commands.Add(new MoveCncCommand(steppers));
 
             executor.WaitExecution(commands);
             commands.Clear();
 
-            RotatorPosition = Options.RotatorStepsToWashing;
+            RotatorPosition = steps;
 
             if (LifterPositionUnderfined)
                 HomeLifter();
 
             // Опускание иглы до промывки
-            commands.Add(new SetSpeedCommand(Options.LifterStepper, 500));
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, (uint)Options.LifterSpeed));
 
             steppers = new Dictionary<int, int>() { { Options.LifterStepper, Options.LifterStepsToWashing - LifterPosition } };
             commands.Add(new MoveCncCommand(steppers));
@@ -129,7 +131,7 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(NeedleUnit)}] - Turning and going down to washing finished.");
         }
 
-        public void PerforateCartridge(CartridgeCell cartridgeCell, bool needSuction = true)
+        public void PerforateCartridge(CartridgeWell cartridgeCell, bool needSuction = true)
         {
             Logger.Debug($"[{nameof(NeedleUnit)}] - Start going down and perforating cartridge.");
 
@@ -137,7 +139,7 @@ namespace AnalyzerService.Units
 
             int steps = Options.LifterStepsToCell;
 
-            if (cartridgeCell == CartridgeCell.MixCell)
+            if (cartridgeCell == CartridgeWell.ACW)
             {
                 if (needSuction)
                     steps = Options.LifterStepsToMixCellAtSuction;
@@ -182,7 +184,7 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(NeedleUnit)}] - Going to safe level finished.");
         }
 
-        public void TurnToCartridge(CartridgeCell cell)
+        public void TurnToCartridge(CartridgeWell well)
         {
             Logger.Debug($"[{nameof(NeedleUnit)}] - Start turn to cartridge.");
             List<ICommand> commands = new List<ICommand>();
@@ -190,19 +192,19 @@ namespace AnalyzerService.Units
             int turnSteps = 0;
 
             //TODO: Что то тут не так (if-else)
-            if(cell == CartridgeCell.ResultCell) {
+            if(well == CartridgeWell.CUV) {
                 turnSteps = Options.RotatorStepsToResultCell;
             }
-            else if(cell == CartridgeCell.MixCell) {
+            else if(well == CartridgeWell.ACW) {
                 turnSteps = Options.RotatorStepsToMixCell;
             }
-            else if(cell == CartridgeCell.FirstCell) {
+            else if(well == CartridgeWell.W1) {
                 turnSteps = Options.RotatorStepsToFirstCell;
             }
-            else if(cell == CartridgeCell.SecondCell) {
+            else if(well == CartridgeWell.W2) {
                 turnSteps = Options.RotatorStepsToSecondCell;
             }
-            else if(cell == CartridgeCell.ThirdCell) {
+            else if(well == CartridgeWell.W3) {
                 turnSteps = Options.RotatorStepsToThirdCell;
             }
 

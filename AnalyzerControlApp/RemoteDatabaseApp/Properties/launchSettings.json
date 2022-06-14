@@ -2,7 +2,7 @@
   "profiles": {
     "RemoteDatabaseApp": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Users\\tarasradio\\Programming\\github\\analyzer_control\\AnalyzerControlApp\\bin"
+      "workingDirectory": "C:\\Users\\tarasradio\\Programming\\github\\analyzer_control\\AnalyzerControlApp\\bin\\DB_app_bin"
     }
   }
 }

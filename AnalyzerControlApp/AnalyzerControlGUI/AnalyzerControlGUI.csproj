@@ -224,7 +224,6 @@
     <Compile Include="Views\Windows\AnalyzerControlWindow.xaml.cs">
       <DependentUpon>AnalyzerControlWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\BoolToIndexConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToIntConverter.cs" />
@@ -237,7 +236,6 @@
     <Compile Include="ViewModels\EditAnalysisViewModel.cs" />
     <Compile Include="ViewModels\EditCartridgeViewModel.cs" />
     <Compile Include="ViewModels\mainViewModel.cs" />
-    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewsHelpers\ConveyorController.cs" />
     <Compile Include="ViewsHelpers\GraphMath.cs" />
     <Compile Include="Views\DialogWindows\AnalysisTypesWindow.xaml.cs">
@@ -385,6 +383,10 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{6DCFF691-FFBB-45B4-90A9-36806AE27D02}</Project>
       <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MVVM\MVVM.csproj">
+      <Project>{37a262da-316b-4b85-8997-a7dc6dbb49b9}</Project>
+      <Name>MVVM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

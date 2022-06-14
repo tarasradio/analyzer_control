@@ -40,5 +40,14 @@ namespace PresentationWinForms.UnitsViews
                        shiftType: AnalyzerService.Units.ConveyorUnit.ShiftType.OneTube);
                });
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Analyzer.TaskExecutor.StartTask(
+               () =>
+               {
+                   Analyzer.Conveyor.Shift2(3);
+               });
+        }
     }
 }

@@ -6,27 +6,27 @@ using System.Threading.Tasks;
 
 namespace AnalyzerDomain.Models
 {
-    public enum CartridgeCell
+    public enum CartridgeWell
     {
         /// <summary>
         /// Ячейка с первым реагентом
         /// </summary>
-        FirstCell,
+        W1,
         /// <summary>
         /// Ячейка со вторым реагентом
         /// </summary>
-        SecondCell,
+        W2,
         /// <summary>
         /// Ячейка с третьим реагентом
         /// </summary>
-        ThirdCell,
+        W3,
         /// <summary>
         /// Белая ячейка, в которой происходит смешивание реагентов
         /// </summary>
-        MixCell,
+        ACW,
         /// <summary>
-        /// Прозрачная ячейка, куда помещается конечный результат
+        /// Прозрачная кювета, куда помещается конечный результат
         /// </summary>
-        ResultCell
+        CUV
     };
 }

@@ -11,6 +11,9 @@ namespace AnalyzerService.Units
 {
     public class PompUnit : UnitBase<PompConfiguration>
     {
+        const int inputValve = 0;
+        const int needleValve = 1;
+
         public PompUnit(ICommandExecutor executor, IConfigurationProvider provider) : base(executor, provider)
         {
 
@@ -21,7 +24,7 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(PompUnit)}] - Close valves.");
             List<ICommand> commands = new List<ICommand>();
 
-            commands.Add(new OffDeviceCncCommand(new List<int>() { 0 , 1 }));
+            commands.Add(new OffDeviceCncCommand(new List<int>() { inputValve, needleValve }));
 
             executor.WaitExecution(commands);
         }
@@ -43,6 +46,31 @@ namespace AnalyzerService.Units
 
             steppers = new Dictionary<int, int>() {
                 { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
+            };
+            commands.Add(new HomeCncCommand(steppers));
+
+            //commands.Add(new OffDeviceCncCommand(new List<int>() { 0 }));
+
+            executor.WaitExecution(commands);
+            Logger.Debug($"[{nameof(PompUnit)}] - Homing finished.");
+        }
+
+        public void HomeSmall()
+        {
+            Logger.Debug($"[{nameof(PompUnit)}] - Start homing.");
+            List<ICommand> commands = new List<ICommand>();
+
+            //commands.Add(new OnDeviceCncCommand(new List<int>() { 0 }));
+
+            //commands.Add(new OffDeviceCncCommand(new List<int>() { 1 }));
+
+            steppers = new Dictionary<int, int>() {
+                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
+            };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
                 { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
             };
             commands.Add(new HomeCncCommand(steppers));
@@ -166,6 +194,39 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(PompUnit)}] - Washing finished.");
         }
 
+        public void WashTheNeedle2(int cycles)
+        {
+            for (int i = 0; i < cycles; i++)
+                SmallPistonWashingCycle();
+        }
+
+        private void SmallPistonWashingCycle()
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
+                };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
+                };
+            commands.Add(new HomeCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtWashing }
+                };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.SmallPistonStepper, Options.SmallPistonStepsAtWashing }
+                };
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+        }
+
         private void WashingCycle()
         {
             List<ICommand> commands = new List<ICommand>();
@@ -187,6 +248,64 @@ namespace AnalyzerService.Units
 
             commands.Add(new OffDeviceCncCommand(new List<int>() { 0 }));
             commands.Add(new OnDeviceCncCommand(new List<int>() { 1 }));
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.BigPistonStepper, Options.BigPistonSpeedAtWashing },
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtWashing }
+                };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.BigPistonStepper, Options.BigPistonStepsAtWashing },
+                    { Options.SmallPistonStepper, Options.SmallPistonStepsAtWashing }
+                };
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+        }
+
+        public void FillTheNeedle(int cycles)
+        {
+            for (int i = 0; i < cycles; i++) {
+                FillNeedleFirstCycle();
+                FillNeedleSecondCycle();
+            }
+            FillNeedleFirstCycle();
+            CloseValves();
+        }
+
+        private void FillNeedleFirstCycle()
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            // шаг первый - выкачка в иглу
+
+            commands.Add(new OffDeviceCncCommand(new List<int>() { inputValve }));
+            commands.Add(new OnDeviceCncCommand(new List<int>() { needleValve }));
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
+                };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() {
+                    { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
+                };
+            commands.Add(new HomeCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+        }
+
+        private void FillNeedleSecondCycle()
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            // шаг второй - закачка в шприцы
+
+            commands.Add(new OffDeviceCncCommand(new List<int>() { needleValve }));
+            commands.Add(new OnDeviceCncCommand(new List<int>() { inputValve }));
 
             steppers = new Dictionary<int, int>() {
                     { Options.BigPistonStepper, Options.BigPistonSpeedAtWashing },

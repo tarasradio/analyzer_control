@@ -16,8 +16,7 @@ namespace AnalyzerControlGUI.Views.CustomViews
         private ConveyorController conveyor;
         private RotorController rotor;
 
-        readonly DispatcherTimer conveyorTimer = new DispatcherTimer();
-        readonly DispatcherTimer rotorTimer = new DispatcherTimer();
+        readonly DispatcherTimer timer = new DispatcherTimer();
 
         #region ConveyorCellsDefinition
         public static readonly DependencyProperty ConveyorCellsProperty 
@@ -80,17 +79,14 @@ namespace AnalyzerControlGUI.Views.CustomViews
             if(ConveyorCells != null && RotorCells != null)
             {
                 conveyor = new ConveyorController(CanvasTubes, 0.01, 1.7, ConveyorCells);
-                rotor = new RotorController(CanvasTubes, 0.01, 1.7, RotorCells);
+                rotor = new RotorController(CanvasTubes, 0.01, 1.7, RotorCells, ConveyorCells.Count);
                 
                 ConvHelp.DataContext = conveyor;
 
-                conveyorTimer.Tick += conveyor.ConveyorLoopStep;
-                conveyorTimer.Interval = TimeSpan.FromMilliseconds(30);
-                conveyorTimer.Start();
-
-                rotorTimer.Tick += rotor.RotorLoopStep;
-                rotorTimer.Interval = TimeSpan.FromMilliseconds(30);
-                rotorTimer.Start();
+                timer.Tick += conveyor.ConveyorLoopStep;
+                timer.Tick += rotor.RotorLoopStep;
+                timer.Interval = TimeSpan.FromMilliseconds(30);
+                timer.Start();
             }
         }
     }

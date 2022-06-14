@@ -1,9 +1,6 @@
-﻿using AnalyzerControlGUI.Commands;
-using AnalyzerService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using AnalyzerService;
+using MVVM.Commands;
+using MVVM.ViewModels;
 using System.Threading.Tasks;
 
 namespace AnalyzerControlGUI.ViewModels
@@ -136,7 +133,7 @@ namespace AnalyzerControlGUI.ViewModels
         private async void unloadTubes()
         {
             await Task.Run(() => { 
-                Analyzer.Conveyor.Move(25); 
+                Analyzer.Conveyor.Shift2(25); 
             });
         }
 

@@ -465,15 +465,15 @@ void CommandExecutor::executeCncHomeCommand(uint8_t *packet, uint32_t packetId)
         Protocol::sendMessage(message.c_str());
     }
 #endif
+    uint8_t is_falling_edge = packet[countOfSteppers * 5 + 1];
 
     for (int i = 0; i < countOfSteppers; i++)
     {
         int8_t stepper = packet[i * 5 + 1];
         int32_t fullSpeed = readLong(packet + i * 5 + 2);
-
-        if (checkStepper(stepper))
-        {
-            homingController->addStepperForHoming(stepper, fullSpeed);
+        
+        if (checkStepper(stepper)) {
+            homingController->addStepperForHoming(stepper, fullSpeed, is_falling_edge == 1 ? true : false);
         }
 
 #ifdef DEBUG

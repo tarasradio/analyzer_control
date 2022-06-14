@@ -26,7 +26,7 @@ namespace PresentationWinForms
                 IConfigurationProvider provider = new XmlConfigurationProvider();
 
                 Analyzer analyzer = new Analyzer(provider);
-                ConveyorService conveyor = new ConveyorService(54);
+                ConveyorService conveyor = new ConveyorService(52);
                 RotorService rotor = new RotorService(40);
                 CartridgesDeckService cartridgesDeck = new CartridgesDeckService(10);
 

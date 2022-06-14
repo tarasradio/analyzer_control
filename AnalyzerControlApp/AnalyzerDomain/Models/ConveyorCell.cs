@@ -6,26 +6,20 @@ using System.Threading.Tasks;
 
 namespace AnalyzerDomain.Models
 {
-    public enum ConveyorCellState
-    {
-        Empty,
-        Processed,
-        Processing,
-        Error
-    }
-
     public class ConveyorCell : ModelBase
     {
         public string AnalysisBarcode { get; set; }
         public bool IsEmpty {
             get  {
-                return AnalysisBarcode == string.Empty;
+                return string.IsNullOrEmpty(AnalysisBarcode);
             }
             private set { }
         }
 
-        private ConveyorCellState _state;
-        public ConveyorCellState State
+        public bool Selected { get; set; } = false;
+
+        private CellState _state;
+        public CellState State
         {
             get { return _state; }
             set
@@ -38,13 +32,13 @@ namespace AnalyzerDomain.Models
         public ConveyorCell()
         {
             AnalysisBarcode = string.Empty;
-            State = ConveyorCellState.Empty;
+            State = CellState.Empty;
         }
 
         public void SetEmpty()
         {
             AnalysisBarcode = string.Empty;
-            State = ConveyorCellState.Empty;
+            State = CellState.Empty;
         }
     }
 }

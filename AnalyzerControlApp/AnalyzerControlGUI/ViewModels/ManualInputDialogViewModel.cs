@@ -1,7 +1,8 @@
-﻿using AnalyzerControlGUI.Commands;
-using AnalyzerDomain;
+﻿using AnalyzerDomain;
 using AnalyzerDomain.Models;
 using Microsoft.EntityFrameworkCore;
+using MVVM.Commands;
+using MVVM.ViewModels;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;

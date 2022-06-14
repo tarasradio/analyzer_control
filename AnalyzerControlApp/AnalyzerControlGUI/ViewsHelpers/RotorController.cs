@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -16,6 +17,8 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
         public ObservableCollection<RotorCell> Cells = new ObservableCollection<RotorCell>();
 
+        private int _conveyorCellsCount;
+
         private List<Point> _coords;
         private List<int> _cellsCoordsIndexes;
         private Canvas _canvas;
@@ -23,13 +26,15 @@ namespace AnalyzerControlGUI.ViewsHelpers
         private double _scale;
         private int _offset = 1;
 
-        public RotorController(Canvas canvas, double pathResolution, double scale, ObservableCollection<RotorCell> cells) 
+        public RotorController(Canvas canvas, double pathResolution, double scale, ObservableCollection<RotorCell> cells, int conveyorCellsCount) 
         {
             _coords = new List<Point>();
             _cellsCoordsIndexes = new List<int>();
             _canvas = canvas;
             _pathResolution = pathResolution;
             _scale = scale;
+            _conveyorCellsCount = conveyorCellsCount;
+
             Cells = cells;
 
             calcConveyorPath();
@@ -43,12 +48,23 @@ namespace AnalyzerControlGUI.ViewsHelpers
         {
             for (int i = 0; i < Cells.Count; i++) {
 
-                Ellipse ellipse = (Ellipse)_canvas.Children[i+54];
+                Brush strokeBrush = Brushes.Black;
+                int strokeThickness = 1;
+
+                if (Cells[i].Selected)
+                {
+                    strokeBrush = Brushes.Red;
+                    strokeThickness = 3;
+                }
+
+                Ellipse ellipse = (Ellipse)_canvas.Children[i + _conveyorCellsCount];
                 ellipse.Fill = GetFillBrush(Cells[i]);
+                ellipse.Stroke = strokeBrush;
+                ellipse.StrokeThickness = strokeThickness;
 
                 int nextPointIndex = (_cellsCoordsIndexes[i] + _offset) % _coords.Count;
-                Canvas.SetLeft(_canvas.Children[i+54], _coords[nextPointIndex].X);
-                Canvas.SetTop(_canvas.Children[i+54], _coords[nextPointIndex].Y);
+                Canvas.SetLeft(_canvas.Children[i + _conveyorCellsCount], _coords[nextPointIndex].X);
+                Canvas.SetTop(_canvas.Children[i + _conveyorCellsCount], _coords[nextPointIndex].Y);
             }
 
             _offset += 50;
@@ -95,8 +111,22 @@ namespace AnalyzerControlGUI.ViewsHelpers
         {
             Brush brush = Brushes.LightGray;
 
-            if(cell.AnalysisBarcode != string.Empty) {
-                brush = Brushes.LightGreen;
+            switch (cell.State)
+            {
+                case CellState.Empty:
+                    brush = Brushes.LightGray;
+                    break;
+                case CellState.Processed:
+                    brush = Brushes.LightGreen;
+                    break;
+                case CellState.Processing:
+                    brush = Brushes.Khaki;
+                    break;
+                case CellState.Error:
+                    brush = Brushes.LightPink;
+                    break;
+                default:
+                    break;
             }
 
             return brush;

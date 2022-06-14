@@ -1,14 +1,13 @@
 ﻿using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.ServerCommunication;
 using AnalyzerControl.Services;
-using AnalyzerControlGUI.Commands;
 using AnalyzerDomain;
 using AnalyzerDomain.Models;
+using AnalyzerDomain.Services;
 using AnalyzerService;
+using MVVM.Commands;
+using MVVM.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AnalyzerControlGUI.ViewModels
@@ -38,6 +37,8 @@ namespace AnalyzerControlGUI.ViewModels
         private LoadAnalysisState state = LoadAnalysisState.Started;
 
         private string analysisBarcode = String.Empty;
+
+        private int conveyorCellIndex = 0;
 
         #region DialogResult
         private bool? _dialogResult;
@@ -158,7 +159,7 @@ namespace AnalyzerControlGUI.ViewModels
             return state != LoadAnalysisState.Finished;
         }
 
-        private async void firstCommand()
+        private void firstCommand()
         {
             switch (state)
             {
@@ -240,7 +241,7 @@ namespace AnalyzerControlGUI.ViewModels
             return state != LoadAnalysisState.Finished;
         }
 
-        private async void secondCommand()
+        private void secondCommand()
         {
             switch (state)
             {
@@ -251,7 +252,7 @@ namespace AnalyzerControlGUI.ViewModels
                     DialogText = "Сканирование пробирки";
                     FirstButtonEnabled = false;
                     SecondButtonEnabled = false;
-                    //nextTubePrepare();
+                    prepareBeforeScanning();
                     scanTube();
                     break;
                 case LoadAnalysisState.TubeInserted:
@@ -271,7 +272,6 @@ namespace AnalyzerControlGUI.ViewModels
                     DialogText = "Сканирование пробирки";
                     FirstButtonEnabled = false;
                     SecondButtonEnabled = false;
-                    //nextTubePrepare();
                     scanTube();
                     break;
                 case LoadAnalysisState.WaitCassettePulledOut:
@@ -288,22 +288,20 @@ namespace AnalyzerControlGUI.ViewModels
         {
             Task.Run(() =>
             {
-                //Analyzer.Conveyor.PrepareBeforeScanning();
-                //Analyzer.Conveyor.Shift(false, shiftType: AnalyzerService.Units.ConveyorUnit.ShiftType.HalfTube);
-            });
-            
-            state = LoadAnalysisState.TubeInserted;
-            DialogText = "Вставьте пробирку и нажмите - Сканировать пробирку.";
-            FirstButtonText = "Сканировать пробирку";
-            FirstButtonEnabled = true;
-        }
+                //  Проверяем или есть свободная ячейка
+                var (exist, index) = Conveyor.findFreeCellIndex();
 
-        private void nextTubePrepare()
-        {
-            Task.Run(() =>
-            {
-                Analyzer.Conveyor.Shift(false, shiftType: AnalyzerService.Units.ConveyorUnit.ShiftType.OneTube);
-            });
+                if(exist)
+                {
+                    Conveyor.PlaceCellInScanPosition((int)index);
+                    conveyorCellIndex = (int)index;
+                }
+                
+                state = LoadAnalysisState.TubeInserted;
+                DialogText = "Вставьте пробирку и нажмите - Сканировать пробирку.";
+                FirstButtonText = "Сканировать пробирку";
+                FirstButtonEnabled = true;
+            }).Wait();
         }
 
         private async void scanTube()
@@ -313,8 +311,8 @@ namespace AnalyzerControlGUI.ViewModels
             await Task.Run(() =>
             {
                 Analyzer.Conveyor.RotateAndScanTube();
-                System.Threading.Thread.Sleep(2000); // Типа ожидаем, когда бар-код будет прочитан
-                barcode = Analyzer.State.CartridgeBarcode;
+                Task.Delay(2000).Wait();// Типа ожидаем, когда бар-код будет прочитан
+                barcode = Analyzer.State.TubeBarcode;
             });
             
             if (String.IsNullOrEmpty(barcode))
@@ -322,31 +320,34 @@ namespace AnalyzerControlGUI.ViewModels
                 DialogText = "Пробирка не обнаружена. Нажмите еще раз для сканирования.";
                 FirstButtonEnabled = true;
             } else {
-                checkBarcode(barcode);
+                await Task.Run(() =>
+                {
+                    checkBarcode(barcode);
+                });
             }
         }
 
-        private async void checkBarcode(string barcode)
+        private void checkBarcode(string tubeBarcode)
         {
             DialogText = "Подключение к серверу...";
-            System.Threading.Thread.Sleep(500);
+            Task.Delay(2000).Wait();
 
             DatabaseClient client = new DatabaseClient();
             if (client.Connect())
             {
                 DialogText = "Подключение к серверу выполнено, запрос анализа из БД.";
-                System.Threading.Thread.Sleep(500);
-                String cartridgeBarcode = client.GetCartridgeBarcode(barcode.Trim());
+                Task.Delay(500).Wait();
+                String cartridgeID = client.GetCartridgeID(tubeBarcode.Trim());
 
-                if (cartridgeBarcode != null)
+                if (cartridgeID != null)
                 {
                     DialogText = "Данные анализа загружены с сервера.";
-                    System.Threading.Thread.Sleep(500);
+                    Task.Delay(500).Wait();
 
                     state = LoadAnalysisState.TubeScanned;
 
                     DialogText = "Сканирование завершено. Для загрузки картриджа поместите его в ячеку 0.";
-                    System.Threading.Thread.Sleep(500);
+                    Task.Delay(500).Wait();
 
                     FirstButtonEnabled = false;
 
@@ -354,7 +355,7 @@ namespace AnalyzerControlGUI.ViewModels
                     waitCassetteInserted();
 
                     DialogText = "Картридж вставлен, запуск сканирования картриджа";
-                    System.Threading.Thread.Sleep(500);
+                    Task.Delay(500).Wait();
 
                     bool isScanned = scanCassette();
                     if (isScanned)
@@ -364,11 +365,11 @@ namespace AnalyzerControlGUI.ViewModels
 
                         FirstButtonEnabled = false;
 
-                        var (isOk, cellPosition) = Rotor.AddAnalysis(barcode);
+                        var (isOk, cellPosition) = Rotor.AddAnalysis(tubeBarcode);
 
                         if(isOk)
                         {
-                            await Task.Run(() =>
+                            Task.Run(() =>
                             {
                                 Analyzer.Rotor.Home();
                                 Analyzer.Rotor.PlaceCellAtCharge((int)cellPosition, 0);
@@ -377,7 +378,7 @@ namespace AnalyzerControlGUI.ViewModels
                                 Analyzer.Charger.ChargeCartridge();
                                 Analyzer.Charger.HomeHook(true);
                                 Analyzer.Charger.MoveHookAfterHome();
-                            });
+                            }).Wait();
                         } else {
                             // Ячейки ротора заняты
                         }
@@ -385,18 +386,18 @@ namespace AnalyzerControlGUI.ViewModels
                     client.Disconnect();
 
                     DialogText = "Картридж загружен, вытащите кассету из ячейки 0.";
-                    System.Threading.Thread.Sleep(500);
+                    Task.Delay(500).Wait();
 
                     waitCassettePulledOut();
 
                     Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.NoColor()).GetBytes());
 
-                    Conveyor.Cells[0].AnalysisBarcode = barcode;
+                    Conveyor.Cells[Conveyor.CellInScanPosition].AnalysisBarcode = tubeBarcode;
                     NotifyPropertyChanged("ConveyorCells");
-                    addAnalysis(barcode, null);
+                    addAnalysis(tubeBarcode, null);
 
                     DialogText = "Загрузка анализа завершена. Выберите, что делать далее.";
-                    System.Threading.Thread.Sleep(500);
+                    Task.Delay(500).Wait();
 
                     FirstButtonEnabled = true;
                     SecondButtonEnabled = true;
@@ -434,18 +435,20 @@ namespace AnalyzerControlGUI.ViewModels
 
             if (barcode != null)
             {
-                if (string.IsNullOrEmpty(barcode) || string.IsNullOrWhiteSpace(barcode) || barcode.Contains("\u0002"))
+                AssayParameters parameters = AssayParametersBarcodeParser.Parse(barcode);
+
+                if(parameters != null)
                 {
-                    CartridgesDeck.Cassettes[0].Barcode = "No barcode";
-                    CartridgesDeck.Cassettes[0].CountLeft = 0;
-                    Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.Red()).GetBytes());
-                }
-                else
-                {
-                    CartridgesDeck.Cassettes[0].Barcode = barcode;
+                    CartridgesDeck.Cassettes[0].Parameters = parameters;
+                    CartridgesDeck.Cassettes[0].Barcode = parameters.assayShortName;
                     CartridgesDeck.Cassettes[0].CountLeft = 10;
                     Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.Green()).GetBytes());
                     return true;
+                } else {
+                    CartridgesDeck.Cassettes[0].Parameters = null;
+                    CartridgesDeck.Cassettes[0].Barcode = "No cartridge";
+                    CartridgesDeck.Cassettes[0].CountLeft = 0;
+                    Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.Red()).GetBytes());
                 }
             }
             else

@@ -115,7 +115,7 @@ namespace AnalyzerService.Units
         /// <param name="cartridgePosition">Номер позиции картриджа в роторе</param>
         /// <param name="cartridgeCell">Ячейка катриджа</param>
         /// <param name="cellPosition">Позиция ячейки картриджа</param>
-        public void PlaceCellUnderNeedle(int cartridgePosition, CartridgeCell cartridgeCell, CellPosition cellPosition = CellPosition.CellCenter)
+        public void PlaceCellUnderNeedle(int cartridgePosition, CartridgeWell cartridgeCell, CellPosition cellPosition = CellPosition.CellCenter)
         {
             Logger.Debug($"[{nameof(RotorUnit)}] - Start placing cell under needle.");
             List<ICommand> commands = new List<ICommand>();
@@ -124,15 +124,15 @@ namespace AnalyzerService.Units
 
             int turnSteps = 0;
 
-            if (cartridgeCell == CartridgeCell.ResultCell)
+            if (cartridgeCell == CartridgeWell.CUV)
             {
                 turnSteps = Options.StepsToNeedleResultCenter;
             }
-            else if (cartridgeCell == CartridgeCell.MixCell)
+            else if (cartridgeCell == CartridgeWell.ACW)
             {
                 turnSteps = Options.StepsToNeedleWhiteCenter;
             }
-            else if (cartridgeCell == CartridgeCell.FirstCell)
+            else if (cartridgeCell == CartridgeWell.W1)
             {
                 if (cellPosition == CellPosition.CellLeft)
                     turnSteps = Options.StepsToNeedleLeft1;
@@ -144,7 +144,7 @@ namespace AnalyzerService.Units
                         (Options.StepsToNeedleRight1 - Options.StepsToNeedleLeft1) / 2;
                 }
             }
-            else if (cartridgeCell == CartridgeCell.SecondCell)
+            else if (cartridgeCell == CartridgeWell.W2)
             {
                 if (cellPosition == CellPosition.CellLeft)
                     turnSteps = Options.StepsToNeedleLeft2;
@@ -156,7 +156,7 @@ namespace AnalyzerService.Units
                         (Options.StepsToNeedleRight2 - Options.StepsToNeedleLeft2) / 2;
                 }
             }
-            else if (cartridgeCell == CartridgeCell.ThirdCell)
+            else if (cartridgeCell == CartridgeWell.W3)
             {
                 if (cellPosition == CellPosition.CellLeft)
                     turnSteps = Options.StepsToNeedleLeft3;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnalyzerDomain.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,8 @@ namespace AnalyzerDomain.Models
                 OnPropertyChanged();
             }
         }
+
+        public AssayParameters Parameters { get; set; } = null;
 
         private bool _inserted;
 

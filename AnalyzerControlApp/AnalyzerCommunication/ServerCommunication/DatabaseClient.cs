@@ -20,7 +20,7 @@ namespace AnalyzerCommunication.ServerCommunication
         };
 
         const int port = 8888;
-        const string address = "192.168.43.51";
+        const string address = "192.168.144.51";
 
         TcpClient client = null;
         NetworkStream stream = null;
@@ -50,7 +50,7 @@ namespace AnalyzerCommunication.ServerCommunication
             client.Close();
         }
 
-        public String GetCartridgeBarcode(string barcode)
+        public String GetCartridgeID(string barcode)
         {
             byte[] barcodeBytes = Encoding.Unicode.GetBytes(barcode.Trim());
             byte[] data = new byte[barcodeBytes.Length + 1];

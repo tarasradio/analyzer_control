@@ -122,6 +122,11 @@
                             Command="{Binding UnloadCommand}" 
                             Style="{StaticResource RectangleButton}" 
                             Content="Выгрузка"/>
+                    <Button Height="50" Margin="0 10" 
+                            BorderBrush="HotPink"
+                            Command="{Binding TestCommand}" 
+                            Style="{StaticResource RectangleButton}" 
+                            Content="Test"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical" 
@@ -194,7 +199,8 @@
                     <DataGrid Height="300"
                               Style="{StaticResource DataGridStyle}"
                               Background="Transparent"
-                              ItemsSource="{Binding SheduledAnalyzes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                              ItemsSource="{Binding SheduledAnalyzes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedIndex="{Binding SelectedAnalysisIndex, Mode=OneWayToSource}">
                         <DataGrid.Columns>
                         <DataGridTextColumn Header="Дата"
                                         IsReadOnly="True"

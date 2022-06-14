@@ -68,6 +68,13 @@ void loop()
         sendSteppersStates();
         sendSensorsValues();
     }
+
+    static long timer2 = micros();
+
+    if(micros() - timer2 >= 5000) {
+        timer2 = micros();
+        runController.updateState();
+    }
 }
 
 void sendSteppersStates()

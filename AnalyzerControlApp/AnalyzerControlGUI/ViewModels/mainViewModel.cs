@@ -1,15 +1,11 @@
 ﻿using AnalyzerConfiguration;
 using AnalyzerControl;
 using AnalyzerControl.Services;
-using AnalyzerControlGUI.Commands;
 using AnalyzerControlGUI.Views;
 using AnalyzerService;
 using Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MVVM.Commands;
+using MVVM.ViewModels;
 
 namespace AnalyzerControlGUI.ViewModels
 {
@@ -38,7 +34,7 @@ namespace AnalyzerControlGUI.ViewModels
             try {
                 analyzer = new Analyzer(provider);
 
-                conveyor = new ConveyorService(54);
+                conveyor = new ConveyorService(52);
                 rotor = new RotorService(40);
                 cartridgesDeck = new CartridgesDeckService(10);
 

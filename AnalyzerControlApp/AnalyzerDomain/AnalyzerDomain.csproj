@@ -173,9 +173,11 @@
     <Compile Include="Models\AnalysisStage.cs" />
     <Compile Include="Models\AnalysisStages.cs" />
     <Compile Include="Models\AnalysisType.cs" />
+    <Compile Include="Models\Assay.cs" />
     <Compile Include="Models\CartridgeCassette.cs" />
-    <Compile Include="Models\CartridgeCell.cs" />
+    <Compile Include="Models\CartridgeWell.cs" />
     <Compile Include="Models\Cartridge.cs" />
+    <Compile Include="Models\CellState.cs" />
     <Compile Include="Models\ConveyorCell.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\RotorCell.cs" />

@@ -30,25 +30,16 @@ namespace PresentationWinForms.UnitsViews
             int cellNumber = (int)editCellNumber.Value;
             int chargePosition = (int)editChargePosition.Value;
 
-            CartridgeCell cell = CartridgeCell.MixCell;
+            CartridgeWell well = CartridgeWell.ACW;
 
-            if (selectFirstCell.Checked)
-            {
-                cell = CartridgeCell.FirstCell;
-            }
-            else if (selectSecondCell.Checked)
-            {
-                cell = CartridgeCell.SecondCell;
-            }
-            else if (selectThirdCell.Checked)
-            {
-                cell = CartridgeCell.ThirdCell;
-            }
-            else if (selectResultCell.Checked)
-            {
-                cell = CartridgeCell.ResultCell;
-            }
-
+            if (selectW1.Checked)
+                well = CartridgeWell.W1;
+            else if (selectW2.Checked)
+                well = CartridgeWell.W2;
+            else if (selectW3.Checked)
+                well = CartridgeWell.W3;
+            else if (selectCUV.Checked)
+                well = CartridgeWell.CUV;
 
             if (selectChargePlace.Checked)
             {
@@ -65,7 +56,7 @@ namespace PresentationWinForms.UnitsViews
                 () =>
                 {
                     Analyzer.Rotor.Home();
-                    Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorUnit.CellPosition.CellLeft);
+                    Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, well, RotorUnit.CellPosition.CellLeft);
                 });
             }
             else if(selectNeedleRightPlace.Checked)
@@ -74,7 +65,7 @@ namespace PresentationWinForms.UnitsViews
                 () =>
                 {
                     Analyzer.Rotor.Home();
-                    Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, cell, RotorUnit.CellPosition.CellRight);
+                    Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, well, RotorUnit.CellPosition.CellRight);
                 });
             }
             else if(selectWashBufferPlace.Checked)

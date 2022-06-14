@@ -43,7 +43,7 @@ namespace PresentationWinForms.Forms
             tube.Stages.Add(new Stage()
             {
                 CartridgePosition = 0,
-                Cell = CartridgeCell.FirstCell,
+                Cell = CartridgeWell.W1,
                 TimeToPerform = 5
             });
 
@@ -64,7 +64,7 @@ namespace PresentationWinForms.Forms
         {
             tube.Stages[stagesList.CurrentRow.Index].TimeToPerform = (int)editTimeToPerform.Value;
             tube.Stages[stagesList.CurrentRow.Index].CartridgePosition = (int)editCartridgePosition.Value;
-            tube.Stages[stagesList.CurrentRow.Index].Cell = (CartridgeCell)(selectCellType.SelectedIndex + 1);
+            tube.Stages[stagesList.CurrentRow.Index].Cell = (CartridgeWell)(selectCellType.SelectedIndex + 1);
 
             updateStagesList();
         }

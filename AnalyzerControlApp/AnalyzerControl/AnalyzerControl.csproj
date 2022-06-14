@@ -132,6 +132,7 @@
     <Compile Include="AnalyzerController.cs" />
     <Compile Include="AnalyzerDemoController.cs" />
     <Compile Include="AnalyzerOperations.cs" />
+    <Compile Include="AssaysProcessingController.cs" />
     <Compile Include="Configuration\DemoControllerConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CartridgesDeckService.cs" />

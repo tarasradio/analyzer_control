@@ -11,8 +11,6 @@ namespace AnalyzerCommunication.CommunicationProtocol.CncCommands
 
     public class RunCncCommand : AbstractCommand, IRemoteCommand
     {
-        
-
         private Dictionary<int, int> steppers;
         const int BytesPerStepper = 5;
 

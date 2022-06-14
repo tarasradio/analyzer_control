@@ -22,7 +22,6 @@ namespace AnalyzerService.Units
 
         public void HomeScreen()
         {
-            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start screen homing.");
             List<ICommand> commands = new List<ICommand>();
 
             commands.Add(new SetSpeedCommand(Options.ScreenUpDownStepper, 100));
@@ -38,16 +37,12 @@ namespace AnalyzerService.Units
             commands.Add(new HomeCncCommand(steppers));
             
             executor.WaitExecution(commands);
-
-            
-            Logger.Debug($"[{nameof(ConveyorUnit)}] - Screen homing finished.");
         }
 
         public void OpenScreen()
         {
             HomeScreen();
 
-            Logger.Debug($"[{nameof(ConveyorUnit)}] - Start screen opening.");
             List<ICommand> commands = new List<ICommand>();
 
             // Выставить экран прямо
@@ -60,12 +55,7 @@ namespace AnalyzerService.Units
             steppers = new Dictionary<int, int>() { { Options.ScreenUpDownStepper, -70000 } };
             commands.Add(new MoveCncCommand(steppers));
 
-           
-
             executor.WaitExecution(commands);
-
-
-            Logger.Debug($"[{nameof(ConveyorUnit)}] - Screen opening finished.");
         }
 
         public void CloseScreen()

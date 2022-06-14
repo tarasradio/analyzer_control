@@ -44,8 +44,19 @@ namespace AnalyzerControlGUI.ViewsHelpers
         {
             for (int i = 0; i < Cells.Count; i++) {
 
+                Brush strokeBrush = Brushes.Black;
+                int strokeThickness = 1;
+
+                if (Cells[i].Selected)
+                {
+                    strokeBrush = Brushes.Red;
+                    strokeThickness = 4;
+                }
+                    
                 Ellipse ellipse = (Ellipse)_canvas.Children[i];
                 ellipse.Fill = GetFillBrush(Cells[i]);
+                ellipse.Stroke = strokeBrush;
+                ellipse.StrokeThickness = strokeThickness;
 
                 int nextPointIndex = (_cellsCoordsIndexes[i] + _offset) % _coords.Count;
                 Canvas.SetLeft(_canvas.Children[i], _coords[nextPointIndex].X);
@@ -115,18 +126,19 @@ namespace AnalyzerControlGUI.ViewsHelpers
         private static Brush GetFillBrush(ConveyorCell cell)
         {
             Brush brush = Brushes.LightGray;
+
             switch (cell.State)
             {
-                case ConveyorCellState.Empty:
+                case CellState.Empty:
                     brush = Brushes.LightGray;
                     break;
-                case ConveyorCellState.Processed:
+                case CellState.Processed:
                     brush = Brushes.LightGreen;
                     break;
-                case ConveyorCellState.Processing:
+                case CellState.Processing:
                     brush = Brushes.Khaki;
                     break;
-                case ConveyorCellState.Error:
+                case CellState.Error:
                     brush = Brushes.LightPink;
                     break;
                 default:

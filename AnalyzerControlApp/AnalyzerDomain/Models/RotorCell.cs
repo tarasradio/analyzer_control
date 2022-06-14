@@ -19,10 +19,22 @@ namespace AnalyzerDomain.Models
             }
         }
 
+        public bool Selected { get; set; } = false;
+
+        private CellState _state;
+        public CellState State
+        {
+            get { return _state; }
+            set
+            {
+                _state = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsEmpty
         {
-            get
-            {
+            get  {
                 return AnalysisBarcode == string.Empty;
             }
             private set { }
@@ -31,11 +43,13 @@ namespace AnalyzerDomain.Models
         public RotorCell()
         {
             AnalysisBarcode = string.Empty;
+            State = CellState.Empty;
         }
 
         public void SetEmpty()
         {
             AnalysisBarcode = string.Empty;
+            State = CellState.Empty;
         }
     }
 }

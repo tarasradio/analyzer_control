@@ -15,33 +15,22 @@ namespace AnalyzerControl.Services
     {
         public ObservableCollection<ConveyorCell> Cells { get; private set; }
 
-        private const int cellsBetweenScanAndSampling = 7;
-        private const int cellsBetweenScanAndLoading = 29; // TODO:проверить, сколько реально
+        /// <summary>
+        /// Количество ячеек между позицией сканирования и позицией забора материала (при движении по часовой стрелке)
+        /// </summary>
+        private const int cellsBetweenScanAndSampling = 27;
 
         /// <summary>
-        /// Ячейка в позиции перед сканером
+        /// Ячейка в позиции перед сканером ( инкремент при каждом сдвиге)
         /// </summary>
         public int CellInScanPosition { get; set; } = 0;
 
         /// <summary>
         /// Ячейка в позиции забора материала
         /// </summary>
-        public int CellInSamplingPosition { 
+        public int CellInSamplePosition { 
             get {
                 int cell = CellInScanPosition - cellsBetweenScanAndSampling;
-                if (cell < 0) cell += Cells.Count;
-
-                return cell;
-            }
-        }
-
-        /// <summary>
-        /// Ячейка в позиции загрузки/выгрузки
-        /// </summary>
-        public int CellInLoadingPosition
-        {
-            get {
-                int cell = CellInScanPosition - cellsBetweenScanAndLoading;
                 if (cell < 0) cell += Cells.Count;
 
                 return cell;
@@ -83,7 +72,7 @@ namespace AnalyzerControl.Services
         /// <summary>
         /// Проверка, что проден полный круг, обнуляет индекс ячейки перед сканером
         /// </summary>
-        public void CheckFullCycle()
+        public void checkFullCycle()
         {
             if (CellInScanPosition == Cells.Count) {
                 CellInScanPosition = 0;
@@ -95,7 +84,7 @@ namespace AnalyzerControl.Services
             return Cells.Count(c => c.IsEmpty) > 0;
         }
 
-        private (bool, int?) findFreeCellIndex()
+        public (bool, int?) findFreeCellIndex()
         {
             for (int i = 0; i < Cells.Count; i++) {
                 if (Cells[i].IsEmpty) {
@@ -116,9 +105,22 @@ namespace AnalyzerControl.Services
             return (false, null);
         }
 
-        public void RemoveAnalysis(int cellIndex)
+        public void FreeCell(int cellIndex)
         {
             Cells[cellIndex].SetEmpty();
+        }
+
+        public void PlaceCellInScanPosition(int cell)
+        {
+            int cellsOffset = calcCellsOffset(cell);
+            Analyzer.Conveyor.Shift2(cellsOffset);
+            incrementCellsPosition(cellsOffset);
+        }
+
+        public void ShiftNextCell()
+        {
+            Analyzer.Conveyor.Shift2(1);
+            incrementCellsPosition(1);
         }
 
         public async void Load()
@@ -139,8 +141,10 @@ namespace AnalyzerControl.Services
                     await Task.Run(waitControllerFinished);
                 }
 
-                int cellsOffset = calcCellsOffset(index);
-                Analyzer.Conveyor.Move(cellsOffset); // Отправляем конвейеру запрос на загрузку
+                int cellsOffset = calcCellsOffset((int)index);
+                Analyzer.Conveyor.Shift2(cellsOffset); // Отправляем конвейеру запрос на загрузку
+
+                incrementCellsPosition(cellsOffset);
 
                 Logger.Info("Ожидайте, ячейка уже выехала...");
                 await Task.Run(cellArrived);
@@ -157,10 +161,20 @@ namespace AnalyzerControl.Services
             }
         }
 
-        private int calcCellsOffset(int? index)
+        private void incrementCellsPosition(int cellsOffset)
         {
-            int cellsBetweenScanAndIndex = (CellInScanPosition - (int)index);
-            int cells = cellsBetweenScanAndLoading - cellsBetweenScanAndIndex;
+            CellInScanPosition += cellsOffset;
+
+            if (CellInScanPosition >= Cells.Count)
+            {
+                CellInScanPosition -= Cells.Count;
+            }
+        }
+
+        private int calcCellsOffset(int cell)
+        {
+            int cells = cell - CellInScanPosition;
+            if (cells < 0) cells += Cells.Count;
             return cells;
         }
 
@@ -179,13 +193,15 @@ namespace AnalyzerControl.Services
                     await Task.Run(waitControllerFinished);
                 }
 
-                int cellsOffset = calcCellsOffset(index);
-                Analyzer.Conveyor.Move(cellsOffset); // Отправляем конвейеру запрос на загрузку
+                int cellsOffset = calcCellsOffset((int)index);
+                Analyzer.Conveyor.Shift2(cellsOffset); // Отправляем конвейеру запрос на загрузку
+
+                incrementCellsPosition(cellsOffset);
 
                 Logger.Info("Ожидайте, пробирка уже выехала...");
                 await Task.Run(cellArrived);
 
-                RemoveAnalysis((int)index); // Помечаем ячейку как свободную
+                FreeCell((int)index); // Помечаем ячейку как свободную
 
                 State = States.Waiting; // Aктивировать кнопку "Продолжить"
                 Logger.Info(

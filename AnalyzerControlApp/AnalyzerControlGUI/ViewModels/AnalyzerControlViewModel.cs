@@ -1,28 +1,26 @@
-﻿using AnalyzerConfiguration;
+﻿using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
+using AnalyzerConfiguration;
 using AnalyzerControl;
 using AnalyzerControl.Services;
-using AnalyzerControlGUI.Commands;
-using AnalyzerControlGUI.Models;
 using AnalyzerControlGUI.Views;
 using AnalyzerControlGUI.Views.DialogWindows;
+using AnalyzerDomain;
 using AnalyzerDomain.Models;
 using AnalyzerService;
 using Infrastructure;
-using System;
+using Microsoft.EntityFrameworkCore;
+using MVVM.Commands;
+using MVVM.ViewModels;
 using System.Collections.ObjectModel;
-
-using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using System.ComponentModel;
 using System.Windows;
-using AnalyzerDomain;
-using Microsoft.EntityFrameworkCore;
 
 namespace AnalyzerControlGUI.ViewModels
 {
     public class AnalyzerControlViewModel : ViewModel
     {
         private const int cassettesCount = 10;
-        private const int conveyorCellsCount = 54;
+        private const int conveyorCellsCount = 52;
         private const int rotorCellsCount = 40;
 
         public ObservableCollection<CartridgeCassette> Cassettes { get; set; }
@@ -344,6 +342,30 @@ namespace AnalyzerControlGUI.ViewModels
         }
         #endregion
 
+        #region SelectedAnalysisIndex
+
+        private int selectedAnalysisIndex;
+
+        public int SelectedAnalysisIndex {
+            get { return selectedAnalysisIndex; }
+            set {
+                if(selectedAnalysisIndex != -1) {
+                    conveyor.Cells[selectedAnalysisIndex].Selected = false;
+                    rotor.Cells[selectedAnalysisIndex].Selected = false;
+                }
+                    
+                selectedAnalysisIndex = value;
+
+                if (selectedAnalysisIndex != -1) {
+                    conveyor.Cells[selectedAnalysisIndex].Selected = true;
+                    rotor.Cells[selectedAnalysisIndex].Selected = true;
+                }
+                    
+            }
+        }
+
+        #endregion
+
         static IConfigurationProvider provider = new XmlConfigurationProvider();
         static Analyzer analyzer = null;
         static ConveyorService conveyor = null;
@@ -355,8 +377,6 @@ namespace AnalyzerControlGUI.ViewModels
 
         public AnalyzerControlViewModel()
         {
-            InitCustomControls();
-
             Logger.InfoMessageAdded += onInfoMessageAdded;
             Logger.DebugMessageAdded += onDebugMessageAdded;
 
@@ -393,7 +413,7 @@ namespace AnalyzerControlGUI.ViewModels
             ConnectionState = state;
             if (state) {
                 ConnectionText = "Соединение установлено";
-                openScreen();
+                //openScreen();
             } else {
                 ConnectionText = "Соединение не установлено";
             }
@@ -415,8 +435,6 @@ namespace AnalyzerControlGUI.ViewModels
             set
             {
                 _selectedCassette = value;
-                if(ConnectionState)
-                    //scanCassette();
                 NotifyPropertyChanged();
             }
         }
@@ -536,54 +554,30 @@ namespace AnalyzerControlGUI.ViewModels
                    }));
             }
         }
-        
-        private void changeCell()
-        {
-            if(ConveyorCells[0].State == ConveyorCellState.Empty)
-                ConveyorCells[0].State = ConveyorCellState.Error;
-            else
-                ConveyorCells[0].State = ConveyorCellState.Empty;
 
-            if (RotorCells[0].AnalysisBarcode == string.Empty)
-                RotorCells[0].AnalysisBarcode = "123";
-            else
-                RotorCells[0].AnalysisBarcode = string.Empty;
+        private RelayCommand _testCommand;
+
+        public RelayCommand TestCommand
+        {
+            get
+            {
+                return _testCommand ?? (
+                    _testCommand = new RelayCommand(obj =>
+                    {
+                        test();
+                    }));
+            }
         }
 
-        private void InitCustomControls()
+        void test()
         {
-            //Cassettes = new ObservableCollection<CartridgeCassette>
-            //{
-            //    new CartridgeCassette { Barcode="A" },
-            //    new CartridgeCassette { Barcode="B" },
-            //    new CartridgeCassette { Barcode="C" },
-            //    new CartridgeCassette { Barcode="D" },
-            //    new CartridgeCassette { Barcode="E" },
-            //    new CartridgeCassette { Barcode="F" },
-            //    new CartridgeCassette { Barcode="G" },
-            //    new CartridgeCassette { Barcode="H" },
-            //    new CartridgeCassette { Barcode="K" },
-            //    new CartridgeCassette { Barcode="L" },
-            //};
-
-            //ConveyorCells = new ObservableCollection<Models.ConveyorCell>();
-
-            //for (int i = 0; i < conveyorCellsCount; ++i)
-            //    ConveyorCells.Add(new Models.ConveyorCell());
-
-            //ConveyorCells[5].State = ConveyorCellState.Processed;
-            //ConveyorCells[6].State = ConveyorCellState.Error;
-            //ConveyorCells[7].State = ConveyorCellState.Processing;
-
-            //RotorCells = new ObservableCollection<Models.RotorCell>();
-
-            //for(int i = 0; i < rotorCellsCount; ++i)
-            //{
-            //    RotorCells.Add(new RotorCell());
-            //}
-
-            //RotorCells[0].AnalysisBarcode = "123";
-            //RotorCells[4].AnalysisBarcode = "123";
+            if(conveyor.Cells[0].State == CellState.Empty) {
+                conveyor.Cells[0].State = CellState.Processing;
+                rotor.Cells[0].State = CellState.Processing;
+            } else {
+                conveyor.Cells[0].State = CellState.Empty;
+                rotor.Cells[0].State = CellState.Empty;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using AnalyzerDomain.Entyties;
 using System;
 using System.Windows.Forms;
 using AnalyzerDomain.Models;
+using AnalyzerControl;
 
 namespace PresentationWinForms.UnitsViews
 {
@@ -40,65 +41,54 @@ namespace PresentationWinForms.UnitsViews
                 () =>
                 {
                     Analyzer.Needle.GoHome();
-                    Analyzer.Needle.TurnAndGoDownToWashing();
+                    Analyzer.Needle.TurnAndGoDownToWashing(false);
                 });
         }
 
         private void buttonTurnToCartridge_Click(object sender, EventArgs e)
         {
-            CartridgeCell cell = CartridgeCell.MixCell;
-
-            if(selectFirstCell.Checked)
-            {
-                cell = CartridgeCell.FirstCell;
-            }
-            else if(selectSecondCell.Checked)
-            {
-                cell = CartridgeCell.SecondCell;
-            }
-            else if(selectThirdCell.Checked)
-            {
-                cell = CartridgeCell.ThirdCell;
-            }
-            else if(selectResultCell.Checked)
-            {
-                cell = CartridgeCell.ResultCell;
-            }
+            CartridgeWell well = CartridgeWell.ACW;
+            well = selectWell(well);
 
             Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    Analyzer.Needle.GoHome();
-                    Analyzer.Needle.TurnToCartridge(cell);
+                    //Analyzer.Needle.GoHome();
+                    Analyzer.Needle.TurnToCartridge(well);
                 });
         }
 
         private void buttonGoDownAndBrokeCartridge_Click(object sender, EventArgs e)
         {
-            CartridgeCell cell = CartridgeCell.MixCell;
+            CartridgeWell well = CartridgeWell.ACW;
 
-            if (selectFirstCell.Checked)
-            {
-                cell = CartridgeCell.FirstCell;
-            }
-            else if (selectSecondCell.Checked)
-            {
-                cell = CartridgeCell.SecondCell;
-            }
-            else if (selectThirdCell.Checked)
-            {
-                cell = CartridgeCell.ThirdCell;
-            }
-            else if (selectResultCell.Checked)
-            {
-                cell = CartridgeCell.ResultCell;
-            }
+            if (selectW1.Checked)
+                well = CartridgeWell.W1;
+            else if (selectW2.Checked)
+                well = CartridgeWell.W2;
+            else if (selectW3.Checked)
+                well = CartridgeWell.W3;
+            else if (selectCUV.Checked)
+                well = CartridgeWell.CUV;
 
             Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
-                    Analyzer.Needle.PerforateCartridge(cell);
+                    Analyzer.Needle.PerforateCartridge(well);
                 });
+        }
+
+        private CartridgeWell selectWell(CartridgeWell well)
+        {
+            if (selectW1.Checked)
+                well = CartridgeWell.W1;
+            else if (selectW2.Checked)
+                well = CartridgeWell.W2;
+            else if (selectW3.Checked)
+                well = CartridgeWell.W3;
+            else if (selectCUV.Checked)
+                well = CartridgeWell.CUV;
+            return well;
         }
 
         private void buttonHomeLift_Click(object sender, EventArgs e)
@@ -107,6 +97,26 @@ namespace PresentationWinForms.UnitsViews
                 () =>
                 {
                     Analyzer.Needle.HomeLifter();
+                });
+        }
+
+        private void buttonTurnAndGoDownToWashingAlkali_Click(object sender, EventArgs e)
+        {
+            Analyzer.TaskExecutor.StartTask(
+                () =>
+                {
+                    Analyzer.Needle.GoHome();
+                    Analyzer.Needle.TurnAndGoDownToWashing(true);
+                });
+        }
+
+        private void buttonWashing2_Click(object sender, EventArgs e)
+        {
+            Analyzer.TaskExecutor.StartTask(
+                () =>
+                {
+                    Analyzer.Needle.GoHome();
+                    AnalyzerOperations.WashNeedle2();
                 });
         }
     }

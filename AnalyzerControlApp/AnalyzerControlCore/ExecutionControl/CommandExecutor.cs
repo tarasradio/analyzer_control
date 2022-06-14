@@ -15,7 +15,6 @@ namespace AnalyzerService.ExecutionControl
         private const int timeToWaitResponse = 2000;
         
         private Thread executionThread;
-        private static object locker;
         Stopwatch timer;
 
         private List<ICommand> commands;
@@ -27,7 +26,6 @@ namespace AnalyzerService.ExecutionControl
         public CommandExecutor()
         {
             commands = new List<ICommand>();
-            locker = new object();
             timer = new Stopwatch();
         }
 
@@ -112,8 +110,6 @@ namespace AnalyzerService.ExecutionControl
             {
                 if(timer.ElapsedMilliseconds >= timeToWaitResponse)
                 {
-                    //Logger.Info("[Command executor] - Слишком долгое ожидание ответа от устройства.");
-
                     Analyzer.Serial.SendPacket(command.GetBytes());
 
                     timer.Restart();

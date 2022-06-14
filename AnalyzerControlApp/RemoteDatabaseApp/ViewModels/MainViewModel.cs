@@ -1,7 +1,8 @@
 ﻿using AnalyzerDomain;
 using AnalyzerDomain.Models;
 using Microsoft.EntityFrameworkCore;
-using RemoteDatabaseApp.Commands;
+using MVVM.Commands;
+using MVVM.ViewModels;
 using RemoteDatabaseApp.Connection;
 using RemoteDatabaseApp.Views.DialogWindows;
 using System;

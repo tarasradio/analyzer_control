@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AnalyzerDomain\AnalyzerDomain.csproj" />
+    <ProjectReference Include="..\MVVM\MVVM.csproj" />
   </ItemGroup>
 
 </Project>
