@@ -11,9 +11,6 @@
         Title="Редактирование анализа"
         ResizeMode="CanMinimize" Topmost="True"
         SizeToContent="WidthAndHeight">
-    <Window.DataContext>
-        <vm:EditAnalysisViewModel/>
-    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

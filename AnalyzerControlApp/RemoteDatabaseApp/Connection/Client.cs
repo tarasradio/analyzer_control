@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RemoteDatabaseApp.Connection
 {
-    public class ClientObject
+    public class Client
     {
         public event Action<String> RequestReceived;
 
@@ -27,7 +27,7 @@ namespace RemoteDatabaseApp.Connection
 
         public TcpClient client;
 
-        public ClientObject(TcpClient tcpClient) {
+        public Client(TcpClient tcpClient) {
             client = tcpClient;
         }
 

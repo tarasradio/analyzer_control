@@ -195,7 +195,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BoolToColorConverter.cs" />
-    <Compile Include="Models\Cassette.cs" />
     <Compile Include="ViewModels\AnalyzerControlViewModel.cs" />
     <Compile Include="ViewModels\EveningCheckoutViewModel.cs" />
     <Compile Include="ViewModels\LoadAnalysisViewModel.cs" />
@@ -229,11 +228,9 @@
     <Compile Include="Converters\StringToIntConverter.cs" />
     <Compile Include="Services\DialogCloser.cs" />
     <Compile Include="ViewModels\AnalysisTypesManagementViewModel.cs" />
-    <Compile Include="ViewModels\AnalyzesManagementViewModel.cs" />
     <Compile Include="ViewModels\CartridgesManagementViewModel.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Compile Include="ViewModels\EditAnalysisTypeViewModel.cs" />
-    <Compile Include="ViewModels\EditAnalysisViewModel.cs" />
     <Compile Include="ViewModels\EditCartridgeViewModel.cs" />
     <Compile Include="ViewModels\mainViewModel.cs" />
     <Compile Include="ViewsHelpers\ConveyorController.cs" />
@@ -389,6 +386,7 @@
       <Name>MVVM</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

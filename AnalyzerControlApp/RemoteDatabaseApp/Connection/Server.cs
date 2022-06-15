@@ -56,12 +56,12 @@ namespace RemoteDatabaseApp.Connection
 
                 while (true)
                 {
-                    TcpClient client = listener.AcceptTcpClient();
-                    ClientObject clientObject = new ClientObject(client);
-                    clientObject.RequestReceived += RequestReceived;
+                    TcpClient tcpClient = listener.AcceptTcpClient();
+                    Client client = new Client(tcpClient);
+                    client.RequestReceived += RequestReceived;
 
                     // создаем новый поток для обслуживания нового клиента
-                    Thread clientThread = new Thread(new ThreadStart(clientObject.Process));
+                    Thread clientThread = new Thread(new ThreadStart(client.Process));
                     clientThread.Start();
                 }
             }

@@ -1,11 +1,4 @@
-﻿using AnalyzerControlGUI.Models;
-using AnalyzerControlGUI.ViewModels;
-using AnalyzerControlGUI.Views.CustomViews;
-using AnalyzerControlGUI.ViewsHelpers;
-using System;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Threading;
+﻿using System.Windows;
 
 namespace AnalyzerControlGUI
 {
