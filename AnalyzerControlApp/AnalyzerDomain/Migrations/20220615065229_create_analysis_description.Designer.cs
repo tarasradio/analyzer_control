@@ -3,14 +3,16 @@ using System;
 using AnalyzerDomain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AnalyzerDomain.Migrations
 {
     [DbContext(typeof(AnalyzerContext))]
-    partial class AnalyzerContextModelSnapshot : ModelSnapshot
+    [Migration("20220615065229_create_analysis_description")]
+    partial class create_analysis_description
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

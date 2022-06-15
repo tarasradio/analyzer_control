@@ -168,8 +168,13 @@
     <Compile Include="Migrations\20210821092822_AddSheduledAnalyzes.designer.cs">
       <DependentUpon>20210821092822_AddSheduledAnalyzes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20220615065229_create_analysis_description.cs" />
+    <Compile Include="Migrations\20220615065229_create_analysis_description.designer.cs">
+      <DependentUpon>20220615065229_create_analysis_description.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AnalyzerContextModelSnapshot.cs" />
     <Compile Include="Models\Analysis.cs" />
+    <Compile Include="Models\AnalysisDescription.cs" />
     <Compile Include="Models\AnalysisStage.cs" />
     <Compile Include="Models\AnalysisStages.cs" />
     <Compile Include="Models\AnalysisType.cs" />

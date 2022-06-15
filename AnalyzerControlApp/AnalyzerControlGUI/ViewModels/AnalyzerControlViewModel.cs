@@ -11,6 +11,7 @@ using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MVVM.Commands;
 using MVVM.ViewModels;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -311,35 +312,33 @@ namespace AnalyzerControlGUI.ViewModels
         }
         #endregion
 
-        #region SheduledAnalyzes
-        private ObservableCollection<Analysis> _sheduledAnalyzes;
+        #region Analyzes
 
-        public ObservableCollection<Analysis> SheduledAnalyzes
+        private ObservableCollection<AnalysisDescription> _analyzes;
+
+        public ObservableCollection<AnalysisDescription> Analyzes
         {
-            get
-            {
-                if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
-                {
-                    return new ObservableCollection<Analysis>();
+            get {
+                if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+                    return new ObservableCollection<AnalysisDescription>();
                 }
                 else
-                    return LoadSheduledAnalyzesDetails();
+                    return LoadAnalyzes();
             }
-            private set
-            {
-                _sheduledAnalyzes = value;
-                NotifyPropertyChanged("SheduledAnalyzes");
+            private set {
+                _analyzes = value;
+                NotifyPropertyChanged("Analyzes");
             }
         }
 
-        private ObservableCollection<Analysis> LoadSheduledAnalyzesDetails()
+        private ObservableCollection<AnalysisDescription> LoadAnalyzes()
         {
-            using (AnalyzerContext db = new AnalyzerContext())
-            {
-                db.SheduledAnalyzes.Load();
-                return db.SheduledAnalyzes.Local.ToObservableCollection();
+            using (AnalyzerContext db = new AnalyzerContext()) {
+                db.Analyses.Load();
+                return db.Analyses.Local.ToObservableCollection();
             }
         }
+
         #endregion
 
         #region SelectedAnalysisIndex
@@ -350,17 +349,21 @@ namespace AnalyzerControlGUI.ViewModels
             get { return selectedAnalysisIndex; }
             set {
                 if(selectedAnalysisIndex != -1) {
-                    conveyor.Cells[selectedAnalysisIndex].Selected = false;
-                    rotor.Cells[selectedAnalysisIndex].Selected = false;
+                    rotor.Cells[Analyzes[selectedAnalysisIndex].RotorPosition].Selected = false;
+                    conveyor.Cells[Analyzes[selectedAnalysisIndex].ConveyorPosition].Selected = false;
                 }
-                    
+
                 selectedAnalysisIndex = value;
 
                 if (selectedAnalysisIndex != -1) {
-                    conveyor.Cells[selectedAnalysisIndex].Selected = true;
-                    rotor.Cells[selectedAnalysisIndex].Selected = true;
-                }
-                    
+                    if(Analyzes[selectedAnalysisIndex].IsCompleted == false) {
+                        int rotorPosition = Analyzes[selectedAnalysisIndex].RotorPosition;
+                        int conveyorPosition = Analyzes[selectedAnalysisIndex].ConveyorPosition;
+
+                        rotor.Cells[rotorPosition].Selected = true;
+                        conveyor.Cells[conveyorPosition].Selected = true;
+                    }
+                } 
             }
         }
 
@@ -571,6 +574,13 @@ namespace AnalyzerControlGUI.ViewModels
 
         void test()
         {
+            using (AnalyzerContext db = new AnalyzerContext())
+            {
+                db.Analyses.Add(new AnalysisDescription() { Date = DateTime.Now, RotorPosition = 5, ConveyorPosition = 10, IsCompleted = false });
+                db.SaveChanges();
+                NotifyPropertyChanged("Analyzes");
+            }
+
             if(conveyor.Cells[0].State == CellState.Empty) {
                 conveyor.Cells[0].State = CellState.Processing;
                 rotor.Cells[0].State = CellState.Processing;

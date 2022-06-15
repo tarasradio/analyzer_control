@@ -14,6 +14,8 @@ namespace AnalyzerDomain
         public DbSet<AnalysisType> AnalysisTypes { get; set; }
         public DbSet<Analysis> SheduledAnalyzes { get; set; }
 
+        public DbSet<AnalysisDescription> Analyses { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Data Source=Analyzer.db");
     }
