@@ -202,20 +202,6 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private void addAnalysis(string barcode, string cartridgeBarcode)
-        {
-            using (AnalyzerContext db = new AnalyzerContext())
-            {
-                Analysis analysis = new Analysis();
-
-                analysis.Date = DateTime.Now;
-                analysis.CurrentStage = 0;
-                analysis.Barcode = barcode;
-
-                db.SheduledAnalyzes.Add(analysis);
-                db.SaveChanges();
-            }
-        }
         #endregion
 
         #region SecondCommand
@@ -357,46 +343,51 @@ namespace AnalyzerControlGUI.ViewModels
                     DialogText = "Картридж вставлен, запуск сканирования картриджа";
                     Task.Delay(500).Wait();
 
-                    bool isScanned = scanCassette();
-                    if (isScanned)
+                    AssayParameters parameters = scanCassette();
+                    if (parameters != null)
                     {
                         DialogText = "Картридж отсканирован. Запуск загрузки картриджа";
                         System.Threading.Thread.Sleep(500);
 
                         FirstButtonEnabled = false;
 
-                        var (isOk, cellPosition) = Rotor.AddAnalysis(tubeBarcode);
+                        var (isOk, rotorCellPosition) = Rotor.AddAnalysis(tubeBarcode);
 
                         if(isOk)
                         {
                             Task.Run(() =>
                             {
                                 Analyzer.Rotor.Home();
-                                Analyzer.Rotor.PlaceCellAtCharge((int)cellPosition, 0);
+                                Analyzer.Rotor.PlaceCellAtCharge((int)rotorCellPosition, 0);
 
                                 Analyzer.Charger.HomeHook(false);
                                 Analyzer.Charger.ChargeCartridge();
                                 Analyzer.Charger.HomeHook(true);
                                 Analyzer.Charger.MoveHookAfterHome();
                             }).Wait();
+
+                            // Картридж заряжен
+
+                            DialogText = "Картридж загружен, вытащите кассету из ячейки 0.";
+                            Task.Delay(500).Wait();
+
+                            waitCassettePulledOut();
+
+                            Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.NoColor()).GetBytes());
+
+                            Conveyor.Cells[Conveyor.CellInScanPosition].AnalysisBarcode = tubeBarcode;
+                            NotifyPropertyChanged("ConveyorCells");
+
+                            addAnalysis(tubeBarcode, parameters, (int)rotorCellPosition, Conveyor.CellInScanPosition);
+
+                            DialogText = "Загрузка анализа завершена. Выберите, что делать далее.";
                         } else {
                             // Ячейки ротора заняты
+                            DialogText = "Все ячейки ротора заняты!";
                         }
                     }
                     client.Disconnect();
 
-                    DialogText = "Картридж загружен, вытащите кассету из ячейки 0.";
-                    Task.Delay(500).Wait();
-
-                    waitCassettePulledOut();
-
-                    Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.NoColor()).GetBytes());
-
-                    Conveyor.Cells[Conveyor.CellInScanPosition].AnalysisBarcode = tubeBarcode;
-                    NotifyPropertyChanged("ConveyorCells");
-                    addAnalysis(tubeBarcode, null);
-
-                    DialogText = "Загрузка анализа завершена. Выберите, что делать далее.";
                     Task.Delay(500).Wait();
 
                     FirstButtonEnabled = true;
@@ -427,23 +418,52 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private bool scanCassette()
+        private void addAnalysis(string patientID, AssayParameters parameters, int rotorPosition, int conveyorPosition)
         {
+            using (AnalyzerContext db = new AnalyzerContext())
+            {
+                AnalysisDescription analysis = new AnalysisDescription();
+
+                analysis.Date = DateTime.Now;
+                analysis.PatientId = patientID;
+
+                analysis.RotorPosition = rotorPosition;
+                analysis.ConveyorPosition = conveyorPosition;
+
+                analysis.SampleVolume = parameters.usedVolumes.Sample_NDIL;
+                analysis.Tw2Volume = parameters.usedVolumes.TW2_Conjugate;
+                analysis.Tw3Volume = parameters.usedVolumes.TW3_Substrate;
+                analysis.TacwVolume = parameters.usedVolumes.TACW;
+                analysis.Inc1Duration = 2;//parameters.incubationTimes.inc_1;
+                analysis.inc2Duration = 2;//parameters.incubationTimes.inc_2;
+
+                analysis.CurrentStage = -1;
+                analysis.IsCompleted = false;
+
+                db.Analyses.Add(analysis);
+                db.SaveChanges();
+            }
+        }
+
+        private AssayParameters scanCassette()
+        {
+            AssayParameters parameters = null;
+
             CartridgesDeck.ScanCassette(0);
 
             string barcode = Analyzer.State.CartridgeBarcode;
 
             if (barcode != null)
             {
-                AssayParameters parameters = AssayParametersBarcodeParser.Parse(barcode);
+                parameters = AssayParametersBarcodeParser.Parse(barcode);
 
                 if(parameters != null)
                 {
                     CartridgesDeck.Cassettes[0].Parameters = parameters;
                     CartridgesDeck.Cassettes[0].Barcode = parameters.assayShortName;
                     CartridgesDeck.Cassettes[0].CountLeft = 10;
+
                     Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.Green()).GetBytes());
-                    return true;
                 } else {
                     CartridgesDeck.Cassettes[0].Parameters = null;
                     CartridgesDeck.Cassettes[0].Barcode = "No cartridge";
@@ -455,7 +475,7 @@ namespace AnalyzerControlGUI.ViewModels
             {
                 Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.NoColor()).GetBytes());
             }
-            return false;
+            return parameters;
         }
 
         private void waitCassetteInserted()

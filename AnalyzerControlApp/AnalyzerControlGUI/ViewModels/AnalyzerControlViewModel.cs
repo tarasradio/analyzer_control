@@ -333,10 +333,7 @@ namespace AnalyzerControlGUI.ViewModels
 
         private ObservableCollection<AnalysisDescription> LoadAnalyzes()
         {
-            using (AnalyzerContext db = new AnalyzerContext()) {
-                db.Analyses.Load();
-                return db.Analyses.Local.ToObservableCollection();
-            }
+            return repository.Analyzes;
         }
 
         #endregion
@@ -348,14 +345,14 @@ namespace AnalyzerControlGUI.ViewModels
         public int SelectedAnalysisIndex {
             get { return selectedAnalysisIndex; }
             set {
-                if(selectedAnalysisIndex != -1) {
+                if(selectedAnalysisIndex != -1 && Analyzes.Count != 0) {
                     rotor.Cells[Analyzes[selectedAnalysisIndex].RotorPosition].Selected = false;
                     conveyor.Cells[Analyzes[selectedAnalysisIndex].ConveyorPosition].Selected = false;
                 }
 
                 selectedAnalysisIndex = value;
 
-                if (selectedAnalysisIndex != -1) {
+                if (selectedAnalysisIndex != -1 && Analyzes.Count != 0) {
                     if(Analyzes[selectedAnalysisIndex].IsCompleted == false) {
                         int rotorPosition = Analyzes[selectedAnalysisIndex].RotorPosition;
                         int conveyorPosition = Analyzes[selectedAnalysisIndex].ConveyorPosition;
@@ -378,6 +375,8 @@ namespace AnalyzerControlGUI.ViewModels
 
         const string controllerFileName = "DemoControllerConfiguration";
 
+        static AnalyzesRepository repository = new AnalyzesRepository();
+
         public AnalyzerControlViewModel()
         {
             Logger.InfoMessageAdded += onInfoMessageAdded;
@@ -396,7 +395,7 @@ namespace AnalyzerControlGUI.ViewModels
                 rotor = new RotorService(rotorCellsCount);
                 cartridgesDeck = new CartridgesDeckService(cassettesCount);
 
-                demoController = new AnalyzerDemoController(provider, conveyor, rotor, cartridgesDeck);
+                demoController = new AnalyzerDemoController(provider, conveyor, rotor, repository);
 
                 conveyor.SetController(demoController);
                 demoController.LoadConfiguration(controllerFileName);
@@ -574,14 +573,9 @@ namespace AnalyzerControlGUI.ViewModels
 
         void test()
         {
-            using (AnalyzerContext db = new AnalyzerContext())
-            {
-                db.Analyses.Add(new AnalysisDescription() { Date = DateTime.Now, RotorPosition = 5, ConveyorPosition = 10, IsCompleted = false });
-                db.SaveChanges();
-                NotifyPropertyChanged("Analyzes");
-            }
+            demoController.test();
 
-            if(conveyor.Cells[0].State == CellState.Empty) {
+            if (conveyor.Cells[0].State == CellState.Empty) {
                 conveyor.Cells[0].State = CellState.Processing;
                 rotor.Cells[0].State = CellState.Processing;
             } else {

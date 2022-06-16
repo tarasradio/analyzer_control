@@ -112,9 +112,23 @@ namespace AnalyzerControl.Services
 
         public void PlaceCellInScanPosition(int cell)
         {
-            int cellsOffset = calcCellsOffset(cell);
+            int cellsOffset = calcCellsOffset(cell, CellInScanPosition);
             Analyzer.Conveyor.Shift2(cellsOffset);
             incrementCellsPosition(cellsOffset);
+        }
+
+        public void PlaceCellInSamplePosition(int cell)
+        {
+            int cellsOffset = calcCellsOffset(cell, CellInSamplePosition);
+            Analyzer.Conveyor.Shift2(cellsOffset);
+            incrementCellsPosition(cellsOffset);
+        }
+
+        private int calcCellsOffset(int cell, int targetPosition)
+        {
+            int cells = cell - targetPosition;
+            if (cells < 0) cells += Cells.Count;
+            return cells;
         }
 
         public void ShiftNextCell()

@@ -137,11 +137,15 @@ namespace AnalyzerService.Units
         // Пример: на 1 uL -> 1 / 100.48 * 25600 = 255 шагов
         public void Pull(int value)
         {
+            double steps = (double)value / 100.48 * 25600;
+
+
             Logger.Debug($"[{nameof(PompUnit)}] - Start suction.");
             List<ICommand> commands = new List<ICommand>();
-
-            commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
-            //commands.Add( new OffDeviceCncCommand(new List<int>() { 1 }) );
+            
+            commands.Add( new OffDeviceCncCommand(new List<int>() { inputValve }) );
+            commands.Add( new OnDeviceCncCommand(new List<int>() { needleValve }) );
+            
             
             steppers = new Dictionary<int, int>() {
                 { Options.SmallPistonStepper, Options.SmallPistonSpeedAtSuction }
@@ -149,11 +153,11 @@ namespace AnalyzerService.Units
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Options.SmallPistonStepper, Options.SmallPistonStepsAtSuction }
+                { Options.SmallPistonStepper, -(int)steps }
             };
             commands.Add( new MoveCncCommand(steppers) );
             
-            commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
+            commands.Add( new OffDeviceCncCommand(new List<int>() { needleValve }) );
 
             executor.WaitExecution(commands);
             Logger.Debug($"[{nameof(PompUnit)}] - Suction finished.");
@@ -161,11 +165,13 @@ namespace AnalyzerService.Units
 
         public void Push(int value)
         {
+            double steps = (double)value / 100.48 * 25600;
+
             Logger.Debug($"[{nameof(PompUnit)}] - Start unsuction.");
             List<ICommand> commands = new List<ICommand>();
             
-            commands.Add( new OnDeviceCncCommand(new List<int>() { 0 }) );
-            commands.Add( new OffDeviceCncCommand(new List<int>() { 1 }) );
+            commands.Add( new OnDeviceCncCommand(new List<int>() { needleValve }) );
+            commands.Add( new OffDeviceCncCommand(new List<int>() { inputValve }) );
 
             steppers = new Dictionary<int, int>() {
                 { Options.SmallPistonStepper, Options.SmallPistonSpeedAtSuction }
@@ -173,11 +179,11 @@ namespace AnalyzerService.Units
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Options.SmallPistonStepper, Options.SmallPistonSpeedAtSuction }
+                { Options.SmallPistonStepper, (int)steps }
             };
-            commands.Add( new HomeCncCommand(steppers) );
-            
-            commands.Add( new OffDeviceCncCommand(new List<int>() { 0 }) );
+            commands.Add(new MoveCncCommand(steppers));
+
+            commands.Add( new OffDeviceCncCommand(new List<int>() { needleValve }) );
 
             executor.WaitExecution(commands);
             Logger.Debug($"[{nameof(PompUnit)}] - Unsuction finished.");

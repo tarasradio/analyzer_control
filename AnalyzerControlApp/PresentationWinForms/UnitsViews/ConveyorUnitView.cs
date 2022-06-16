@@ -1,5 +1,6 @@
 ﻿using AnalyzerService;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PresentationWinForms.UnitsViews
@@ -43,10 +44,9 @@ namespace PresentationWinForms.UnitsViews
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Analyzer.TaskExecutor.StartTask(
-               () =>
+            Analyzer.TaskExecutor.StartTask( () =>
                {
-                   Analyzer.Conveyor.Shift2(3);
+                   Analyzer.Conveyor.Shift2(52);
                });
         }
     }

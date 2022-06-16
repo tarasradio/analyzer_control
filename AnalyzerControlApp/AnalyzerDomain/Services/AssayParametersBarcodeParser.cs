@@ -316,7 +316,7 @@ namespace AnalyzerDomain.Services
                 
                 printBarcode(parameters, filename);
 
-                Process.Start("notepad.exe", filename);
+                //Process.Start("notepad.exe", filename);
             }
             return parameters;
         }

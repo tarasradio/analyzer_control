@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AnalyzerDomain.Models
 {
-    public class AnalysisDescription
+    public class AnalysisDescription : ModelBase
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
@@ -26,13 +26,21 @@ namespace AnalyzerDomain.Models
         public int Inc1Duration { get; set; }
         public int inc2Duration { get; set; }
 
-        public int CurrentStage { get; set; }
-        public bool IncubationStarted { get; set; }
-        public int RemainingIncubationTime { get; set; }
+        private int _currentStage;
+        public int CurrentStage { get { return _currentStage; } set { _currentStage = value; OnPropertyChanged(); } }
+
+        private bool _incubationStarted;
+        public bool IncubationStarted { get { return _incubationStarted; } set { _incubationStarted = value; OnPropertyChanged(); } }
+
+        private int _remIncTime;
+        public int RemainingIncubationTime { get { return _remIncTime; } set { _remIncTime = value; OnPropertyChanged(); } }
         public double OM1Value { get; set; }
         public double OM2Value { get; set; }
 
-        public bool IsCompleted { get; set; }
-        public string Result { get; set; }
+        private bool _isCompleted;
+        public bool IsCompleted { get { return _isCompleted; } set { _isCompleted = value; OnPropertyChanged(); } }
+
+        private string _result;
+        public string Result { get { return _result; } set { _result = value; OnPropertyChanged(); } }
     }
 }

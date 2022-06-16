@@ -7,6 +7,7 @@ using AnalyzerConfiguration.UnitsConfiguration;
 using AnalyzerService.ExecutionControl;
 using Infrastructure;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AnalyzerService.Units
 {
@@ -87,6 +88,7 @@ namespace AnalyzerService.Units
             for (int i = 0; i < cellsCount; i++)
             {
                 Shift2();
+                Task.Delay(100).Wait();
             }
         }
 
@@ -94,14 +96,14 @@ namespace AnalyzerService.Units
         {
             List<ICommand> commands = new List<ICommand>();
 
-            if(Analyzer.State.SensorsValues[3] >= 500)
+            if(Analyzer.State.SensorsValues[3] >= 800)
             {
                 steppers = new Dictionary<int, int>() { { Options.ConveyorStepper, Options.ConveyorSpeed } };
-                commands.Add(new RunCncCommand(steppers, 3, 500, ValueEdge.FallingEdge));
+                commands.Add(new RunCncCommand(steppers, 3, 800, ValueEdge.FallingEdge));
             }
 
             steppers = new Dictionary<int, int>() { { Options.ConveyorStepper, Options.ConveyorSpeed } };
-            commands.Add(new RunCncCommand(steppers, 3, 500, ValueEdge.RisingEdge));
+            commands.Add(new RunCncCommand(steppers, 3, 800, ValueEdge.RisingEdge));
 
             executor.WaitExecution(commands);
         }

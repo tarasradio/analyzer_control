@@ -52,16 +52,14 @@ namespace AnalyzerControl
             Analyzer.Needle.HomeLifter();
             Analyzer.Needle.TurnAndGoDownToWashing(true); // В щелочь
 
-            Analyzer.Pomp.WashTheNeedle2(3);
-            Analyzer.Pomp.HomeSmall();
-            Analyzer.Pomp.CloseValves();
+            Analyzer.Pomp.FillTheNeedle(3);
 
             Analyzer.Needle.HomeLifter();
             Analyzer.Needle.TurnAndGoDownToWashing(false); // В воду
 
-            Analyzer.Pomp.WashTheNeedle2(3);
-            Analyzer.Pomp.HomeSmall();
-            Analyzer.Pomp.CloseValves();
+            Analyzer.Pomp.FillTheNeedle(3);
+            Analyzer.Needle.HomeLifter();
+            Analyzer.Needle.GoHome();
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace AnalyzerControlGUI.ViewModels
                 rotor = new RotorService(40);
                 cartridgesDeck = new CartridgesDeckService(10);
 
-                demoController = new AnalyzerDemoController(provider, conveyor, rotor, cartridgesDeck);
+                demoController = new AnalyzerDemoController(provider, conveyor, rotor, null);
                 demoController.LoadConfiguration(controllerFileName);
 
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;

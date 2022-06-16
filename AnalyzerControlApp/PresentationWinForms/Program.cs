@@ -5,6 +5,7 @@ using AnalyzerControl;
 using AnalyzerConfiguration;
 using AnalyzerControl.Services;
 using AnalyzerService;
+using AnalyzerDomain;
 
 namespace PresentationWinForms
 {
@@ -29,8 +30,9 @@ namespace PresentationWinForms
                 ConveyorService conveyor = new ConveyorService(52);
                 RotorService rotor = new RotorService(40);
                 CartridgesDeckService cartridgesDeck = new CartridgesDeckService(10);
+                AnalyzesRepository analyzesRepository = new AnalyzesRepository();
 
-                AnalyzerDemoController demoController = new AnalyzerDemoController(provider, conveyor, rotor, cartridgesDeck);
+                AnalyzerDemoController demoController = new AnalyzerDemoController(provider, conveyor, rotor, analyzesRepository);
 
                 demoController.LoadConfiguration("DemoControllerConfiguration");
 

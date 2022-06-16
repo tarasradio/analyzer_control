@@ -200,13 +200,14 @@
                               Style="{StaticResource DataGridStyle}"
                               Background="Transparent"
                               ItemsSource="{Binding Analyzes, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedIndex="{Binding SelectedAnalysisIndex, Mode=OneWayToSource}">
+                              SelectedIndex="{Binding SelectedAnalysisIndex, Mode=OneWayToSource}"
+                              >
                         <DataGrid.Columns>
                         <DataGridTextColumn Header="Дата"
                                         IsReadOnly="True"
                                         FontSize="16"
                                         MinWidth="150" 
-                                        Binding="{Binding Date}"/>
+                                        Binding="{Binding Date, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn Header="ID Пациента"
                                         IsReadOnly="True"
                                         FontSize="16"
