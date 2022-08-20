@@ -19,6 +19,17 @@ namespace AnalyzerDomain.Models
             }
         }
 
+        private string _cartridgeDescription;
+        public string CartridgeDescription
+        {
+            get => _cartridgeDescription;
+            set
+            {
+                _cartridgeDescription = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool Selected { get; set; } = false;
 
         private CellState _state;
@@ -35,7 +46,7 @@ namespace AnalyzerDomain.Models
         public bool IsEmpty
         {
             get  {
-                return AnalysisBarcode == string.Empty;
+                return AnalysisBarcode == string.Empty && CartridgeDescription == string.Empty;
             }
             private set { }
         }
@@ -43,12 +54,14 @@ namespace AnalyzerDomain.Models
         public RotorCell()
         {
             AnalysisBarcode = string.Empty;
+            CartridgeDescription = string.Empty;
             State = CellState.Empty;
         }
 
         public void SetEmpty()
         {
             AnalysisBarcode = string.Empty;
+            CartridgeDescription = string.Empty;
             State = CellState.Empty;
         }
     }

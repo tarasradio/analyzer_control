@@ -187,6 +187,7 @@ namespace AnalyzerControlGUI.ViewModels
             viewModel.CartridgesDeck = cartridgesDeck;
             viewModel.Conveyor = conveyor;
             viewModel.Rotor = rotor;
+            viewModel.AnalyzesRepository = repository;
 
             viewModel.Init();
 
@@ -404,6 +405,9 @@ namespace AnalyzerControlGUI.ViewModels
                 RotorCells = rotor.Cells;
                 Cassettes = cartridgesDeck.Cassettes;
 
+                repository.Analyzes.Clear();
+                repository.Save();
+
                 Analyzer.Serial.ConnectionChanged += UpdateConnectionState;
             } catch {
                 Logger.Debug("Возникла ошибка при запуске!");
@@ -415,6 +419,7 @@ namespace AnalyzerControlGUI.ViewModels
             ConnectionState = state;
             if (state) {
                 ConnectionText = "Соединение установлено";
+                LigthOffCells();
                 //openScreen();
             } else {
                 ConnectionText = "Соединение не установлено";
@@ -455,6 +460,14 @@ namespace AnalyzerControlGUI.ViewModels
             {
                 Analyzer.AdditionalDevices.CloseScreen();
             });
+        }
+
+        private void LigthOffCells()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Analyzer.Serial.SendPacket(new SetLedColorCommand(i, LEDColor.NoColor()).GetBytes());
+            }
         }
 
         // Сканирование кассеты

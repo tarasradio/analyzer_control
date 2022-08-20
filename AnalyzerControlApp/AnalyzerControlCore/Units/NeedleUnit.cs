@@ -3,11 +3,10 @@ using AnalyzerCommunication.CommunicationProtocol.CncCommands;
 using AnalyzerCommunication.CommunicationProtocol.StepperCommands;
 using AnalyzerConfiguration;
 using AnalyzerConfiguration.UnitsConfiguration;
+using AnalyzerDomain.Models;
 using AnalyzerService.ExecutionControl;
-using AnalyzerDomain.Entyties;
 using Infrastructure;
 using System.Collections.Generic;
-using AnalyzerDomain.Models;
 
 namespace AnalyzerService.Units
 {
@@ -16,10 +15,57 @@ namespace AnalyzerService.Units
         public int LifterPosition { get; set; } = 0;
         public int RotatorPosition { get; set; } = 0;
         public bool LifterPositionUnderfined { get; set; } = true;
+        
+        private const int rotatorMovingSpeed = 50;
+        private const int rotatorHomingSpeed = 100;
+        private const int lifterHomingSpeed = 500;
 
         public NeedleUnit(ICommandExecutor executor, IConfigurationProvider provider) : base(executor, provider)
         {
 
+        }
+
+        public void GoHome()
+        {
+            HomeLifter();
+            HomeRotator();
+        }
+
+        public void HomeRotator()
+        {
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start rotator going to home.");
+
+            List<ICommand> commands = new List<ICommand>();
+
+            commands.Add(new SetSpeedCommand(Options.RotatorStepper, rotatorHomingSpeed));
+
+            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, rotatorHomingSpeed } };
+            commands.Add(new HomeCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            RotatorPosition = 0;
+
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Rotator goint to home finished.");
+        }
+
+        public void HomeLifter()
+        {
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Start lift going to home.");
+
+            List<ICommand> commands = new List<ICommand>();
+
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, lifterHomingSpeed));
+
+            steppers = new Dictionary<int, int>() { { Options.LifterStepper, -lifterHomingSpeed } };
+            commands.Add(new HomeCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+
+            LifterPosition = 0;
+            LifterPositionUnderfined = false;
+
+            Logger.Debug($"[{nameof(NeedleUnit)}] - Lift going to home finished.");
         }
 
         public void TurnToTubeAndWaitTouch()
@@ -55,48 +101,6 @@ namespace AnalyzerService.Units
             Logger.Debug($"[{nameof(NeedleUnit)}] - Turn to tube and waiting touch finished.");
         }
 
-        public void HomeRotator()
-        {
-            Logger.Debug($"[{nameof(NeedleUnit)}] - Start rotator going to home.");
-            List<ICommand> commands = new List<ICommand>();
-            
-            commands.Add(new SetSpeedCommand(Options.RotatorStepper, 1000));
-
-            steppers = new Dictionary<int, int>() { { Options.RotatorStepper, 100 } };
-            commands.Add(new HomeCncCommand(steppers));
-
-            executor.WaitExecution(commands);
-            
-            RotatorPosition = 0;
-
-            Logger.Debug($"[{nameof(NeedleUnit)}] - Rotator goint to home finished.");
-        }
-
-        public void HomeLifter()
-        {
-            Logger.Debug($"[{nameof(NeedleUnit)}] - Start lift going to home.");
-            List<ICommand> commands = new List<ICommand>();
-
-            
-            commands.Add(new SetSpeedCommand(Options.LifterStepper, 1000));
-
-            steppers = new Dictionary<int, int>() { { Options.LifterStepper, -500 } };
-            commands.Add(new HomeCncCommand(steppers));
-
-            executor.WaitExecution(commands);
-
-            LifterPosition = 0;
-            LifterPositionUnderfined = false;
-
-            Logger.Debug($"[{nameof(NeedleUnit)}] - Lift going to home finished.");
-        }
-
-        public void GoHome()
-        {
-            HomeLifter();
-            HomeRotator();
-        }
-
         public void TurnAndGoDownToWashing(bool alkali)
         {
             Logger.Debug($"[{nameof(NeedleUnit)}] - Start turn and going down to washing.");
@@ -105,7 +109,7 @@ namespace AnalyzerService.Units
             int steps = alkali ? Options.RotatorStepsToAlkaliWashing : Options.RotatorStepsToWashing;
 
             // Поворот иглы до промывки
-            commands.Add(new SetSpeedCommand(Options.RotatorStepper, 50));
+            commands.Add(new SetSpeedCommand(Options.RotatorStepper, rotatorMovingSpeed));
 
             steppers = new Dictionary<int, int>() { { Options.RotatorStepper, steps - RotatorPosition} };
             commands.Add(new MoveCncCommand(steppers));
@@ -208,7 +212,7 @@ namespace AnalyzerService.Units
                 turnSteps = Options.RotatorStepsToThirdCell;
             }
 
-            commands.Add(new SetSpeedCommand(Options.RotatorStepper, 50));
+            commands.Add(new SetSpeedCommand(Options.RotatorStepper, rotatorMovingSpeed));
 
             steppers = new Dictionary<int, int>() { { Options.RotatorStepper, turnSteps - RotatorPosition } };
             commands.Add(new MoveCncCommand(steppers));

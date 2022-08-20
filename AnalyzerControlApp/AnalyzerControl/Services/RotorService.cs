@@ -25,9 +25,9 @@ namespace AnalyzerControl.Services
             }
         }
 
-        public bool ExistEmptyCells()
+        public bool ExistEmptyCells(int count = 0)
         {
-            return Cells.Count(c => c.IsEmpty) > 0;
+            return Cells.Count(c => c.IsEmpty) > count;
         }
 
         private (bool, int?) findFreeCellIndex()
@@ -40,12 +40,13 @@ namespace AnalyzerControl.Services
             return (false, null);
         }
 
-        public (bool, int?) AddAnalysis(string barcode)
+        public (bool, int?) AddAnalysis(string analysisBarcode, string cartridgeDescription)
         {
             var (existFreeCells, cellIndex) = findFreeCellIndex();
 
             if(existFreeCells) {
-                Cells[(int)cellIndex].AnalysisBarcode = barcode;
+                Cells[(int)cellIndex].AnalysisBarcode = analysisBarcode;
+                Cells[(int)cellIndex].CartridgeDescription = cartridgeDescription;
             }
             return (existFreeCells, cellIndex);
         }

@@ -216,8 +216,13 @@
                         <DataGridTextColumn Header="Стадия"
                                         IsReadOnly="True"
                                         FontSize="16"
-                                        MinWidth="100" 
+                                        MinWidth="70" 
                                         Binding="{Binding CurrentStage}"/>
+                            <DataGridTextColumn Header="Осталось (мин.)"
+                                        IsReadOnly="True"
+                                        FontSize="16"
+                                        MinWidth="120"
+                                        Binding="{Binding RemainingIncubationTime}"/>
                             <DataGridTextColumn Header="Результат"
                                         IsReadOnly="True"
                                         FontSize="16"

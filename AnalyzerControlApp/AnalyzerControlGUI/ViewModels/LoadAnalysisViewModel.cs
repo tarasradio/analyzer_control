@@ -1,4 +1,5 @@
-﻿using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
+﻿using AnalyzerCommunication;
+using AnalyzerCommunication.CommunicationProtocol.AdditionalCommands;
 using AnalyzerCommunication.ServerCommunication;
 using AnalyzerControl.Services;
 using AnalyzerDomain;
@@ -8,7 +9,9 @@ using AnalyzerService;
 using MVVM.Commands;
 using MVVM.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace AnalyzerControlGUI.ViewModels
 {
@@ -20,7 +23,7 @@ namespace AnalyzerControlGUI.ViewModels
             NextTube,
             TubeInserted,
             TubeScanned,
-            WaitCartridgeInserted, 
+            WaitCartridgesInserted, 
             BadTubeScanned,
             ServerConnectionError,
             WaitCassettePulledOut,
@@ -31,6 +34,8 @@ namespace AnalyzerControlGUI.ViewModels
         public RotorService Rotor = null;
         public CartridgesDeckService CartridgesDeck = null;
 
+        public AnalyzesRepository AnalyzesRepository = null;
+
         private readonly int[] cassettesSensors = { 14, 11, 9, 10, 8, 12, 13, 7, 5, 6 };
         private const int sensorTreshold = 512;
 
@@ -39,6 +44,9 @@ namespace AnalyzerControlGUI.ViewModels
         private string analysisBarcode = String.Empty;
 
         private int conveyorCellIndex = 0;
+
+        String[] cartridgesIDs;
+        AssayParameters[] analyzesParameters;
 
         #region DialogResult
         private bool? _dialogResult;
@@ -159,7 +167,7 @@ namespace AnalyzerControlGUI.ViewModels
             return state != LoadAnalysisState.Finished;
         }
 
-        private void firstCommand()
+        private async void firstCommand()
         {
             switch (state)
             {
@@ -178,11 +186,13 @@ namespace AnalyzerControlGUI.ViewModels
                     scanTube();
                     break;
                 case LoadAnalysisState.TubeScanned:
-                    state = LoadAnalysisState.WaitCartridgeInserted;
+                    state = LoadAnalysisState.WaitCartridgesInserted;
                     break;
-                case LoadAnalysisState.WaitCartridgeInserted:
-
-                    state = LoadAnalysisState.BadTubeScanned;
+                case LoadAnalysisState.WaitCartridgesInserted:
+                    await Task.Run(() => { 
+                        checkCartridges();
+                    });
+                    
                     break;
                 case LoadAnalysisState.BadTubeScanned:
 
@@ -247,7 +257,7 @@ namespace AnalyzerControlGUI.ViewModels
                 case LoadAnalysisState.TubeScanned:
 
                     break;
-                case LoadAnalysisState.WaitCartridgeInserted:
+                case LoadAnalysisState.WaitCartridgesInserted:
 
                     break;
                 case LoadAnalysisState.BadTubeScanned:
@@ -283,7 +293,10 @@ namespace AnalyzerControlGUI.ViewModels
                     conveyorCellIndex = (int)index;
                 }
                 
+                LigthOffCells();
+                
                 state = LoadAnalysisState.TubeInserted;
+
                 DialogText = "Вставьте пробирку и нажмите - Сканировать пробирку.";
                 FirstButtonText = "Сканировать пробирку";
                 FirstButtonEnabled = true;
@@ -308,12 +321,13 @@ namespace AnalyzerControlGUI.ViewModels
             } else {
                 await Task.Run(() =>
                 {
-                    checkBarcode(barcode);
+                    analysisBarcode = barcode;
+                    checkBarcode();
                 });
             }
         }
 
-        private void checkBarcode(string tubeBarcode)
+        private void checkBarcode()
         {
             DialogText = "Подключение к серверу...";
             Task.Delay(2000).Wait();
@@ -323,83 +337,24 @@ namespace AnalyzerControlGUI.ViewModels
             {
                 DialogText = "Подключение к серверу выполнено, запрос анализа из БД.";
                 Task.Delay(500).Wait();
-                String cartridgeID = client.GetCartridgeID(tubeBarcode.Trim());
 
-                if (cartridgeID != null)
+                cartridgesIDs = client.GetCatridgesIDs(analysisBarcode.Trim());
+                client.Disconnect();
+
+                if (cartridgesIDs.Length > 0)
                 {
                     DialogText = "Данные анализа загружены с сервера.";
                     Task.Delay(500).Wait();
 
                     state = LoadAnalysisState.TubeScanned;
 
-                    DialogText = "Сканирование завершено. Для загрузки картриджа поместите его в ячеку 0.";
-                    Task.Delay(500).Wait();
-
                     FirstButtonEnabled = false;
-
-                    Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.Blue()).GetBytes());
-                    waitCassetteInserted();
-
-                    DialogText = "Картридж вставлен, запуск сканирования картриджа";
-                    Task.Delay(500).Wait();
-
-                    AssayParameters parameters = scanCassette();
-                    if (parameters != null)
-                    {
-                        DialogText = "Картридж отсканирован. Запуск загрузки картриджа";
-                        System.Threading.Thread.Sleep(500);
-
-                        FirstButtonEnabled = false;
-
-                        var (isOk, rotorCellPosition) = Rotor.AddAnalysis(tubeBarcode);
-
-                        if(isOk)
-                        {
-                            Task.Run(() =>
-                            {
-                                Analyzer.Rotor.Home();
-                                Analyzer.Rotor.PlaceCellAtCharge((int)rotorCellPosition, 0);
-
-                                Analyzer.Charger.HomeHook(false);
-                                Analyzer.Charger.ChargeCartridge();
-                                Analyzer.Charger.HomeHook(true);
-                                Analyzer.Charger.MoveHookAfterHome();
-                            }).Wait();
-
-                            // Картридж заряжен
-
-                            DialogText = "Картридж загружен, вытащите кассету из ячейки 0.";
-                            Task.Delay(500).Wait();
-
-                            waitCassettePulledOut();
-
-                            Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.NoColor()).GetBytes());
-
-                            Conveyor.Cells[Conveyor.CellInScanPosition].AnalysisBarcode = tubeBarcode;
-                            NotifyPropertyChanged("ConveyorCells");
-
-                            addAnalysis(tubeBarcode, parameters, (int)rotorCellPosition, Conveyor.CellInScanPosition);
-
-                            DialogText = "Загрузка анализа завершена. Выберите, что делать далее.";
-                        } else {
-                            // Ячейки ротора заняты
-                            DialogText = "Все ячейки ротора заняты!";
-                        }
-                    }
-                    client.Disconnect();
+                    DialogText = "Сканирование завершено. Поместите следующие картриджи в подсвеченные ячейки: \n\r";
 
                     Task.Delay(500).Wait();
 
-                    FirstButtonEnabled = true;
-                    SecondButtonEnabled = true;
-
-                    FirstButtonText = "Завершить загрузку.";
-                    SecondButtonText = "Следующая пробирка";
-
-                    state = LoadAnalysisState.NextTube;
-                }
-                else
-                {
+                    checkCartridges();
+                } else {
                     state = LoadAnalysisState.BadTubeScanned;
                     DialogText = "Анализ не найден. Вставьте другую пробирку и нажмите - Сканировать пробирку.";
                     FirstButtonText = "Сканировать пробирку";
@@ -418,9 +373,212 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
+        private void checkCartridges()
+        {
+            int cell = 0;
+
+            foreach (var cartridge in cartridgesIDs) {
+                Analyzer.Serial.SendPacket(new SetLedColorCommand(cell, LEDColor.Blue()).GetBytes());
+                Task.Delay(100).Wait();
+
+                DialogText += ($"[{cartridge}] ");
+
+                cell++;
+            }
+
+            Task.Delay(500).Wait();
+
+            waitAllCassettesInserted(cartridgesIDs.Length);
+
+            DialogText = "Все ячейки заполнены, запуск сканирования картриджей";
+            Task.Delay(500).Wait();
+
+            bool[] checkedCells = new bool[cartridgesIDs.Length];
+
+            bool haveWrongCartridges = false;
+
+            analyzesParameters = new AssayParameters[cartridgesIDs.Length];
+
+            for (int i = 0; i < cartridgesIDs.Length; i++)
+            {
+                AssayParameters parameters = scanCassette(i);
+                analyzesParameters[i] = parameters;
+
+                if (parameters != null)
+                {
+                    bool cartridgeIsFound = false;
+                    for (int j = 0; j < cartridgesIDs.Length; j++)
+                    {
+                        cartridgeIsFound = string.Equals(parameters.assayName, cartridgesIDs[i]);
+                        if (cartridgeIsFound)
+                            break;
+                    }
+
+                    checkedCells[i] = cartridgeIsFound;
+
+                    if (cartridgeIsFound) {
+                        DialogText += $"\n\r В ячейке [{i + 1}] найден картридж [{parameters.assayName}].";
+                    } else {
+                        DialogText += $"\n\r В ячейке [{i + 1}] найден неверный картридж!";
+
+                        haveWrongCartridges = true;
+                    }
+                }
+                else
+                {
+                    DialogText += $"\n\r В ячейке [{i + 1}] картридж не был отсканирован!";
+
+                    haveWrongCartridges = true;
+                }
+            }
+
+            if(haveWrongCartridges) {
+                DialogText += $"\n\r Проверьте картриджи и нажмите \"Продолжить\".";
+
+                FirstButtonEnabled = true;
+                FirstButtonText = "Продолжить";
+
+                state = LoadAnalysisState.WaitCartridgesInserted;
+            } else {
+                DialogText = $"Все картриджи найдены, запуск загрузки картриджей.";
+
+                loadCartridges();
+
+                Task.Delay(500).Wait();
+
+                FirstButtonEnabled = true;
+                SecondButtonEnabled = true;
+
+                FirstButtonText = "Завершить загрузку.";
+                SecondButtonText = "Следующая пробирка";
+
+                state = LoadAnalysisState.NextTube;
+            }
+        }
+
+        private void loadCartridges()
+        {
+            // Проверка наличия свободных ячеек в роторе
+            bool existEmptyCells = Rotor.ExistEmptyCells(cartridgesIDs.Length);
+
+            if(existEmptyCells) {
+                // Найдены свободные ячейки в роторе
+
+                for (int i = 0; i < cartridgesIDs.Length; i++) {
+                    loadCartridge(i);
+                }
+
+                DialogText = "Картриджи загружены, вытащите кассеты из ячеек.";
+                Task.Delay(500).Wait();
+
+                waitAllCassetesPulledOut(cartridgesIDs.Length);
+
+                LigthOffCells();
+
+                Conveyor.Cells[Conveyor.CellInScanPosition].AnalysisBarcode = analysisBarcode;
+                Conveyor.Cells[Conveyor.CellInScanPosition].State = CellState.Processing;
+
+                NotifyPropertyChanged("ConveyorCells");
+
+                DialogText = "Загрузка анализов завершена. Выберите, что делать далее.";
+            }
+            else {
+                // Ячейки ротора заняты
+                DialogText = "Все ячейки ротора заняты!";
+            }
+        }
+
+        private void loadCartridge(int i)
+        {
+            // Загрузка картриджа из ячейки
+
+            var (isOk, rotorCellPosition) = Rotor.AddAnalysis(analysisBarcode, cartridgesIDs[i]);
+
+            if (isOk)
+            {
+                Task.Run(() =>
+                {
+                    Analyzer.Rotor.Home();
+                    Analyzer.Rotor.PlaceCellAtCharge((int)rotorCellPosition, i);
+
+                    Analyzer.Charger.HomeHook(false);
+                    Analyzer.Charger.MoveHookAfterHome();
+
+                    Analyzer.Charger.HomeRotator();
+                    Analyzer.Charger.TurnToCell(i);
+
+                    Analyzer.Charger.ChargeCartridge();
+                    Analyzer.Charger.HomeHook(true);
+                    Analyzer.Charger.MoveHookAfterHome();
+                }).Wait();
+
+                Rotor.Cells[(int)rotorCellPosition].State = CellState.Processing;
+
+                addAnalysis(analysisBarcode, analyzesParameters[i], (int)rotorCellPosition, Conveyor.CellInScanPosition);
+            }
+        }
+
+        private void waitAllCassettesInserted(int cells)
+        {
+            bool cartridgesInserted;
+
+            do {
+                cartridgesInserted = true;
+                for (int i = 0; i < cells; i++) {
+                    bool cartridgeInserted = Analyzer.State.SensorsValues[cassettesSensors[i]] > sensorTreshold;
+
+                    if (cartridgeInserted) {
+                        Analyzer.Serial.SendPacket(new SetLedColorCommand(i, LEDColor.Red()).GetBytes());
+                    } else {
+                        Analyzer.Serial.SendPacket(new SetLedColorCommand(i, LEDColor.Blue()).GetBytes());
+                    }
+
+                    Task.Delay(100).Wait();
+                    cartridgesInserted &= cartridgeInserted;
+                }
+            } while (!cartridgesInserted);
+        }
+
+        private void waitAllCassetesPulledOut(int cells)
+        {
+            bool cartridgesInserted;
+
+            do
+            {
+                cartridgesInserted = true;
+                for (int i = 0; i < cells; i++)
+                {
+                    bool cartridgeInserted = Analyzer.State.SensorsValues[cassettesSensors[i]] > sensorTreshold;
+
+                    if (cartridgeInserted)
+                    {
+                        Analyzer.Serial.SendPacket(new SetLedColorCommand(i, LEDColor.Red()).GetBytes());
+                    }
+                    else
+                    {
+                        Analyzer.Serial.SendPacket(new SetLedColorCommand(i, LEDColor.Blue()).GetBytes());
+                    }
+
+                    Task.Delay(100).Wait();
+                    cartridgesInserted &= cartridgeInserted;
+                }
+            } while (cartridgesInserted);
+        }
+
+        private static void LigthOffCells()
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            for (int i = 0; i < 10; i++) {
+                commands.Add(new SetLedColorCommand(i, LEDColor.NoColor()));
+            }
+
+            Analyzer.CommandExecutor.WaitExecution(commands);
+        }
+
         private void addAnalysis(string patientID, AssayParameters parameters, int rotorPosition, int conveyorPosition)
         {
-            using (AnalyzerContext db = new AnalyzerContext())
+            App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
             {
                 AnalysisDescription analysis = new AnalysisDescription();
 
@@ -434,22 +592,22 @@ namespace AnalyzerControlGUI.ViewModels
                 analysis.Tw2Volume = parameters.usedVolumes.TW2_Conjugate;
                 analysis.Tw3Volume = parameters.usedVolumes.TW3_Substrate;
                 analysis.TacwVolume = parameters.usedVolumes.TACW;
-                analysis.Inc1Duration = 2;//parameters.incubationTimes.inc_1;
-                analysis.inc2Duration = 2;//parameters.incubationTimes.inc_2;
+                analysis.Inc1Duration = 5;//parameters.incubationTimes.inc_1;
+                analysis.inc2Duration = 5;//parameters.incubationTimes.inc_2;
 
                 analysis.CurrentStage = -1;
                 analysis.IsCompleted = false;
 
-                db.Analyses.Add(analysis);
-                db.SaveChanges();
-            }
+                AnalyzesRepository.Add(analysis);
+                AnalyzesRepository.Save();
+            });
         }
 
-        private AssayParameters scanCassette()
+        private AssayParameters scanCassette(int cell)
         {
             AssayParameters parameters = null;
 
-            CartridgesDeck.ScanCassette(0);
+            CartridgesDeck.ScanCassette(cell);
 
             string barcode = Analyzer.State.CartridgeBarcode;
 
@@ -459,21 +617,21 @@ namespace AnalyzerControlGUI.ViewModels
 
                 if(parameters != null)
                 {
-                    CartridgesDeck.Cassettes[0].Parameters = parameters;
-                    CartridgesDeck.Cassettes[0].Barcode = parameters.assayShortName;
-                    CartridgesDeck.Cassettes[0].CountLeft = 10;
+                    CartridgesDeck.Cassettes[cell].Parameters = parameters;
+                    CartridgesDeck.Cassettes[cell].Barcode = parameters.assayShortName;
+                    CartridgesDeck.Cassettes[cell].CountLeft = 10;
 
-                    Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.Green()).GetBytes());
+                    Analyzer.Serial.SendPacket(new SetLedColorCommand(cell, LEDColor.Green()).GetBytes());
                 } else {
-                    CartridgesDeck.Cassettes[0].Parameters = null;
-                    CartridgesDeck.Cassettes[0].Barcode = "No cartridge";
-                    CartridgesDeck.Cassettes[0].CountLeft = 0;
-                    Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.Red()).GetBytes());
+                    CartridgesDeck.Cassettes[cell].Parameters = null;
+                    CartridgesDeck.Cassettes[cell].Barcode = "No cartridge";
+                    CartridgesDeck.Cassettes[cell].CountLeft = 0;
+                    Analyzer.Serial.SendPacket(new SetLedColorCommand(cell, LEDColor.Red()).GetBytes());
                 }
             }
             else
             {
-                Analyzer.Serial.SendPacket(new SetLedColorCommand(0, LEDColor.NoColor()).GetBytes());
+                Analyzer.Serial.SendPacket(new SetLedColorCommand(cell, LEDColor.NoColor()).GetBytes());
             }
             return parameters;
         }

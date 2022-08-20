@@ -32,6 +32,7 @@ namespace PresentationWinForms.UnitsViews
                 () =>
                 {
                     Analyzer.Charger.HomeHook(false);
+                    Analyzer.Charger.MoveHookAfterHome();
                 });
         }
 

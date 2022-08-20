@@ -171,7 +171,7 @@ namespace PresentationWinForms.Forms
                 Analyzer.Needle.GoHome();
                 Analyzer.Needle.TurnAndGoDownToWashing(false);
                 Analyzer.Pomp.Home();
-                Analyzer.Pomp.FillTheNeedle(10);
+                Analyzer.Pomp.FillTheNeedle(30);
                 Analyzer.Needle.GoHome();
             });
         }

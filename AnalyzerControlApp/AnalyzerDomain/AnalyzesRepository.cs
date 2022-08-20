@@ -21,6 +21,12 @@ namespace AnalyzerDomain
             Analyzes = context.Analyses.Local.ToObservableCollection();
         }
 
+        public void Load()
+        {
+            context.Analyses.Load();
+            Analyzes = context.Analyses.Local.ToObservableCollection();
+        }
+
         public void Add(AnalysisDescription description)
         {
             context.Analyses.Add(description);

@@ -6,6 +6,7 @@ using AnalyzerService.ExecutionControl;
 using Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AnalyzerService.Units
 {
@@ -287,20 +288,31 @@ namespace AnalyzerService.Units
             // шаг первый - выкачка в иглу
 
             commands.Add(new OffDeviceCncCommand(new List<int>() { inputValve }));
+
+            executor.WaitExecution(commands);
+            commands.Clear();
+            //Task.Delay(1000).Wait();
+
             commands.Add(new OnDeviceCncCommand(new List<int>() { needleValve }));
 
             steppers = new Dictionary<int, int>() {
-                    { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                    //{ Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
                     { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
                 };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                    { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                    //{ Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
                     { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
                 };
             commands.Add(new HomeCncCommand(steppers));
 
+            executor.WaitExecution(commands);
+
+            //Task.Delay(1000).Wait();
+
+            commands.Clear();
+            commands.Add(new OffDeviceCncCommand(new List<int>() { needleValve }));
             executor.WaitExecution(commands);
         }
 
@@ -311,16 +323,21 @@ namespace AnalyzerService.Units
             // шаг второй - закачка в шприцы
 
             commands.Add(new OffDeviceCncCommand(new List<int>() { needleValve }));
+
+            executor.WaitExecution(commands);
+            commands.Clear();
+            //Task.Delay(1000).Wait();
+
             commands.Add(new OnDeviceCncCommand(new List<int>() { inputValve }));
 
             steppers = new Dictionary<int, int>() {
-                    { Options.BigPistonStepper, Options.BigPistonSpeedAtWashing },
-                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtWashing }
+                    //{ Options.BigPistonStepper, Options.BigPistonSpeedAtWashing },
+                    { Options.SmallPistonStepper, Options.SmallPistonSpeedAtWashing * 2 }
                 };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                    { Options.BigPistonStepper, Options.BigPistonStepsAtWashing },
+                    //{ Options.BigPistonStepper, Options.BigPistonStepsAtWashing },
                     { Options.SmallPistonStepper, Options.SmallPistonStepsAtWashing }
                 };
             commands.Add(new MoveCncCommand(steppers));

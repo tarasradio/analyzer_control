@@ -46,6 +46,12 @@ void setup()
 
     Steppers::get(15).configStepMode(STEP_FS_32);
 
+    Steppers::get(9).setAcc(1000);
+    Steppers::get(9).setDec(1000);
+
+    Steppers::get(10).setAcc(1000);
+    Steppers::get(10).setDec(1000);
+
     timer = millis();
 
     commandExecutor.init_leds();

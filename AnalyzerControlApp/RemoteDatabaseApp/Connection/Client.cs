@@ -16,12 +16,14 @@ namespace RemoteDatabaseApp.Connection
 
         enum RequestsTypes
         {
-            AnalysisRequest
+            AnalysisRequest,
+            AnalyzesListRequest
         };
 
         enum ResponcesTypes
         {
             CartridgeBarcodeResponse,
+            CartridgesBarcodesResponse,
             UnknownBarcodeResponse
         };
 
@@ -50,9 +52,13 @@ namespace RemoteDatabaseApp.Connection
                     String message = String.Empty;
 
                     if (data[0] == (int)RequestsTypes.AnalysisRequest) {
-                        handleAnalysisRequest(data, stream);
-                    } else {
-                        handleUnknownRequest(data, stream);
+                        handleAnalysisReq(data, stream);
+                    }
+                    else if (data[0] == (int)RequestsTypes.AnalyzesListRequest) {
+                        handleAnalyzesListReq(data, stream);
+                    }
+                    else {
+                        handleUnknownReq(data, stream);
                     }
                 }
             }
@@ -69,7 +75,58 @@ namespace RemoteDatabaseApp.Connection
             }
         }
 
-        private void handleAnalysisRequest(byte[] data, NetworkStream stream)
+        private void handleAnalyzesListReq(byte[] data, NetworkStream stream)
+        {
+            StringBuilder builder = new StringBuilder();
+
+            String barcode = Encoding.Unicode.GetString(data, 1, data.Length - 2);
+
+            Console.WriteLine($"Запрошен штрихкод анализа: {barcode}");
+
+            using (AnalyzerContext db = new AnalyzerContext())
+            {
+                db.SheduledAnalyzes.Include(a => a.AnalysisType).Load();
+                db.Cartridges.Load();
+
+                var analyzes = db.SheduledAnalyzes.Where(a => String.Equals(a.Barcode, barcode)).ToList();
+
+                if(analyzes.Count > 0) {
+
+                    List<String> cartridges = new List<string>();
+
+                    List<byte> responseBytesList = new List<byte>();
+
+                    byte[] analyzesCountBytes = BitConverter.GetBytes((UInt32)analyzes.Count);
+                    responseBytesList.AddRange(analyzesCountBytes);
+
+                    foreach(var analysis in analyzes) {
+                        String cartridgeBarcode = analysis.AnalysisType.Cartridge.Description;
+
+                        byte[] barcodeLengthBytes = BitConverter.GetBytes((UInt32)cartridgeBarcode.Length);
+                        byte[] barcodeBytes = Encoding.Unicode.GetBytes(cartridgeBarcode);
+
+                        responseBytesList.AddRange(barcodeLengthBytes);
+                        responseBytesList.AddRange(barcodeBytes);
+                    }
+
+                    byte[] responseBytes = new byte[responseBytesList.Count + 1];
+                    responseBytesList.CopyTo(responseBytes, 1);
+                    responseBytes[0] = (byte)ResponcesTypes.CartridgesBarcodesResponse;
+
+                    // отправка сообщения
+                    stream.Write(responseBytes, 0, responseBytes.Length);
+
+                } else {
+                    Console.WriteLine($"Анализов для запрошенного пациента не найдено!");
+                    byte[] responseBytes = new byte[1];
+                    responseBytes[0] = (byte)ResponcesTypes.UnknownBarcodeResponse;
+                    stream.Write(responseBytes, 0, responseBytes.Length);
+                }
+                
+            }
+        }
+
+        private void handleAnalysisReq(byte[] data, NetworkStream stream)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -85,7 +142,7 @@ namespace RemoteDatabaseApp.Connection
                 Analysis analysis = db.SheduledAnalyzes.FirstOrDefault(a => String.Equals(a.Barcode, barcode));
                 if (analysis != null)
                 {
-                    String cartridgeBarcode = analysis.AnalysisType.Cartridge.Barcode;
+                    String cartridgeBarcode = analysis.AnalysisType.Cartridge.Description;
 
                     Console.WriteLine($"Запрошен пациент: {analysis.Description}.");
                     RequestReceived($"Запрошен пациент: {analysis.Description}.");
@@ -115,7 +172,7 @@ namespace RemoteDatabaseApp.Connection
             
         }
 
-        private void handleUnknownRequest(byte[] data, NetworkStream stream)
+        private void handleUnknownReq(byte[] data, NetworkStream stream)
         {
             data = Encoding.Unicode.GetBytes("Принята неизвестная команда!");
             stream.Write(data, 0, data.Length);
