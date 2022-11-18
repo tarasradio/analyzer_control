@@ -41,49 +41,47 @@ namespace PresentationWinForms.UnitsViews
             else if (selectCUV.Checked)
                 well = CartridgeWell.CUV;
 
-            if (selectChargePlace.Checked)
-            {
+            if (chargePlace.Checked) {
                 Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
                     Analyzer.Rotor.PlaceCellAtCharge(cellNumber, chargePosition);
                 });
-            }
-            else if(selectNeedleLeftPlace.Checked)
-            {
+            } else if (dischargePlace.Checked) {
                 Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
+                    Analyzer.Rotor.PlaceCellAtDischarge(cellNumber);
+                });
+            } else if(needleLeftPlace.Checked) {
+                Analyzer.TaskExecutor.StartTask(
+                () =>
+                {
+                    //Analyzer.Rotor.Home();
                     Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, well, RotorUnit.CellPosition.CellLeft);
                 });
-            }
-            else if(selectNeedleRightPlace.Checked)
-            {
+            } else if(needleRightPlace.Checked) {
                 Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
                     Analyzer.Rotor.PlaceCellUnderNeedle(cellNumber, well, RotorUnit.CellPosition.CellRight);
                 });
-            }
-            else if(selectWashBufferPlace.Checked)
-            {
+            } else if(washBufferPlace.Checked) {
                 Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
                     Analyzer.Rotor.PlaceCellUnderWashBuffer(cellNumber);
                 });
-            }
-            else if(selectDischargePlace.Checked)
-            {
+            } else if(OMPlace.Checked) {
                 Analyzer.TaskExecutor.StartTask(
                 () =>
                 {
                     Analyzer.Rotor.Home();
-                    Analyzer.Rotor.PlaceCellAtDischarge(cellNumber);
+                    Analyzer.Rotor.PlaceCellAtOM(cellNumber);
                 });
             }
         }

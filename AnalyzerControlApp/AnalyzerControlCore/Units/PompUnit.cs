@@ -40,13 +40,13 @@ namespace AnalyzerService.Units
             //commands.Add(new OffDeviceCncCommand(new List<int>() { 1 }));
 
             steppers = new Dictionary<int, int>() {
-                { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                //{ Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
                 { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
             };
             commands.Add(new SetSpeedCncCommand(steppers));
 
             steppers = new Dictionary<int, int>() {
-                { Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
+                //{ Options.BigPistonStepper, Options.BigPistonSpeedAtHoming },
                 { Options.SmallPistonStepper, Options.SmallPistonSpeedAtHoming }
             };
             commands.Add(new HomeCncCommand(steppers));
@@ -124,24 +124,14 @@ namespace AnalyzerService.Units
             executor.WaitExecution(commands);
         }
 
-
-        // M = 100.48 uL за один оборот (диаметр 4 мм ход 8 мм)
-        // 1 микролитр равен одному кубическому миллиметру
-        // 200 шагов на один оборот мотора (без делителей)
-        // используется делитель 128 (128 микрошагов на 1 шаг)
-        // =>
-        // 1 оборот малого плунжера = 128 * 200 = 25 600 шагов (SM)
-        // расчет S шагов на N микролитров:
-        // S = N / M * SM
-        // Пример: на 200 uL -> 200 / 100.48 * 25600 = 50955 шагов
-        // Пример: на 5 uL -> 5 / 100.48 * 25600 = 1274 шагов
-        // Пример: на 1 uL -> 1 / 100.48 * 25600 = 255 шагов
+        /// <summary>
+        /// Забор материала в иглу
+        /// </summary>
+        /// <param name="value">Объем материала (uL)</param>
         public void Pull(int value)
         {
-            double steps = (double)value / 100.48 * 25600;
+            int steps = calcStepsFromValue(value);
 
-
-            Logger.Debug($"[{nameof(PompUnit)}] - Start suction.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add( new OffDeviceCncCommand(new List<int>() { inputValve }) );
@@ -161,14 +151,16 @@ namespace AnalyzerService.Units
             commands.Add( new OffDeviceCncCommand(new List<int>() { needleValve }) );
 
             executor.WaitExecution(commands);
-            Logger.Debug($"[{nameof(PompUnit)}] - Suction finished.");
         }
 
+        /// <summary>
+        /// Слив материала из иглы
+        /// </summary>
+        /// <param name="value">Объем материала (uL)</param>
         public void Push(int value)
         {
-            double steps = (double)value / 100.48 * 25600;
+            int steps = calcStepsFromValue(value);
 
-            Logger.Debug($"[{nameof(PompUnit)}] - Start unsuction.");
             List<ICommand> commands = new List<ICommand>();
             
             commands.Add( new OnDeviceCncCommand(new List<int>() { needleValve }) );
@@ -180,14 +172,37 @@ namespace AnalyzerService.Units
             commands.Add( new SetSpeedCncCommand(steppers) );
 
             steppers = new Dictionary<int, int>() {
-                { Options.SmallPistonStepper, (int)steps }
+                { Options.SmallPistonStepper, steps }
             };
             commands.Add(new MoveCncCommand(steppers));
 
             commands.Add( new OffDeviceCncCommand(new List<int>() { needleValve }) );
 
             executor.WaitExecution(commands);
-            Logger.Debug($"[{nameof(PompUnit)}] - Unsuction finished.");
+        }
+
+
+        // M = 100.48 uL за один оборот (диаметр 4 мм ход 8 мм)
+        // 1 микролитр равен одному кубическому миллиметру
+        // 200 шагов на один оборот мотора (без делителей)
+        // используется делитель 128 (128 микрошагов на 1 шаг)
+        // =>
+        // 1 оборот малого плунжера = 128 * 200 = 25 600 шагов (SM)
+        // расчет S шагов на N микролитров:
+        // S = N / M * SM
+        // Пример: на 200 uL -> 200 / 100.48 * 25600 = 50955 шагов
+        // Пример: на 5 uL -> 5 / 100.48 * 25600 = 1274 шагов
+        // Пример: на 1 uL -> 1 / 100.48 * 25600 = 255 шагов
+
+        /// <summary>
+        /// Вычисление колиечства шагов мотора на заданный объем материала
+        /// </summary>
+        /// <param name="value">Объем материала (uL)</param>
+        /// <returns>Число шагов</returns>
+        private int calcStepsFromValue(int value)
+        {
+            double steps = (double)value / 100.48 * 25600;
+            return (int)steps;
         }
 
         public void WashTheNeedle(int cycles)

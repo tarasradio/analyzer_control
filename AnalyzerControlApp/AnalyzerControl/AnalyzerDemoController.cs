@@ -2,15 +2,13 @@
 using AnalyzerControl.Configuration;
 using AnalyzerControl.Services;
 using AnalyzerDomain;
-using AnalyzerDomain.Entyties;
 using AnalyzerDomain.Models;
 using AnalyzerService;
 using AnalyzerService.Units;
 using Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Timers;
 
 namespace AnalyzerControl
@@ -186,7 +184,7 @@ namespace AnalyzerControl
 
         private void sampleAnalysis(AnalysisDescription analysis)
         {
-            // забираем материал из иглы
+            // забираем материал из пробирки
             Analyzer.Needle.HomeLifter(); // Поднимаем иглу вверх до дома
             Analyzer.Needle.GoHome();
             Analyzer.Needle.TurnToTubeAndWaitTouch(); // Устанавливаем иглу над пробиркой и опускаем ее до контакта с материалом в пробирке
@@ -222,6 +220,9 @@ namespace AnalyzerControl
 
         void stage2Analysis(AnalysisDescription analysis)
         {
+            // Перед переливанием из TW3 в TACW нужно промыть TACW в wash buffer
+            washTacw(analysis);
+
             // забираем из TW3
             Analyzer.Rotor.Home();
             Analyzer.Rotor.PlaceCellUnderNeedle(analysis.RotorPosition, CartridgeWell.W3, RotorUnit.CellPosition.CellLeft);
@@ -249,6 +250,21 @@ namespace AnalyzerControl
             AnalyzerOperations.WashNeedle2();
         }
 
+        private void washTacw(AnalysisDescription analysis)
+        {
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellUnderWashBuffer(analysis.RotorPosition);
+
+            // Здесь нужно включить wash-буффер
+            Analyzer.AdditionalDevices.HomeWashBuffer();
+            // 1) опустить wash-буффер до высоты TACW
+            Analyzer.AdditionalDevices.PutDownWashBuffer();
+            // 2) запустить процесс промывки TACW
+            AnalyzerOperations.WashTacw();
+            // 3) поднять wash-буффер
+            Analyzer.AdditionalDevices.HomeWashBuffer();
+        }
+
         void finishAnalysis(AnalysisDescription analysis)
         {
             // забираем из TACW
@@ -263,7 +279,13 @@ namespace AnalyzerControl
 
             Analyzer.Needle.HomeLifter();
 
-            // выливаем в TACW
+            // Замер TCUV без материала
+
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellAtOM(analysis.RotorPosition);
+            analysis.OM1Value = Analyzer.State.SensorsValues[15];
+
+            // выливаем в TCUV
             Analyzer.Rotor.Home();
             Analyzer.Rotor.PlaceCellUnderNeedle(analysis.RotorPosition, CartridgeWell.CUV);
 
@@ -274,6 +296,21 @@ namespace AnalyzerControl
             Analyzer.Pomp.Push(analysis.TacwVolume);
 
             Analyzer.Needle.HomeLifter();
+
+            // Замер TCUV с материалом
+
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellAtOM(analysis.RotorPosition);
+            analysis.OM2Value = Analyzer.State.SensorsValues[15];
+
+            Analyzer.Rotor.Home();
+            Analyzer.Rotor.PlaceCellAtDischarge(analysis.RotorPosition);
+
+            Analyzer.Charger.HomeRotator();
+            Analyzer.Charger.TurnToDischarge();
+            Analyzer.Charger.DischargeCartridge();
+            Analyzer.Charger.HomeHook(false);
+            Analyzer.Charger.MoveHookAfterHome();
 
             AnalyzerOperations.WashNeedle2();
         }

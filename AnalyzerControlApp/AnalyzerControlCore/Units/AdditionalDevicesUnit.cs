@@ -62,5 +62,30 @@ namespace AnalyzerService.Units
         {
             HomeScreen();
         }
+
+        public void HomeWashBuffer()
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            commands.Add(new SetSpeedCommand(Options.WashBufferUpDownStepper, (uint)Options.WashBufferHomeSpeed));
+
+            // Выставить экран прямо
+            steppers = new Dictionary<int, int>() { { Options.WashBufferUpDownStepper, Options.WashBufferHomeSpeed } };
+            commands.Add(new HomeCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+        }
+
+        public void PutDownWashBuffer()
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            // Выставить экран прямо
+            commands.Add(new SetSpeedCommand(Options.WashBufferUpDownStepper, (uint)Options.WashBufferPutDownSpeed));
+            steppers = new Dictionary<int, int>() { { Options.WashBufferUpDownStepper, Options.WashBufferPutDownSteps } };
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+        }
     }
 }

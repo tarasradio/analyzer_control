@@ -33,11 +33,11 @@
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.buttonPlaceCell = new System.Windows.Forms.Button();
             this.groupBoxSelectCell = new System.Windows.Forms.GroupBox();
-            this.selectDischargePlace = new System.Windows.Forms.RadioButton();
-            this.selectNeedleRightPlace = new System.Windows.Forms.RadioButton();
-            this.selectChargePlace = new System.Windows.Forms.RadioButton();
-            this.selectNeedleLeftPlace = new System.Windows.Forms.RadioButton();
-            this.selectWashBufferPlace = new System.Windows.Forms.RadioButton();
+            this.dischargePlace = new System.Windows.Forms.RadioButton();
+            this.needleRightPlace = new System.Windows.Forms.RadioButton();
+            this.chargePlace = new System.Windows.Forms.RadioButton();
+            this.needleLeftPlace = new System.Windows.Forms.RadioButton();
+            this.washBufferPlace = new System.Windows.Forms.RadioButton();
             this.editCellNumber = new System.Windows.Forms.NumericUpDown();
             this.labelNumberCell = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -48,6 +48,7 @@
             this.selectW2 = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.editChargePosition = new System.Windows.Forms.NumericUpDown();
+            this.OMPlace = new System.Windows.Forms.RadioButton();
             this.groupBoxSelectCell.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -77,7 +78,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(178, 3);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(547, 464);
+            this.propertyGrid.Size = new System.Drawing.Size(547, 535);
             this.propertyGrid.TabIndex = 10;
             // 
             // buttonPlaceCell
@@ -96,70 +97,71 @@
             // 
             // groupBoxSelectCell
             // 
-            this.groupBoxSelectCell.Controls.Add(this.selectDischargePlace);
-            this.groupBoxSelectCell.Controls.Add(this.selectNeedleRightPlace);
-            this.groupBoxSelectCell.Controls.Add(this.selectChargePlace);
-            this.groupBoxSelectCell.Controls.Add(this.selectNeedleLeftPlace);
-            this.groupBoxSelectCell.Controls.Add(this.selectWashBufferPlace);
+            this.groupBoxSelectCell.Controls.Add(this.OMPlace);
+            this.groupBoxSelectCell.Controls.Add(this.dischargePlace);
+            this.groupBoxSelectCell.Controls.Add(this.needleRightPlace);
+            this.groupBoxSelectCell.Controls.Add(this.chargePlace);
+            this.groupBoxSelectCell.Controls.Add(this.needleLeftPlace);
+            this.groupBoxSelectCell.Controls.Add(this.washBufferPlace);
             this.groupBoxSelectCell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBoxSelectCell.Location = new System.Drawing.Point(3, 137);
             this.groupBoxSelectCell.Name = "groupBoxSelectCell";
-            this.groupBoxSelectCell.Size = new System.Drawing.Size(169, 134);
+            this.groupBoxSelectCell.Size = new System.Drawing.Size(169, 160);
             this.groupBoxSelectCell.TabIndex = 12;
             this.groupBoxSelectCell.TabStop = false;
             this.groupBoxSelectCell.Text = "Выбор места";
             // 
             // selectDischargePlace
             // 
-            this.selectDischargePlace.AutoSize = true;
-            this.selectDischargePlace.Location = new System.Drawing.Point(6, 111);
-            this.selectDischargePlace.Name = "selectDischargePlace";
-            this.selectDischargePlace.Size = new System.Drawing.Size(76, 19);
-            this.selectDischargePlace.TabIndex = 8;
-            this.selectDischargePlace.Text = "Выгрузка";
-            this.selectDischargePlace.UseVisualStyleBackColor = true;
+            this.dischargePlace.AutoSize = true;
+            this.dischargePlace.Location = new System.Drawing.Point(6, 111);
+            this.dischargePlace.Name = "selectDischargePlace";
+            this.dischargePlace.Size = new System.Drawing.Size(76, 19);
+            this.dischargePlace.TabIndex = 8;
+            this.dischargePlace.Text = "Выгрузка";
+            this.dischargePlace.UseVisualStyleBackColor = true;
             // 
             // selectNeedleRightPlace
             // 
-            this.selectNeedleRightPlace.AutoSize = true;
-            this.selectNeedleRightPlace.Checked = true;
-            this.selectNeedleRightPlace.Location = new System.Drawing.Point(6, 42);
-            this.selectNeedleRightPlace.Name = "selectNeedleRightPlace";
-            this.selectNeedleRightPlace.Size = new System.Drawing.Size(96, 19);
-            this.selectNeedleRightPlace.TabIndex = 4;
-            this.selectNeedleRightPlace.TabStop = true;
-            this.selectNeedleRightPlace.Text = "Игла (право)";
-            this.selectNeedleRightPlace.UseVisualStyleBackColor = true;
+            this.needleRightPlace.AutoSize = true;
+            this.needleRightPlace.Checked = true;
+            this.needleRightPlace.Location = new System.Drawing.Point(6, 42);
+            this.needleRightPlace.Name = "selectNeedleRightPlace";
+            this.needleRightPlace.Size = new System.Drawing.Size(96, 19);
+            this.needleRightPlace.TabIndex = 4;
+            this.needleRightPlace.TabStop = true;
+            this.needleRightPlace.Text = "Игла (право)";
+            this.needleRightPlace.UseVisualStyleBackColor = true;
             // 
             // selectChargePlace
             // 
-            this.selectChargePlace.AutoSize = true;
-            this.selectChargePlace.Location = new System.Drawing.Point(6, 88);
-            this.selectChargePlace.Name = "selectChargePlace";
-            this.selectChargePlace.Size = new System.Drawing.Size(73, 19);
-            this.selectChargePlace.TabIndex = 7;
-            this.selectChargePlace.Text = "Загрузка";
-            this.selectChargePlace.UseVisualStyleBackColor = true;
+            this.chargePlace.AutoSize = true;
+            this.chargePlace.Location = new System.Drawing.Point(6, 88);
+            this.chargePlace.Name = "selectChargePlace";
+            this.chargePlace.Size = new System.Drawing.Size(73, 19);
+            this.chargePlace.TabIndex = 7;
+            this.chargePlace.Text = "Загрузка";
+            this.chargePlace.UseVisualStyleBackColor = true;
             // 
             // selectNeedleLeftPlace
             // 
-            this.selectNeedleLeftPlace.AutoSize = true;
-            this.selectNeedleLeftPlace.Location = new System.Drawing.Point(6, 19);
-            this.selectNeedleLeftPlace.Name = "selectNeedleLeftPlace";
-            this.selectNeedleLeftPlace.Size = new System.Drawing.Size(89, 19);
-            this.selectNeedleLeftPlace.TabIndex = 5;
-            this.selectNeedleLeftPlace.Text = "Игла (лево)";
-            this.selectNeedleLeftPlace.UseVisualStyleBackColor = true;
+            this.needleLeftPlace.AutoSize = true;
+            this.needleLeftPlace.Location = new System.Drawing.Point(6, 19);
+            this.needleLeftPlace.Name = "selectNeedleLeftPlace";
+            this.needleLeftPlace.Size = new System.Drawing.Size(89, 19);
+            this.needleLeftPlace.TabIndex = 5;
+            this.needleLeftPlace.Text = "Игла (лево)";
+            this.needleLeftPlace.UseVisualStyleBackColor = true;
             // 
             // selectWashBufferPlace
             // 
-            this.selectWashBufferPlace.AutoSize = true;
-            this.selectWashBufferPlace.Location = new System.Drawing.Point(6, 65);
-            this.selectWashBufferPlace.Name = "selectWashBufferPlace";
-            this.selectWashBufferPlace.Size = new System.Drawing.Size(84, 19);
-            this.selectWashBufferPlace.TabIndex = 6;
-            this.selectWashBufferPlace.Text = "Промывка";
-            this.selectWashBufferPlace.UseVisualStyleBackColor = true;
+            this.washBufferPlace.AutoSize = true;
+            this.washBufferPlace.Location = new System.Drawing.Point(6, 65);
+            this.washBufferPlace.Name = "selectWashBufferPlace";
+            this.washBufferPlace.Size = new System.Drawing.Size(84, 19);
+            this.washBufferPlace.TabIndex = 6;
+            this.washBufferPlace.Text = "Промывка";
+            this.washBufferPlace.UseVisualStyleBackColor = true;
             // 
             // editCellNumber
             // 
@@ -188,7 +190,7 @@
             this.groupBox1.Controls.Add(this.selectW1);
             this.groupBox1.Controls.Add(this.selectW2);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox1.Location = new System.Drawing.Point(3, 277);
+            this.groupBox1.Location = new System.Drawing.Point(3, 303);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(169, 146);
             this.groupBox1.TabIndex = 15;
@@ -266,6 +268,16 @@
             this.editChargePosition.TabIndex = 16;
             this.editChargePosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // OMPlace
+            // 
+            this.OMPlace.AutoSize = true;
+            this.OMPlace.Location = new System.Drawing.Point(6, 136);
+            this.OMPlace.Name = "OMPlace";
+            this.OMPlace.Size = new System.Drawing.Size(87, 19);
+            this.OMPlace.TabIndex = 9;
+            this.OMPlace.Text = "Измерение";
+            this.OMPlace.UseVisualStyleBackColor = true;
+            // 
             // RotorUnitView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -280,7 +292,7 @@
             this.Controls.Add(this.propertyGrid);
             this.Controls.Add(this.buttonHome);
             this.Name = "RotorUnitView";
-            this.Size = new System.Drawing.Size(728, 470);
+            this.Size = new System.Drawing.Size(728, 541);
             this.groupBoxSelectCell.ResumeLayout(false);
             this.groupBoxSelectCell.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.editCellNumber)).EndInit();
@@ -298,10 +310,10 @@
         private System.Windows.Forms.PropertyGrid propertyGrid;
         private System.Windows.Forms.Button buttonPlaceCell;
         private System.Windows.Forms.GroupBox groupBoxSelectCell;
-        private System.Windows.Forms.RadioButton selectNeedleRightPlace;
-        private System.Windows.Forms.RadioButton selectChargePlace;
-        private System.Windows.Forms.RadioButton selectNeedleLeftPlace;
-        private System.Windows.Forms.RadioButton selectWashBufferPlace;
+        private System.Windows.Forms.RadioButton needleRightPlace;
+        private System.Windows.Forms.RadioButton chargePlace;
+        private System.Windows.Forms.RadioButton needleLeftPlace;
+        private System.Windows.Forms.RadioButton washBufferPlace;
         private System.Windows.Forms.NumericUpDown editCellNumber;
         private System.Windows.Forms.Label labelNumberCell;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -311,7 +323,8 @@
         private System.Windows.Forms.RadioButton selectW2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown editChargePosition;
-        private System.Windows.Forms.RadioButton selectDischargePlace;
+        private System.Windows.Forms.RadioButton dischargePlace;
         private System.Windows.Forms.RadioButton selectCUV;
+        private System.Windows.Forms.RadioButton OMPlace;
     }
 }

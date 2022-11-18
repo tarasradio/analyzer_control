@@ -29,6 +29,9 @@ namespace AnalyzerService
         public static PompUnit Pomp { get; private set; }
         public static AdditionalDevicesUnit AdditionalDevices { get; private set; }
 
+        public static string ServerAddress { get; private set; }
+        public static int ServerPort { get; private set; }
+
         public Analyzer(IConfigurationProvider provider) : base(provider)
         {
             this.provider = provider;
@@ -50,6 +53,9 @@ namespace AnalyzerService
             
             SerialCommunicationInit();
             SerialCommunicationOpen();
+
+            ServerAddress = Options.ServerAddress;
+            ServerPort = Options.ServerPort;
 
             Logger.Debug("Запись работы системы начата");
         }

@@ -74,7 +74,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="2.4*"/>
+                    <RowDefinition Height="1.5*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -129,6 +129,7 @@
                             Content="Test"/>
                 </StackPanel>
 
+                <!--
                 <StackPanel Orientation="Vertical" 
                                 Grid.Column="1" 
                                 Grid.Row="0" 
@@ -172,6 +173,7 @@
                         </ListView.ItemsPanel>
                     </ListView>
                 </StackPanel>
+                -->
                 
                 <StackPanel Orientation="Vertical" 
                                 Grid.Column="1" 
@@ -223,6 +225,18 @@
                                         FontSize="16"
                                         MinWidth="120"
                                         Binding="{Binding RemainingIncubationTime}"/>
+                            <DataGridTextColumn Header="OM (Empty)"
+                                        IsReadOnly="True"
+                                        FontSize="16"
+                                        Width="Auto"
+                                        MinWidth="100"
+                                        Binding="{Binding OM1Value}"/>
+                            <DataGridTextColumn Header="OM (Full)"
+                                        IsReadOnly="True"
+                                        FontSize="16"
+                                        Width="Auto"
+                                        MinWidth="100"
+                                        Binding="{Binding OM2Value}"/>
                             <DataGridTextColumn Header="Результат"
                                         IsReadOnly="True"
                                         FontSize="16"

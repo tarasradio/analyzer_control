@@ -8,6 +8,7 @@ using AnalyzerDomain.Entyties;
 using Infrastructure;
 using System.Collections.Generic;
 using AnalyzerDomain.Models;
+using System;
 
 namespace AnalyzerService.Units
 {
@@ -76,7 +77,24 @@ namespace AnalyzerService.Units
 
             Logger.Debug($"[{nameof(RotorUnit)}] - Placing cell at discharger finished.");
         }
-        
+
+        public void PlaceCellAtOM(int cartridgePosition)
+        {
+            List<ICommand> commands = new List<ICommand>();
+
+            int turnSteps = Options.StepsToOM;
+            turnSteps += Options.StepsPerCell * cartridgePosition;
+
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, Options.RotorSpeed } };
+            commands.Add(new SetSpeedCncCommand(steppers));
+
+            steppers = new Dictionary<int, int>() { { Options.RotorStepper, turnSteps - Position } };
+            commands.Add(new MoveCncCommand(steppers));
+
+            executor.WaitExecution(commands);
+            Position = turnSteps;
+        }
+
         /// <summary>
         /// Разместить ячеку ротора в позицию для загрузки картриджа из кассеты
         /// </summary>

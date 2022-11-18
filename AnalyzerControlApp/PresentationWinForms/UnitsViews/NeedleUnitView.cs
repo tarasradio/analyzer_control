@@ -119,5 +119,14 @@ namespace PresentationWinForms.UnitsViews
                     AnalyzerOperations.WashNeedle2();
                 });
         }
+
+        private void buttonGoToSafeLevel_Click(object sender, EventArgs e)
+        {
+            Analyzer.TaskExecutor.StartTask(
+                () =>
+                {
+                    Analyzer.Needle.GoToSafeLevel();
+                });
+        }
     }
 }

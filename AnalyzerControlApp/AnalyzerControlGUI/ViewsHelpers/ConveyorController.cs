@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -41,7 +42,8 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
         public void ConveyorLoopStep(object sender, EventArgs e)
         {
-            for (int i = 0; i < Cells.Count; i++) {
+            for (int i = 0; i < Cells.Count; i++)
+            {
 
                 Brush strokeBrush = Brushes.Black;
                 int strokeThickness = 1;
@@ -51,7 +53,7 @@ namespace AnalyzerControlGUI.ViewsHelpers
                     strokeBrush = Brushes.Red;
                     strokeThickness = 4;
                 }
-                    
+
                 Ellipse ellipse = (Ellipse)_canvas.Children[i];
                 ellipse.Fill = GetFillBrush(Cells[i]);
                 ellipse.Stroke = strokeBrush;
@@ -64,7 +66,8 @@ namespace AnalyzerControlGUI.ViewsHelpers
 
             _offset += 50;
 
-            if (_offset > _coords.Count) {
+            if (_offset > _coords.Count)
+            {
                 _offset = 0;
             }
         }

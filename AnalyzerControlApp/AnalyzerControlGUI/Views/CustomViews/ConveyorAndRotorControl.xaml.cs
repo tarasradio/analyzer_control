@@ -85,7 +85,7 @@ namespace AnalyzerControlGUI.Views.CustomViews
 
                 timer.Tick += conveyor.ConveyorLoopStep;
                 timer.Tick += rotor.RotorLoopStep;
-                timer.Interval = TimeSpan.FromMilliseconds(30);
+                timer.Interval = TimeSpan.FromMilliseconds(50);
                 timer.Start();
             }
         }

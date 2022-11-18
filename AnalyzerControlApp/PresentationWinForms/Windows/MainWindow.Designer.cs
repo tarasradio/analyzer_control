@@ -41,30 +41,32 @@
             this.buttonAbortExecution = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.fillNeedleButton = new System.Windows.Forms.ToolStripButton();
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.devicesTabPage = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cncTabPage = new System.Windows.Forms.TabPage();
+            this.armTabPage = new System.Windows.Forms.TabPage();
+            this.tranporterTabPage = new System.Windows.Forms.TabPage();
+            this.rotorTabPage = new System.Windows.Forms.TabPage();
+            this.loadTabPage = new System.Windows.Forms.TabPage();
+            this.pompTabPage = new System.Windows.Forms.TabPage();
+            this.additionalTabPage = new System.Windows.Forms.TabPage();
+            this.demoTabPage = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.sensorsView = new PresentationWinForms.Views.SensorsView();
             this.steppersGridView = new PresentationWinForms.Views.SteppersView();
             this.devicesControlView = new PresentationWinForms.Views.DevicesView();
-            this.cncTabPage = new System.Windows.Forms.TabPage();
             this.cncView = new PresentationWinForms.Views.CncControlView();
-            this.armTabPage = new System.Windows.Forms.TabPage();
             this.armControllerView = new PresentationWinForms.UnitsViews.NeedleUnitView();
-            this.tranporterTabPage = new System.Windows.Forms.TabPage();
             this.transporterControllerView = new PresentationWinForms.UnitsViews.ConveyorUnitView();
-            this.rotorTabPage = new System.Windows.Forms.TabPage();
             this.rotorControllerView = new PresentationWinForms.UnitsViews.RotorUnitView();
-            this.loadTabPage = new System.Windows.Forms.TabPage();
             this.loadControllerView = new PresentationWinForms.UnitsViews.ChargeUnitView();
-            this.pompTabPage = new System.Windows.Forms.TabPage();
             this.pompControllerView = new PresentationWinForms.UnitsViews.PompUnitView();
-            this.demoTabPage = new System.Windows.Forms.TabPage();
             this.demoExecutorView = new PresentationWinForms.UnitsViews.DemoControllerView();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.logView = new PresentationWinForms.Views.LogView();
-            this.fillNeedleButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.additionalUnitsView1 = new PresentationWinForms.UnitsViews.AdditionalUnitsView();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.mainTabControl.SuspendLayout();
@@ -76,6 +78,7 @@
             this.rotorTabPage.SuspendLayout();
             this.loadTabPage.SuspendLayout();
             this.pompTabPage.SuspendLayout();
+            this.additionalTabPage.SuspendLayout();
             this.demoTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -223,6 +226,24 @@
             this.toolStripButton1.Text = "Экран закрыть";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 35);
+            // 
+            // fillNeedleButton
+            // 
+            this.fillNeedleButton.BackColor = System.Drawing.Color.SeaGreen;
+            this.fillNeedleButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.fillNeedleButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.fillNeedleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.fillNeedleButton.Margin = new System.Windows.Forms.Padding(2, 1, 2, 2);
+            this.fillNeedleButton.Name = "fillNeedleButton";
+            this.fillNeedleButton.Padding = new System.Windows.Forms.Padding(2);
+            this.fillNeedleButton.Size = new System.Drawing.Size(113, 32);
+            this.fillNeedleButton.Text = "Заполнение иглы";
+            this.fillNeedleButton.Click += new System.EventHandler(this.fillNeedleButton_Click);
+            // 
             // mainTabControl
             // 
             this.mainTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -235,6 +256,7 @@
             this.mainTabControl.Controls.Add(this.rotorTabPage);
             this.mainTabControl.Controls.Add(this.loadTabPage);
             this.mainTabControl.Controls.Add(this.pompTabPage);
+            this.mainTabControl.Controls.Add(this.additionalTabPage);
             this.mainTabControl.Controls.Add(this.demoTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(3, 3);
             this.mainTabControl.Name = "mainTabControl";
@@ -272,6 +294,112 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(863, 399);
             this.tableLayoutPanel1.TabIndex = 21;
             // 
+            // cncTabPage
+            // 
+            this.cncTabPage.Controls.Add(this.cncView);
+            this.cncTabPage.Location = new System.Drawing.Point(4, 22);
+            this.cncTabPage.Name = "cncTabPage";
+            this.cncTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.cncTabPage.Size = new System.Drawing.Size(875, 413);
+            this.cncTabPage.TabIndex = 1;
+            this.cncTabPage.Text = "Программное управление";
+            this.cncTabPage.UseVisualStyleBackColor = true;
+            // 
+            // armTabPage
+            // 
+            this.armTabPage.Controls.Add(this.armControllerView);
+            this.armTabPage.Location = new System.Drawing.Point(4, 22);
+            this.armTabPage.Name = "armTabPage";
+            this.armTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.armTabPage.Size = new System.Drawing.Size(875, 413);
+            this.armTabPage.TabIndex = 2;
+            this.armTabPage.Text = "Рука";
+            this.armTabPage.UseVisualStyleBackColor = true;
+            // 
+            // tranporterTabPage
+            // 
+            this.tranporterTabPage.Controls.Add(this.transporterControllerView);
+            this.tranporterTabPage.Location = new System.Drawing.Point(4, 22);
+            this.tranporterTabPage.Name = "tranporterTabPage";
+            this.tranporterTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.tranporterTabPage.Size = new System.Drawing.Size(875, 413);
+            this.tranporterTabPage.TabIndex = 4;
+            this.tranporterTabPage.Text = "Конвейер";
+            this.tranporterTabPage.UseVisualStyleBackColor = true;
+            // 
+            // rotorTabPage
+            // 
+            this.rotorTabPage.Controls.Add(this.rotorControllerView);
+            this.rotorTabPage.Location = new System.Drawing.Point(4, 22);
+            this.rotorTabPage.Name = "rotorTabPage";
+            this.rotorTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.rotorTabPage.Size = new System.Drawing.Size(875, 413);
+            this.rotorTabPage.TabIndex = 3;
+            this.rotorTabPage.Text = "Ротор";
+            this.rotorTabPage.UseVisualStyleBackColor = true;
+            // 
+            // loadTabPage
+            // 
+            this.loadTabPage.Controls.Add(this.loadControllerView);
+            this.loadTabPage.Location = new System.Drawing.Point(4, 22);
+            this.loadTabPage.Name = "loadTabPage";
+            this.loadTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.loadTabPage.Size = new System.Drawing.Size(875, 413);
+            this.loadTabPage.TabIndex = 5;
+            this.loadTabPage.Text = "Загрузка";
+            this.loadTabPage.UseVisualStyleBackColor = true;
+            // 
+            // pompTabPage
+            // 
+            this.pompTabPage.Controls.Add(this.pompControllerView);
+            this.pompTabPage.Location = new System.Drawing.Point(4, 22);
+            this.pompTabPage.Name = "pompTabPage";
+            this.pompTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.pompTabPage.Size = new System.Drawing.Size(875, 413);
+            this.pompTabPage.TabIndex = 6;
+            this.pompTabPage.Text = "Насос";
+            this.pompTabPage.UseVisualStyleBackColor = true;
+            // 
+            // additionalTabPage
+            // 
+            this.additionalTabPage.Controls.Add(this.additionalUnitsView1);
+            this.additionalTabPage.Location = new System.Drawing.Point(4, 22);
+            this.additionalTabPage.Name = "additionalTabPage";
+            this.additionalTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.additionalTabPage.Size = new System.Drawing.Size(875, 413);
+            this.additionalTabPage.TabIndex = 10;
+            this.additionalTabPage.Text = "Дополнительно";
+            this.additionalTabPage.UseVisualStyleBackColor = true;
+            // 
+            // demoTabPage
+            // 
+            this.demoTabPage.Controls.Add(this.demoExecutorView);
+            this.demoTabPage.Location = new System.Drawing.Point(4, 22);
+            this.demoTabPage.Name = "demoTabPage";
+            this.demoTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.demoTabPage.Size = new System.Drawing.Size(875, 413);
+            this.demoTabPage.TabIndex = 9;
+            this.demoTabPage.Text = "Демо";
+            this.demoTabPage.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 35);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.mainTabControl);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.logView);
+            this.splitContainer1.Size = new System.Drawing.Size(889, 605);
+            this.splitContainer1.SplitterDistance = 445;
+            this.splitContainer1.TabIndex = 16;
+            // 
             // sensorsView
             // 
             this.sensorsView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -305,17 +433,6 @@
             this.devicesControlView.Size = new System.Drawing.Size(207, 391);
             this.devicesControlView.TabIndex = 17;
             // 
-            // cncTabPage
-            // 
-            this.cncTabPage.Controls.Add(this.cncView);
-            this.cncTabPage.Location = new System.Drawing.Point(4, 22);
-            this.cncTabPage.Name = "cncTabPage";
-            this.cncTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.cncTabPage.Size = new System.Drawing.Size(875, 413);
-            this.cncTabPage.TabIndex = 1;
-            this.cncTabPage.Text = "Программное управление";
-            this.cncTabPage.UseVisualStyleBackColor = true;
-            // 
             // cncView
             // 
             this.cncView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -326,17 +443,6 @@
             this.cncView.Name = "cncView";
             this.cncView.Size = new System.Drawing.Size(863, 399);
             this.cncView.TabIndex = 0;
-            // 
-            // armTabPage
-            // 
-            this.armTabPage.Controls.Add(this.armControllerView);
-            this.armTabPage.Location = new System.Drawing.Point(4, 22);
-            this.armTabPage.Name = "armTabPage";
-            this.armTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.armTabPage.Size = new System.Drawing.Size(875, 413);
-            this.armTabPage.TabIndex = 2;
-            this.armTabPage.Text = "Рука";
-            this.armTabPage.UseVisualStyleBackColor = true;
             // 
             // armControllerView
             // 
@@ -349,17 +455,6 @@
             this.armControllerView.Size = new System.Drawing.Size(863, 399);
             this.armControllerView.TabIndex = 0;
             // 
-            // tranporterTabPage
-            // 
-            this.tranporterTabPage.Controls.Add(this.transporterControllerView);
-            this.tranporterTabPage.Location = new System.Drawing.Point(4, 22);
-            this.tranporterTabPage.Name = "tranporterTabPage";
-            this.tranporterTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tranporterTabPage.Size = new System.Drawing.Size(875, 413);
-            this.tranporterTabPage.TabIndex = 4;
-            this.tranporterTabPage.Text = "Конвейер";
-            this.tranporterTabPage.UseVisualStyleBackColor = true;
-            // 
             // transporterControllerView
             // 
             this.transporterControllerView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -370,17 +465,6 @@
             this.transporterControllerView.Name = "transporterControllerView";
             this.transporterControllerView.Size = new System.Drawing.Size(863, 399);
             this.transporterControllerView.TabIndex = 0;
-            // 
-            // rotorTabPage
-            // 
-            this.rotorTabPage.Controls.Add(this.rotorControllerView);
-            this.rotorTabPage.Location = new System.Drawing.Point(4, 22);
-            this.rotorTabPage.Name = "rotorTabPage";
-            this.rotorTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.rotorTabPage.Size = new System.Drawing.Size(875, 413);
-            this.rotorTabPage.TabIndex = 3;
-            this.rotorTabPage.Text = "Ротор";
-            this.rotorTabPage.UseVisualStyleBackColor = true;
             // 
             // rotorControllerView
             // 
@@ -393,17 +477,6 @@
             this.rotorControllerView.Size = new System.Drawing.Size(863, 399);
             this.rotorControllerView.TabIndex = 0;
             // 
-            // loadTabPage
-            // 
-            this.loadTabPage.Controls.Add(this.loadControllerView);
-            this.loadTabPage.Location = new System.Drawing.Point(4, 22);
-            this.loadTabPage.Name = "loadTabPage";
-            this.loadTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.loadTabPage.Size = new System.Drawing.Size(875, 413);
-            this.loadTabPage.TabIndex = 5;
-            this.loadTabPage.Text = "Загрузка";
-            this.loadTabPage.UseVisualStyleBackColor = true;
-            // 
             // loadControllerView
             // 
             this.loadControllerView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -415,17 +488,6 @@
             this.loadControllerView.Size = new System.Drawing.Size(863, 399);
             this.loadControllerView.TabIndex = 0;
             // 
-            // pompTabPage
-            // 
-            this.pompTabPage.Controls.Add(this.pompControllerView);
-            this.pompTabPage.Location = new System.Drawing.Point(4, 22);
-            this.pompTabPage.Name = "pompTabPage";
-            this.pompTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.pompTabPage.Size = new System.Drawing.Size(875, 413);
-            this.pompTabPage.TabIndex = 6;
-            this.pompTabPage.Text = "Насос";
-            this.pompTabPage.UseVisualStyleBackColor = true;
-            // 
             // pompControllerView
             // 
             this.pompControllerView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -436,17 +498,6 @@
             this.pompControllerView.Name = "pompControllerView";
             this.pompControllerView.Size = new System.Drawing.Size(863, 399);
             this.pompControllerView.TabIndex = 0;
-            // 
-            // demoTabPage
-            // 
-            this.demoTabPage.Controls.Add(this.demoExecutorView);
-            this.demoTabPage.Location = new System.Drawing.Point(4, 22);
-            this.demoTabPage.Name = "demoTabPage";
-            this.demoTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.demoTabPage.Size = new System.Drawing.Size(875, 413);
-            this.demoTabPage.TabIndex = 9;
-            this.demoTabPage.Text = "Демо";
-            this.demoTabPage.UseVisualStyleBackColor = true;
             // 
             // demoExecutorView
             // 
@@ -460,24 +511,6 @@
             this.demoExecutorView.Size = new System.Drawing.Size(863, 399);
             this.demoExecutorView.TabIndex = 0;
             // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 35);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.mainTabControl);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.logView);
-            this.splitContainer1.Size = new System.Drawing.Size(889, 605);
-            this.splitContainer1.SplitterDistance = 445;
-            this.splitContainer1.TabIndex = 16;
-            // 
             // logView
             // 
             this.logView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -489,23 +522,15 @@
             this.logView.Size = new System.Drawing.Size(883, 148);
             this.logView.TabIndex = 13;
             // 
-            // fillNeedleButton
+            // additionalUnitsView1
             // 
-            this.fillNeedleButton.BackColor = System.Drawing.Color.SeaGreen;
-            this.fillNeedleButton.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.fillNeedleButton.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.fillNeedleButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.fillNeedleButton.Margin = new System.Windows.Forms.Padding(2, 1, 2, 2);
-            this.fillNeedleButton.Name = "fillNeedleButton";
-            this.fillNeedleButton.Padding = new System.Windows.Forms.Padding(2);
-            this.fillNeedleButton.Size = new System.Drawing.Size(113, 32);
-            this.fillNeedleButton.Text = "Заполнение иглы";
-            this.fillNeedleButton.Click += new System.EventHandler(this.fillNeedleButton_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 35);
+            this.additionalUnitsView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.additionalUnitsView1.Location = new System.Drawing.Point(6, 6);
+            this.additionalUnitsView1.Name = "additionalUnitsView1";
+            this.additionalUnitsView1.Size = new System.Drawing.Size(863, 401);
+            this.additionalUnitsView1.TabIndex = 0;
             // 
             // MainWindow
             // 
@@ -536,6 +561,7 @@
             this.rotorTabPage.ResumeLayout(false);
             this.loadTabPage.ResumeLayout(false);
             this.pompTabPage.ResumeLayout(false);
+            this.additionalTabPage.ResumeLayout(false);
             this.demoTabPage.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -583,6 +609,8 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton fillNeedleButton;
+        private System.Windows.Forms.TabPage additionalTabPage;
+        private UnitsViews.AdditionalUnitsView additionalUnitsView1;
     }
 }
 

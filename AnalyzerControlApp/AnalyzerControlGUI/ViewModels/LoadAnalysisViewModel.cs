@@ -332,7 +332,7 @@ namespace AnalyzerControlGUI.ViewModels
             DialogText = "Подключение к серверу...";
             Task.Delay(2000).Wait();
 
-            DatabaseClient client = new DatabaseClient();
+            DatabaseClient client = new DatabaseClient(Analyzer.ServerAddress, Analyzer.ServerPort);
             if (client.Connect())
             {
                 DialogText = "Подключение к серверу выполнено, запрос анализа из БД.";
@@ -409,7 +409,7 @@ namespace AnalyzerControlGUI.ViewModels
                     bool cartridgeIsFound = false;
                     for (int j = 0; j < cartridgesIDs.Length; j++)
                     {
-                        cartridgeIsFound = string.Equals(parameters.assayName, cartridgesIDs[i]);
+                        cartridgeIsFound = parameters.assayName.Equals(cartridgesIDs[i]);
                         if (cartridgeIsFound)
                             break;
                     }
@@ -488,10 +488,8 @@ namespace AnalyzerControlGUI.ViewModels
             }
         }
 
-        private void loadCartridge(int i)
+        private void loadCartridge(int i) // Загрузка картриджа из ячейки
         {
-            // Загрузка картриджа из ячейки
-
             var (isOk, rotorCellPosition) = Rotor.AddAnalysis(analysisBarcode, cartridgesIDs[i]);
 
             if (isOk)

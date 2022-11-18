@@ -21,15 +21,16 @@ namespace AnalyzerCommunication.ServerCommunication
             CartridgesBarcodesResponse,
         };
 
-        const int port = 8888;
-        const string address = "192.168.219.51";
+        int port;
+        string address;
 
         TcpClient client = null;
         NetworkStream stream = null;
 
-        public DatabaseClient()
+        public DatabaseClient(string address = "192.168.219.51", int port = 8888)
         {
-
+            this.address = address;
+            this.port = port;
         }
 
         public bool Connect()

@@ -31,6 +31,9 @@ namespace AnalyzerConfiguration
         public string PortName { get; set; }
         public int Baudrate { get; set; }
 
+        public string ServerAddress { get; set; }
+        public int ServerPort { get; set; }
+
         public List<Stepper> Steppers { get; set; }
         public List<Device> Devices { get; set; }
         public List<Device> Sensors { get; set; }
@@ -39,6 +42,9 @@ namespace AnalyzerConfiguration
         {
             PortName = "COM1";
             Baudrate = 115200;
+
+            ServerAddress = "192.168.1.1";
+            ServerPort = 8888;
 
             Steppers = new List<Stepper>();
             Devices = new List<Device>();

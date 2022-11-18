@@ -32,6 +32,8 @@ unsigned long timer;
 void sendSteppersStates();
 void sendSensorsValues();
 
+void blink();
+
 void setup()
 {
     Serial.begin(BAUDRATE);
@@ -55,6 +57,15 @@ void setup()
     timer = millis();
 
     commandExecutor.init_leds();
+
+    pinMode(29, OUTPUT);
+    digitalWrite(29, HIGH);
+
+    pinMode(28, OUTPUT);
+    digitalWrite(28, HIGH);
+
+    pinMode(27, OUTPUT);
+    digitalWrite(27, HIGH);
 }
 
 void loop()
@@ -81,6 +92,8 @@ void loop()
         timer2 = micros();
         runController.updateState();
     }
+
+    //blink();
 }
 
 void sendSteppersStates()
@@ -101,4 +114,18 @@ void sendSensorsValues()
         sensorValues[i] =  Sensors::getSensorValue(i);
 
     Protocol::sendSensorsValues(sensorValues, 16);
+}
+
+void blink() {
+    static long timer = micros();
+    static bool isOn = false;
+    if(micros() - timer >= 10000) {
+        if(isOn) {
+            Devices::on(5);
+        } else {
+            Devices::off(5);
+        }
+        isOn = !isOn;
+        timer = micros();
+    }
 }

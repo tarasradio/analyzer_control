@@ -34,8 +34,12 @@ namespace AnalyzerDomain.Models
 
         private int _remIncTime;
         public int RemainingIncubationTime { get { return _remIncTime; } set { _remIncTime = value; OnPropertyChanged(); } }
-        public double OM1Value { get; set; }
-        public double OM2Value { get; set; }
+
+        private double _om1Value;
+        public double OM1Value { get { return _om1Value; } set { _om1Value = value; OnPropertyChanged(); } }
+
+        private double _om2Value;
+        public double OM2Value { get { return _om2Value; } set { _om2Value = value; OnPropertyChanged(); } }
 
         private bool _isCompleted;
         public bool IsCompleted { get { return _isCompleted; } set { _isCompleted = value; OnPropertyChanged(); } }

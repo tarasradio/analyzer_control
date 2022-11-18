@@ -20,6 +20,8 @@ namespace AnalyzerConfiguration.UnitsConfiguration
         public int StepsToUnload { get; set; } = 0;
         [DisplayName("Шагов до wash-буфера"), Category("3.1 Шаги (общие задачи)")]
         public int StepsToWashBuffer { get; set; } = 0;
+        [DisplayName("Шагов до оптического блока"), Category("3.1 Шаги (общие задачи)")]
+        public int StepsToOM { get; set; } = 0;
 
         [DisplayName("Шагов до иглы прозрачной ячейки (центр)"), Category("3.2 Шаги (работа с иглой)")]
         public int StepsToNeedleResultCenter { get; set; } = 0;
@@ -37,7 +39,7 @@ namespace AnalyzerConfiguration.UnitsConfiguration
         public int StepsToNeedleLeft3 { get; set; } = 0;
         [DisplayName("Шагов до иглы 3-й ячейки (право)"), Category("3.2 Шаги (работа с иглой)")]
         public int StepsToNeedleRight3 { get; set; } = 0;
-
+        
         public RotorConfiguration()
         {
 

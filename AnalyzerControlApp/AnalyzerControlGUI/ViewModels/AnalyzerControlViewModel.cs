@@ -391,7 +391,7 @@ namespace AnalyzerControlGUI.ViewModels
         private void tryCreateController()
         {
             try {
-                analyzer = new Analyzer(provider);
+                new Analyzer(provider);
                 conveyor = new ConveyorService(conveyorCellsCount);
                 rotor = new RotorService(rotorCellsCount);
                 cartridgesDeck = new CartridgesDeckService(cassettesCount);

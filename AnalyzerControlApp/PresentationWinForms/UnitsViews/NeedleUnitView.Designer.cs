@@ -44,6 +44,7 @@
             this.buttonHomeLift = new System.Windows.Forms.Button();
             this.buttonTurnAndGoDownToWashingAlkali = new System.Windows.Forms.Button();
             this.buttonWashing2 = new System.Windows.Forms.Button();
+            this.buttonGoToSafeLevel = new System.Windows.Forms.Button();
             this.groupBoxSelectCell.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -156,7 +157,7 @@
             this.groupBoxSelectCell.Controls.Add(this.selectW2);
             this.groupBoxSelectCell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBoxSelectCell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBoxSelectCell.Location = new System.Drawing.Point(3, 234);
+            this.groupBoxSelectCell.Location = new System.Drawing.Point(3, 265);
             this.groupBoxSelectCell.Name = "groupBoxSelectCell";
             this.groupBoxSelectCell.Size = new System.Drawing.Size(140, 147);
             this.groupBoxSelectCell.TabIndex = 8;
@@ -180,7 +181,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.propertyGrid.Location = new System.Drawing.Point(149, 3);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(595, 457);
+            this.propertyGrid.Size = new System.Drawing.Size(595, 522);
             this.propertyGrid.TabIndex = 9;
             // 
             // buttonGoDownAndBrokeCartridge
@@ -233,7 +234,7 @@
             this.buttonWashing2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonWashing2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonWashing2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonWashing2.Location = new System.Drawing.Point(3, 381);
+            this.buttonWashing2.Location = new System.Drawing.Point(3, 418);
             this.buttonWashing2.Name = "buttonWashing2";
             this.buttonWashing2.Size = new System.Drawing.Size(140, 25);
             this.buttonWashing2.TabIndex = 13;
@@ -241,10 +242,25 @@
             this.buttonWashing2.UseVisualStyleBackColor = false;
             this.buttonWashing2.Click += new System.EventHandler(this.buttonWashing2_Click);
             // 
+            // buttonGoToSafeLevel
+            // 
+            this.buttonGoToSafeLevel.BackColor = System.Drawing.Color.LimeGreen;
+            this.buttonGoToSafeLevel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonGoToSafeLevel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonGoToSafeLevel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonGoToSafeLevel.Location = new System.Drawing.Point(3, 234);
+            this.buttonGoToSafeLevel.Name = "buttonGoToSafeLevel";
+            this.buttonGoToSafeLevel.Size = new System.Drawing.Size(140, 25);
+            this.buttonGoToSafeLevel.TabIndex = 14;
+            this.buttonGoToSafeLevel.Text = "Safe level";
+            this.buttonGoToSafeLevel.UseVisualStyleBackColor = false;
+            this.buttonGoToSafeLevel.Click += new System.EventHandler(this.buttonGoToSafeLevel_Click);
+            // 
             // NeedleUnitView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.buttonGoToSafeLevel);
             this.Controls.Add(this.buttonWashing2);
             this.Controls.Add(this.buttonTurnAndGoDownToWashingAlkali);
             this.Controls.Add(this.buttonHomeLift);
@@ -256,7 +272,7 @@
             this.Controls.Add(this.turnOnTubeButton);
             this.Controls.Add(this.buttonHomeRotator);
             this.Name = "NeedleUnitView";
-            this.Size = new System.Drawing.Size(747, 463);
+            this.Size = new System.Drawing.Size(747, 528);
             this.groupBoxSelectCell.ResumeLayout(false);
             this.groupBoxSelectCell.PerformLayout();
             this.ResumeLayout(false);
@@ -280,5 +296,6 @@
         private System.Windows.Forms.RadioButton selectCUV;
         private System.Windows.Forms.Button buttonTurnAndGoDownToWashingAlkali;
         private System.Windows.Forms.Button buttonWashing2;
+        private System.Windows.Forms.Button buttonGoToSafeLevel;
     }
 }

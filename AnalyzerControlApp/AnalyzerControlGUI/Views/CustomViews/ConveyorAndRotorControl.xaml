@@ -29,22 +29,22 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="{Binding TubeDiameter,FallbackValue=70}"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Ellipse Grid.Column="1" Grid.Row="1" 
                      Stroke="Black" Fill="LightGray" StrokeThickness="0.5" 
-                     Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                     Width="{Binding TubeDiameter,FallbackValue=70}" Height="{Binding TubeDiameter,FallbackValue=70}"/>
             <Ellipse Grid.Column="3" Grid.Row="1" 
                      Stroke="Black" Fill="LightGreen" StrokeThickness="0.5" 
-                     Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                     Width="{Binding TubeDiameter,FallbackValue=70}" Height="{Binding TubeDiameter,FallbackValue=70}"/>
             <Ellipse Grid.Column="5" Grid.Row="1" 
                      Stroke="Black" Fill="Khaki" StrokeThickness="0.5" 
-                     Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                     Width="{Binding TubeDiameter,FallbackValue=70}" Height="{Binding TubeDiameter,FallbackValue=70}"/>
             <Ellipse Grid.Column="7" Grid.Row="1" 
                      Stroke="Black" Fill="LightPink" StrokeThickness="0.5" 
-                     Width="{Binding TubeDiameter}" Height="{Binding TubeDiameter}"/>
+                     Width="{Binding TubeDiameter,FallbackValue=70}" Height="{Binding TubeDiameter,FallbackValue=70}"/>
             <Label Grid.Column="1" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Свободно</Label>
             <Label Grid.Column="3" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Обработано</Label>
             <Label Grid.Column="5" Grid.Row="0" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">В процессе</Label>

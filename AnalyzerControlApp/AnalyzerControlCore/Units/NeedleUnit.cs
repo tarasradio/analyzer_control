@@ -90,6 +90,13 @@ namespace AnalyzerService.Units
             steppers = new Dictionary<int, int>() { { Options.LifterStepper, Options.LifterSpeed } };
             commands.Add(new RunCncCommand(steppers, 0, 500, ValueEdge.RisingEdge));
 
+            executor.WaitExecution(commands);
+
+            commands.Clear();
+
+            // Опускание иглы до жидкости в пробирке
+            commands.Add(new SetSpeedCommand(Options.LifterStepper, (uint)Options.LifterSpeed));
+
             // Дополнительное опускание иглы в жидкости
             steppers = new Dictionary<int, int>() { { Options.LifterStepper, Options.LifterStepsAfterTouch } };
             commands.Add(new MoveCncCommand(steppers));

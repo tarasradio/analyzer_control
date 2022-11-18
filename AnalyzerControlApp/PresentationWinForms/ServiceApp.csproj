@@ -194,6 +194,12 @@
     <Compile Include="CustomControls\DoubleBufferedDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UnitsViews\AdditionalUnitsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UnitsViews\AdditionalUnitsView.Designer.cs">
+      <DependentUpon>AdditionalUnitsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ConnectionSettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -300,6 +306,9 @@
       <DependentUpon>StepperTurningView.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\DataGridViewStyler.cs" />
+    <EmbeddedResource Include="UnitsViews\AdditionalUnitsView.resx">
+      <DependentUpon>AdditionalUnitsView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Windows\ConnectionSettingsWindow.resx">
       <DependentUpon>ConnectionSettingsWindow.cs</DependentUpon>
     </EmbeddedResource>

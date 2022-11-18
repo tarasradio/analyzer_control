@@ -29,6 +29,11 @@ namespace AnalyzerControl
             Logger.Debug($"Возврат устройств в начальную позицию завершен.");
         }
 
+        public static void WashTacw()
+        {
+
+        }
+
         /// <summary>
         /// Промывка иглы
         /// </summary>
